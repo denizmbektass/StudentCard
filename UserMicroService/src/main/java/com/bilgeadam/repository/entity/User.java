@@ -16,7 +16,7 @@ import java.util.List;
 @Document
 public class User extends BaseEntity {
     @Id
-    private String id;
+    private String userId;
     private String name;
     private String surname;
     private Long identityNumber;

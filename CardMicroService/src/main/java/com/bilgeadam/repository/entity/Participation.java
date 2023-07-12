@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Participation extends BaseEntity{
     @Id
-    private String id;
+    private String participationId;
     private long score; // Participation Rate
     private String studentId;
 }

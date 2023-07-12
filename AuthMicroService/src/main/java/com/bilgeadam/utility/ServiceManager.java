@@ -4,7 +4,9 @@ package com.bilgeadam.utility;
 import com.bilgeadam.repository.entity.BaseEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
+
 
 import java.util.List;
 import java.util.Optional;

@@ -9,6 +9,7 @@ import com.bilgeadam.exceptions.ErrorType;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -16,7 +17,7 @@ public class JwtTokenManager {
     private final String issuer = "StudentCard";
     private final String secretKey = "StudentCard";
     private final String audience = "audience";
-    public Optional<String> createToken(Long id,String role){
+    public Optional<String> createToken(String id, List<String> role){
         String token= null;
         Long exDate = 1000L*60*150;
         try{
@@ -26,8 +27,8 @@ public class JwtTokenManager {
                     .withClaim("howtopage","AuthMicroService")
                     .withClaim("lastjoin", System.currentTimeMillis())
                     .withClaim("role",role)
-                    .withIssuer(issuer) // jwt nin sahibi
-                    .withIssuedAt(new Date()) // token oluşturulma tarihi
+                    .withIssuer(issuer)
+                    .withIssuedAt(new Date())
                     .withExpiresAt(new Date(System.currentTimeMillis()+exDate))
                     .sign(Algorithm.HMAC512(secretKey));
             return Optional.of(token);
@@ -67,7 +68,7 @@ public class JwtTokenManager {
         }
     }
 
-    public Optional<String> getRoleFromToken(String token) {
+    public List<String> getRoleFromToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC512(secretKey);
             JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
@@ -75,12 +76,12 @@ public class JwtTokenManager {
             if (decodedJWT == null) {
                 throw new AuthServiceException(ErrorType.INVALID_TOKEN);
             }
-            String role = decodedJWT.getClaim("role").asString();
-            return Optional.of(role);
+            List<String> role = decodedJWT.getClaim("role").asList(String.class);
+            return role;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new AuthServiceException(ErrorType.INVALID_TOKEN);
-            // Yorum yaptım!
+
         }
     }
 }

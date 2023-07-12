@@ -18,12 +18,14 @@ public class JwtUserDetails implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return null;
     }
-    public UserDetails loadUserByUserRole(String role) throws UsernameNotFoundException {
+    public UserDetails loadUserByUserRole(List<String> role) throws UsernameNotFoundException {
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority(role));
+        role.stream().map(item->{
+            return authorityList.add(new SimpleGrantedAuthority(item));
+        });
 
         return User.builder()
-                .username(role)
+                .username("")// buralar düzenlenecek
                 .password("")
                 .accountLocked(false)
                 .accountExpired(false)
@@ -31,3 +33,4 @@ public class JwtUserDetails implements UserDetailsService {
                 .build();
     }
 }
+
