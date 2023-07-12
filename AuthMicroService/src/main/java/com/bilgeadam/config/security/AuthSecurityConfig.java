@@ -19,11 +19,9 @@ public class AuthSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests().antMatchers(
-                "/v3/api-docs/**",
-                "/swagger-ui/**",
-                "/api/v1/user/create",
-                "/api/v1/user/activatestatus",
-                "/api/v1/follow/findall").permitAll().anyRequest().authenticated()
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/api/v1/auth/**").permitAll().anyRequest().authenticated()
                 .and()
                 .cors().and().csrf().disable();
         httpSecurity.addFilterBefore(getJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

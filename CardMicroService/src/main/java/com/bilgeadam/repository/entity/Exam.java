@@ -16,7 +16,7 @@ import java.util.Set;
 @Document
 public class Exam extends BaseEntity{
     @Id
-    private String id;
+    private String examId;
     private String title;
     private long score;
     private String description;

@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Project extends BaseEntity{
     @Id
-    private String id;
+    private String projectId;
     private String title;
     private long score;
     private String description;

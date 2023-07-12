@@ -14,5 +14,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Card extends BaseEntity {
     @Id
-    private String id;
+    private String cardId;
 }

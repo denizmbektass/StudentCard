@@ -1,24 +1,23 @@
 server:
-  port: 4040
+  port: 4042
 spring:
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: user
-    password: root
+  #  rabbitmq:
+  #    host: localhost
+  #    port: 5672
+  #    username: user
+  #    password: root
   #  zipkin:
   #    enabled: true
   #    base-url: http://localhost:9411
   #    service:
-  #      name: auth-service
+  #      name: card-service
   data:
     mongodb:
       host: localhost
-      port: 27020
+      port: 27017
       username: studentcarduser
       password: root
       database: studentcard
-
 #  security:
 #    user:
 #      name: kullanici

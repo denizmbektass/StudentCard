@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Assignment extends BaseEntity{
     @Id
-    private String id;
+    private String assignmentId;
     private String title;
     private long score;
     private String description;

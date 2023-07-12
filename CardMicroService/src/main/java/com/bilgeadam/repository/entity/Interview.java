@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Interview extends BaseEntity{
     @Id
-    private String id;
+    private String interviewId;
     private String name;
     private long score;
     private String description;

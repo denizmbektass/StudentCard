@@ -4,9 +4,8 @@ buildscript{
     }
 }
 dependencies {
-    //implementation libs.postgresql
     implementation libs.springCloudOpenFeign
-    implementation libs.springBootDataMongo
+   implementation libs.springBootDataMongo
     implementation libs.springBootStarterSecurity
     implementation libs.jwt
     implementation libs.springBootAmqp
