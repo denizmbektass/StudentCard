@@ -9,8 +9,9 @@ import feign.Param;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 import static com.bilgeadam.constants.ApiUrls.*;
 
@@ -33,7 +34,7 @@ public class AuthController {
     }
     @PostMapping(LOGIN)
     @CrossOrigin("*")
-    public ResponseEntity<LoginResponseDto>login(@RequestBody LoginRequestDto dto) {
+    public ResponseEntity<LoginResponseDto>login(@RequestBody @Valid LoginRequestDto dto) {
         return ResponseEntity.ok(authService.login(dto));
     }
 }
