@@ -2,6 +2,7 @@ package com.bilgeadam.config.security;
 
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.AuthServiceException;
+import com.bilgeadam.repository.enums.EStatus;
 import com.bilgeadam.utility.JwtTokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 ;
 
 public class JwtTokenFilter extends OncePerRequestFilter {
@@ -25,12 +27,18 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization");
+            final String authHeader = request.getHeader("Authorization");
         if (authHeader!=null&&authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
+            Optional<String> id = jwtTokenManager.getIdFromToken(token);
             List<String> userRole = jwtTokenManager.getRoleFromToken(token);
-            if (!userRole.isEmpty()) {
-                UserDetails userDetails = jwtUserDetails.loadUserByUserRole(userRole);
+            Optional<EStatus> status = Optional.of(jwtTokenManager.getStatusFromToken(token));
+            if (!status.isPresent())
+                throw new AuthServiceException(ErrorType.INVALID_TOKEN);
+            else if (!status.get().toString().equals("ACTIVE"))
+                throw new AuthServiceException(ErrorType.STATUS_NOT_ACTIVE);
+            else if (!userRole.isEmpty()) {
+                UserDetails userDetails = jwtUserDetails.loadUserByAuthId(id.get());
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
