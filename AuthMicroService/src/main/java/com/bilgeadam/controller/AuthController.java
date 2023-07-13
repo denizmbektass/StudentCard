@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static com.bilgeadam.constants.ApiUrls.*;
 
 @RestController
@@ -27,7 +29,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.forgotMyPassword(email));
     }
     @PostMapping(LOGIN)
-    public ResponseEntity<LoginResponseDto>login(@RequestBody LoginRequestDto dto) {
+    public ResponseEntity<LoginResponseDto>login(@RequestBody @Valid LoginRequestDto dto) {
         return ResponseEntity.ok(authService.login(dto));
     }
 }

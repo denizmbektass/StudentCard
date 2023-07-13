@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static com.bilgeadam.constants.ApiUrls.*;
 
 @RestController
@@ -16,7 +18,7 @@ public class UserController {
 
 
     @PutMapping(UPDATE)
-    public ResponseEntity<Boolean>updateUser(@RequestBody UserUpdateRequestDto dto){
+    public ResponseEntity<Boolean>updateUser(@RequestBody @Valid UserUpdateRequestDto dto){
         return ResponseEntity.ok(userService.updateUser(dto));
     }
     @PutMapping(DO_PASSIVE)
