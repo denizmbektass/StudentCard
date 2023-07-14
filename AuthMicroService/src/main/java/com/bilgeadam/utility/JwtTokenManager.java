@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.bilgeadam.exceptions.AuthServiceException;
 import com.bilgeadam.exceptions.ErrorType;
+import com.bilgeadam.repository.enums.EStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -17,7 +18,7 @@ public class JwtTokenManager {
     private final String issuer = "StudentCard";
     private final String secretKey = "StudentCard";
     private final String audience = "audience";
-    public Optional<String> createToken(String id, List<String> role){
+    public Optional<String> createToken(String id, List<String> role,EStatus status){
         String token= null;
         Long exDate = 1000L*60*150;
         try{
@@ -27,6 +28,7 @@ public class JwtTokenManager {
                     .withClaim("howtopage","AuthMicroService")
                     .withClaim("lastjoin", System.currentTimeMillis())
                     .withClaim("role",role)
+                    .withClaim("status", String.valueOf(status))
                     .withIssuer(issuer)
                     .withIssuedAt(new Date())
                     .withExpiresAt(new Date(System.currentTimeMillis()+exDate))
@@ -51,7 +53,7 @@ public class JwtTokenManager {
         return true;
     }
 
-    public Optional<Long> getByIdFromToken(String token){
+    public Optional<String> getIdFromToken(String token){
         try{
             Algorithm algorithm = Algorithm.HMAC512(secretKey);
             JWTVerifier verifier = JWT.require(algorithm)
@@ -59,7 +61,7 @@ public class JwtTokenManager {
             DecodedJWT decodedJWT = verifier.verify(token);
             if(decodedJWT == null)
                 return Optional.empty();
-            Long id = decodedJWT.getClaim("id").asLong();
+            String id = decodedJWT.getClaim("id").asString();
 //            String howToPage = decodedJWT.getClaim("howtopage").asString();
 //            System.out.println("howtopage....: "+ howToPage);
             return Optional.of(id);
@@ -78,6 +80,23 @@ public class JwtTokenManager {
             }
             List<String> role = decodedJWT.getClaim("role").asList(String.class);
             return role;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new AuthServiceException(ErrorType.INVALID_TOKEN);
+
+        }
+    }
+
+    public EStatus getStatusFromToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            if (decodedJWT == null) {
+                throw new AuthServiceException(ErrorType.INVALID_TOKEN);
+            }
+            EStatus status = decodedJWT.getClaim("status").as(EStatus.class);   //DANIŞ
+            return status;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new AuthServiceException(ErrorType.INVALID_TOKEN);

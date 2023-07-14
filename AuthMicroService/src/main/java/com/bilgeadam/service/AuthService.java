@@ -43,7 +43,7 @@ public class AuthService extends ServiceManager<Auth, String> {
         List<String> roles = role.stream().map(x->{
             return x.name();
         }).toList();
-        Optional<String> token = jwtTokenManager.createToken(authOptional.get().getAuthId(),roles);
+        Optional<String> token = jwtTokenManager.createToken(authOptional.get().getAuthId(),roles,authOptional.get().getStatus());
         if(token.isEmpty())
             throw new AuthServiceException(ErrorType.TOKEN_NOT_CREATED);
         return LoginResponseDto.builder().token(token.get()).message("Login Successfully").role(roles).build();
@@ -65,6 +65,7 @@ public class AuthService extends ServiceManager<Auth, String> {
         if (auth.isEmpty())
             throw new AuthServiceException(ErrorType.EMAIL_NOT_FOUND);
         auth.get().setPassword(CodeGenerator.generateCode());
+        update(auth.get());
         resetPasswordProducer.sendNewPassword(ResetPasswordModel.builder().email(auth.get().getEmail()).password(auth.get().getPassword()).build());
         return MessageResponseDto.builder().message("Your password has been sent by e-mail").build();
     }
