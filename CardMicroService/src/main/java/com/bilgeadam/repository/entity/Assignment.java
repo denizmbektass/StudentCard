@@ -1,5 +1,6 @@
 package com.bilgeadam.repository.entity;
 
+import com.bilgeadam.repository.enums.AssignmentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,8 @@ public class Assignment extends BaseEntity{
     @Id
     private String assignmentId;
     private String title;
-    private long score;
-    private String description;
+    private AssignmentType type;
+    private Long score;
+    private String statement;
     private String studentId;
 }
