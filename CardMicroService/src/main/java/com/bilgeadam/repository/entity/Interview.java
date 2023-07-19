@@ -1,6 +1,8 @@
 package com.bilgeadam.repository.entity;
 
+import com.bilgeadam.repository.enums.EStatus;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -19,6 +21,8 @@ public class Interview extends BaseEntity{
     private long score;
     private String description;
     private String studentId;
+    @Builder.Default()
+    private EStatus eStatus = EStatus.ACTIVE;
     //private int trainerId,hrId;
 
 }
