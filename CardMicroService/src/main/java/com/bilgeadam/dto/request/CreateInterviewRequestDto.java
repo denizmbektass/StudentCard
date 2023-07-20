@@ -11,4 +11,5 @@ public class CreateInterviewRequestDto {
     private long score;
     private String description;
     private String studentId;
+    private String interviewType;
 }

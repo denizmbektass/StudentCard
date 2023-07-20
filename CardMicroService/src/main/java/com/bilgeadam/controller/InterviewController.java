@@ -20,22 +20,23 @@ import static com.bilgeadam.constants.ApiUrls.*;
 @RequiredArgsConstructor
 public class InterviewController {
     private final InterviewService interviewService;
-    @PostMapping(CREATEINTERVIEW)
+    @PostMapping(CREATE_INTERVIEW)
     public ResponseEntity<CreateInterviewResponseDto> createInterview(@RequestBody CreateInterviewRequestDto dto){
         return ResponseEntity.ok(interviewService.createInterview(dto));
     }
-    @GetMapping(FINDALLINTERVIEW)
+    @GetMapping(FIND_ALL_INTERVIEW)
     public ResponseEntity<List<Interview>> findAllInterview(){
         return ResponseEntity.ok(interviewService.findAll());
     }
-    @PostMapping(UPDATEINTERVIEW)
+    @PostMapping(UPDATE_INTERVIEW)
     public ResponseEntity<UpdateInterviewResponseDto> updateInterview(@RequestBody UpdateInterviewRequestDto dto){
         return ResponseEntity.ok(interviewService.updateInterview(dto));
     }
-    @DeleteMapping(DELETEINTERVIEW)
+    @DeleteMapping(DELETE_INTERVIEW)
     public ResponseEntity<DeleteInterviewResponseDto> deleteInterview(@RequestParam String id){
         return ResponseEntity.ok(interviewService.deleteInterview(id));
     }
+
 
 
 

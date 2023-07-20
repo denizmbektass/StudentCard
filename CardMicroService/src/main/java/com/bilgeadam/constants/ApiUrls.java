@@ -17,4 +17,5 @@ public class ApiUrls {
     public static final String FIND_ALL_INTERVIEW ="/find-all-interview" ;
     public static final String UPDATE_INTERVIEW ="/update-interview" ;
     public static final String DELETE_INTERVIEW = "/delete-interview";
+
 }

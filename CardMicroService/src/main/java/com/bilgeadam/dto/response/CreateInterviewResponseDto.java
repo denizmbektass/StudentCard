@@ -11,5 +11,6 @@ public class CreateInterviewResponseDto {
     private long score;
     private String description;
     private String studentId;
+    private String interviewType;
 
 }
