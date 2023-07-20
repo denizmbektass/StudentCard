@@ -1,4 +1,5 @@
-port: 4041
+server:
+  port: 4041
 spring:
   #  rabbitmq:
   #    host: localhost

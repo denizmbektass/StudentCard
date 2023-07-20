@@ -12,7 +12,11 @@ import com.bilgeadam.repository.entity.TrainerAssessment;
 import com.bilgeadam.repository.enums.EStatus;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,String> {
 
@@ -53,5 +57,10 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         update(trainerAssessment.get());
 
         return "Silme işlemi başarılı";
+    }
+
+    public List<TrainerAssessment> findAllTrainerAssessment() {
+        return findAll().stream().filter(x->x.getEStatus()==EStatus.ACTIVE)
+                .collect(Collectors.toList());
     }
 }
