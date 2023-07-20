@@ -21,6 +21,7 @@ public class Interview extends BaseEntity{
     private long score;
     private String description;
     private String studentId;
+    private String interviewType;
     @Builder.Default()
     private EStatus eStatus = EStatus.ACTIVE;
     //private int trainerId,hrId;
