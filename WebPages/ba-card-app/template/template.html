@@ -86,9 +86,20 @@
                     <li type="button" class="list-group-item list-group-item-action list-group-item-primary" style="color: white; padding-left: 30px; display: flex; justify-content: flex-start;" >
                         <img class="vector-icon" alt="" src="./images/vector.svg" style="padding-bottom: 5px; margin-left: 0px; margin-right: 20px;"/>
                         Öğrenci İşlemleri</li>
-                    <li type="button" class="list-group-item list-group-item-action list-group-item-secondary" style="padding-left: 30px; display: flex; justify-content: flex-start;">
-                        <img class="group-icon" alt="" src="./images/group.svg" style="margin-left: 0px; margin-right: 20px;"/>
-                        Mülakat</li>
+                    <div class="btn-group" role="group">
+                        <li type="button" class="list-group-item list-group-item-action list-group-item-secondary dropdown-toggle-split" style="padding-left: 30px; display: flex; justify-content: flex-start;" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img class="group-icon" alt="" src="./images/group.svg" style="margin-left: 0px; margin-right: 20px;"/>
+                            <p style="margin-right: 50px; margin-bottom: 0px;">
+                                Mülakat
+                            </p>
+                            <img class="group-icon" alt="" src="./images/DownArrow.svg" style="margin-left: 30px; margin-right: 20px; padding: 5px;"/>
+                        </li>
+                        <ul class="dropdown-menu">
+                            <li class="list-group-item-secondary list-group-item list-group-item-action"><a class="dropdown-item" href="#">Mülakat Oluştur</a></li>
+                            <li class="list-group-item-secondary list-group-item list-group-item-action"><a class="dropdown-item" href="#">Mülakatları Görüntüle</a></li>
+                            <li class="list-group-item-secondary list-group-item list-group-item-action"><a class="dropdown-item" href="#">Mülakat Sil</a></li>
+                        </ul>
+                    </div>
                     <li type="button" class="list-group-item list-group-item-action list-group-item-secondary" style="padding-left: 30px; display: flex; justify-content: flex-start;">
                         <img class="frame-item" alt="" src="./images/group-7.svg" style="margin-left: 0px; margin-right: 20px;"/>
                         Sınavlar</li>
