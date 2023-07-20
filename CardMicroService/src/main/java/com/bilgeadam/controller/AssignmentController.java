@@ -22,7 +22,7 @@ public class AssignmentController {
     public ResponseEntity<MessageResponse> createAssignment(@RequestBody AssignmentRequestDto dto){
         return ResponseEntity.ok(assignmentService.createAssignment(dto));
     }
-    @GetMapping(FINDALL)
+    @GetMapping(FIND_ALL)
     public ResponseEntity<List<AssignmentResponseDto>> findAllAssignments(){
         return ResponseEntity.ok( assignmentService.findAllAssignments());
     }
