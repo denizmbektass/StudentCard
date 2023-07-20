@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class InternshipSuccessRate extends BaseEntity {
     @Id
     private String internshipSuccessRateId;
-    private long score; // Participation Rate
+    private Long score; // Participation Rate
+    private String comment;
     private String studentId;
 }
