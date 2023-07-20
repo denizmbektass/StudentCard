@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainerAssessmentResponseDto {
+public class TrainerAssessmentSaveResponseDto {
 
     private Long score;
     private String description;

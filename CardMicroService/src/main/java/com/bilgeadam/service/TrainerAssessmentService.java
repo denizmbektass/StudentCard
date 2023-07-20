@@ -1,14 +1,18 @@
 package com.bilgeadam.service;
 
-import com.bilgeadam.dto.request.TrainerAssessmentRequestDto;
-import com.bilgeadam.dto.response.TrainerAssessmentResponseDto;
+import com.bilgeadam.dto.request.TrainerAssessmentSaveRequestDto;
+import com.bilgeadam.dto.request.UpdateTrainerAssessmentRequestDto;
+import com.bilgeadam.dto.response.TrainerAssessmentSaveResponseDto;
+import com.bilgeadam.dto.response.UpdateTrainerAssessmentResponseDto;
+import com.bilgeadam.exceptions.ErrorType;
+import com.bilgeadam.exceptions.TrainerAssessmentException;
 import com.bilgeadam.mapper.ITrainerAssesmentMapper;
 import com.bilgeadam.repository.ITrainerAssessmentRepository;
 import com.bilgeadam.repository.entity.TrainerAssessment;
+import com.bilgeadam.repository.enums.EStatus;
 import com.bilgeadam.utility.ServiceManager;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import java.util.Optional;
 @Service
 public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,String> {
 
@@ -19,17 +23,35 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         this.iTrainerAssesmentRepository=iTrainerAssessmentRepository;
     }
 
-    public ResponseEntity<TrainerAssessmentResponseDto> TrainerAssesmentDescription(TrainerAssessmentRequestDto dto){
-//        Optional<TrainerAssessment> trainerAssessment = iTrainerAssesmentRepository.findOptionalByCardId(dto);
-//        if(!trainerAssessment.isPresent())
-//            throw new CardServiceException(ErrorType.CARD_NOT_FOUND);
-        TrainerAssessment trainerAssessment= new TrainerAssessment();
-        trainerAssessment.builder()
-                .description(dto.getDescription())
-                .score(dto.getScore())
-                .studentId(dto.getStudentId())
-                .build();
+    public TrainerAssessmentSaveResponseDto saveTrainerAssessment(TrainerAssessmentSaveRequestDto dto){
+        /**
+         * StudentId ekledniğinde geliştirilecek
+         */
+        TrainerAssessment trainerAssessment= ITrainerAssesmentMapper.INSTANCE.toTrainerAssesment(dto);
+        save(trainerAssessment);
+        return ITrainerAssesmentMapper.INSTANCE.toSaveTrainerAssesment(trainerAssessment);
+    }
 
-        return ResponseEntity.ok(ITrainerAssesmentMapper.INSTANCE.toTrainerAssesment2(trainerAssessment));
+    public UpdateTrainerAssessmentResponseDto updateTrainerAssessment(UpdateTrainerAssessmentRequestDto dto, String id){
+        Optional<TrainerAssessment> trainerAssessment=iTrainerAssesmentRepository.findOptionalByTrainerAssessmentId(id);
+        if(trainerAssessment.isEmpty())
+            throw new TrainerAssessmentException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
+
+        trainerAssessment.get().setScore(dto.getScore());
+        trainerAssessment.get().setDescription(dto.getDescription());
+        trainerAssessment.get().setStudentId(dto.getStudentId());
+        update(trainerAssessment.get());
+
+        return ITrainerAssesmentMapper.INSTANCE.toUpdateTrainerAssessment(trainerAssessment.get());
+    }
+
+    public String deleteTrainerAssessment(String id){
+        Optional<TrainerAssessment> trainerAssessment=iTrainerAssesmentRepository.findOptionalByTrainerAssessmentId(id);
+        if(trainerAssessment.isEmpty())
+            throw new TrainerAssessmentException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
+        trainerAssessment.get().setEStatus(EStatus.DELETED);
+        update(trainerAssessment.get());
+
+        return "Silme işlemi başarılı";
     }
 }
