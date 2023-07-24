@@ -21,9 +21,9 @@ public class InternshipSuccessRateService extends ServiceManager<InternshipSucce
         this.jwtTokenManager = jwtTokenManager;
     }
 
-    public InternshipSuccessRate addScoreAndCommentForStudent(InternshipSuccessRateRequestDto dto) {
+    public Boolean addScoreAndCommentForStudent(InternshipSuccessRateRequestDto dto) {
         InternshipSuccessRate internshipSuccessRate = IInternshipSuccessRateMapper.INSTANCE.toInternshipSuccessRateDtoFromInternshipSuccessRate(dto);
         save(internshipSuccessRate);
-        return internshipSuccessRate;
+        return true;
     }
 }

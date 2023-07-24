@@ -5,16 +5,19 @@ import com.bilgeadam.repository.entity.InternshipSuccessRate;
 import com.bilgeadam.service.InternshipSuccessRateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static com.bilgeadam.constants.ApiUrls.*;
 
 @RestController
-@RequestMapping()
+@RequestMapping(INTERNSHIP)
 @RequiredArgsConstructor
 public class InternshipSuccessRateController {
     private final InternshipSuccessRateService internshipSuccessRateService;
 
-    public ResponseEntity<InternshipSuccessRate> addScoreAndCommentForStudent(InternshipSuccessRateRequestDto dto) {
+    @PostMapping(ADD_SCORE_AND_COMMENT)
+    @CrossOrigin("*")
+    public ResponseEntity<Boolean> addScoreAndCommentForStudent(@RequestBody InternshipSuccessRateRequestDto dto) {
         return ResponseEntity.ok(internshipSuccessRateService.addScoreAndCommentForStudent(dto));
     }
 }

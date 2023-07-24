@@ -17,5 +17,5 @@ public class InternshipSuccessRate extends BaseEntity {
     private String internshipSuccessRateId;
     private Long score; // Participation Rate
     private String comment;
-    private String studentId;
+    private String userId;
 }
