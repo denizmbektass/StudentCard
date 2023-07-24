@@ -20,5 +20,7 @@ public class ApiUrls {
     public static final String UPDATE_INTERVIEW ="/update-interview" ;
     public static final String DELETE_INTERVIEW = "/delete-interview";
     public static final String CREATE_PORJECT_SCORE ="/create-project-score";
+    public static final String INTERNSHIP = VERSION + "/internship";
+    public static final String ADD_SCORE_AND_COMMENT = "/add-score-and-comment";
 
 }
