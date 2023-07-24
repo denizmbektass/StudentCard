@@ -7,5 +7,5 @@ public class ApiUrls {
     public static final String UPDATE = "/update";
     public static final String DO_PASSIVE = "/do-passive";
     public static final String SAFE_DELETE = "/safe-delete";
-
+    public static final String SAVE = "/save";
 }

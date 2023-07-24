@@ -1,21 +1,18 @@
-package com.bilgeadam.repository.entity;
+package com.bilgeadam.dto.response;
 
 import com.bilgeadam.repository.enums.ERole;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
-
 @Data
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document
-public class User extends BaseEntity {
-    @Id
+public class UserResponseDto {
     private String userId;
     private String name;
     private String surname;
@@ -29,6 +26,4 @@ public class User extends BaseEntity {
     private String email;
     private List<String> groupNameList;
     private List<ERole> roleList;
-    @Builder.Default
-    private EStatus status = EStatus.ACTIVE;
 }
