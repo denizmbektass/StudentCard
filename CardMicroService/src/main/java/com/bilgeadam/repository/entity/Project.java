@@ -20,5 +20,5 @@ public class Project extends BaseEntity{
     private Long mainProjectScore;
     private Long graduationProjectScore;
     private String description;
-    private String studentId;
+    private String userId;
 }
