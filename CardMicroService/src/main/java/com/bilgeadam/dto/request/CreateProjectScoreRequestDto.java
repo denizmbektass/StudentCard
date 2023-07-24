@@ -11,7 +11,7 @@ import org.springframework.data.annotation.Id;
 @AllArgsConstructor
 @Builder
 public class CreateProjectScoreRequestDto {
-    private String studentId;
+    private String userId;
     private Long intermediateProjectScore;
     private Long mainProjectScore;
     private Long graduationProjectScore;

@@ -5,9 +5,8 @@ import com.bilgeadam.dto.response.CreateProjectScoreResponseDto;
 import com.bilgeadam.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import static com.bilgeadam.constants.ApiUrls.*;
 
 @RequiredArgsConstructor
@@ -16,8 +15,9 @@ import static com.bilgeadam.constants.ApiUrls.*;
 public class ProjectController {
     private final ProjectService projectService;
 
-    @PostMapping(CREATE_PORJECT_SCORE)
-    public ResponseEntity<CreateProjectScoreResponseDto> createProjectScore (CreateProjectScoreRequestDto dto){
+    @CrossOrigin
+    @PostMapping(CREATE_PROJECT_SCORE)
+    public ResponseEntity<CreateProjectScoreResponseDto> createProjectScore (@RequestBody CreateProjectScoreRequestDto dto){
         return ResponseEntity.ok(projectService.createProjectScore(dto));
     }
 }
