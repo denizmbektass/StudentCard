@@ -20,6 +20,7 @@ public enum ErrorType {
     BAD_REQUEST(4100,"Parameter Error",HttpStatus.BAD_REQUEST),
 
     INTERVIEW_NOT_FOUND(6100,"Böyle bir mülakat bulunamadı",HttpStatus.BAD_REQUEST),
+    ASSIGNMENT_NOT_FOUND(6100,"Böyle bir ödev bulunamadı",HttpStatus.BAD_REQUEST),
 
     TRAINER_ASSESSMENT_NOT_FOUND(6001,"Trainer Assessment is not found please try again",HttpStatus.BAD_REQUEST),
 
