@@ -18,7 +18,7 @@ public class Exam extends BaseEntity{
     @Id
     private String examId;
     private String title;
-    private long score; //Long'a çevirilecek.
+    private Long score;
     private String description;
     private String studentId;
 }
