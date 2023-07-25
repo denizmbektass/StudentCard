@@ -19,22 +19,31 @@ import static com.bilgeadam.constants.ApiUrls.*;
 @RequiredArgsConstructor
 public class TrainerAssessmentController {
 
-    private final TrainerAssessmentService trainerAssesmentService;
+    private final TrainerAssessmentService trainerAssessmentService;
 
     @PostMapping(SAVE)
-    public ResponseEntity<TrainerAssessmentSaveResponseDto> saveTrainerAssesment(TrainerAssessmentSaveRequestDto dto){
-        return ResponseEntity.ok(trainerAssesmentService.saveTrainerAssessment(dto));
+    @CrossOrigin("*")
+    public ResponseEntity<TrainerAssessmentSaveResponseDto> saveTrainerAssessment(@RequestBody TrainerAssessmentSaveRequestDto dto){
+        return ResponseEntity.ok(trainerAssessmentService.saveTrainerAssessment(dto));
     }
     @PutMapping(UPDATE)
-    public ResponseEntity<UpdateTrainerAssessmentResponseDto> updateTrainerAssesment(UpdateTrainerAssessmentRequestDto dto,String id){
-        return ResponseEntity.ok(trainerAssesmentService.updateTrainerAssessment(dto,id));
+    @CrossOrigin("*")
+    public ResponseEntity<UpdateTrainerAssessmentResponseDto> updateTrainerAssessment(@RequestBody UpdateTrainerAssessmentRequestDto dto,String id){
+        return ResponseEntity.ok(trainerAssessmentService.updateTrainerAssessment(dto,id));
     }
     @DeleteMapping(DELETE)
-    public ResponseEntity<String> deleteTrainerAssesment(String id){
-        return ResponseEntity.ok(trainerAssesmentService.deleteTrainerAssessment(id));
+    @CrossOrigin("*")
+    public ResponseEntity<String> deleteTrainerAssessment(String id){
+        return ResponseEntity.ok(trainerAssessmentService.deleteTrainerAssessment(id));
     }
     @GetMapping(FIND_ALL_ACTIVE_TRAINER_ASSESSMENT)
-    public ResponseEntity<List<TrainerAssessment>> findAllTrainerAssesment(){
-        return ResponseEntity.ok(trainerAssesmentService.findAllTrainerAssessment());
+    @CrossOrigin("*")
+    public ResponseEntity<List<TrainerAssessment>> findAllTrainerAssessmentActive(String studentId){
+        return ResponseEntity.ok(trainerAssessmentService.findAllTrainerAssessment(studentId));
+    }
+    @GetMapping(FIND_ALL)
+    @CrossOrigin("*")
+    public ResponseEntity<List<TrainerAssessment>> findAllTrainerAssessment(){
+        return ResponseEntity.ok(trainerAssessmentService.findAll());
     }
 }

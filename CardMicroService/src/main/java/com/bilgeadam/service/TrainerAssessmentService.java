@@ -31,6 +31,12 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         /**
          * StudentId ekledniğinde geliştirilecek
          */
+        if (dto.getScore()<=0 || dto.getScore()>10)
+            throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Puan 1 ile 10 arasında olmak zorundadır...");
+        if(dto.getDescription().isEmpty())
+            throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Görüş boş bırakılamaz...");
+        if(dto.getScore()==null)
+            throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Puan boş bırakılamaz...");
         TrainerAssessment trainerAssessment= ITrainerAssesmentMapper.INSTANCE.toTrainerAssesment(dto);
         save(trainerAssessment);
         return ITrainerAssesmentMapper.INSTANCE.toSaveTrainerAssesment(trainerAssessment);
@@ -40,11 +46,11 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         Optional<TrainerAssessment> trainerAssessment=iTrainerAssesmentRepository.findOptionalByTrainerAssessmentId(id);
         if(trainerAssessment.isEmpty())
             throw new TrainerAssessmentException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
-
-        trainerAssessment.get().setScore(dto.getScore());
-        trainerAssessment.get().setDescription(dto.getDescription());
-        trainerAssessment.get().setStudentId(dto.getStudentId());
-        update(trainerAssessment.get());
+        TrainerAssessment trainerAssessmentUpdate = trainerAssessment.get();
+        trainerAssessmentUpdate.setScore(dto.getScore());
+        trainerAssessmentUpdate.setDescription(dto.getDescription());
+        trainerAssessmentUpdate.setStudentId(dto.getStudentId());
+        update(trainerAssessmentUpdate);
 
         return ITrainerAssesmentMapper.INSTANCE.toUpdateTrainerAssessment(trainerAssessment.get());
     }
@@ -59,8 +65,8 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         return "Silme işlemi başarılı";
     }
 
-    public List<TrainerAssessment> findAllTrainerAssessment() {
-        return findAll().stream().filter(x->x.getEStatus()==EStatus.ACTIVE)
+    public List<TrainerAssessment> findAllTrainerAssessment(String studentId) {
+        return findAll().stream().filter(x->x.getEStatus()==EStatus.ACTIVE && x.getStudentId().equals(studentId))
                 .collect(Collectors.toList());
     }
 }
