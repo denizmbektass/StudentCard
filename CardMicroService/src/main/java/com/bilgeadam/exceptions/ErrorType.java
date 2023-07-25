@@ -25,6 +25,8 @@ public enum ErrorType {
 
     TRAINER_ASSESSMENT_NOT_FOUND(6001,"Trainer Assessment is not found please try again",HttpStatus.BAD_REQUEST),
 
+    ABSENCE_NOT_FOUND(7001,"Absence is not found please try again",HttpStatus.NOT_FOUND),
+
 
 
 
