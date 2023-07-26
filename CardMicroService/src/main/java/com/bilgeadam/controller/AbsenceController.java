@@ -1,6 +1,7 @@
 package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.AddAbsenceRequestDto;
+import com.bilgeadam.dto.response.ShowUserAbsenceInformationResponseDto;
 import com.bilgeadam.service.AbsenceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class AbsenceController {
 
     @CrossOrigin("*")
     @GetMapping("/show-user-absence-information/{userId}")
-    public ResponseEntity<Double> showUserAbsenceInformation(@PathVariable String userId){
+    public ResponseEntity<ShowUserAbsenceInformationResponseDto> showUserAbsenceInformation(@PathVariable String userId){
         return ResponseEntity.ok(absenceService.showUserAbsenceInformation(userId));
     }
 

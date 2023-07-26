@@ -20,5 +20,6 @@ public class Absence extends BaseEntity {
     private byte hourOfAbsenceLimit = 66;
     private byte hourOfAbsence;
     private String userId;
+    private String group;
     private Long absenceDate;
 }

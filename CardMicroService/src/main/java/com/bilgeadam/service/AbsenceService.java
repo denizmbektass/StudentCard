@@ -1,6 +1,7 @@
 package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.AddAbsenceRequestDto;
+import com.bilgeadam.dto.response.ShowUserAbsenceInformationResponseDto;
 import com.bilgeadam.exceptions.AbsenceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.mapper.IAbsenceMapper;
@@ -28,17 +29,27 @@ public class AbsenceService extends ServiceManager<Absence,String> {
         return true;
     }
 
-    public Double showUserAbsenceInformation(String userId){
+    public ShowUserAbsenceInformationResponseDto showUserAbsenceInformation(String userId){
         List<Absence> absenceList = absenceRepository.findByUserId(userId);
         if(absenceList.isEmpty())
             throw new AbsenceException(ErrorType.ABSENCE_NOT_FOUND);
-        byte sumOfAbsenceHours = 0;
+        byte sumOfAbsencePercentageGroup1 = 0;
+        byte sumOfAbsencePercentageGroup2 = 0;
         for(Absence absence : absenceList){
-            sumOfAbsenceHours += absence.getHourOfAbsence();
+            if(absence.getGroup().equals("Group1")){
+                sumOfAbsencePercentageGroup1 += absence.getHourOfAbsence();
+            }else if(absence.getGroup().equals("Group2")){
+                sumOfAbsencePercentageGroup2 += absence.getHourOfAbsence();
+            }
         }
-        System.out.println(sumOfAbsenceHours);
-        double absenceHour = 100 -((sumOfAbsenceHours)*100/absenceList.get(0).getHourOfAbsenceLimit());
-        return absenceHour;
+        double absencePercentageGroup1 = 100 -((sumOfAbsencePercentageGroup1)*100 / absenceList.get(0).getHourOfAbsenceLimit()/2);
+        double absencePercentageGroup2 = 100 -((sumOfAbsencePercentageGroup2)*100 / absenceList.get(0).getHourOfAbsenceLimit()/2);
+        System.out.println("Group1: " + absencePercentageGroup1);
+        System.out.println("Group2: " + absencePercentageGroup2);
+        return ShowUserAbsenceInformationResponseDto.builder()
+                .group1Percentage(absencePercentageGroup1)
+                .group2Percentage(absencePercentageGroup2)
+                .build();
     }
 
 }
