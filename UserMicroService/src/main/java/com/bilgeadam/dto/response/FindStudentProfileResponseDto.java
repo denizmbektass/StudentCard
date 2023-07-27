@@ -22,4 +22,9 @@ public class FindStudentProfileResponseDto {
     private String school;
     private String department;
     private List<String> groupNameList;
+    private String email;
+    private String address;
+    private String profilePicture;
+
+
 }

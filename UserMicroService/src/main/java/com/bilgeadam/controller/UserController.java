@@ -60,8 +60,8 @@ public class UserController {
     public  ResponseEntity<String> getIdFromToken( String token){
         return  ResponseEntity.ok(userService.getIdFromToken(token));
     }
-    @CrossOrigin
-    @PostMapping("find-student-profile/{token}")
+    @CrossOrigin("*")
+    @GetMapping ("find-student-profile/{token}")
     public  ResponseEntity<FindStudentProfileResponseDto> findStudentProfile(@PathVariable String token){
         return  ResponseEntity.ok(userService.findStudentProfile(token));
     }
