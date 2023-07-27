@@ -33,7 +33,7 @@ public class AssignmentService extends ServiceManager<Assignment,String> {
     public Boolean createAssignment(AssignmentRequestDto dto){
         if(dto.getScore()>=100||dto.getScore()<=0)
             throw new AssignmentException(ErrorType.BAD_REQUEST,"Ödev notu 100'den büyük veya 0'dan küçük olamaz...");
-        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
         if(studentId.isEmpty())
             throw new AssignmentException(ErrorType.INVALID_TOKEN);
         Assignment assignment = assignmentMapper.toAssignment(dto);

@@ -18,13 +18,13 @@ import javax.validation.constraints.Size;
 
 public class AssignmentRequestDto {
     @NotNull
-    private String token;
+    private String studentToken;
     @NotBlank(message = "Bu kısım boş bırakılamaz")
     private String title;
     @NotBlank(message = "Bu kısım boş bırakılamaz")
     private String assignmentType;
     @NotBlank(message = "Bu kısım boş bırakılamaz")
     private String statement;
-    @NotBlank(message = "Bu kısım boş bırakılamaz")
+    @NotNull(message = "Bu kısım boş bırakılamaz")
     private Long score;
 }
