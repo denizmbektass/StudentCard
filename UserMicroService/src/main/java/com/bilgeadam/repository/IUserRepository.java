@@ -6,9 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 
-
 @Repository
 public interface IUserRepository extends MongoRepository<User,String> {
-    List<User> findByNameContainingAndSurnameContainingOrEmailOrPhoneNumber(String name,String surname ,String email,String phoneNumber);
-
+    List<User> findByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndPhoneNumberContaining(String name, String surname , String email, String phoneNumber);
 }

@@ -59,4 +59,11 @@ public class UserController {
     public  ResponseEntity<String> getIdFromToken( String token){
         return  ResponseEntity.ok(userService.getIdFromToken(token));
     }
+
+    @CrossOrigin
+    @PutMapping("save-user-list")
+    public  ResponseEntity<Boolean> saveUserList(@RequestBody List<UserRequestDto> dtoList){
+        return  ResponseEntity.ok(userService.saveUserList(dtoList));
+    }
+
 }

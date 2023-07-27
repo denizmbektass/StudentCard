@@ -75,9 +75,13 @@ public class UserService extends ServiceManager<User, String> {
         save(user);
        return IUserMapper.INSTANCE.toUserResponseDto(user);
     }
+
+
     public List<User> searchUser(SearchUserRequestDto dto){
-      return   userRepository.findByNameContainingAndSurnameContainingOrEmailOrPhoneNumber(dto.getName(), dto.getSurname(), dto.getEmail(), dto.getPhoneNumber());
+      return   userRepository.findByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndPhoneNumberContaining( dto.getName(), dto.getSurname(), dto.getEmail(), dto.getPhoneNumber());
     }
+
+
     public String createToken(SelectUserCreateTokenDto dto){
       Optional<String> token=jwtTokenManager.createToken(dto.getStudentId(), dto.getRole(),dto.getStatus());
       if(token.isEmpty())throw  new UserServiceException(ErrorType.TOKEN_NOT_CREATED);
@@ -87,5 +91,11 @@ public class UserService extends ServiceManager<User, String> {
         Optional<String> userId=jwtTokenManager.getIdFromToken(token);
         if (userId.isEmpty())throw  new UserServiceException(ErrorType.INVALID_TOKEN);
         return  userId.get();
+    }
+    public Boolean saveUserList(List<UserRequestDto> dtoList ){
+       dtoList.stream().forEach(dto -> {
+         save(dto);
+       });
+        return  true;
     }
 }
