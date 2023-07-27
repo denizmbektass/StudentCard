@@ -44,6 +44,7 @@ public class UserController {
     }
     @CrossOrigin
     @PostMapping("search-user")
+
     public  ResponseEntity<List<User>> searchUser(@RequestBody SearchUserRequestDto dto){
         return  ResponseEntity.ok(userService.searchUser(dto));
     }

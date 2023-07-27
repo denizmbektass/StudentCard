@@ -21,20 +21,26 @@ import static com.bilgeadam.constants.ApiUrls.*;
 @RequiredArgsConstructor
 public class ExamController {
     private  final ExamService examService;
-
+    @CrossOrigin("*")
     @PostMapping(CREATE)
     public ResponseEntity<MessageResponse> createExam(@RequestBody @Valid CreateExamRequestDto dto){
         return  ResponseEntity.ok(examService.createExam(dto));
     }
+
     @PostMapping(FIND_ALL)
+    @CrossOrigin("*")
     public ResponseEntity<List<ExamResponseDto>> findAllExams(@RequestBody @Valid FindByStudentIdRequestDto dto){
         return  ResponseEntity.ok(examService.findAllExams(dto));
     }
+
+
     @PutMapping(UPDATE)
+    @CrossOrigin("*")
     public ResponseEntity<MessageResponse> updateExam(@RequestBody UpdateExamRequestDto dto){
         return  ResponseEntity.ok(examService.updateExam(dto));
     }
     @DeleteMapping(DELETE)
+    @CrossOrigin("*")
     public ResponseEntity<MessageResponse> deleteExam(@RequestParam String examId){
         return  ResponseEntity.ok(examService.deleteExam(examId));
     }
