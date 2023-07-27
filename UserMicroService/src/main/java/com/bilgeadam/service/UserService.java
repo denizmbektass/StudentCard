@@ -1,6 +1,7 @@
 package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.SearchUserRequestDto;
+import com.bilgeadam.dto.request.SelectUserCreateTokenDto;
 import com.bilgeadam.dto.request.UserRequestDto;
 import com.bilgeadam.dto.request.UserUpdateRequestDto;
 import com.bilgeadam.dto.response.UserResponseDto;
@@ -11,6 +12,7 @@ import com.bilgeadam.mapper.IUserMapper;
 import com.bilgeadam.repository.IUserRepository;
 import com.bilgeadam.repository.entity.EStatus;
 import com.bilgeadam.repository.entity.User;
+import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +23,14 @@ import java.util.Optional;
 public class UserService extends ServiceManager<User, String> {
     private final IUserRepository userRepository;
     private final UserConverter userConverter;
+    private final JwtTokenManager jwtTokenManager;
 
 
-    public UserService(IUserRepository userRepository, UserConverter userConverter) {
+    public UserService(IUserRepository userRepository, UserConverter userConverter,JwtTokenManager jwtTokenManager) {
         super(userRepository);
         this.userRepository = userRepository;
         this.userConverter = userConverter;
+        this.jwtTokenManager = jwtTokenManager;
     }
 
     public Boolean updateUser(UserUpdateRequestDto dto) {
@@ -72,6 +76,16 @@ public class UserService extends ServiceManager<User, String> {
        return IUserMapper.INSTANCE.toUserResponseDto(user);
     }
     public List<User> searchUser(SearchUserRequestDto dto){
-      return   userRepository.findByNameOrSurnameOrEmailOrPhoneNumber(dto.getName(), dto.getSurname(), dto.getEmail(), dto.getPhoneNumber());
+      return   userRepository.findByNameContainingAndSurnameContainingOrEmailOrPhoneNumber(dto.getName(), dto.getSurname(), dto.getEmail(), dto.getPhoneNumber());
+    }
+    public String createToken(SelectUserCreateTokenDto dto){
+      Optional<String> token=jwtTokenManager.createToken(dto.getStudentId(), dto.getRole(),dto.getStatus());
+      if(token.isEmpty())throw  new UserServiceException(ErrorType.TOKEN_NOT_CREATED);
+        return token.get();
+    }
+    public  String getIdFromToken(String token){
+        Optional<String> userId=jwtTokenManager.getIdFromToken(token);
+        if (userId.isEmpty())throw  new UserServiceException(ErrorType.INVALID_TOKEN);
+        return  userId.get();
     }
 }

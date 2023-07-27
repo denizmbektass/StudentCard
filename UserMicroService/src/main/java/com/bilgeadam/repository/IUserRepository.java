@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface IUserRepository extends MongoRepository<User,String> {
-    List<User> findByNameOrSurnameOrEmailOrPhoneNumber(String name,String surname ,String email,Long phoneNumber);
+    List<User> findByNameContainingAndSurnameContainingOrEmailOrPhoneNumber(String name,String surname ,String email,String phoneNumber);
 
 }
