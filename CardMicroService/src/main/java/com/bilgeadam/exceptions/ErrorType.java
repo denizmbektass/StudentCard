@@ -27,8 +27,9 @@ public enum ErrorType {
 
     ABSENCE_NOT_FOUND(7001,"Absence is not found please try again",HttpStatus.NOT_FOUND),
 
-
-
+    USER_NOT_FOUND(8001,"Kullanıcı bulunamadı",HttpStatus.NOT_FOUND),
+    POINT_SUCCESS_RATE(8002,"Girdiğiniz puan 0 ile 100 arasında olmalıdır.",HttpStatus.BAD_REQUEST),
+    COMMENT_LENGTH_VERGE(8003, "Girilen yorum 255 karakterden fazla olamaz",HttpStatus.BAD_REQUEST),
 
     ;
 

@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InternshipSuccessRateRequestDto {
-    private String userId;
+    private String token;
     private Long score;
     private String comment;
-
 }
