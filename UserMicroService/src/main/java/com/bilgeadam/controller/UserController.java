@@ -4,6 +4,7 @@ import com.bilgeadam.dto.request.SearchUserRequestDto;
 import com.bilgeadam.dto.request.SelectUserCreateTokenDto;
 import com.bilgeadam.dto.request.UserRequestDto;
 import com.bilgeadam.dto.request.UserUpdateRequestDto;
+import com.bilgeadam.dto.response.FindStudentProfileResponseDto;
 import com.bilgeadam.dto.response.UserResponseDto;
 import com.bilgeadam.repository.entity.User;
 import com.bilgeadam.service.UserService;
@@ -58,5 +59,10 @@ public class UserController {
     @PostMapping("get-id-from-token")
     public  ResponseEntity<String> getIdFromToken( String token){
         return  ResponseEntity.ok(userService.getIdFromToken(token));
+    }
+    @CrossOrigin("*")
+    @GetMapping ("find-student-profile/{token}")
+    public  ResponseEntity<FindStudentProfileResponseDto> findStudentProfile(@PathVariable String token){
+        return  ResponseEntity.ok(userService.findStudentProfile(token));
     }
 }

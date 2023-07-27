@@ -31,4 +31,5 @@ public class User extends BaseEntity {
     private List<ERole> roleList;
     @Builder.Default
     private EStatus status = EStatus.ACTIVE;
+    private String profilePicture;
 }
