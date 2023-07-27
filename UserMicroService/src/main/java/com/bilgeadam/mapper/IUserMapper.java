@@ -14,6 +14,7 @@ public interface IUserMapper {
     IUserMapper INSTANCE = Mappers.getMapper(IUserMapper.class);
 
     User toUser(final UserRequestDto dto);
+    Iterable<User> toUsers(final Iterable<UserRequestDto> dto);
     UserResponseDto toUserResponseDto(final User user);
     FindStudentProfileResponseDto toFindStudentProfileResponseDto(final User user);
 }

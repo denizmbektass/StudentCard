@@ -65,4 +65,11 @@ public class UserController {
     public  ResponseEntity<FindStudentProfileResponseDto> findStudentProfile(@PathVariable String token){
         return  ResponseEntity.ok(userService.findStudentProfile(token));
     }
+
+    @CrossOrigin
+    @PutMapping("save-user-list")
+    public  ResponseEntity<Boolean> saveUserList(@RequestBody List<UserRequestDto> dtoList){
+        return  ResponseEntity.ok(userService.saveUserList(dtoList));
+    }
+
 }
