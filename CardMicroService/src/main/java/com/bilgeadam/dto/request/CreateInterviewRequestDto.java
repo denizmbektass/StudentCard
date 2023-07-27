@@ -8,8 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 public class CreateInterviewRequestDto {
     private String name;
+    private String token;
     private long score;
     private String description;
-    private String studentId;
     private String interviewType;
 }

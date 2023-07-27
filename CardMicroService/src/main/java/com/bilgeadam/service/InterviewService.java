@@ -11,44 +11,50 @@ import com.bilgeadam.mapper.IInterviewMapper;
 import com.bilgeadam.repository.IInterviewRepository;
 import com.bilgeadam.repository.entity.Interview;
 import com.bilgeadam.repository.enums.EStatus;
+import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class InterviewService extends ServiceManager<Interview,String> {
+public class InterviewService extends ServiceManager<Interview, String> {
     private final IInterviewRepository interviewRepository;
+    private final JwtTokenManager jwtTokenManager;
 
 
-    public InterviewService(IInterviewRepository interviewRepository) {
+    public InterviewService(IInterviewRepository interviewRepository, JwtTokenManager jwtTokenManager) {
         super(interviewRepository);
         this.interviewRepository = interviewRepository;
+        this.jwtTokenManager = jwtTokenManager;
     }
 
     public CreateInterviewResponseDto createInterview(CreateInterviewRequestDto dto) {
         //if check ile böyle bir student var mı eklenebilir user micro service oluşturulduktan sonra.
-            Interview interview = IInterviewMapper.INSTANCE.toInterview(dto);
-            save(interview);
-            return IInterviewMapper.INSTANCE.toCreateInterviewResponseDto(interview);
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());
+        Interview interview = IInterviewMapper.INSTANCE.toInterview(dto);
+        interview.setStudentId(studentId.get());
+        save(interview);
+        return IInterviewMapper.INSTANCE.toCreateInterviewResponseDto(interview);
     }
 
     public UpdateInterviewResponseDto updateInterview(UpdateInterviewRequestDto dto) {
         Optional<Interview> interview = interviewRepository.findById(dto.getInterviewId());
-        if(interview.isEmpty()){
+        if (interview.isEmpty()) {
             throw new InterviewServiceException(ErrorType.INTERVIEW_NOT_FOUND);
         }
-        interview.get().setDescription(dto.getDescription());
-        interview.get().setName(dto.getName());
-        interview.get().setScore(dto.getScore());
-        interview.get().setStudentId(dto.getStudentId());
-        update(interview.get());
+        Interview toUpdateInterview = interview.get();
+        toUpdateInterview.setDescription(dto.getDescription());
+        toUpdateInterview.setName(dto.getName());
+        toUpdateInterview.setScore(dto.getScore());
+        toUpdateInterview.setStudentId(dto.getStudentId());
+        update(toUpdateInterview);
         return IInterviewMapper.INSTANCE.toUpdateInterviewResponseDto(interview.get());
     }
 
     public DeleteInterviewResponseDto deleteInterview(String id) {
         Optional<Interview> interview = interviewRepository.findById(id);
-        if(interview.isEmpty()){
+        if (interview.isEmpty()) {
             throw new InterviewServiceException(ErrorType.INTERVIEW_NOT_FOUND);
         }
         interview.get().setEStatus(EStatus.DELETED);
