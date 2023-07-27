@@ -29,7 +29,10 @@ public class AbsenceService extends ServiceManager<Absence,String> {
         return true;
     }
 
-    public ShowUserAbsenceInformationResponseDto showUserAbsenceInformation(String userId){
+    public ShowUserAbsenceInformationResponseDto showUserAbsenceInformation(String token){
+        String userId = jwtTokenManager.getIdFromToken(token).orElseThrow(()->{
+            throw new AbsenceException(ErrorType.USER_NOT_EXIST);
+        });
         List<Absence> absenceList = absenceRepository.findByUserId(userId);
         if(absenceList.isEmpty())
             throw new AbsenceException(ErrorType.ABSENCE_NOT_FOUND);

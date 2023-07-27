@@ -4,6 +4,7 @@ import com.bilgeadam.dto.request.SearchUserRequestDto;
 import com.bilgeadam.dto.request.SelectUserCreateTokenDto;
 import com.bilgeadam.dto.request.UserRequestDto;
 import com.bilgeadam.dto.request.UserUpdateRequestDto;
+import com.bilgeadam.dto.response.FindStudentProfileResponseDto;
 import com.bilgeadam.dto.response.UserResponseDto;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.UserServiceException;
@@ -83,9 +84,21 @@ public class UserService extends ServiceManager<User, String> {
       if(token.isEmpty())throw  new UserServiceException(ErrorType.TOKEN_NOT_CREATED);
         return token.get();
     }
-    public  String getIdFromToken(String token){
+    public String getIdFromToken(String token){
         Optional<String> userId=jwtTokenManager.getIdFromToken(token);
         if (userId.isEmpty())throw  new UserServiceException(ErrorType.INVALID_TOKEN);
         return  userId.get();
     }
+
+    public FindStudentProfileResponseDto  findStudentProfile(String token){
+        String userId = jwtTokenManager.getIdFromToken(token).orElseThrow(() -> {
+            throw new UserServiceException(ErrorType.INVALID_TOKEN);
+        });
+        User user = findById(userId).orElseThrow(()->{
+            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        });
+        return IUserMapper.INSTANCE.toFindStudentProfileResponseDto(user);
+    }
+
+
 }

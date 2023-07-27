@@ -21,9 +21,9 @@ public class AbsenceController {
     }
 
     @CrossOrigin("*")
-    @GetMapping("/show-user-absence-information/{userId}")
-    public ResponseEntity<ShowUserAbsenceInformationResponseDto> showUserAbsenceInformation(@PathVariable String userId){
-        return ResponseEntity.ok(absenceService.showUserAbsenceInformation(userId));
+    @GetMapping("/show-user-absence-information/{token}")
+    public ResponseEntity<ShowUserAbsenceInformationResponseDto> showUserAbsenceInformation(@PathVariable String token){
+        return ResponseEntity.ok(absenceService.showUserAbsenceInformation(token));
     }
 
 

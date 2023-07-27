@@ -24,7 +24,7 @@ public enum ErrorType {
     EXAM_NOT_FOUND(6100,"Böyle bir sınav bulunamadı",HttpStatus.BAD_REQUEST),
 
     TRAINER_ASSESSMENT_NOT_FOUND(6001,"Trainer Assessment is not found please try again",HttpStatus.BAD_REQUEST),
-
+    USER_NOT_EXIST(500,"User not exist",HttpStatus.BAD_REQUEST),
     ABSENCE_NOT_FOUND(7001,"Absence is not found please try again",HttpStatus.NOT_FOUND),
 
 
