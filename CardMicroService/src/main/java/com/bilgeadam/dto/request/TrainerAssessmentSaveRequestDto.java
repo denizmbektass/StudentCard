@@ -13,5 +13,5 @@ public class TrainerAssessmentSaveRequestDto {
 
     private Long score;
     private String description;
-    private String studentId;
+    private String token;
 }

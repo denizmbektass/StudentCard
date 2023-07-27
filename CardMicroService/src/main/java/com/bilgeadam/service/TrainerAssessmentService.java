@@ -10,6 +10,7 @@ import com.bilgeadam.mapper.ITrainerAssesmentMapper;
 import com.bilgeadam.repository.ITrainerAssessmentRepository;
 import com.bilgeadam.repository.entity.TrainerAssessment;
 import com.bilgeadam.repository.enums.EStatus;
+import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
@@ -21,23 +22,28 @@ import java.util.stream.Collectors;
 public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,String> {
 
     private final ITrainerAssessmentRepository iTrainerAssesmentRepository;
+    private final JwtTokenManager jwtTokenManager;
 
-    public TrainerAssessmentService(ITrainerAssessmentRepository iTrainerAssessmentRepository){
+    public TrainerAssessmentService(ITrainerAssessmentRepository iTrainerAssessmentRepository, JwtTokenManager jwtTokenManager){
         super(iTrainerAssessmentRepository);
         this.iTrainerAssesmentRepository=iTrainerAssessmentRepository;
+        this.jwtTokenManager = jwtTokenManager;
     }
 
     public TrainerAssessmentSaveResponseDto saveTrainerAssessment(TrainerAssessmentSaveRequestDto dto){
         /**
          * StudentId ekledniğinde geliştirilecek
          */
-        if (dto.getScore()<=0 || dto.getScore()>10)
-            throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Puan 1 ile 10 arasında olmak zorundadır...");
-        if(dto.getDescription().isEmpty())
-            throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Görüş boş bırakılamaz...");
-        if(dto.getScore()==null)
-            throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Puan boş bırakılamaz...");
+//        if (dto.getScore()<=0 || dto.getScore()>10)
+//            throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Puan 1 ile 10 arasında olmak zorundadır...");
+//        if(dto.getDescription().isEmpty())
+//            throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Görüş boş bırakılamaz...");
+//        if(dto.getScore()==null)
+//            throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Puan boş bırakılamaz...");
+
+        Optional<String> studentId= jwtTokenManager.getIdFromToken(dto.getToken());
         TrainerAssessment trainerAssessment= ITrainerAssesmentMapper.INSTANCE.toTrainerAssesment(dto);
+        trainerAssessment.setStudentId(studentId.get());
         save(trainerAssessment);
         return ITrainerAssesmentMapper.INSTANCE.toSaveTrainerAssesment(trainerAssessment);
     }
