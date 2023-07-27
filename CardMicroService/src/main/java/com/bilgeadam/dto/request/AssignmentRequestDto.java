@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 
 public class AssignmentRequestDto {
     @NotNull
-    private String studentId;
+    private String token;
     @NotBlank(message = "Bu kısım boş bırakılamaz")
     private String title;
     @NotBlank(message = "Bu kısım boş bırakılamaz")

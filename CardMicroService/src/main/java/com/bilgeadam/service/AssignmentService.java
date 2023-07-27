@@ -4,13 +4,13 @@ import com.bilgeadam.dto.request.AssignmentRequestDto;
 import com.bilgeadam.dto.request.FindByStudentIdRequestDto;
 import com.bilgeadam.dto.request.UpdateAssignmentRequestDto;
 import com.bilgeadam.dto.response.AssignmentResponseDto;
-import com.bilgeadam.dto.response.MessageResponse;
 import com.bilgeadam.exceptions.AssignmentException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.mapper.IAssignmentMapper;
 import com.bilgeadam.repository.IAssignmentRepository;
 import com.bilgeadam.repository.entity.Assignment;
 import com.bilgeadam.repository.enums.AssignmentType;
+import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
@@ -21,18 +21,23 @@ import java.util.Optional;
 public class AssignmentService extends ServiceManager<Assignment,String> {
     private final IAssignmentRepository assignmentRepository;
     private final IAssignmentMapper assignmentMapper;
+    private final JwtTokenManager jwtTokenManager;
 
-
-    public AssignmentService(IAssignmentRepository assignmentRepository, IAssignmentMapper assignmentMapper) {
+    public AssignmentService(IAssignmentRepository assignmentRepository, IAssignmentMapper assignmentMapper, JwtTokenManager jwtTokenManager) {
         super(assignmentRepository);
         this.assignmentRepository = assignmentRepository;
         this.assignmentMapper = assignmentMapper;
+        this.jwtTokenManager = jwtTokenManager;
     }
 
     public Boolean createAssignment(AssignmentRequestDto dto){
         if(dto.getScore()>=100||dto.getScore()<=0)
             throw new AssignmentException(ErrorType.BAD_REQUEST,"Ödev notu 100'den büyük veya 0'dan küçük olamaz...");
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());
+        if(studentId.isEmpty())
+            throw new AssignmentException(ErrorType.INVALID_TOKEN);
         Assignment assignment = assignmentMapper.toAssignment(dto);
+        assignment.setStudentId(studentId.get());
         assignment.setType(AssignmentType.valueOf(dto.getAssignmentType()));
         save(assignment);
         return true;
