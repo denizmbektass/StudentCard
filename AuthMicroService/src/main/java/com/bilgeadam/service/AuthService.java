@@ -40,9 +40,7 @@ public class AuthService extends ServiceManager<Auth, String> {
         if(authOptional.isEmpty())
             throw new AuthServiceException(ErrorType.LOGIN_ERROR);
         List<ERole> role = authOptional.get().getRole();
-        List<String> roles = role.stream().map(x->{
-            return x.name();
-        }).toList();
+        List<String> roles = role.stream().map(x-> x.name()).toList();
         Optional<String> token = jwtTokenManager.createToken(authOptional.get().getAuthId(),roles,authOptional.get().getStatus());
         if(token.isEmpty())
             throw new AuthServiceException(ErrorType.TOKEN_NOT_CREATED);

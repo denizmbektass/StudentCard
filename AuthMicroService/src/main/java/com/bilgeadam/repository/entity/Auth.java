@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -21,6 +22,11 @@ public class Auth extends BaseEntity {
     @Id
     private String authId;
     private String userId;
+    /**
+     * if two users have the same e-mail, DB will be found the first one, second one is never be shown.
+     * Because of that we use the unique value for e-mails
+     */
+    @Indexed(unique = true)
     private String email;
     private String password;
     private List<ERole> role;
