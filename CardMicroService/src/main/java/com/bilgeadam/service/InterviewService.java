@@ -1,6 +1,7 @@
 package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.CreateInterviewRequestDto;
+
 import com.bilgeadam.dto.request.UpdateInterviewRequestDto;
 import com.bilgeadam.dto.response.CreateInterviewResponseDto;
 import com.bilgeadam.dto.response.DeleteInterviewResponseDto;
@@ -10,12 +11,15 @@ import com.bilgeadam.exceptions.InterviewServiceException;
 import com.bilgeadam.mapper.IInterviewMapper;
 import com.bilgeadam.repository.IInterviewRepository;
 import com.bilgeadam.repository.entity.Interview;
+import com.bilgeadam.repository.entity.TrainerAssessment;
 import com.bilgeadam.repository.enums.EStatus;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class InterviewService extends ServiceManager<Interview, String> {
@@ -31,6 +35,12 @@ public class InterviewService extends ServiceManager<Interview, String> {
 
     public CreateInterviewResponseDto createInterview(CreateInterviewRequestDto dto) {
         //if check ile böyle bir student var mı eklenebilir user micro service oluşturulduktan sonra.
+        if (dto.getScore()<=0 || dto.getScore()>100)
+            throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Puan 0 ile 100 arasında olmak zorundadır...");
+        if(dto.getDescription().isEmpty())
+            throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Görüş boş bırakılamaz...");
+        if(dto.getScore()==null)
+            throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Puan boş bırakılamaz...");
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());
         Interview interview = IInterviewMapper.INSTANCE.toInterview(dto);
         interview.setStudentId(studentId.get());
@@ -60,5 +70,10 @@ public class InterviewService extends ServiceManager<Interview, String> {
         interview.get().setEStatus(EStatus.DELETED);
         update(interview.get());
         return IInterviewMapper.INSTANCE.toDeleteInterviewResponseDto(interview.get());
+    }
+
+    public List<Interview> findAllInterviews(String studentId) {
+        return findAll().stream().filter(x->x.getEStatus()==EStatus.ACTIVE && x.getStudentId().equals(studentId))
+                .collect(Collectors.toList());
     }
 }
