@@ -38,7 +38,7 @@ public class TrainerAssessmentController {
     }
     @GetMapping(FIND_ALL_ACTIVE_TRAINER_ASSESSMENT)
     @CrossOrigin("*")
-    public ResponseEntity<List<TrainerAssessment>> findAllTrainerAssessmentActive(String studentId){
+    public ResponseEntity<List<TrainerAssessment>> findAllTrainerAssessmentActive(@RequestParam String studentId){
         return ResponseEntity.ok(trainerAssessmentService.findAllTrainerAssessment(studentId));
     }
     @GetMapping(FIND_ALL)
