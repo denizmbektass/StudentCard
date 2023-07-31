@@ -2,6 +2,7 @@ package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.CreateInterviewRequestDto;
 
+import com.bilgeadam.dto.request.FindAllInterviewRequestDto;
 import com.bilgeadam.dto.request.UpdateInterviewRequestDto;
 import com.bilgeadam.dto.response.CreateInterviewResponseDto;
 import com.bilgeadam.dto.response.DeleteInterviewResponseDto;
@@ -28,10 +29,10 @@ public class InterviewController {
     public ResponseEntity<CreateInterviewResponseDto> createInterview(@RequestBody CreateInterviewRequestDto dto){
         return ResponseEntity.ok(interviewService.createInterview(dto));
     }
-    @GetMapping(FIND_ALL_INTERVIEW)
+    @PostMapping(FIND_ALL_INTERVIEW)
     @CrossOrigin("*")
-    public ResponseEntity<List<Interview>> findAllInterview(@RequestParam String studentId){
-        return ResponseEntity.ok(interviewService.findAllInterviews(studentId));
+    public ResponseEntity<List<Interview>> findAllInterview(@RequestBody FindAllInterviewRequestDto dto){
+        return ResponseEntity.ok(interviewService.findAllInterviews(dto));
     }
     @PostMapping(UPDATE_INTERVIEW)
     @CrossOrigin("*")
