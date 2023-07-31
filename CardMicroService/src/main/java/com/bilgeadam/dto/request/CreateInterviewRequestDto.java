@@ -9,7 +9,7 @@ import lombok.*;
 public class CreateInterviewRequestDto {
     private String name;
     private String token;
-    private long score;
+    private Long score;
     private String description;
     private String interviewType;
 }

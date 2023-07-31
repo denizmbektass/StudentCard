@@ -9,7 +9,7 @@ import lombok.*;
 public class UpdateInterviewRequestDto {
     private String interviewId;
     private String name;
-    private long score;
+    private Long score;
     private String description;
     private String studentId;
 }

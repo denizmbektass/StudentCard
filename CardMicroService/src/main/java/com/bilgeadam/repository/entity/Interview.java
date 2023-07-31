@@ -18,7 +18,7 @@ public class Interview extends BaseEntity{
     @Id
     private String interviewId;
     private String name;
-    private long score;
+    private Long score;
     private String description;
     private String studentId;
     private String interviewType;
