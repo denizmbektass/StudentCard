@@ -2,6 +2,7 @@ package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.CreateInterviewRequestDto;
 
+import com.bilgeadam.dto.request.FindAllInterviewRequestDto;
 import com.bilgeadam.dto.request.UpdateInterviewRequestDto;
 import com.bilgeadam.dto.response.CreateInterviewResponseDto;
 import com.bilgeadam.dto.response.DeleteInterviewResponseDto;
@@ -72,8 +73,9 @@ public class InterviewService extends ServiceManager<Interview, String> {
         return IInterviewMapper.INSTANCE.toDeleteInterviewResponseDto(interview.get());
     }
 
-    public List<Interview> findAllInterviews(String studentId) {
-        return findAll().stream().filter(x->x.getEStatus()==EStatus.ACTIVE && x.getStudentId().equals(studentId))
+    public List<Interview> findAllInterviews(FindAllInterviewRequestDto dto) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());
+        return findAll().stream().filter(x->x.getEStatus()==EStatus.ACTIVE && x.getStudentId().equals(studentId.get()))
                 .collect(Collectors.toList());
     }
 }

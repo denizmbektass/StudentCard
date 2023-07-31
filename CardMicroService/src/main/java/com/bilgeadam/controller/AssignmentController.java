@@ -22,6 +22,7 @@ public class AssignmentController {
     private final AssignmentService assignmentService;
 
     @PostMapping(CREATE)
+    @CrossOrigin("*")
     public ResponseEntity<MessageResponse> createAssignment(@RequestBody @Valid AssignmentRequestDto dto){
         assignmentService.createAssignment(dto);
         return ResponseEntity.ok(new MessageResponse("Ödev başarıyla kaydedildi.."));
