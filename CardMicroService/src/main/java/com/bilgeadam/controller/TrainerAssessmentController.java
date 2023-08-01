@@ -1,7 +1,9 @@
 package com.bilgeadam.controller;
 
+import com.bilgeadam.dto.request.TokenRequestDto;
 import com.bilgeadam.dto.request.TrainerAssessmentSaveRequestDto;
 import com.bilgeadam.dto.request.UpdateTrainerAssessmentRequestDto;
+import com.bilgeadam.dto.response.DeleteAssessmentResponseDto;
 import com.bilgeadam.dto.response.TrainerAssessmentSaveResponseDto;
 import com.bilgeadam.dto.response.UpdateTrainerAssessmentResponseDto;
 import com.bilgeadam.repository.entity.TrainerAssessment;
@@ -33,17 +35,17 @@ public class TrainerAssessmentController {
     }
     @DeleteMapping(DELETE)
     @CrossOrigin("*")
-    public ResponseEntity<String> deleteTrainerAssessment(String id){
+    public ResponseEntity<DeleteAssessmentResponseDto> deleteTrainerAssessment(@RequestParam String id){
         return ResponseEntity.ok(trainerAssessmentService.deleteTrainerAssessment(id));
     }
-    @GetMapping(FIND_ALL_ACTIVE_TRAINER_ASSESSMENT)
+    @PostMapping(FIND_ALL_ACTIVE_TRAINER_ASSESSMENT)
     @CrossOrigin("*")
-    public ResponseEntity<List<TrainerAssessment>> findAllTrainerAssessmentActive(@RequestParam String studentId){
-        return ResponseEntity.ok(trainerAssessmentService.findAllTrainerAssessment(studentId));
+    public ResponseEntity<List<TrainerAssessment>> findAllTrainerAssessmentActive(@RequestBody TokenRequestDto dto){
+        return ResponseEntity.ok(trainerAssessmentService.findAllTrainerAssessment(dto));
     }
-    @GetMapping(FIND_ALL)
-    @CrossOrigin("*")
-    public ResponseEntity<List<TrainerAssessment>> findAllTrainerAssessment(){
-        return ResponseEntity.ok(trainerAssessmentService.findAll());
-    }
+//    @GetMapping(FIND_ALL)
+//    @CrossOrigin("*")
+//    public ResponseEntity<List<TrainerAssessment>> findAllTrainerAssessment(){
+//        return ResponseEntity.ok(trainerAssessmentService.findAll());
+//    }
 }

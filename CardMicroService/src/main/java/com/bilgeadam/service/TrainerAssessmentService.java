@@ -1,7 +1,9 @@
 package com.bilgeadam.service;
 
+import com.bilgeadam.dto.request.TokenRequestDto;
 import com.bilgeadam.dto.request.TrainerAssessmentSaveRequestDto;
 import com.bilgeadam.dto.request.UpdateTrainerAssessmentRequestDto;
+import com.bilgeadam.dto.response.DeleteAssessmentResponseDto;
 import com.bilgeadam.dto.response.TrainerAssessmentSaveResponseDto;
 import com.bilgeadam.dto.response.UpdateTrainerAssessmentResponseDto;
 import com.bilgeadam.exceptions.ErrorType;
@@ -61,18 +63,19 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         return ITrainerAssesmentMapper.INSTANCE.toUpdateTrainerAssessment(trainerAssessment.get());
     }
 
-    public String deleteTrainerAssessment(String id){
-        Optional<TrainerAssessment> trainerAssessment=iTrainerAssesmentRepository.findOptionalByTrainerAssessmentId(id);
+    public DeleteAssessmentResponseDto deleteTrainerAssessment(String id){
+        Optional<TrainerAssessment> trainerAssessment=iTrainerAssesmentRepository.findById(id);
         if(trainerAssessment.isEmpty())
             throw new TrainerAssessmentException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
         trainerAssessment.get().setEStatus(EStatus.DELETED);
         update(trainerAssessment.get());
 
-        return "Silme işlemi başarılı";
+        return ITrainerAssesmentMapper.INSTANCE.toDeleteTrainerAssesment(trainerAssessment.get());
     }
 
-    public List<TrainerAssessment> findAllTrainerAssessment(String studentId) {
-        return findAll().stream().filter(x->x.getEStatus()==EStatus.ACTIVE && x.getStudentId().equals(studentId))
+    public List<TrainerAssessment> findAllTrainerAssessment(TokenRequestDto dto) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());
+        return findAll().stream().filter(x->x.getEStatus()==EStatus.ACTIVE && x.getStudentId().equals(studentId.get()))
                 .collect(Collectors.toList());
     }
 }

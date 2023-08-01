@@ -2,7 +2,7 @@ package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.CreateInterviewRequestDto;
 
-import com.bilgeadam.dto.request.FindAllInterviewRequestDto;
+import com.bilgeadam.dto.request.TokenRequestDto;
 import com.bilgeadam.dto.request.UpdateInterviewRequestDto;
 import com.bilgeadam.dto.response.CreateInterviewResponseDto;
 import com.bilgeadam.dto.response.DeleteInterviewResponseDto;
@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 import static com.bilgeadam.constants.ApiUrls.*;
@@ -31,7 +30,7 @@ public class InterviewController {
     }
     @PostMapping(FIND_ALL_INTERVIEW)
     @CrossOrigin("*")
-    public ResponseEntity<List<Interview>> findAllInterview(@RequestBody FindAllInterviewRequestDto dto){
+    public ResponseEntity<List<Interview>> findAllInterview(@RequestBody TokenRequestDto dto){
         return ResponseEntity.ok(interviewService.findAllInterviews(dto));
     }
     @PostMapping(UPDATE_INTERVIEW)

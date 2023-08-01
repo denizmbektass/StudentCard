@@ -2,7 +2,7 @@ package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.CreateInterviewRequestDto;
 
-import com.bilgeadam.dto.request.FindAllInterviewRequestDto;
+import com.bilgeadam.dto.request.TokenRequestDto;
 import com.bilgeadam.dto.request.UpdateInterviewRequestDto;
 import com.bilgeadam.dto.response.CreateInterviewResponseDto;
 import com.bilgeadam.dto.response.DeleteInterviewResponseDto;
@@ -12,7 +12,6 @@ import com.bilgeadam.exceptions.InterviewServiceException;
 import com.bilgeadam.mapper.IInterviewMapper;
 import com.bilgeadam.repository.IInterviewRepository;
 import com.bilgeadam.repository.entity.Interview;
-import com.bilgeadam.repository.entity.TrainerAssessment;
 import com.bilgeadam.repository.enums.EStatus;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
@@ -73,7 +72,7 @@ public class InterviewService extends ServiceManager<Interview, String> {
         return IInterviewMapper.INSTANCE.toDeleteInterviewResponseDto(interview.get());
     }
 
-    public List<Interview> findAllInterviews(FindAllInterviewRequestDto dto) {
+    public List<Interview> findAllInterviews(TokenRequestDto dto) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());
         return findAll().stream().filter(x->x.getEStatus()==EStatus.ACTIVE && x.getStudentId().equals(studentId.get()))
                 .collect(Collectors.toList());
