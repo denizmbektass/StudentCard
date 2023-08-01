@@ -7,11 +7,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class CreateProjectScoreResponseDto {
+public class StudentProjectListResponseDto {
     private EProjectType projectType;
     private Long projectScore;
     private String description;
+    private String studentNameAndSurname;
 }

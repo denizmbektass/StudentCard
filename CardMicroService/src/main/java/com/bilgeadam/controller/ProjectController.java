@@ -2,6 +2,7 @@ package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.CreateProjectScoreRequestDto;
 import com.bilgeadam.dto.response.CreateProjectScoreResponseDto;
+import com.bilgeadam.dto.response.StudentProjectListResponseDto;
 import com.bilgeadam.repository.enums.EProjectType;
 import com.bilgeadam.service.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,11 @@ public class ProjectController {
     @GetMapping("/show-project-type")
     public ResponseEntity<List<EProjectType>> showProjectsType(){
         return ResponseEntity.ok(projectService.showProjectsType());
+    }
+
+    @CrossOrigin
+    @GetMapping("/show-project-type/{studentToken}")
+    public ResponseEntity<List<StudentProjectListResponseDto>> showStudentProjectList(@PathVariable String studentToken){
+        return ResponseEntity.ok(projectService.showStudentProjectList(studentToken));
     }
 }
