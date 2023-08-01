@@ -107,16 +107,13 @@ public class UserService extends ServiceManager<User, String> {
         return IUserMapper.INSTANCE.toFindStudentProfileResponseDto(user);
     }
 
-    public GetNameAndSurnameByIdResponseDto getNameAndSurnameWithId(String userId){
+    public String getNameAndSurnameWithId(String userId){
         Optional<User> optionalUser= userRepository.findById(userId);
         if (optionalUser.isEmpty()){
             throw new UserServiceException(ErrorType.USER_NOT_EXIST);
         }
-        GetNameAndSurnameByIdResponseDto dto=
-                IUserMapper.INSTANCE.toGetNameAndSurnameByIdResponseDto(optionalUser.get());
-        return dto;
+        return optionalUser.get().getName() + " " + optionalUser.get().getSurname();
 
     }
-
 
 }
