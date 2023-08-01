@@ -2,10 +2,14 @@ package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.CreateProjectScoreRequestDto;
 import com.bilgeadam.dto.response.CreateProjectScoreResponseDto;
+import com.bilgeadam.repository.enums.EProjectType;
 import com.bilgeadam.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.bilgeadam.constants.ApiUrls.*;
 
@@ -19,5 +23,10 @@ public class ProjectController {
     @PostMapping(CREATE_PROJECT_SCORE)
     public ResponseEntity<CreateProjectScoreResponseDto> createProjectScore (@RequestBody CreateProjectScoreRequestDto dto){
         return ResponseEntity.ok(projectService.createProjectScore(dto));
+    }
+    @CrossOrigin
+    @GetMapping("/show-project-type")
+    public ResponseEntity<List<EProjectType>> showProjectsType(){
+        return ResponseEntity.ok(projectService.showProjectsType());
     }
 }

@@ -5,6 +5,7 @@ import com.bilgeadam.dto.request.SelectUserCreateTokenDto;
 import com.bilgeadam.dto.request.UserRequestDto;
 import com.bilgeadam.dto.request.UserUpdateRequestDto;
 import com.bilgeadam.dto.response.FindStudentProfileResponseDto;
+import com.bilgeadam.dto.response.GetNameAndSurnameByIdResponseDto;
 import com.bilgeadam.dto.response.UserResponseDto;
 import com.bilgeadam.repository.entity.User;
 import com.bilgeadam.service.UserService;
@@ -72,5 +73,10 @@ public class UserController {
     public  ResponseEntity<Boolean> saveUserList(@RequestBody List<UserRequestDto> dtoList){
         return  ResponseEntity.ok(userService.saveUserList(dtoList));
     }
+    @GetMapping()
+    public ResponseEntity<GetNameAndSurnameByIdResponseDto> getNameAndSurnameWithId(@PathVariable String userId){
+        return ResponseEntity.ok(userService.getNameAndSurnameWithId(userId));
+    }
+
 
 }
