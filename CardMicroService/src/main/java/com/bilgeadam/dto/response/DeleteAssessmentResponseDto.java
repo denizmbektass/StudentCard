@@ -1,4 +1,4 @@
-package com.bilgeadam.dto.request;
+package com.bilgeadam.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FindAllInterviewRequestDto {
-    private String token;
+public class DeleteAssessmentResponseDto {
+    private String name;
 }

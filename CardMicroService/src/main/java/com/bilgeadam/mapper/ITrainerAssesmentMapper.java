@@ -1,6 +1,7 @@
 package com.bilgeadam.mapper;
 
 import com.bilgeadam.dto.request.TrainerAssessmentSaveRequestDto;
+import com.bilgeadam.dto.response.DeleteAssessmentResponseDto;
 import com.bilgeadam.dto.response.TrainerAssessmentSaveResponseDto;
 import com.bilgeadam.dto.response.UpdateTrainerAssessmentResponseDto;
 import com.bilgeadam.repository.entity.TrainerAssessment;
@@ -14,6 +15,7 @@ public interface ITrainerAssesmentMapper {
     ITrainerAssesmentMapper INSTANCE = Mappers.getMapper(ITrainerAssesmentMapper.class);
 
     TrainerAssessment toTrainerAssesment(final TrainerAssessmentSaveRequestDto dto);
+    DeleteAssessmentResponseDto toDeleteTrainerAssesment(final TrainerAssessment trainerAssessment);
 
     TrainerAssessmentSaveResponseDto toSaveTrainerAssesment(final TrainerAssessment trainerAssessment);
 
