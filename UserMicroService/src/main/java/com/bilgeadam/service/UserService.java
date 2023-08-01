@@ -5,6 +5,7 @@ import com.bilgeadam.dto.request.SelectUserCreateTokenDto;
 import com.bilgeadam.dto.request.UserRequestDto;
 import com.bilgeadam.dto.request.UserUpdateRequestDto;
 import com.bilgeadam.dto.response.FindStudentProfileResponseDto;
+import com.bilgeadam.dto.response.GetNameAndSurnameByIdResponseDto;
 import com.bilgeadam.dto.response.UserResponseDto;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.UserServiceException;
@@ -104,6 +105,17 @@ public class UserService extends ServiceManager<User, String> {
             throw new UserServiceException(ErrorType.USER_NOT_EXIST);
         });
         return IUserMapper.INSTANCE.toFindStudentProfileResponseDto(user);
+    }
+
+    public GetNameAndSurnameByIdResponseDto getNameAndSurnameWithId(String userId){
+        Optional<User> optionalUser= userRepository.findById(userId);
+        if (optionalUser.isEmpty()){
+            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        }
+        GetNameAndSurnameByIdResponseDto dto=
+                IUserMapper.INSTANCE.toGetNameAndSurnameByIdResponseDto(optionalUser.get());
+        return dto;
+
     }
 
 

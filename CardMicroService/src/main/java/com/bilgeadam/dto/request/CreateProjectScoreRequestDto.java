@@ -1,5 +1,6 @@
 package com.bilgeadam.dto.request;
 
+import com.bilgeadam.repository.enums.EProjectType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,7 @@ import org.springframework.data.annotation.Id;
 @Builder
 public class CreateProjectScoreRequestDto {
     private String token;
-    private Long intermediateProjectScore;
-    private Long mainProjectScore;
-    private Long graduationProjectScore;
+    private EProjectType projectType;
+    private Long projectScore;
+    private String description;
 }

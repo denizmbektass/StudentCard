@@ -1,5 +1,6 @@
 package com.bilgeadam.repository.entity;
 
+import com.bilgeadam.repository.enums.EProjectType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,9 +17,8 @@ public class Project extends BaseEntity{
     @Id
     private String projectId;
     private String title;
-    private Long intermediateProjectScore;
-    private Long mainProjectScore;
-    private Long graduationProjectScore;
+    private EProjectType projectType;
+    private Long projectScore;
     private String description;
     private String userId;
 }

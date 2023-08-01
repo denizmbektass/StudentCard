@@ -1,6 +1,5 @@
 package com.bilgeadam.dto.response;
 
-import com.bilgeadam.repository.enums.EProjectType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreateProjectScoreResponseDto {
-    private EProjectType projectType;
-    private Long projectScore;
-    private String description;
+public class GetNameAndSurnameByIdResponseDto {
+    private String userId;
     private String name;
     private String surname;
 }
