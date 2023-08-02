@@ -27,10 +27,10 @@ public class ExamController {
         return  ResponseEntity.ok(examService.createExam(dto));
     }
 
-    @PostMapping(FIND_ALL)
+    @GetMapping(FIND_ALL+"/{token}")
     @CrossOrigin("*")
-    public ResponseEntity<List<ExamResponseDto>> findAllExams(@RequestBody @Valid FindByStudentIdRequestDto dto){
-        return  ResponseEntity.ok(examService.findAllExams(dto));
+    public ResponseEntity<List<ExamResponseDto>> findAllExams(@PathVariable String token){
+        return  ResponseEntity.ok(examService.findAllExams(token));
     }
 
 
@@ -44,5 +44,8 @@ public class ExamController {
     public ResponseEntity<MessageResponse> deleteExam(@RequestParam String examId){
         return  ResponseEntity.ok(examService.deleteExam(examId));
     }
-
+    @GetMapping(FIND_ALL+"/title/{token}")
+public ResponseEntity<List<String>> getAllTitles(@PathVariable String token){
+        return ResponseEntity.ok(examService.getAllTitles(token));
+}
 }
