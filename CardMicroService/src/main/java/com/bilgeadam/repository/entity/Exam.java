@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
 import java.util.Set;
 
 @SuperBuilder
@@ -21,4 +22,6 @@ public class Exam extends BaseEntity{
     private Long score;
     private String description;
     private String studentId;
+    private List<String> groupNames;
+
 }
