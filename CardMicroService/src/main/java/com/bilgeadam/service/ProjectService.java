@@ -56,6 +56,7 @@ public class ProjectService extends ServiceManager<Project,String> {
         List<Project> projectList = iProjectRepository.findAllByUserId(userId);
         List<StudentProjectListResponseDto> studentProjectListResponseDtoList = projectList.stream().map(project ->
             StudentProjectListResponseDto.builder()
+                    .projectId(project.getProjectId())
                     .projectScore(project.getProjectScore())
                     .projectType(project.getProjectType())
                     .description(project.getDescription())
