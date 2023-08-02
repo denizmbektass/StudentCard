@@ -21,5 +21,6 @@ public class Absence extends BaseEntity {
     private byte hourOfAbsence;
     private String userId;
     private String group;
+    private String groupName;
     private Long absenceDate;
 }

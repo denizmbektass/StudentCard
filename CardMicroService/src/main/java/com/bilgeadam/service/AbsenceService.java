@@ -49,9 +49,11 @@ public class AbsenceService extends ServiceManager<Absence,String> {
         double absencePercentageGroup2 = 100 -((sumOfAbsencePercentageGroup2)*100 / absenceList.get(0).getHourOfAbsenceLimit()/2);
         System.out.println("Group1: " + absencePercentageGroup1);
         System.out.println("Group2: " + absencePercentageGroup2);
+        String groupName = absenceList.get(0).getGroupName();
         return ShowUserAbsenceInformationResponseDto.builder()
                 .group1Percentage(absencePercentageGroup1)
                 .group2Percentage(absencePercentageGroup2)
+                .groupName(groupName)
                 .build();
     }
 
