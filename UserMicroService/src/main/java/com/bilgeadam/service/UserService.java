@@ -81,8 +81,9 @@ public class UserService extends ServiceManager<User, String> {
       return   userRepository.findByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndPhoneNumberContaining( dto.getName(), dto.getSurname(), dto.getEmail(), dto.getPhoneNumber());
     }
     public String createToken(SelectUserCreateTokenDto dto){
-      Optional<String> token=jwtTokenManager.createToken(dto.getStudentId(), dto.getRole(),dto.getStatus());
-      if(token.isEmpty())throw  new UserServiceException(ErrorType.TOKEN_NOT_CREATED);
+        Optional<User> user = findById(dto.getStudentId());
+        Optional<String> token=jwtTokenManager.createToken(dto.getStudentId(), dto.getRole(),dto.getStatus(),user.get().getGroupNameList());
+        if(token.isEmpty()) throw  new UserServiceException(ErrorType.TOKEN_NOT_CREATED);
         return token.get();
     }
     public String getIdFromToken(String token){

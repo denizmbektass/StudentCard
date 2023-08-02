@@ -20,13 +20,14 @@ public class JwtTokenManager {
     private final String issuer = "StudentCard";
     private final String secretKey = "StudentCard";
     private final String audience = "audience";
-    public Optional<String> createToken(String id, List<String> role, EStatus status){
+    public Optional<String> createToken(String id, List<String> role, EStatus status,List<String> groupName){
         String token= null;
         Long exDate = 1000L*60*150;
         try{
 
             token = JWT.create().withAudience(audience)
                     .withClaim("id",id)
+                    .withClaim("groupname",groupName)
                     .withClaim("howtopage","AuthMicroService")
                     .withClaim("lastjoin", System.currentTimeMillis())
                     .withClaim("role",role)
