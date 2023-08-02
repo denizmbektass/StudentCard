@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class ShowUserAbsenceInformationResponseDto {
     private Double group1Percentage;
     private Double group2Percentage;
+    private String groupName;
 }

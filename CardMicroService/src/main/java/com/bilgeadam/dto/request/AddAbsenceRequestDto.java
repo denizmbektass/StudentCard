@@ -13,4 +13,6 @@ public class AddAbsenceRequestDto {
     private byte hourOfAbsence;
     private String userId;
     private Long absenceDate;
+    private String group;
+    private String groupName;
 }
