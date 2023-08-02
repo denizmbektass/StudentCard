@@ -69,6 +69,14 @@ public class JwtTokenManager {
             return Optional.empty();
         }
     }
+    public List<String> getGroupNameFromToken(String token){
+
+            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer(issuer).withAudience(audience).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            return decodedJWT.getClaim("groupname").asList(String.class);
+    }
 
     public List<String> getRoleFromToken(String token) {
         try {

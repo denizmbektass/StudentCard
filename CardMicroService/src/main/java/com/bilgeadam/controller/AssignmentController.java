@@ -27,18 +27,25 @@ public class AssignmentController {
         assignmentService.createAssignment(dto);
         return ResponseEntity.ok(new MessageResponse("Ödev başarıyla kaydedildi.."));
     }
-    @PostMapping(FIND_ALL)
-    public ResponseEntity<List<AssignmentResponseDto>> findAllAssignments(@RequestBody @Valid FindByStudentIdRequestDto dto){
-        return ResponseEntity.ok( assignmentService.findAllAssignments(dto));
+    @GetMapping(FIND_ALL+"/{token}")
+    @CrossOrigin("*")
+    public ResponseEntity<List<AssignmentResponseDto>> findAllAssignments(@PathVariable String token){
+        return ResponseEntity.ok( assignmentService.findAllAssignments(token));
     }
     @PutMapping(UPDATE)
+    @CrossOrigin("*")
     public ResponseEntity<MessageResponse> updateAssignment(@RequestBody UpdateAssignmentRequestDto dto){
         assignmentService.updateAssignment(dto);
         return ResponseEntity.ok(new MessageResponse("Ödev başarıyla güncellendi.."));
     }
     @DeleteMapping(DELETE)
+    @CrossOrigin("*")
     public ResponseEntity<MessageResponse> deleteAssignment(@RequestParam String assignmentId){
         assignmentService.deleteAssignment(assignmentId);
         return ResponseEntity.ok(new MessageResponse("Ödev başarıyla silindi.."));
+    }
+    @GetMapping(FIND_ALL+"/title/{token}")
+    public ResponseEntity<List<String>> getAllTitles(@PathVariable String token){
+        return ResponseEntity.ok(assignmentService.getAllTitles(token));
     }
 }

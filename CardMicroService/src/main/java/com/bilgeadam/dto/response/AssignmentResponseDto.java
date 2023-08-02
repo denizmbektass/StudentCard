@@ -1,6 +1,5 @@
 package com.bilgeadam.dto.response;
 
-import com.bilgeadam.repository.enums.AssignmentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AssignmentResponseDto {
-    private String assignmentType;
+    private String assignmentId;
     private String title;
     private Long score;
     private String statement;
