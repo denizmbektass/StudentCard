@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class StudentProjectListResponseDto {
+    private String projectId;
     private EProjectType projectType;
     private Long projectScore;
     private String description;
