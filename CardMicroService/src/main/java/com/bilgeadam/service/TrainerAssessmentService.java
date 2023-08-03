@@ -50,14 +50,13 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         return ITrainerAssesmentMapper.INSTANCE.toSaveTrainerAssesment(trainerAssessment);
     }
 
-    public UpdateTrainerAssessmentResponseDto updateTrainerAssessment(UpdateTrainerAssessmentRequestDto dto, String id){
-        Optional<TrainerAssessment> trainerAssessment=iTrainerAssesmentRepository.findOptionalByTrainerAssessmentId(id);
+    public UpdateTrainerAssessmentResponseDto updateTrainerAssessment(UpdateTrainerAssessmentRequestDto dto){
+        Optional<TrainerAssessment> trainerAssessment=iTrainerAssesmentRepository.findById(dto.getAssessmentId());
         if(trainerAssessment.isEmpty())
             throw new TrainerAssessmentException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
         TrainerAssessment trainerAssessmentUpdate = trainerAssessment.get();
         trainerAssessmentUpdate.setScore(dto.getScore());
         trainerAssessmentUpdate.setDescription(dto.getDescription());
-        trainerAssessmentUpdate.setStudentId(dto.getStudentId());
         update(trainerAssessmentUpdate);
 
         return ITrainerAssesmentMapper.INSTANCE.toUpdateTrainerAssessment(trainerAssessment.get());

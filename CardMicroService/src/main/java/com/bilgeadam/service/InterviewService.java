@@ -57,7 +57,6 @@ public class InterviewService extends ServiceManager<Interview, String> {
         toUpdateInterview.setDescription(dto.getDescription());
         toUpdateInterview.setName(dto.getName());
         toUpdateInterview.setScore(dto.getScore());
-        toUpdateInterview.setStudentId(dto.getStudentId());
         update(toUpdateInterview);
         return IInterviewMapper.INSTANCE.toUpdateInterviewResponseDto(interview.get());
     }
