@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 import static com.bilgeadam.constants.ApiUrls.*;
 
@@ -45,7 +46,8 @@ public class AssignmentController {
         return ResponseEntity.ok(new MessageResponse("Ödev başarıyla silindi.."));
     }
     @GetMapping(FIND_ALL+"/title/{token}")
-    public ResponseEntity<List<String>> getAllTitles(@PathVariable String token){
+    @CrossOrigin("*")
+    public ResponseEntity<Set<String>> getAllTitles(@PathVariable String token){
         return ResponseEntity.ok(assignmentService.getAllTitles(token));
     }
 }
