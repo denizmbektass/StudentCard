@@ -1,11 +1,14 @@
 package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.InternshipSuccessRateRequestDto;
+import com.bilgeadam.dto.response.InternshipResponseDto;
 import com.bilgeadam.repository.entity.InternshipSuccessRate;
 import com.bilgeadam.service.InternshipSuccessRateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.bilgeadam.constants.ApiUrls.*;
 
@@ -19,5 +22,11 @@ public class InternshipSuccessRateController {
     @CrossOrigin("*")
     public ResponseEntity<Boolean> addScoreAndCommentForStudent(@RequestBody InternshipSuccessRateRequestDto dto) {
         return ResponseEntity.ok(internshipSuccessRateService.addScoreAndCommentForStudent(dto));
+    }
+
+    @GetMapping("/find-all-internship-with-user/{token}")
+    @CrossOrigin("*")
+    public ResponseEntity<List<InternshipResponseDto>> findAllInternshipWithUser(@PathVariable String token) {
+        return ResponseEntity.ok(internshipSuccessRateService.findAllInternshipWithUser(token));
     }
 }
