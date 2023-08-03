@@ -36,4 +36,10 @@ public class ProjectController {
     public ResponseEntity<List<StudentProjectListResponseDto>> showStudentProjectList(@PathVariable String studentToken){
         return ResponseEntity.ok(projectService.showStudentProjectList(studentToken));
     }
+
+    @CrossOrigin
+    @PutMapping("/delete-student-project/{projectId}")
+    public ResponseEntity<Boolean> deleteStudentProject(@PathVariable String projectId){
+        return ResponseEntity.ok(projectService.deleteStudentProject(projectId));
+    }
 }
