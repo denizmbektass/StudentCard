@@ -1,8 +1,10 @@
 package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.CreateProjectScoreRequestDto;
+import com.bilgeadam.dto.request.UpdateProjectRequestDto;
 import com.bilgeadam.dto.response.CreateProjectScoreResponseDto;
 import com.bilgeadam.dto.response.StudentProjectListResponseDto;
+import com.bilgeadam.dto.response.UpdateProjectResponseDto;
 import com.bilgeadam.repository.enums.EProjectType;
 import com.bilgeadam.service.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -42,4 +44,11 @@ public class ProjectController {
     public ResponseEntity<Boolean> deleteStudentProject(@PathVariable String projectId){
         return ResponseEntity.ok(projectService.deleteStudentProject(projectId));
     }
+    @CrossOrigin
+    @PutMapping("/update-student-project")
+    public ResponseEntity<UpdateProjectResponseDto> updateStudentProject(@RequestBody UpdateProjectRequestDto dto){
+        return ResponseEntity.ok(projectService.updateStudentProject(dto));
+    }
+
+
 }
