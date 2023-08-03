@@ -29,4 +29,11 @@ public class InternshipSuccessRateController {
     public ResponseEntity<List<InternshipResponseDto>> findAllInternshipWithUser(@PathVariable String token) {
         return ResponseEntity.ok(internshipSuccessRateService.findAllInternshipWithUser(token));
     }
+
+    @DeleteMapping("/delete-selected-internship/{internshipId}")
+    @CrossOrigin("*")
+    public ResponseEntity<Boolean> deleteSelectedInternship(@PathVariable String internshipId) {
+        return ResponseEntity.ok(internshipSuccessRateService.deleteSelectedInternship(internshipId));
+    }
+
 }
