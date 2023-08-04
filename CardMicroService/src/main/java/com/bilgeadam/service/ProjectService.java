@@ -1,8 +1,11 @@
 package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.CreateProjectScoreRequestDto;
+import com.bilgeadam.dto.request.UpdateProjectRequestDto;
 import com.bilgeadam.dto.response.CreateProjectScoreResponseDto;
 import com.bilgeadam.dto.response.StudentProjectListResponseDto;
+import com.bilgeadam.dto.response.UpdateProjectResponseDto;
+import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.manager.IUserManager;
 import com.bilgeadam.mapper.IProjectMapper;
 import com.bilgeadam.repository.IProjectRepository;
@@ -73,5 +76,15 @@ public class ProjectService extends ServiceManager<Project,String> {
         project.setStatus(EStatus.DELETED);
         update(project);
         return true;
+    }
+
+    public UpdateProjectResponseDto updateStudentProject(UpdateProjectRequestDto dto){
+        Optional<Project> project = findById(dto.getProjectId());
+        if (project.isEmpty()){
+            throw new RuntimeException("Böyle bir proje bulunamadı");
+        }
+        update(IProjectMapper.INSTANCE.updateProjectRequestDtoTOProject(dto,project.get()));
+        UpdateProjectResponseDto updatedProject= IProjectMapper.INSTANCE.toUpdateProjectResponseDto(project.get());
+        return updatedProject;
     }
 }
