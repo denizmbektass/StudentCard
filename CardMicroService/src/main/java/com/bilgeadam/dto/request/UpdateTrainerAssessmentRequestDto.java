@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateTrainerAssessmentRequestDto {
-
+    private String assessmentId;
     private Long score;
     private String description;
-    private String studentId;
 }

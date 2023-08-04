@@ -28,10 +28,10 @@ public class TrainerAssessmentController {
     public ResponseEntity<TrainerAssessmentSaveResponseDto> saveTrainerAssessment(@RequestBody TrainerAssessmentSaveRequestDto dto){
         return ResponseEntity.ok(trainerAssessmentService.saveTrainerAssessment(dto));
     }
-    @PutMapping(UPDATE)
+    @PostMapping(UPDATE)
     @CrossOrigin("*")
-    public ResponseEntity<UpdateTrainerAssessmentResponseDto> updateTrainerAssessment(@RequestBody UpdateTrainerAssessmentRequestDto dto,String id){
-        return ResponseEntity.ok(trainerAssessmentService.updateTrainerAssessment(dto,id));
+    public ResponseEntity<UpdateTrainerAssessmentResponseDto> updateTrainerAssessment(@RequestBody UpdateTrainerAssessmentRequestDto dto){
+        return ResponseEntity.ok(trainerAssessmentService.updateTrainerAssessment(dto));
     }
     @DeleteMapping(DELETE)
     @CrossOrigin("*")
