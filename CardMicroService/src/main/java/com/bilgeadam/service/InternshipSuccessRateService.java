@@ -51,4 +51,11 @@ public class InternshipSuccessRateService extends ServiceManager<InternshipSucce
         List<InternshipResponseDto> internshipSuccessRateList = internshipSuccessRateRepository.findAllByUserId(userId.get());
         return internshipSuccessRateList;
     }
+    public Boolean deleteSelectedInternship(String internshipId) {
+        Optional<InternshipSuccessRate> deletedInternship = findById(internshipId);
+        if (deletedInternship.isEmpty())
+            throw new RuntimeException("Bu staj zaten bulunamadı.");
+        deleteById(deletedInternship.get().getInternshipSuccessRateId());
+        return true;
+    }
 }
