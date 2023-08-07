@@ -1,6 +1,7 @@
 package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.InternshipSuccessRateRequestDto;
+import com.bilgeadam.dto.request.UpdateInternshipRequestDto;
 import com.bilgeadam.dto.response.InternshipResponseDto;
 import com.bilgeadam.repository.entity.InternshipSuccessRate;
 import com.bilgeadam.service.InternshipSuccessRateService;
@@ -36,4 +37,9 @@ public class InternshipSuccessRateController {
         return ResponseEntity.ok(internshipSuccessRateService.deleteSelectedInternship(internshipId));
     }
 
+    @PutMapping("/update-selected-internship")
+    @CrossOrigin("*")
+    public ResponseEntity<Boolean> updateSelectedInternship(@RequestBody UpdateInternshipRequestDto dto) {
+        return ResponseEntity.ok(internshipSuccessRateService.updateSelectedInternship(dto));
+    }
 }

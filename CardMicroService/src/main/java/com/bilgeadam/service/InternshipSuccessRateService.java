@@ -1,6 +1,7 @@
 package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.InternshipSuccessRateRequestDto;
+import com.bilgeadam.dto.request.UpdateInternshipRequestDto;
 import com.bilgeadam.dto.response.InternshipResponseDto;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
@@ -56,6 +57,14 @@ public class InternshipSuccessRateService extends ServiceManager<InternshipSucce
         if (deletedInternship.isEmpty())
             throw new RuntimeException("Bu staj zaten bulunamadı.");
         deleteById(deletedInternship.get().getInternshipSuccessRateId());
+        return true;
+    }
+    public Boolean updateSelectedInternship(UpdateInternshipRequestDto dto) {
+        Optional<InternshipSuccessRate> getInternship = internshipSuccessRateRepository.findById(dto.getInternshipSuccessRateId());
+        if (getInternship.isEmpty())
+            throw new RuntimeException("Bu staj zaten bulunamadı.");
+        InternshipSuccessRate updatedInternship = IInternshipSuccessRateMapper.INSTANCE.toUpdateInternshipFromInternship(dto, getInternship.get());
+        update(updatedInternship);
         return true;
     }
 }
