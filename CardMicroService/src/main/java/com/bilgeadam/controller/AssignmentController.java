@@ -39,9 +39,9 @@ public class AssignmentController {
         assignmentService.updateAssignment(dto);
         return ResponseEntity.ok(new MessageResponse("Ödev başarıyla güncellendi.."));
     }
-    @DeleteMapping(DELETE)
+    @DeleteMapping(DELETE+"/{assignment-id}")
     @CrossOrigin("*")
-    public ResponseEntity<MessageResponse> deleteAssignment(@RequestParam String assignmentId){
+    public ResponseEntity<MessageResponse> deleteAssignment(@PathVariable String assignmentId){
         assignmentService.deleteAssignment(assignmentId);
         return ResponseEntity.ok(new MessageResponse("Ödev başarıyla silindi.."));
     }
