@@ -38,13 +38,14 @@ public class AssignmentController {
         assignmentService.updateAssignment(dto);
         return ResponseEntity.ok(new MessageResponse("Ödev başarıyla güncellendi.."));
     }
-    @DeleteMapping(DELETE)
+    @DeleteMapping(DELETE+"/{assignmentId}")
     @CrossOrigin("*")
-    public ResponseEntity<MessageResponse> deleteAssignment(@RequestParam String assignmentId){
+    public ResponseEntity<MessageResponse> deleteAssignment(@PathVariable String assignmentId){
         assignmentService.deleteAssignment(assignmentId);
         return ResponseEntity.ok(new MessageResponse("Ödev başarıyla silindi.."));
     }
     @GetMapping(FIND_ALL+"/title/{token}")
+    @CrossOrigin("*")
     public ResponseEntity<List<String>> getAllTitles(@PathVariable String token){
         return ResponseEntity.ok(assignmentService.getAllTitles(token));
     }
