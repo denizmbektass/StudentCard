@@ -20,7 +20,7 @@ public class Exam extends BaseEntity{
     private String examId;
     private String title;
     private Long score;
-    private String description;
+    private String statement;
     private String studentId;
     private List<String> groupNames;
 

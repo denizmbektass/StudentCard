@@ -13,7 +13,10 @@ public class ExamResponseDto {
 
     private String title;
     private Long score;
-    private String description;
+
+    private String examId;
+
+    private String statement;
 
 
 }

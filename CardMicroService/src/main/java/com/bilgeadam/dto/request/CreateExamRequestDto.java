@@ -17,7 +17,7 @@ public class CreateExamRequestDto {
     @NotNull(message = "Bu kısım boş bırakılamaz")
     private Long score;
     @NotBlank(message = "Bu kısım boş bırakılamaz")
-    private String description;
+    private String statement;
     @NotNull
     private String studentToken;
 
