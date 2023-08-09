@@ -89,7 +89,7 @@ public class JwtTokenManager {
             List<String> role = decodedJWT.getClaim("role").asList(String.class);
             return role;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
 
         }
@@ -106,7 +106,7 @@ public class JwtTokenManager {
 //            EStatus status = decodedJWT.getClaim("status").as(EStatus.class);   //DANIŞ
 //            return status;
 //        } catch (Exception e) {
-//            System.out.println(e.getMessage());
+//
 //            throw new AuthServiceException(ErrorType.INVALID_TOKEN);
 //
 //        }

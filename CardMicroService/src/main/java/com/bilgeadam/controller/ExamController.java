@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.bilgeadam.constants.ApiUrls.*;
 
@@ -39,13 +40,24 @@ public class ExamController {
     public ResponseEntity<MessageResponse> updateExam(@RequestBody UpdateExamRequestDto dto){
         return  ResponseEntity.ok(examService.updateExam(dto));
     }
-    @DeleteMapping(DELETE)
+  /* @DeleteMapping(DELETE)
     @CrossOrigin("*")
     public ResponseEntity<MessageResponse> deleteExam(@RequestParam String examId){
         return  ResponseEntity.ok(examService.deleteExam(examId));
+    }*/
+
+
+    @DeleteMapping(DELETE+"/{examId}")
+    @CrossOrigin("*")
+    public ResponseEntity<MessageResponse> deleteExam(@PathVariable String examId){
+        examService.deleteExam(examId);
+        return ResponseEntity.ok(new MessageResponse("Sınav başarıyla silindi.."));
     }
+
     @GetMapping(FIND_ALL+"/title/{token}")
-public ResponseEntity<List<String>> getAllTitles(@PathVariable String token){
+    @CrossOrigin("*")
+    public ResponseEntity<Set<String>> getAllTitles(@PathVariable String token){
+
         return ResponseEntity.ok(examService.getAllTitles(token));
 }
 }

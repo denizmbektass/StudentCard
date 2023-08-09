@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class UpdateExamRequestDto {
     private String title;
     private Long score;
-    private String description;
+    private String statement;
     private String examId;
+
 }
