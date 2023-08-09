@@ -54,6 +54,10 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         Optional<TrainerAssessment> trainerAssessment=iTrainerAssesmentRepository.findById(dto.getAssessmentId());
         if(trainerAssessment.isEmpty())
             throw new TrainerAssessmentException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
+        if(dto.getDescription().isEmpty())
+            throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Görüş boş bırakılamaz...");
+        if(dto.getScore()==null)
+            throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Puan boş bırakılamaz...");
         TrainerAssessment trainerAssessmentUpdate = trainerAssessment.get();
         trainerAssessmentUpdate.setScore(dto.getScore());
         trainerAssessmentUpdate.setDescription(dto.getDescription());
@@ -68,7 +72,6 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
             throw new TrainerAssessmentException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
         trainerAssessment.get().setEStatus(EStatus.DELETED);
         update(trainerAssessment.get());
-
         return ITrainerAssesmentMapper.INSTANCE.toDeleteTrainerAssesment(trainerAssessment.get());
     }
 
