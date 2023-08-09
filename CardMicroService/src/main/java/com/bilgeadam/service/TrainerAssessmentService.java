@@ -36,7 +36,7 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         /**
          * StudentId ekledniğinde geliştirilecek
          */
-        if (dto.getScore()<=0 || dto.getScore()>10)
+        if (dto.getScore()<0 || dto.getScore()>10)
             throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Puan 1 ile 10 arasında olmak zorundadır...");
         if(dto.getDescription().isEmpty())
             throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Görüş boş bırakılamaz...");
