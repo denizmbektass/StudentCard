@@ -5,18 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExamResponseDto {
-
-    private String title;
+public class InternshipResponseDto {
+    private String internshipSuccessRateId;
     private Long score;
-
-    private String examId;
-
-    private String statement;
-
-
+    private String comment;
 }

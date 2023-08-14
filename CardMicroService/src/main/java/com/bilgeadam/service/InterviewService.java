@@ -35,7 +35,7 @@ public class InterviewService extends ServiceManager<Interview, String> {
 
     public CreateInterviewResponseDto createInterview(CreateInterviewRequestDto dto) {
         //if check ile böyle bir student var mı eklenebilir user micro service oluşturulduktan sonra.
-        if (dto.getScore()<=0 || dto.getScore()>100)
+        if (dto.getScore()<0 || dto.getScore()>100)
             throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Puan 0 ile 100 arasında olmak zorundadır...");
         if(dto.getDescription().isEmpty())
             throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Görüş boş bırakılamaz...");
@@ -57,6 +57,7 @@ public class InterviewService extends ServiceManager<Interview, String> {
         toUpdateInterview.setDescription(dto.getDescription());
         toUpdateInterview.setName(dto.getName());
         toUpdateInterview.setScore(dto.getScore());
+        toUpdateInterview.setInterviewType((dto.getInterviewType()));
         update(toUpdateInterview);
         return IInterviewMapper.INSTANCE.toUpdateInterviewResponseDto(interview.get());
     }

@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AssignmentService extends ServiceManager<Assignment,String> {
@@ -74,11 +76,11 @@ public class AssignmentService extends ServiceManager<Assignment,String> {
         return true;
     }
 
-    public List<String> getAllTitles(String token) {
+    public Set<String> getAllTitles(String token) {
         List<String> groupNames = jwtTokenManager.getGroupNameFromToken(token);
         if(groupNames.isEmpty())
             throw new AssignmentException(ErrorType.INVALID_TOKEN);
         return findAll().stream().filter(x -> x.getGroupNames().stream().anyMatch(groupNames::contains))
-                .map(y-> y.getTitle()).toList();
+                .map(y-> y.getTitle()).collect(Collectors.toSet());
     }
 }

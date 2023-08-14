@@ -11,4 +11,5 @@ public class UpdateInterviewRequestDto {
     private String name;
     private Long score;
     private String description;
+    private String interviewType;
 }

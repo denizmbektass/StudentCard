@@ -6,11 +6,13 @@ import com.bilgeadam.dto.request.UpdateExamRequestDto;
 import com.bilgeadam.dto.response.ExamResponseDto;
 import com.bilgeadam.dto.response.MessageResponse;
 
+import com.bilgeadam.exceptions.AssignmentException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.ExamException;
 import com.bilgeadam.mapper.IExamMapper;
 import com.bilgeadam.repository.IExamRepository;
 
+import com.bilgeadam.repository.entity.Assignment;
 import com.bilgeadam.repository.entity.Exam;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
@@ -19,6 +21,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ExamService extends ServiceManager<Exam,String> {
@@ -52,7 +56,8 @@ public class ExamService extends ServiceManager<Exam,String> {
     public List<ExamResponseDto> findAllExams(String token){
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
         if(studentId.isEmpty())
-            throw new ExamException(ErrorType.INVALID_TOKEN);
+        { throw new ExamException(ErrorType.INVALID_TOKEN);}
+
         return examRepository.findAllByStudentId(studentId.get()).stream().map(exam ->
             examMapper.toExamResponseDto(exam)).toList();
     }
@@ -61,27 +66,34 @@ public class ExamService extends ServiceManager<Exam,String> {
         if(exam.isEmpty())
             throw new ExamException(ErrorType.EXAM_NOT_FOUND);
         Exam update = exam.get();
-        update.setDescription(dto.getDescription());
+        update.setStatement(dto.getStatement());
         update.setTitle(dto.getTitle());
         update.setScore(dto.getScore());
         update(update);
         return new MessageResponse("Sınav başarıyla güncellendi.");
     }
 
-    public MessageResponse deleteExam(String examId) {
+  /*  public MessageResponse deleteExam(String examId) {
         Optional<Exam> exam = findById(examId);
         if (exam.isEmpty())
             throw new ExamException(ErrorType.EXAM_NOT_FOUND);
         deleteById(examId);
         return  new MessageResponse("Sınav başarıyla silindi.");
+    }*/
+    public Boolean deleteExam(String examId) {
+        Optional<Exam> exam = findById(examId);
+        if (exam.isEmpty())
+            throw new ExamException(ErrorType.EXAM_NOT_FOUND);
+        deleteById(examId);
+        return true;
     }
 
-    public List<String> getAllTitles(String token) {
+    public Set<String> getAllTitles(String token) {
         List<String> groupNames = jwtTokenManager.getGroupNameFromToken(token);
         if(groupNames.isEmpty())
             throw new ExamException(ErrorType.INVALID_TOKEN);
         return findAll().stream().filter(x -> x.getGroupNames().stream().anyMatch(groupNames::contains))
-                .map(y-> y.getTitle()).toList();
+                .map(y-> y.getTitle()).collect(Collectors.toSet());
 
     }
 }

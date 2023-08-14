@@ -1,7 +1,9 @@
 package com.bilgeadam.repository.entity;
 
 import com.bilgeadam.repository.enums.EProjectType;
+import com.bilgeadam.repository.enums.EStatus;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -21,4 +23,6 @@ public class Project extends BaseEntity{
     private Long projectScore;
     private String description;
     private String userId;
+    @Builder.Default
+    private EStatus status = EStatus.ACTIVE;
 }

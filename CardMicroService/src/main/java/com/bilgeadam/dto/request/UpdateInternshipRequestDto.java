@@ -6,13 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class UpdateExamRequestDto {
-    private String title;
+@NoArgsConstructor
+@AllArgsConstructor
+public class UpdateInternshipRequestDto {
+    private String internshipSuccessRateId;
     private Long score;
-    private String statement;
-    private String examId;
-
+    private String comment;
 }

@@ -1,6 +1,8 @@
 package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.InternshipSuccessRateRequestDto;
+import com.bilgeadam.dto.request.UpdateInternshipRequestDto;
+import com.bilgeadam.dto.response.InternshipResponseDto;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.mapper.IInternshipSuccessRateMapper;
@@ -10,6 +12,7 @@ import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,6 +42,29 @@ public class InternshipSuccessRateService extends ServiceManager<InternshipSucce
             throw new CardServiceException(ErrorType.COMMENT_LENGTH_VERGE);
         }
         save(internshipSuccessRate);
+        return true;
+    }
+
+    public List<InternshipResponseDto> findAllInternshipWithUser(String token) {
+        Optional<String> userId = jwtTokenManager.getIdFromToken(token);
+        if (userId.isEmpty())
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        List<InternshipResponseDto> internshipSuccessRateList = internshipSuccessRateRepository.findAllByUserId(userId.get());
+        return internshipSuccessRateList;
+    }
+    public Boolean deleteSelectedInternship(String internshipId) {
+        Optional<InternshipSuccessRate> deletedInternship = findById(internshipId);
+        if (deletedInternship.isEmpty())
+            throw new RuntimeException("Bu staj zaten bulunamadı.");
+        deleteById(deletedInternship.get().getInternshipSuccessRateId());
+        return true;
+    }
+    public Boolean updateSelectedInternship(UpdateInternshipRequestDto dto) {
+        Optional<InternshipSuccessRate> getInternship = internshipSuccessRateRepository.findById(dto.getInternshipSuccessRateId());
+        if (getInternship.isEmpty())
+            throw new RuntimeException("Bu staj zaten bulunamadı.");
+        InternshipSuccessRate updatedInternship = IInternshipSuccessRateMapper.INSTANCE.toUpdateInternshipFromInternship(dto, getInternship.get());
+        update(updatedInternship);
         return true;
     }
 }
