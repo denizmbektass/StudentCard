@@ -68,6 +68,11 @@ public class AssignmentService extends ServiceManager<Assignment,String> {
         return true;
     }
 
+    public Long getAssignmentNote(String studentId){
+        return (long) Math.floor(assignmentRepository.findAllByStudentId(studentId).stream()
+                .mapToLong(x->x.getScore()).average().getAsDouble()) ;
+    }
+
     public Boolean deleteAssignment(String assignmentId) {
         Optional<Assignment> assignment = findById(assignmentId);
         if (assignment.isEmpty())

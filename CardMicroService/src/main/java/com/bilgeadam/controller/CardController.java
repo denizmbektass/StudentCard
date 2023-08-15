@@ -1,13 +1,11 @@
 package com.bilgeadam.controller;
 
+import com.bilgeadam.dto.response.CardResponseDto;
 import com.bilgeadam.repository.entity.Card;
 import com.bilgeadam.service.CardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.bilgeadam.constants.ApiUrls.*;
 
@@ -16,4 +14,10 @@ import static com.bilgeadam.constants.ApiUrls.*;
 @RequiredArgsConstructor
 public class CardController {
     private final CardService cardService;
+
+    @PostMapping("/get-card/{token}")
+    @CrossOrigin("*")
+    public ResponseEntity<CardResponseDto> getCardByStudent(@PathVariable String token){
+        return ResponseEntity.ok(cardService.getCardByStudent(token));
+    }
 }

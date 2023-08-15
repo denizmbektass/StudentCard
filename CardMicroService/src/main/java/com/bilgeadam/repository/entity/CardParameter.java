@@ -1,23 +1,22 @@
 package com.bilgeadam.repository.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
 import java.util.Map;
 
-@Data
 @SuperBuilder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Document
-public class Card extends BaseEntity {
+public class CardParameter extends BaseEntity{
+
     @Id
-    private String cardId;
-    private String studentId;
-    private Map<String,Long> notes;
+    private String cardParameterId;
+    private String groupName;
+    private Map<String,Long> parameters;
+
 }

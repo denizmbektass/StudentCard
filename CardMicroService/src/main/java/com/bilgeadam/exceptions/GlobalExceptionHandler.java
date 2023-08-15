@@ -18,11 +18,11 @@ import java.util.List;
 //@ControllerAdvice
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(RuntimeException.class)
-    @ResponseBody
-    public ResponseEntity<String> handleRuntimeException(RuntimeException ex){
-        return ResponseEntity.ok("Beklenmeyen bir hata olustu: "+ex.getMessage());
-    }
+//    @ExceptionHandler(RuntimeException.class)
+//    @ResponseBody
+//    public ResponseEntity<String> handleRuntimeException(RuntimeException ex){
+//        return ResponseEntity.ok("Beklenmeyen bir hata olustu: "+ex.getMessage());
+//    }
     @ExceptionHandler(CardServiceException.class)
     public ResponseEntity<ErrorMessage> handleManagerException(CardServiceException ex){
         ErrorType errorType=ex.getErrorType();
@@ -90,15 +90,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(createError(errorType,exception),errorType.getHttpStatus());
     }
 
-    @ExceptionHandler(Exception.class)
-
-    public final ResponseEntity<ErrorMessage> handleAllExceptions(Exception exception) {
-        ErrorType errorType = ErrorType.INTERNAL_ERROR;
-        List<String> fields = new ArrayList<>();
-        fields.add(exception.getMessage());
-        ErrorMessage errorMessage = createError(errorType, exception);
-        errorMessage.setFields(fields);
-        return new ResponseEntity<>(createError(errorType, exception), errorType.getHttpStatus());
-    }
+//    @ExceptionHandler(Exception.class)
+//
+//    public final ResponseEntity<ErrorMessage> handleAllExceptions(Exception exception) {
+//        ErrorType errorType = ErrorType.INTERNAL_ERROR;
+//        List<String> fields = new ArrayList<>();
+//        fields.add(exception.getMessage());
+//        ErrorMessage errorMessage = createError(errorType, exception);
+//        errorMessage.setFields(fields);
+//        return new ResponseEntity<>(createError(errorType, exception), errorType.getHttpStatus());
+//    }
 
 }

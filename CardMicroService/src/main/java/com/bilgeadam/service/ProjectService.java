@@ -80,7 +80,10 @@ public class ProjectService extends ServiceManager<Project,String> {
         ).collect(Collectors.toList());
         return studentProjectListResponseDtoList;
     }
-
+    public Long getProjectNote(String studentId){
+        return (long) Math.floor(iProjectRepository.findAllByUserId(studentId).stream()
+                .mapToLong(x->x.getProjectScore()).average().getAsDouble());
+    }
     public Boolean deleteStudentProject(String projectId) {
         Project project = findById(projectId).orElseThrow(()->{throw new RuntimeException("Project Not Found");});
         project.setStatus(EStatus.DELETED);
