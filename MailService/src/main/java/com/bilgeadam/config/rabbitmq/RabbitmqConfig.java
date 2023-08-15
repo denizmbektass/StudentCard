@@ -8,11 +8,15 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitmqConfig {
 
     private String resetPasswordQueue = "reset-password-queue";
+    private String reminderMailQueue = "reminder-mail-queue";
 
     @Bean
     Queue resetPasswordQueue(){
         return new Queue(resetPasswordQueue);
     }
 
-
+    @Bean
+    Queue reminderMailQueue() {
+        return new Queue(reminderMailQueue);
+    }
 }
