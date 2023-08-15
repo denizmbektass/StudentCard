@@ -53,6 +53,14 @@ public class InterviewService extends ServiceManager<Interview, String> {
         if (interview.isEmpty()) {
             throw new InterviewServiceException(ErrorType.INTERVIEW_NOT_FOUND);
         }
+        if(dto.getDescription().isEmpty())
+            throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Görüş boş bırakılamaz...");
+        if(dto.getScore()==null)
+            throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Puan boş bırakılamaz...");
+        if(dto.getInterviewType().isEmpty())
+            throw  new InterviewServiceException(ErrorType.BAD_REQUEST,"Mülakat Türü Boş bırakılamaz");
+        if(dto.getName().isEmpty())
+            throw  new InterviewServiceException(ErrorType.BAD_REQUEST,"Mülakat Adı Boş bırakılamaz");
         Interview toUpdateInterview = interview.get();
         toUpdateInterview.setDescription(dto.getDescription());
         toUpdateInterview.setName(dto.getName());
