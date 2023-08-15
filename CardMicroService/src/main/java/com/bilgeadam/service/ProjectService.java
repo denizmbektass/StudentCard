@@ -6,6 +6,8 @@ import com.bilgeadam.dto.response.CreateProjectScoreResponseDto;
 import com.bilgeadam.dto.response.StudentProjectListResponseDto;
 import com.bilgeadam.dto.response.UpdateProjectResponseDto;
 import com.bilgeadam.exceptions.CardServiceException;
+import com.bilgeadam.exceptions.ErrorType;
+import com.bilgeadam.exceptions.InterviewServiceException;
 import com.bilgeadam.manager.IUserManager;
 import com.bilgeadam.mapper.IProjectMapper;
 import com.bilgeadam.repository.IProjectRepository;
@@ -42,6 +44,14 @@ public class ProjectService extends ServiceManager<Project,String> {
         if (userId.isEmpty()){
               throw new RuntimeException("Böyle bir kullanıcı bulunamadı ..");
         }
+        if(dto.getProjectScore()==null)
+            throw new RuntimeException("Proje notu boş bırakılamaz...");
+        if(dto.getDescription().isBlank())
+            throw new RuntimeException("AÇıklama boş bırakılamaz...");
+        if(dto.getProjectScore()==null)
+            throw new RuntimeException("Proje notu boş bırakılamaz...");
+        if(dto.getProjectType().toString().isEmpty())
+            throw new RuntimeException("Proje tipi boş bırakılamaz...");
         Project project = IProjectMapper.INSTANCE.toProject(dto);
         project.setUserId(userId.get());
         save(project);
@@ -83,6 +93,12 @@ public class ProjectService extends ServiceManager<Project,String> {
         if (project.isEmpty()){
             throw new RuntimeException("Böyle bir proje bulunamadı");
         }
+        if(dto.getProjectScore()==null)
+            throw new RuntimeException("Proje notu boş bırakılamaz...");
+        if(dto.getDescription().isBlank())
+            throw new RuntimeException("AÇıklama boş bırakılamaz...");
+
+
         update(IProjectMapper.INSTANCE.updateProjectRequestDtoTOProject(dto,project.get()));
         UpdateProjectResponseDto updatedProject= IProjectMapper.INSTANCE.toUpdateProjectResponseDto(project.get());
         return updatedProject;

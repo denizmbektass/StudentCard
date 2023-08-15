@@ -35,9 +35,11 @@ public class InterviewService extends ServiceManager<Interview, String> {
 
     public CreateInterviewResponseDto createInterview(CreateInterviewRequestDto dto) {
         //if check ile böyle bir student var mı eklenebilir user micro service oluşturulduktan sonra.
+        if(dto.getInterviewType().isBlank())
+            throw  new InterviewServiceException(ErrorType.BAD_REQUEST,"Mülakat Türü Boş bırakılamaz");
         if (dto.getScore()<0 || dto.getScore()>100)
             throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Puan 0 ile 100 arasında olmak zorundadır...");
-        if(dto.getDescription().isEmpty())
+        if(dto.getDescription().isBlank())
             throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Görüş boş bırakılamaz...");
         if(dto.getScore()==null)
             throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Puan boş bırakılamaz...");
@@ -53,13 +55,13 @@ public class InterviewService extends ServiceManager<Interview, String> {
         if (interview.isEmpty()) {
             throw new InterviewServiceException(ErrorType.INTERVIEW_NOT_FOUND);
         }
-        if(dto.getDescription().isEmpty())
+        if(dto.getDescription().isBlank())
             throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Görüş boş bırakılamaz...");
         if(dto.getScore()==null)
             throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Puan boş bırakılamaz...");
-        if(dto.getInterviewType().isEmpty())
+        if(dto.getInterviewType().isBlank())
             throw  new InterviewServiceException(ErrorType.BAD_REQUEST,"Mülakat Türü Boş bırakılamaz");
-        if(dto.getName().isEmpty())
+        if(dto.getName().isBlank())
             throw  new InterviewServiceException(ErrorType.BAD_REQUEST,"Mülakat Adı Boş bırakılamaz");
         Interview toUpdateInterview = interview.get();
         toUpdateInterview.setDescription(dto.getDescription());
