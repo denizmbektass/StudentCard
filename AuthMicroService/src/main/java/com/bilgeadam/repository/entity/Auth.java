@@ -29,8 +29,7 @@ public class Auth extends BaseEntity {
     @Indexed(unique = true)
     private String email;
     private String password;
-    private boolean isFirstLogin = true;
     private List<ERole> role;
     @Builder.Default
-    private EStatus status=EStatus.ACTIVE;
+    private EStatus status=EStatus.PASSIVE;
 }
