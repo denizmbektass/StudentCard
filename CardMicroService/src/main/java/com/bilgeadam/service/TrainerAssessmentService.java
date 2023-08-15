@@ -65,7 +65,10 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
 
         return ITrainerAssesmentMapper.INSTANCE.toUpdateTrainerAssessment(trainerAssessment.get());
     }
-
+    public Long getTrainerAssessmentNote(String studentId){
+        return (long) Math.floor(iTrainerAssesmentRepository.findAllByStudentId(studentId).stream()
+                .mapToLong(x->x.getScore()).average().getAsDouble());
+    }
     public DeleteAssessmentResponseDto deleteTrainerAssessment(String id){
         Optional<TrainerAssessment> trainerAssessment=iTrainerAssesmentRepository.findById(id);
         if(trainerAssessment.isEmpty())

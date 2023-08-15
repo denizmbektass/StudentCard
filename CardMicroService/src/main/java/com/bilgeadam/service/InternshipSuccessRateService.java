@@ -52,6 +52,10 @@ public class InternshipSuccessRateService extends ServiceManager<InternshipSucce
         List<InternshipResponseDto> internshipSuccessRateList = internshipSuccessRateRepository.findAllByUserId(userId.get());
         return internshipSuccessRateList;
     }
+    public Long getInternshipNote(String studentId){
+        return (long) Math.floor(internshipSuccessRateRepository.findAllByUserId(studentId).stream()
+                .mapToLong(x->x.getScore()).average().getAsDouble());
+    }
     public Boolean deleteSelectedInternship(String internshipId) {
         Optional<InternshipSuccessRate> deletedInternship = findById(internshipId);
         if (deletedInternship.isEmpty())

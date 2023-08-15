@@ -71,7 +71,10 @@ public class InterviewService extends ServiceManager<Interview, String> {
         update(interview.get());
         return IInterviewMapper.INSTANCE.toDeleteInterviewResponseDto(interview.get());
     }
-
+    public Long getInterviewNote(String studentId){
+        return (long) Math.floor(interviewRepository.findAllByStudentId(studentId).stream()
+                .mapToLong(x->x.getScore()).average().getAsDouble());
+    }
     public List<Interview> findAllInterviews(TokenRequestDto dto) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());
         return findAll().stream().filter(x->x.getEStatus()==EStatus.ACTIVE && x.getStudentId().equals(studentId.get()))
