@@ -2,6 +2,7 @@ package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.LoginRequestDto;
 import com.bilgeadam.dto.request.RegisterRequestDto;
+import com.bilgeadam.dto.request.ResetPasswordRequestDto;
 import com.bilgeadam.dto.response.LoginResponseDto;
 import com.bilgeadam.dto.response.MessageResponseDto;
 import com.bilgeadam.exceptions.AuthServiceException;
@@ -37,19 +38,19 @@ public class AuthService extends ServiceManager<Auth, String> {
 
     public LoginResponseDto login(LoginRequestDto dto) {
         Optional<Auth> authOptional = iAuthRepository.findByEmailAndPassword(dto.getEmail(), dto.getPassword());
-        if(authOptional.isEmpty())
+        if (authOptional.isEmpty())
             throw new AuthServiceException(ErrorType.LOGIN_ERROR);
         List<ERole> role = authOptional.get().getRole();
-        List<String> roles = role.stream().map(x-> x.name()).toList();
-        Optional<String> token = jwtTokenManager.createToken(authOptional.get().getAuthId(),roles,authOptional.get().getStatus());
-        if(token.isEmpty())
+        List<String> roles = role.stream().map(x -> x.name()).toList();
+        Optional<String> token = jwtTokenManager.createToken(authOptional.get().getAuthId(), roles, authOptional.get().getStatus());
+        if (token.isEmpty())
             throw new AuthServiceException(ErrorType.TOKEN_NOT_CREATED);
         return LoginResponseDto.builder().token(token.get()).message("Login Successfully").role(roles).build();
     }
 
     public MessageResponseDto register(RegisterRequestDto dto) {
         Optional<Auth> authOptional = iAuthRepository.findByEmail(dto.getEmail());
-        if(authOptional.isPresent())
+        if (authOptional.isPresent())
             throw new AuthServiceException(ErrorType.EXIST_BY_EMAIL);
         String password = CodeGenerator.generateCode();
         Auth auth = Auth.builder().role(List.of(ERole.valueOf(dto.getRole()))).email(dto.getEmail()).password(password).build();
@@ -67,4 +68,24 @@ public class AuthService extends ServiceManager<Auth, String> {
         resetPasswordProducer.sendNewPassword(ResetPasswordModel.builder().email(auth.get().getEmail()).password(auth.get().getPassword()).build());
         return MessageResponseDto.builder().message("Your password has been sent by e-mail").build();
     }
+
+    public Boolean resetPassword(ResetPasswordRequestDto dto) {
+        Optional<Auth> authOptional = iAuthRepository.findByEmail(dto.getEmail());
+        if (authOptional.isEmpty()) {
+            throw new AuthServiceException(ErrorType.EMAIL_NOT_FOUND);
+        }
+        if (authOptional.get().isFirstLogin()) {
+            if (dto.getPassword().equals(dto.getRePassword())) {
+                authOptional.get().setPassword(dto.getPassword());
+                authOptional.get().setFirstLogin(false);
+                save(authOptional.get());
+            } else {
+                throw new AuthServiceException(ErrorType.PASSWORD_UNMATCH);
+            }
+        } else {
+            return true;
+        }
+        return true;
+    }
+
 }
