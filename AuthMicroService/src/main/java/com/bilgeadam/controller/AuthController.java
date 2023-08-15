@@ -2,6 +2,7 @@ package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.LoginRequestDto;
 import com.bilgeadam.dto.request.RegisterRequestDto;
+import com.bilgeadam.dto.request.ResetPasswordRequestDto;
 import com.bilgeadam.dto.response.LoginResponseDto;
 import com.bilgeadam.dto.response.MessageResponseDto;
 import com.bilgeadam.service.AuthService;
@@ -37,4 +38,10 @@ public class AuthController {
     public ResponseEntity<LoginResponseDto>login(@RequestBody @Valid LoginRequestDto dto) {
         return ResponseEntity.ok(authService.login(dto));
     }
+    @PostMapping(RESET_PASSWORD)
+    @CrossOrigin("*")
+    public ResponseEntity<Boolean>resetPassword(@RequestBody @Valid ResetPasswordRequestDto dto) {
+        return ResponseEntity.ok(authService.resetPassword(dto));
+    }
+
 }

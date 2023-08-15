@@ -7,5 +7,6 @@ public class ApiUrls {
     public static final String REGISTER ="/register";
     public static final String LOGIN ="/login";
     public static final String FORGOT_PASSWORD="/forgot-my-password";
+    public static final String RESET_PASSWORD="/reset-password";
 
 }
