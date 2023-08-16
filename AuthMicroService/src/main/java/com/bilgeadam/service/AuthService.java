@@ -41,8 +41,10 @@ public class AuthService extends ServiceManager<Auth, String> {
         Optional<Auth> authOptional = iAuthRepository.findByEmailAndPassword(dto.getEmail(), dto.getPassword());
         if (authOptional.isEmpty())
             throw new AuthServiceException(ErrorType.LOGIN_ERROR);
-        if (!authOptional.get().getStatus().equals(EStatus.ACTIVE))
+        if (authOptional.get().getStatus().equals(EStatus.PASSIVE))
             throw new AuthServiceException(ErrorType.STATUS_NOT_ACTIVE);
+        if(authOptional.get().getStatus().equals(EStatus.DELETED))
+            throw new AuthServiceException(ErrorType.USER_DELETED);
         List<ERole> role = authOptional.get().getRole();
         List<String> roles = role.stream().map(x -> x.name()).toList();
         Optional<String> token = jwtTokenManager.createToken(authOptional.get().getAuthId(), roles, authOptional.get().getStatus());
@@ -66,6 +68,8 @@ public class AuthService extends ServiceManager<Auth, String> {
         Optional<Auth> auth = iAuthRepository.findByEmail(email);
         if (auth.isEmpty())
             throw new AuthServiceException(ErrorType.EMAIL_NOT_FOUND);
+        if(auth.get().getStatus().equals(EStatus.DELETED))
+            throw new AuthServiceException(ErrorType.USER_DELETED);
         auth.get().setPassword(CodeGenerator.generateCode());
         auth.get().setStatus(EStatus.PASSIVE);
         update(auth.get());
@@ -78,6 +82,8 @@ public class AuthService extends ServiceManager<Auth, String> {
         if (authOptional.isEmpty()) {
             throw new AuthServiceException(ErrorType.LOGIN_ERROR);
         }
+        if(authOptional.get().getStatus().equals(EStatus.DELETED))
+            throw new AuthServiceException(ErrorType.USER_DELETED);
         if (dto.getNewPassword().equals(dto.getReNewPassword())) {
             authOptional.get().setPassword(dto.getNewPassword());
             authOptional.get().setStatus(EStatus.ACTIVE);
