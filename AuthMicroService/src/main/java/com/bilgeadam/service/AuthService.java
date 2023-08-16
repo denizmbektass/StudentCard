@@ -13,6 +13,7 @@ import com.bilgeadam.rabbitmq.producer.ResetPasswordProducer;
 import com.bilgeadam.repository.IAuthRepository;
 import com.bilgeadam.repository.entity.Auth;
 import com.bilgeadam.repository.enums.ERole;
+import com.bilgeadam.repository.enums.EStatus;
 import com.bilgeadam.utility.CodeGenerator;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
@@ -40,6 +41,8 @@ public class AuthService extends ServiceManager<Auth, String> {
         Optional<Auth> authOptional = iAuthRepository.findByEmailAndPassword(dto.getEmail(), dto.getPassword());
         if (authOptional.isEmpty())
             throw new AuthServiceException(ErrorType.LOGIN_ERROR);
+        if (!authOptional.get().getStatus().equals(EStatus.ACTIVE))
+            throw new AuthServiceException(ErrorType.STATUS_NOT_ACTIVE);
         List<ERole> role = authOptional.get().getRole();
         List<String> roles = role.stream().map(x -> x.name()).toList();
         Optional<String> token = jwtTokenManager.createToken(authOptional.get().getAuthId(), roles, authOptional.get().getStatus());
@@ -53,10 +56,10 @@ public class AuthService extends ServiceManager<Auth, String> {
         if (authOptional.isPresent())
             throw new AuthServiceException(ErrorType.EXIST_BY_EMAIL);
         String password = CodeGenerator.generateCode();
-        Auth auth = Auth.builder().role(List.of(ERole.valueOf(dto.getRole()))).email(dto.getEmail()).password(password).build();
+        Auth auth = Auth.builder().role(dto.getRole().stream().map(x-> ERole.valueOf(x.toUpperCase())).toList()).email(dto.getEmail()).password(password).build();
         save(auth);
         resetPasswordProducer.sendNewPassword(ResetPasswordModel.builder().email(auth.getEmail()).password(auth.getPassword()).build());
-        return MessageResponseDto.builder().message("Register Successfully").build();
+        return MessageResponseDto.builder().message("Register has been completed successfully, Password needs to be updated for activating the profile!").build();
     }
 
     public MessageResponseDto forgotMyPassword(String email) {
@@ -64,26 +67,23 @@ public class AuthService extends ServiceManager<Auth, String> {
         if (auth.isEmpty())
             throw new AuthServiceException(ErrorType.EMAIL_NOT_FOUND);
         auth.get().setPassword(CodeGenerator.generateCode());
+        auth.get().setStatus(EStatus.PASSIVE);
         update(auth.get());
         resetPasswordProducer.sendNewPassword(ResetPasswordModel.builder().email(auth.get().getEmail()).password(auth.get().getPassword()).build());
-        return MessageResponseDto.builder().message("Your password has been sent by e-mail").build();
+        return MessageResponseDto.builder().message("Your password has been sent by e-mail, Password needs to be updated for activating the profile!").build();
     }
 
     public Boolean resetPassword(ResetPasswordRequestDto dto) {
-        Optional<Auth> authOptional = iAuthRepository.findByEmail(dto.getEmail());
+        Optional<Auth> authOptional = iAuthRepository.findByEmailAndPassword(dto.getEmail(), dto.getPassword());
         if (authOptional.isEmpty()) {
-            throw new AuthServiceException(ErrorType.EMAIL_NOT_FOUND);
+            throw new AuthServiceException(ErrorType.LOGIN_ERROR);
         }
-        if (authOptional.get().isFirstLogin()) {
-            if (dto.getPassword().equals(dto.getRePassword())) {
-                authOptional.get().setPassword(dto.getPassword());
-                authOptional.get().setFirstLogin(false);
-                save(authOptional.get());
-            } else {
-                throw new AuthServiceException(ErrorType.PASSWORD_UNMATCH);
-            }
+        if (dto.getNewPassword().equals(dto.getReNewPassword())) {
+            authOptional.get().setPassword(dto.getNewPassword());
+            authOptional.get().setStatus(EStatus.ACTIVE);
+            save(authOptional.get());
         } else {
-            return true;
+            throw new AuthServiceException(ErrorType.PASSWORD_UNMATCH);
         }
         return true;
     }
