@@ -32,6 +32,8 @@ public enum ErrorType {
     POINT_SUCCESS_RATE(8002,"Girdiğiniz puan 0 ile 100 arasında olmalıdır.",HttpStatus.BAD_REQUEST),
     COMMENT_LENGTH_VERGE(8003, "Girilen yorum 255 karakterden fazla olamaz",HttpStatus.BAD_REQUEST),
 
+    PROJECT_TYPE_DUBLICATE(9001,"Böyle bir proje türü zaten bulunmaktadır",HttpStatus.BAD_REQUEST),
+
     ;
 
 

@@ -1,24 +1,21 @@
 package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.CreateProjectScoreRequestDto;
+import com.bilgeadam.dto.request.CreateProjectTypeRequestDto;
 import com.bilgeadam.dto.request.UpdateProjectRequestDto;
 import com.bilgeadam.dto.response.CreateProjectScoreResponseDto;
 import com.bilgeadam.dto.response.StudentProjectListResponseDto;
 import com.bilgeadam.dto.response.UpdateProjectResponseDto;
-import com.bilgeadam.exceptions.CardServiceException;
-import com.bilgeadam.exceptions.ErrorType;
-import com.bilgeadam.exceptions.InterviewServiceException;
 import com.bilgeadam.manager.IUserManager;
 import com.bilgeadam.mapper.IProjectMapper;
 import com.bilgeadam.repository.IProjectRepository;
 import com.bilgeadam.repository.entity.Project;
-import com.bilgeadam.repository.enums.EProjectType;
+import com.bilgeadam.repository.entity.ProjectType;
 import com.bilgeadam.repository.enums.EStatus;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,15 +26,17 @@ public class ProjectService extends ServiceManager<Project,String> {
     private final IProjectRepository iProjectRepository;
     private final JwtTokenManager jwtTokenManager;
     private final IUserManager userManager;
+    private final ProjectTypeService projectTypeService;
 
 
-
-    public ProjectService(IProjectRepository iProjectRepository, JwtTokenManager jwtTokenManager, IUserManager userManager) {
+    public ProjectService(IProjectRepository iProjectRepository, JwtTokenManager jwtTokenManager, IUserManager userManager, ProjectTypeService projectTypeService) {
         super(iProjectRepository);
         this.iProjectRepository = iProjectRepository;
         this.jwtTokenManager = jwtTokenManager;
         this.userManager = userManager;
+        this.projectTypeService = projectTypeService;
     }
+
 
     public CreateProjectScoreResponseDto createProjectScore(CreateProjectScoreRequestDto dto){
         Optional<String> userId=jwtTokenManager.getIdFromToken(dto.getToken());
@@ -56,11 +55,6 @@ public class ProjectService extends ServiceManager<Project,String> {
         project.setUserId(userId.get());
         save(project);
         return IProjectMapper.INSTANCE.toCreateProjectScoreResponseDto(project);
-    }
-
-    public List<EProjectType> showProjectsType(){
-        List<EProjectType> result = Arrays.asList(EProjectType.values());
-        return result;
     }
 
 
@@ -106,4 +100,17 @@ public class ProjectService extends ServiceManager<Project,String> {
         UpdateProjectResponseDto updatedProject= IProjectMapper.INSTANCE.toUpdateProjectResponseDto(project.get());
         return updatedProject;
     }
+
+    public String createProjectType (CreateProjectTypeRequestDto dto){
+        ProjectType projectType = projectTypeService.createProjectType(dto);
+        return projectType.getProjectType();
+    }
+
+    public List<String> showProjectsType(){
+        List<ProjectType> projectTypeList = projectTypeService.findAll();
+        List<String> newProjectList= projectTypeList.stream().map(x -> x.getProjectType()).collect(Collectors.toList());
+        System.out.println(newProjectList);
+        return newProjectList;
+    }
+
 }
