@@ -1,17 +1,16 @@
 package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.CreateProjectScoreRequestDto;
+import com.bilgeadam.dto.request.CreateProjectTypeRequestDto;
 import com.bilgeadam.dto.request.UpdateProjectRequestDto;
 import com.bilgeadam.dto.response.CreateProjectScoreResponseDto;
 import com.bilgeadam.dto.response.StudentProjectListResponseDto;
 import com.bilgeadam.dto.response.UpdateProjectResponseDto;
-import com.bilgeadam.repository.enums.EProjectType;
 import com.bilgeadam.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.bilgeadam.constants.ApiUrls.*;
@@ -29,7 +28,7 @@ public class ProjectController {
     }
     @CrossOrigin
     @GetMapping("/show-project-type")
-    public ResponseEntity<List<EProjectType>> showProjectsType(){
+    public ResponseEntity<List<String>> showProjectsType(){
         return ResponseEntity.ok(projectService.showProjectsType());
     }
 
@@ -50,5 +49,9 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.updateStudentProject(dto));
     }
 
-
+    @CrossOrigin
+    @PostMapping("/create-project-type")
+    public ResponseEntity<String> createProjectType (@RequestBody CreateProjectTypeRequestDto dto){
+        return ResponseEntity.ok(projectService.createProjectType(dto));
+    }
 }
