@@ -9,11 +9,14 @@ import com.bilgeadam.dto.response.UpdateTrainerAssessmentResponseDto;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.TrainerAssessmentException;
 import com.bilgeadam.mapper.ITrainerAssesmentMapper;
+import com.bilgeadam.rabbitmq.model.ReminderMailModel;
+import com.bilgeadam.rabbitmq.producer.ReminderMailProducer;
 import com.bilgeadam.repository.ITrainerAssessmentRepository;
 import com.bilgeadam.repository.entity.TrainerAssessment;
 import com.bilgeadam.repository.enums.EStatus;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,11 +28,13 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
 
     private final ITrainerAssessmentRepository iTrainerAssesmentRepository;
     private final JwtTokenManager jwtTokenManager;
+    private final ReminderMailProducer reminderMailProducer;
 
-    public TrainerAssessmentService(ITrainerAssessmentRepository iTrainerAssessmentRepository, JwtTokenManager jwtTokenManager){
+    public TrainerAssessmentService(ITrainerAssessmentRepository iTrainerAssessmentRepository, JwtTokenManager jwtTokenManager, ReminderMailProducer reminderMailProducer){
         super(iTrainerAssessmentRepository);
         this.iTrainerAssesmentRepository=iTrainerAssessmentRepository;
         this.jwtTokenManager = jwtTokenManager;
+        this.reminderMailProducer = reminderMailProducer;
     }
 
     public TrainerAssessmentSaveResponseDto saveTrainerAssessment(TrainerAssessmentSaveRequestDto dto){
@@ -82,5 +87,14 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());
         return findAll().stream().filter(x->x.getEStatus()==EStatus.ACTIVE && x.getStudentId().equals(studentId.get()))
                 .collect(Collectors.toList());
+    }
+    @Scheduled(fixedRate = 300000)
+    //cron = "0 58 23 15 * ?"
+    public void sendReminderMail (){
+        reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
+                .email("ogulcantekin97@gmail.com")//aliakkulahh
+                .month("Temmuz")
+                .studentName("Ali Akkülah")
+                .build());
     }
 }
