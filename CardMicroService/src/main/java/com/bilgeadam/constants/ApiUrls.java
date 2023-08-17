@@ -11,6 +11,7 @@ public class ApiUrls {
     public static final String FIND_ALL_ACTIVE_TRAINER_ASSESSMENT ="/find-all-active";
     public static final String ASSIGNMENT = VERSION+"/assignment";
     public static final String EXAM = VERSION+"/exam";
+    public static final String ROLLCALL = VERSION+"/rollcall";
     public static final String INTERVIEW = VERSION+"/interview";
     public static final String PROJECT=VERSION+"/project";
     public static final String CREATE ="/create";

@@ -9,9 +9,7 @@ import com.bilgeadam.service.ExamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-
 import java.util.List;
 import java.util.Set;
 
@@ -40,11 +38,7 @@ public class ExamController {
     public ResponseEntity<MessageResponse> updateExam(@RequestBody UpdateExamRequestDto dto){
         return  ResponseEntity.ok(examService.updateExam(dto));
     }
-  /* @DeleteMapping(DELETE)
-    @CrossOrigin("*")
-    public ResponseEntity<MessageResponse> deleteExam(@RequestParam String examId){
-        return  ResponseEntity.ok(examService.deleteExam(examId));
-    }*/
+
 
 
     @DeleteMapping(DELETE+"/{examId}")
@@ -60,4 +54,5 @@ public class ExamController {
 
         return ResponseEntity.ok(examService.getAllTitles(token));
 }
+
 }
