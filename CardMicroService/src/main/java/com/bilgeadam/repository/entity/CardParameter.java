@@ -17,6 +17,6 @@ public class CardParameter extends BaseEntity{
     @Id
     private String cardParameterId;
     private String groupName;
-    private Map<String,Long> parameters;
+    private Map<String,Integer> parameters;
 
 }

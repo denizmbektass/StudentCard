@@ -6,6 +6,7 @@ import com.bilgeadam.dto.request.UpdateTrainerAssessmentRequestDto;
 import com.bilgeadam.dto.response.DeleteAssessmentResponseDto;
 import com.bilgeadam.dto.response.TrainerAssessmentSaveResponseDto;
 import com.bilgeadam.dto.response.UpdateTrainerAssessmentResponseDto;
+import com.bilgeadam.exceptions.AssignmentException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.TrainerAssessmentException;
 import com.bilgeadam.mapper.ITrainerAssesmentMapper;
@@ -70,9 +71,9 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
 
         return ITrainerAssesmentMapper.INSTANCE.toUpdateTrainerAssessment(trainerAssessment.get());
     }
-    public Long getTrainerAssessmentNote(String studentId){
-        return (long) Math.floor(iTrainerAssesmentRepository.findAllByStudentId(studentId).stream()
-                .mapToLong(x->x.getScore()).average().getAsDouble());
+    public Integer getTrainerAssessmentNote(String studentId){
+        return (int) Math.floor(iTrainerAssesmentRepository.findAllByStudentId(studentId).stream()
+                .mapToLong(x->x.getScore()).average().orElseThrow(()-> new TrainerAssessmentException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND)));
     }
     public DeleteAssessmentResponseDto deleteTrainerAssessment(String id){
         Optional<TrainerAssessment> trainerAssessment=iTrainerAssesmentRepository.findById(id);

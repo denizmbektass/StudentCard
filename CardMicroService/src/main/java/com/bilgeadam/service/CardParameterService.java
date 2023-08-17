@@ -1,9 +1,9 @@
 package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.CreateCardParameterRequestDto;
+import com.bilgeadam.dto.request.ParameterRequestDto;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
-import com.bilgeadam.mapper.ICardParameterMapper;
 import com.bilgeadam.repository.ICardParameterRepository;
 import com.bilgeadam.repository.entity.Card;
 import com.bilgeadam.repository.entity.CardParameter;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CardParameterService extends ServiceManager<CardParameter,String> {
@@ -29,6 +30,9 @@ public class CardParameterService extends ServiceManager<CardParameter,String> {
                 .orElseThrow(()-> new CardServiceException(ErrorType.CARD_PARAMETER_NOT_FOUND));
     }
     public void createCardParameter(CreateCardParameterRequestDto dto) {
-        save(ICardParameterMapper.INSTANCE.toCardParameter(dto));
+        CardParameter cardParameter = CardParameter.builder().groupName(dto.getGroupName())
+                .parameters(dto.getParameters().stream()
+                        .collect(Collectors.toMap(ParameterRequestDto::getName,ParameterRequestDto::getParam))).build();
+        save(cardParameter);
     }
 }

@@ -6,6 +6,9 @@ import com.bilgeadam.dto.request.UpdateProjectRequestDto;
 import com.bilgeadam.dto.response.CreateProjectScoreResponseDto;
 import com.bilgeadam.dto.response.StudentProjectListResponseDto;
 import com.bilgeadam.dto.response.UpdateProjectResponseDto;
+import com.bilgeadam.exceptions.AssignmentException;
+import com.bilgeadam.exceptions.ErrorType;
+import com.bilgeadam.exceptions.ProjectException;
 import com.bilgeadam.manager.IUserManager;
 import com.bilgeadam.mapper.IProjectMapper;
 import com.bilgeadam.repository.IProjectRepository;
@@ -74,9 +77,9 @@ public class ProjectService extends ServiceManager<Project,String> {
         ).collect(Collectors.toList());
         return studentProjectListResponseDtoList;
     }
-    public Long getProjectNote(String studentId){
-        return (long) Math.floor(iProjectRepository.findAllByUserId(studentId).stream()
-                .mapToLong(x->x.getProjectScore()).average().getAsDouble());
+    public Integer getProjectNote(String studentId){
+        return (int) Math.floor(iProjectRepository.findAllByUserId(studentId).stream()
+                .mapToLong(x->x.getProjectScore()).average().orElseThrow(()-> new ProjectException(ErrorType.PROJECT_NOT_FOUND)));
     }
     public Boolean deleteStudentProject(String projectId) {
         Project project = findById(projectId).orElseThrow(()->{throw new RuntimeException("Project Not Found");});

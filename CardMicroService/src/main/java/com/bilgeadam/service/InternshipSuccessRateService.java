@@ -3,6 +3,7 @@ package com.bilgeadam.service;
 import com.bilgeadam.dto.request.InternshipSuccessRateRequestDto;
 import com.bilgeadam.dto.request.UpdateInternshipRequestDto;
 import com.bilgeadam.dto.response.InternshipResponseDto;
+import com.bilgeadam.exceptions.AssignmentException;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.mapper.IInternshipSuccessRateMapper;
@@ -52,9 +53,9 @@ public class InternshipSuccessRateService extends ServiceManager<InternshipSucce
         List<InternshipResponseDto> internshipSuccessRateList = internshipSuccessRateRepository.findAllByUserId(userId.get());
         return internshipSuccessRateList;
     }
-    public Long getInternshipNote(String studentId){
-        return (long) Math.floor(internshipSuccessRateRepository.findAllByUserId(studentId).stream()
-                .mapToLong(x->x.getScore()).average().getAsDouble());
+    public Integer getInternshipNote(String studentId){
+        return (int) Math.floor(internshipSuccessRateRepository.findAllByUserId(studentId).stream()
+                .mapToLong(x->x.getScore()).average().orElseThrow(()-> new CardServiceException(ErrorType.INTERNSHIP_NOT_FOUND)));
     }
     public Boolean deleteSelectedInternship(String internshipId) {
         Optional<InternshipSuccessRate> deletedInternship = findById(internshipId);

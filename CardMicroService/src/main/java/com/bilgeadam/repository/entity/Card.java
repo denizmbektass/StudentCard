@@ -19,5 +19,6 @@ public class Card extends BaseEntity {
     @Id
     private String cardId;
     private String studentId;
-    private Map<String,Long> notes;
+    private Map<String,Integer> notes;
+    private Integer totalNote;
 }

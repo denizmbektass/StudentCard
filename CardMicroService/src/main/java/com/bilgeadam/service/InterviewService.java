@@ -7,6 +7,7 @@ import com.bilgeadam.dto.request.UpdateInterviewRequestDto;
 import com.bilgeadam.dto.response.CreateInterviewResponseDto;
 import com.bilgeadam.dto.response.DeleteInterviewResponseDto;
 import com.bilgeadam.dto.response.UpdateInterviewResponseDto;
+import com.bilgeadam.exceptions.AssignmentException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.InterviewServiceException;
 import com.bilgeadam.mapper.IInterviewMapper;
@@ -81,9 +82,9 @@ public class InterviewService extends ServiceManager<Interview, String> {
         update(interview.get());
         return IInterviewMapper.INSTANCE.toDeleteInterviewResponseDto(interview.get());
     }
-    public Long getInterviewNote(String studentId){
-        return (long) Math.floor(interviewRepository.findAllByStudentId(studentId).stream()
-                .mapToLong(x->x.getScore()).average().getAsDouble());
+    public Integer getInterviewNote(String studentId){
+        return (int) Math.floor(interviewRepository.findAllByStudentId(studentId).stream()
+                .mapToLong(x->x.getScore()).average().orElseThrow(()-> new InterviewServiceException(ErrorType.INTERVIEW_NOT_FOUND)));
     }
     public List<Interview> findAllInterviews(TokenRequestDto dto) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());

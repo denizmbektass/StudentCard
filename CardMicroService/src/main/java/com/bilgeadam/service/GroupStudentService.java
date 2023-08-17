@@ -3,8 +3,7 @@ package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.SaveGroupStudentRequestDto;
 import com.bilgeadam.repository.view.VwGroupStudentResponseDto;
-import com.bilgeadam.exceptions.ErrorType;
-import com.bilgeadam.exceptions.GroupStudentException;
+
 import com.bilgeadam.mapper.IGroupStudentMapper;
 import com.bilgeadam.repository.IGroupStudentRepository;
 import com.bilgeadam.repository.entity.GroupStudent;

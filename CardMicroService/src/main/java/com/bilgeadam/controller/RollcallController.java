@@ -22,13 +22,13 @@ public class RollcallController {
     }*/
 
 
-    @DeleteMapping(DELETE+"/{rollcallId}")
+    @DeleteMapping(DELETE+"/{rollbackId}")
     @CrossOrigin("*")
     public ResponseEntity<MessageResponse> deleteRollback(@PathVariable String rollbackId){
         rollcallService.deleteRollcall(rollbackId);
         return ResponseEntity.ok(new MessageResponse("Grup bilgisi başarıyla silindi.."));
     }
-    @GetMapping(FIND_ALL+"/title/{token]")
+    @GetMapping(FIND_ALL+"/title/{token}")
     @CrossOrigin("*")
     public ResponseEntity<Set<String>> getAllTitles(@PathVariable String token){
         return  ResponseEntity.ok(rollcallService.getAllTitles(token));
