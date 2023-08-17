@@ -61,9 +61,9 @@ public class ExamService extends ServiceManager<Exam,String> {
         return examRepository.findAllByStudentId(studentId.get()).stream().map(exam ->
             examMapper.toExamResponseDto(exam)).toList();
     }
-    public Long getExamNote(String studentId){
-        return (long) Math.floor(examRepository.findAllByStudentId(studentId).stream()
-                .mapToLong(x->x.getScore()).average().getAsDouble());
+    public Integer getExamNote(String studentId){
+        return (int) Math.floor(examRepository.findAllByStudentId(studentId).stream()
+                .mapToLong(x->x.getScore()).average().orElseThrow(()-> new ExamException(ErrorType.EXAM_NOT_FOUND)));
     }
     public MessageResponse updateExam(UpdateExamRequestDto dto){
       Optional<Exam> exam = findById(dto.getExamId());

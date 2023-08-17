@@ -19,9 +19,11 @@ public enum ErrorType {
     INTERNAL_ERROR(5100,"Eternal Error",HttpStatus.INTERNAL_SERVER_ERROR),
     BAD_REQUEST(4100,"Parameter Error",HttpStatus.BAD_REQUEST),
 
-    INTERVIEW_NOT_FOUND(6100,"Böyle bir mülakat bulunamadı",HttpStatus.BAD_REQUEST),
-    ASSIGNMENT_NOT_FOUND(6100,"Böyle bir ödev bulunamadı",HttpStatus.BAD_REQUEST),
-    EXAM_NOT_FOUND(6100,"Böyle bir sınav bulunamadı",HttpStatus.BAD_REQUEST),
+    INTERVIEW_NOT_FOUND(6100,"Böyle bir mülakat bulunamadı",HttpStatus.NOT_FOUND),
+    ASSIGNMENT_NOT_FOUND(6100,"Böyle bir ödev bulunamadı",HttpStatus.NOT_FOUND),
+    PROJECT_NOT_FOUND(6100,"Böyle bir proje bulunamadı",HttpStatus.NOT_FOUND),
+    INTERNSHIP_NOT_FOUND(6100,"Böyle bir staj bulunamadı",HttpStatus.NOT_FOUND),
+    EXAM_NOT_FOUND(6100,"Böyle bir sınav bulunamadı",HttpStatus.NOT_FOUND),
     ROLLCALL_NOT_FOUND(6100,"Böyle bir grup bulunamadı",HttpStatus.BAD_REQUEST),
     CARD_PARAMETER_NOT_FOUND(6100,"Böyle bir parametre bulunamadı",HttpStatus.BAD_REQUEST),
 
