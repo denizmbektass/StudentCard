@@ -1,4 +1,4 @@
-package com.bilgeadam.repository.view;
+package com.bilgeadam.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class VwGroupStudentResponseDto {
+public class UpdateGroupStudentRequestDto {
     private String groupStudentId;
-    private String groupId;
+    private String groupName;
     private String name;
     private String surname;
 }

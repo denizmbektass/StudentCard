@@ -9,6 +9,7 @@ import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GroupService extends ServiceManager<Group,String> {
@@ -32,8 +33,12 @@ public class GroupService extends ServiceManager<Group,String> {
         return groupList;
     }
 
+    public Optional<Group> findGroupByGroupName(String groupName){
+        Optional<Group> group = groupRepository.findByGroupName(groupName);
+        return group;
+    }
 
-
-
-
+    public List<VwGroupResponseDto> findAllGroupNames(){
+        return groupRepository.findAllGroupList();
+    }
 }

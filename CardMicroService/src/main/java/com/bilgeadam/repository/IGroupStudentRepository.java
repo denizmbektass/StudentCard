@@ -9,11 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IGroupStudentRepository extends MongoRepository<GroupStudent, String> {
-    Optional<GroupStudent> findByNameAndSurnameAndGroupName(String name, String surname, String groupName);
 
-    @Query("select new com.bilgeadam.repository.view.VwGroupStudentResponseDto(gs.groupStudentId,gs.groupName,gs.name,gs.surname)" +
+    @Query("select new com.bilgeadam.repository.view.VwGroupStudentResponseDto(gs.groupStudentId,gs.groupId,gs.name,gs.surname)" +
             "from GroupStudent gs")
     List<VwGroupStudentResponseDto> findAllGroupStudentList();
 
     Boolean existsByGroupStudentId(String groupStudentId);
+
+    Integer countAllByGroupId(String groupId);
 }

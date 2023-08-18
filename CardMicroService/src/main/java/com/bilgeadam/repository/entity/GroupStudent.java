@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class GroupStudent extends BaseEntity {
     @Id
     private String groupStudentId;
-    private String groupName;
+    private String groupId;
     private String name;
     private String surname;
 }
