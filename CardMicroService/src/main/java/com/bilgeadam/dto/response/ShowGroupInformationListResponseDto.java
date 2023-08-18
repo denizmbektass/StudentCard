@@ -1,4 +1,4 @@
-package com.bilgeadam.repository.view;
+package com.bilgeadam.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class VwGroupResponseDto {
-    private String groupId;
+public class ShowGroupInformationListResponseDto {
     private String groupName;
+    private Integer numberOfStudent;
 }
