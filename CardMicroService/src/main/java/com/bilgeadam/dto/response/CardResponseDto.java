@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 import java.util.Map;
 
 @Builder
@@ -12,6 +13,6 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CardResponseDto {
-    private Map<String,Long> notes;
+    private Map<String,Integer> notes;
     private Integer totalNote;
 }

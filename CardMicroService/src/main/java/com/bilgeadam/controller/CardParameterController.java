@@ -16,9 +16,8 @@ public class CardParameterController {
 
     @PostMapping(CREATE)
     @CrossOrigin("*")
-    public ResponseEntity<Void> createCardParameter(@RequestBody CreateCardParameterRequestDto dto){
-        cardParameterService.createCardParameter(dto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Boolean> createCardParameter(@RequestBody CreateCardParameterRequestDto dto){
+        return ResponseEntity.ok( cardParameterService.createCardParameter(dto));
     }
 
 }
