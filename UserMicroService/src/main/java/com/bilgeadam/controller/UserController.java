@@ -10,6 +10,7 @@ import com.bilgeadam.repository.entity.User;
 import com.bilgeadam.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -42,36 +43,39 @@ public class UserController {
     public  ResponseEntity<UserResponseDto> save(@RequestBody UserRequestDto dto){
         return ResponseEntity.ok(userService.save(dto));
     }
-    @CrossOrigin
+    //@PreAuthorize("hasAuthority('MANAGER')")
+    @CrossOrigin("*")
     @PostMapping("search-user")
-
     public  ResponseEntity<List<User>> searchUser(@RequestBody SearchUserRequestDto dto){
         return  ResponseEntity.ok(userService.searchUser(dto));
     }
 
-
-    @CrossOrigin
+    //@PreAuthorize("hasAuthority('MANAGER')")
+    @CrossOrigin("*")
     @PostMapping("search-create-token")
     public  ResponseEntity<String> createToken( @RequestBody SelectUserCreateTokenDto dto){
         return  ResponseEntity.ok(userService.createToken(dto));
     }
-
-    @CrossOrigin
+    //@PreAuthorize("hasAuthority('MANAGER')")
+    @CrossOrigin("*")
     @PostMapping("get-id-from-token")
     public  ResponseEntity<String> getIdFromToken( String token){
         return  ResponseEntity.ok(userService.getIdFromToken(token));
     }
+    @PreAuthorize("hasAuthority('MANAGER')")
     @CrossOrigin("*")
     @GetMapping ("find-student-profile/{token}")
     public  ResponseEntity<FindStudentProfileResponseDto> findStudentProfile(@PathVariable String token){
         return  ResponseEntity.ok(userService.findStudentProfile(token));
     }
-
-    @CrossOrigin
+    //@PreAuthorize("hasAuthority('MANAGER')")
+    @CrossOrigin("*")
     @PutMapping("save-user-list")
     public  ResponseEntity<Boolean> saveUserList(@RequestBody List<UserRequestDto> dtoList){
         return  ResponseEntity.ok(userService.saveUserList(dtoList));
     }
+    //@PreAuthorize("hasAuthority('MANAGER')")
+    @CrossOrigin("*")
     @GetMapping("get-name-and-surname-with-id/{userId}")
     public ResponseEntity<String> getNameAndSurnameWithId(@PathVariable String userId){
         return ResponseEntity.ok(userService.getNameAndSurnameWithId(userId));
