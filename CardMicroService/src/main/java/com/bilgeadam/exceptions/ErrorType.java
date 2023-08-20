@@ -36,6 +36,8 @@ public enum ErrorType {
     COMMENT_LENGTH_VERGE(8003, "Girilen yorum 255 karakterden fazla olamaz",HttpStatus.BAD_REQUEST),
 
     PROJECT_TYPE_DUBLICATE(9001,"Böyle bir proje türü zaten bulunmaktadır",HttpStatus.BAD_REQUEST),
+    PROJECT_TYPE_NOT_FOUND(9002,"Böyle bir proje türü bulunamadı",HttpStatus.BAD_REQUEST),
+    PROJECT_TYPE_STATUS(9003,"Proje türü status aktif değil",HttpStatus.BAD_REQUEST),
 
     ;
 

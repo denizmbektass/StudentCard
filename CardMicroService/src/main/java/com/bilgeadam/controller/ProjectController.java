@@ -54,4 +54,10 @@ public class ProjectController {
     public ResponseEntity<String> createProjectType (@RequestBody CreateProjectTypeRequestDto dto){
         return ResponseEntity.ok(projectService.createProjectType(dto));
     }
+
+    @CrossOrigin
+    @PutMapping("delete-project-type/{projectTypeId}")
+    public ResponseEntity<Boolean> deleteProjectType(@PathVariable String projectTypeId){
+        return ResponseEntity.ok(projectService.deleteProjectType(projectTypeId));
+    }
 }

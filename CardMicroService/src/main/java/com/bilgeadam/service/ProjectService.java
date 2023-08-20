@@ -17,6 +17,7 @@ import com.bilgeadam.repository.entity.ProjectType;
 import com.bilgeadam.repository.enums.EStatus;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
+import com.sun.jdi.event.StepEvent;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -110,10 +111,15 @@ public class ProjectService extends ServiceManager<Project,String> {
     }
 
     public List<String> showProjectsType(){
-        List<ProjectType> projectTypeList = projectTypeService.findAll();
-        List<String> newProjectList= projectTypeList.stream().map(x -> x.getProjectType()).collect(Collectors.toList());
-        System.out.println(newProjectList);
-        return newProjectList;
+        return projectTypeService.showProjectsType();
+    }
+
+    public Boolean deleteProjectType(String projectTypeId){
+        Boolean isDeleted = projectTypeService.deleteProjectType(projectTypeId);
+        if (!isDeleted){
+            return false;
+        }
+        return true;
     }
 
 }
