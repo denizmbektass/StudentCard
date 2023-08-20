@@ -1,6 +1,6 @@
 package com.bilgeadam.dto.request;
 
-import com.bilgeadam.repository.entity.EStatus;
+import com.bilgeadam.repository.enums.EStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

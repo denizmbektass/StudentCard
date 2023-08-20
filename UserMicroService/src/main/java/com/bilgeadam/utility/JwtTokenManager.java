@@ -8,7 +8,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.bilgeadam.exceptions.ErrorType;
 
 import com.bilgeadam.exceptions.UserServiceException;
-import com.bilgeadam.repository.entity.EStatus;
+import com.bilgeadam.repository.enums.EStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -89,21 +89,20 @@ public class JwtTokenManager {
 
         }
     }
+    public EStatus getStatusFromToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            if (decodedJWT == null) {
+                throw new UserServiceException(ErrorType.INVALID_TOKEN);
+            }
+            EStatus status = decodedJWT.getClaim("status").as(EStatus.class);   //DANIŞ
+            return status;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new UserServiceException(ErrorType.INVALID_TOKEN);
 
-//    public EStatus getStatusFromToken(String token) {
-//        try {
-//            Algorithm algorithm = Algorithm.HMAC512(secretKey);
-//            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
-//            DecodedJWT decodedJWT = verifier.verify(token);
-//            if (decodedJWT == null) {
-//                throw new AuthServiceException(ErrorType.INVALID_TOKEN);
-//            }
-//            EStatus status = decodedJWT.getClaim("status").as(EStatus.class);   //DANIŞ
-//            return status;
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            throw new AuthServiceException(ErrorType.INVALID_TOKEN);
-//
-//        }
-//    }
+        }
+    }
 }
