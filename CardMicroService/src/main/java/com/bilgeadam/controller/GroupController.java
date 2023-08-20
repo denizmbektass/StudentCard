@@ -1,6 +1,7 @@
 package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.GroupSaveRequestDto;
+import com.bilgeadam.dto.response.AttendanceSearchResponseDto;
 import com.bilgeadam.repository.entity.Group;
 import com.bilgeadam.repository.view.VwGroupResponseDto;
 import com.bilgeadam.service.GroupService;
@@ -26,6 +27,12 @@ public class GroupController {
     @GetMapping("/find-all")
     public ResponseEntity<List<VwGroupResponseDto>> showGroupList(){
         return ResponseEntity.ok(groupService.showGroupList());
+    }
+
+    @CrossOrigin
+    @GetMapping("/show-attendance-search-list/{groupId}")
+    public ResponseEntity<List<AttendanceSearchResponseDto>> showAttendanceSearchList(@PathVariable String groupId){
+        return ResponseEntity.ok(groupService.showAttendanceSearchList(groupId));
     }
 
 }
