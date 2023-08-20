@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+
 import java.util.Map;
 
 @Builder
@@ -14,5 +14,5 @@ import java.util.Map;
 @AllArgsConstructor
 public class CreateCardParameterRequestDto {
     private String groupName;
-    private List<ParameterRequestDto> parameters;
+    private Map<String,Integer> parameters;
 }

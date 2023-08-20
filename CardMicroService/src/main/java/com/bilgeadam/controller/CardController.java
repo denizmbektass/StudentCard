@@ -15,8 +15,8 @@ import static com.bilgeadam.constants.ApiUrls.*;
 public class CardController {
     private final CardService cardService;
 
-    @PostMapping("/get-card/{token}")
     @CrossOrigin("*")
+    @GetMapping("/get-card/{token}")
     public ResponseEntity<CardResponseDto> getCardByStudent(@PathVariable String token){
         return ResponseEntity.ok(cardService.getCardByStudent(token));
     }
