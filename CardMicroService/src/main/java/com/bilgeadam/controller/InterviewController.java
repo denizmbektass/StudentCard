@@ -11,6 +11,7 @@ import com.bilgeadam.repository.entity.Interview;
 import com.bilgeadam.service.InterviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class InterviewController {
     public ResponseEntity<CreateInterviewResponseDto> createInterview(@RequestBody CreateInterviewRequestDto dto){
         return ResponseEntity.ok(interviewService.createInterview(dto));
     }
+    //@PreAuthorize("hasAuthority('MANAGER')")
     @PostMapping(FIND_ALL_INTERVIEW)
     @CrossOrigin("*")
     public ResponseEntity<List<Interview>> findAllInterview(@RequestBody TokenRequestDto dto){
