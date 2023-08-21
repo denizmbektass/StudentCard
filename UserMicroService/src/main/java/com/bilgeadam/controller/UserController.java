@@ -62,7 +62,7 @@ public class UserController {
     public  ResponseEntity<String> getIdFromToken( String token){
         return  ResponseEntity.ok(userService.getIdFromToken(token));
     }
-    @PreAuthorize("hasAuthority('MANAGER')")
+    //@PreAuthorize("hasAuthority('MANAGER')")
     @CrossOrigin("*")
     @GetMapping ("find-student-profile/{token}")
     public  ResponseEntity<FindStudentProfileResponseDto> findStudentProfile(@PathVariable String token){

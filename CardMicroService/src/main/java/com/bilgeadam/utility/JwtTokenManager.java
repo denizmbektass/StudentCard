@@ -89,26 +89,22 @@ public class JwtTokenManager {
             List<String> role = decodedJWT.getClaim("role").asList(String.class);
             return role;
         } catch (Exception e) {
-
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
-
         }
     }
 
-//    public EStatus getStatusFromToken(String token) {
-//        try {
-//            Algorithm algorithm = Algorithm.HMAC512(secretKey);
-//            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
-//            DecodedJWT decodedJWT = verifier.verify(token);
-//            if (decodedJWT == null) {
-//                throw new AuthServiceException(ErrorType.INVALID_TOKEN);
-//            }
-//            EStatus status = decodedJWT.getClaim("status").as(EStatus.class);   //DANIŞ
-//            return status;
-//        } catch (Exception e) {
-//
-//            throw new AuthServiceException(ErrorType.INVALID_TOKEN);
-//
-//        }
-//    }
+    public EStatus getStatusFromToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            if (decodedJWT == null) {
+                throw new CardServiceException(ErrorType.INVALID_TOKEN);
+            }
+            EStatus status = decodedJWT.getClaim("status").as(EStatus.class);   //DANIŞ
+            return status;
+        } catch (Exception e) {
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        }
+    }
 }
