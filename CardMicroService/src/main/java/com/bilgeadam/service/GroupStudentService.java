@@ -101,6 +101,11 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
         return dto;
     }
 
+    public List<GroupStudent> findAllGroupStudents(String groupId){
+        List<GroupStudent> groupStudentList = groupStudentRepository.findAllByGroupId(groupId);
+        return groupStudentList;
+    }
+
 
 
 

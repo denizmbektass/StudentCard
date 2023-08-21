@@ -7,6 +7,7 @@ import com.bilgeadam.repository.IGroupRepository;
 import com.bilgeadam.repository.entity.Group;
 import com.bilgeadam.repository.view.VwGroupResponseDto;
 import com.bilgeadam.utility.ServiceManager;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -66,5 +67,9 @@ public class GroupService extends ServiceManager<Group,String> {
                 start = calendar.getTime();
             }
         return responseDtoList;
+    }
+
+    public Optional<Group> findById(String groupId){
+        return groupRepository.findById(groupId);
     }
 }
