@@ -17,4 +17,9 @@ public interface IGroupStudentRepository extends MongoRepository<GroupStudent, S
     Boolean existsByGroupStudentId(String groupStudentId);
 
     Integer countAllByGroupId(String groupId);
+
+    List<GroupStudent> findAllByGroupId(String groupId);
+
+
+
 }
