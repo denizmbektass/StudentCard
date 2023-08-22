@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ShowGroupInformationListResponseDto {
+    private String groupId;
     private String groupName;
     private Integer numberOfStudent;
 }

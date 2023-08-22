@@ -92,6 +92,7 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
             Integer groupCount = groupStudentRepository.countAllByGroupId(group.getGroupId());
             if(groupCount>0){
                 dto.add(ShowGroupInformationListResponseDto.builder()
+                        .groupId(group.getGroupId())
                         .groupName(group.getGroupName())
                         .numberOfStudent(groupCount)
                         .build());
