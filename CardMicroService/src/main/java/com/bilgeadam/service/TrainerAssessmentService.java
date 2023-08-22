@@ -1,14 +1,12 @@
 package com.bilgeadam.service;
 
-import com.bilgeadam.dto.request.TokenRequestDto;
-import com.bilgeadam.dto.request.TrainerAssessmentSaveRequestDto;
-import com.bilgeadam.dto.request.UpdateTrainerAssessmentRequestDto;
+import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.DeleteAssessmentResponseDto;
 import com.bilgeadam.dto.response.TrainerAssessmentSaveResponseDto;
 import com.bilgeadam.dto.response.UpdateTrainerAssessmentResponseDto;
-import com.bilgeadam.exceptions.AssignmentException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.TrainerAssessmentException;
+import com.bilgeadam.manager.IUserManager;
 import com.bilgeadam.mapper.ITrainerAssesmentMapper;
 import com.bilgeadam.rabbitmq.model.ReminderMailModel;
 import com.bilgeadam.rabbitmq.producer.ReminderMailProducer;
@@ -31,11 +29,14 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
     private final JwtTokenManager jwtTokenManager;
     private final ReminderMailProducer reminderMailProducer;
 
-    public TrainerAssessmentService(ITrainerAssessmentRepository iTrainerAssessmentRepository, JwtTokenManager jwtTokenManager, ReminderMailProducer reminderMailProducer){
+    private final IUserManager userManager;
+
+    public TrainerAssessmentService(ITrainerAssessmentRepository iTrainerAssessmentRepository, JwtTokenManager jwtTokenManager, ReminderMailProducer reminderMailProducer, IUserManager userManager){
         super(iTrainerAssessmentRepository);
         this.iTrainerAssesmentRepository=iTrainerAssessmentRepository;
         this.jwtTokenManager = jwtTokenManager;
         this.reminderMailProducer = reminderMailProducer;
+        this.userManager = userManager;
     }
 
     public TrainerAssessmentSaveResponseDto saveTrainerAssessment(TrainerAssessmentSaveRequestDto dto){
@@ -89,13 +90,19 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         return findAll().stream().filter(x->x.getEStatus()==EStatus.ACTIVE && x.getStudentId().equals(studentId.get()))
                 .collect(Collectors.toList());
     }
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(cron = "0 30 09 15 * ?")
     //cron = "0 58 23 15 * ?"
+    //fixedRate = 300000
     public void sendReminderMail (){
-        reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
-                .email("ogulcantekin97@gmail.com")//aliakkulahh
-                .month("Temmuz")
-                .studentName("Ali Akkülah")
-                .build());
+
+        List<TrainersMailReminderDto> trainers= userManager.getTrainers().getBody();
+        System.out.println(" sadadfdg"+" "+trainers);
+        trainers.stream().forEach(x->{
+            reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
+                    .email(x.getEmail())
+                    .groupName(x.getGroupName())
+                    .build());
+        });
+
     }
 }

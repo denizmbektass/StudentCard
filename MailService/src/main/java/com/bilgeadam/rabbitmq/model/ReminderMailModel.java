@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Builder
 @Data
@@ -13,6 +14,5 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ReminderMailModel implements Serializable {
     private String email;
-    private String studentName;
-    private String month;
+    private List<String> groupName;
 }

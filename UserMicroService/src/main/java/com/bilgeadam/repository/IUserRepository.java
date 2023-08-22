@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface IUserRepository extends MongoRepository<User,String> {
     List<User> findByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndPhoneNumberContaining(String name, String surname , String email, String phoneNumber);
+
 }

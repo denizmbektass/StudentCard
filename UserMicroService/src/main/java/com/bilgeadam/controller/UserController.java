@@ -1,9 +1,6 @@
 package com.bilgeadam.controller;
 
-import com.bilgeadam.dto.request.SearchUserRequestDto;
-import com.bilgeadam.dto.request.SelectUserCreateTokenDto;
-import com.bilgeadam.dto.request.UserRequestDto;
-import com.bilgeadam.dto.request.UserUpdateRequestDto;
+import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.FindStudentProfileResponseDto;
 import com.bilgeadam.dto.response.UserResponseDto;
 import com.bilgeadam.repository.entity.User;
@@ -42,6 +39,10 @@ public class UserController {
     @PutMapping(SAVE)
     public  ResponseEntity<UserResponseDto> save(@RequestBody UserRequestDto dto){
         return ResponseEntity.ok(userService.save(dto));
+    }
+    @GetMapping("mail-reminder")
+    public  ResponseEntity<List<TrainersMailReminderDto>> getTrainers(){
+        return ResponseEntity.ok(userService.getTrainers());
     }
     //@PreAuthorize("hasAuthority('MANAGER')")
     @CrossOrigin("*")

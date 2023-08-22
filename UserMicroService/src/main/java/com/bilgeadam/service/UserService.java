@@ -1,9 +1,6 @@
 package com.bilgeadam.service;
 
-import com.bilgeadam.dto.request.SearchUserRequestDto;
-import com.bilgeadam.dto.request.SelectUserCreateTokenDto;
-import com.bilgeadam.dto.request.UserRequestDto;
-import com.bilgeadam.dto.request.UserUpdateRequestDto;
+import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.FindStudentProfileResponseDto;
 import com.bilgeadam.dto.response.UserResponseDto;
 import com.bilgeadam.exceptions.ErrorType;
@@ -11,14 +8,18 @@ import com.bilgeadam.exceptions.UserServiceException;
 import com.bilgeadam.converter.UserConverter;
 import com.bilgeadam.mapper.IUserMapper;
 import com.bilgeadam.repository.IUserRepository;
+import com.bilgeadam.repository.enums.ERole;
 import com.bilgeadam.repository.enums.EStatus;
 import com.bilgeadam.repository.entity.User;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService extends ServiceManager<User, String> {
@@ -114,6 +115,30 @@ public class UserService extends ServiceManager<User, String> {
         }
         return optionalUser.get().getName() + " " + optionalUser.get().getSurname();
 
+    }
+
+    public List<TrainersMailReminderDto> getTrainers() {
+        List<String> groupName=new ArrayList<>();
+
+        findAll().stream()
+                .filter(x->x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.STUDENT))
+                .forEach(x->{
+                    x.getGroupNameList().stream().forEach(y->{
+                        groupName.add(y);
+                    });
+                });
+
+        System.out.println(" student"+" "+ groupName);
+        List<User> trainer=findAll().stream()
+                .filter(x->x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.TRAINER))
+                .toList();
+
+        System.out.println(" trainer"+" "+trainer);
+        return trainer.stream().filter(x->x.getGroupNameList().stream().anyMatch(groupName::contains))
+                .map(y->TrainersMailReminderDto.builder()
+                        .groupName(y.getGroupNameList()).email(y.getEmail())
+                        .build())
+                .toList();
     }
 
 }

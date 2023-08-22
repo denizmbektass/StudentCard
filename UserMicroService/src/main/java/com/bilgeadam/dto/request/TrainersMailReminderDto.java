@@ -1,18 +1,18 @@
-package com.bilgeadam.rabbitmq.model;
+package com.bilgeadam.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReminderMailModel implements Serializable {
-    private String email;
+public class TrainersMailReminderDto {
+
     private List<String> groupName;
+    private String email;
 }
