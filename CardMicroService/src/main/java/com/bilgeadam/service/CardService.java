@@ -1,9 +1,11 @@
 package com.bilgeadam.service;
 
 
+import com.bilgeadam.dto.request.TranscriptInfo;
 import com.bilgeadam.dto.response.CardResponseDto;
 import com.bilgeadam.exceptions.AssignmentException;
 import com.bilgeadam.exceptions.ErrorType;
+import com.bilgeadam.manager.IUserManager;
 import com.bilgeadam.mapper.ICardMapper;
 import com.bilgeadam.repository.ICardRepository;
 import com.bilgeadam.repository.entity.Card;
@@ -27,12 +29,13 @@ public class CardService extends ServiceManager<Card,String> {
     private final InterviewService interviewService;
     private final ProjectService projectService;
     private final TrainerAssessmentService trainerAssessmentService;
+    private final IUserManager userManager;
 
     public CardService(ICardRepository iCardRepository, JwtTokenManager jwtTokenManager,
                        CardParameterService cardParameterService, AssignmentService assignmentService,
                        ExamService examService, InternshipSuccessRateService intershipService,
                        InterviewService interviewService, ProjectService projectService,
-                       TrainerAssessmentService trainerAssessmentService) {
+                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager) {
         super(iCardRepository);
         this.iCardRepository = iCardRepository;
         this.jwtTokenManager = jwtTokenManager;
@@ -43,6 +46,7 @@ public class CardService extends ServiceManager<Card,String> {
         this.interviewService = interviewService;
         this.projectService = projectService;
         this.trainerAssessmentService = trainerAssessmentService;
+        this.userManager = userManager;
     }
 
     public CardResponseDto getCardByStudent(String token) {
@@ -70,8 +74,14 @@ public class CardService extends ServiceManager<Card,String> {
         Integer totalNote = ((assignmentNote* parameters.get("Assignment"))+(examNote* parameters.get("Exam"))
                 +(internshipNote* parameters.get("Internship"))+(interviewNote* parameters.get("Interview"))
                 +(projectNote* parameters.get("Project"))+(assessmentNote* parameters.get("TrainerAssessment")))/100;
+        TranscriptInfo transcriptInfo = userManager.getTranscriptInfoByUser(token).getBody();
         card.setNotes(newNotes);
+//        card.setAbsence() ;
         card.setTotalNote(totalNote);
-        return ICardMapper.INSTANCE.toCardResponseDto(save(card));
+        save(card);
+        return CardResponseDto.builder().profilePicture(transcriptInfo.getProfilePicture()).totalNote(card.getTotalNote())
+                .notes(card.getNotes()).absence(card.getAbsence()).assistantTrainer(transcriptInfo.getAssistantTrainer())
+                .masterTrainer(transcriptInfo.getMasterTrainer()).groupName(groupNames)
+                .startDate(transcriptInfo.getStartDate()).endDate(transcriptInfo.getEndDate()).build();
     }
 }
