@@ -1,5 +1,6 @@
 package com.bilgeadam.config.security;
 
+import com.bilgeadam.dto.response.GetIdRoleStatusEmailFromTokenResponseDto;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.AuthServiceException;
 import com.bilgeadam.repository.enums.EStatus;
@@ -30,9 +31,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             final String authHeader = request.getHeader("Authorization");
         if (authHeader!=null&&authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
-            Optional<String> id = jwtTokenManager.getIdFromToken(token);
-            List<String> userRole = jwtTokenManager.getRoleFromToken(token);
-            Optional<EStatus> status = Optional.of(jwtTokenManager.getStatusFromToken(token));
+            GetIdRoleStatusEmailFromTokenResponseDto dto = jwtTokenManager.getIdRoleStatusEmailFromToken(token);
+            Optional<String> id = Optional.of(dto.getId());
+            List<String> userRole = dto.getRole();
+            Optional<EStatus> status = Optional.of(dto.getStatus());
             if (!status.isPresent())
                 throw new AuthServiceException(ErrorType.INVALID_TOKEN);
             else if (!status.get().toString().equals("ACTIVE"))

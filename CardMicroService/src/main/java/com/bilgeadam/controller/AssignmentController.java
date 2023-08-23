@@ -8,6 +8,7 @@ import com.bilgeadam.dto.response.MessageResponse;
 import com.bilgeadam.service.AssignmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,7 +22,7 @@ import static com.bilgeadam.constants.ApiUrls.*;
 @RequestMapping(ASSIGNMENT)
 public class AssignmentController {
     private final AssignmentService assignmentService;
-
+    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @PostMapping(CREATE)
     @CrossOrigin("*")
     public ResponseEntity<MessageResponse> createAssignment(@RequestBody @Valid AssignmentRequestDto dto){
@@ -33,12 +34,14 @@ public class AssignmentController {
     public ResponseEntity<List<AssignmentResponseDto>> findAllAssignments(@PathVariable String token){
         return ResponseEntity.ok( assignmentService.findAllAssignments(token));
     }
+    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @PutMapping(UPDATE)
     @CrossOrigin("*")
     public ResponseEntity<MessageResponse> updateAssignment(@RequestBody UpdateAssignmentRequestDto dto){
         assignmentService.updateAssignment(dto);
         return ResponseEntity.ok(new MessageResponse("Ödev başarıyla güncellendi.."));
     }
+    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @DeleteMapping(DELETE+"/{assignmentId}")
     @CrossOrigin("*")
     public ResponseEntity<MessageResponse> deleteAssignment(@PathVariable String assignmentId){

@@ -14,14 +14,15 @@ import static com.bilgeadam.constants.ApiUrls.*;
 public class RollcallController {
     private final RollcallService rollcallService;
 
-
-  /*  @PostMapping(CREATE)
+  /*
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping(CREATE)
     @CrossOrigin("*")
     public ResponseEntity<MessageResponse> createRollcall(@RequestBody @Valid CreateRollcallRequestDto dto){
         return  ResponseEntity.ok(rollcallService.findAllRollcall(token));
     }*/
 
-
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping(DELETE+"/{rollbackId}")
     @CrossOrigin("*")
     public ResponseEntity<MessageResponse> deleteRollback(@PathVariable String rollbackId){
@@ -33,7 +34,7 @@ public class RollcallController {
     public ResponseEntity<Set<String>> getAllTitles(@PathVariable String token){
         return  ResponseEntity.ok(rollcallService.getAllTitles(token));
     }
-
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping(UPDATE)
     @CrossOrigin("*")
     public  ResponseEntity<MessageResponse> updateRollcall(@RequestBody UpdateRollcallRequestDto dto){
