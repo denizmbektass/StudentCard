@@ -1,5 +1,6 @@
 package com.bilgeadam.manager;
 
+import com.bilgeadam.dto.request.TranscriptInfo;
 import com.bilgeadam.dto.request.TrainersMailReminderDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -16,4 +17,8 @@ public interface IUserManager {
 
     @GetMapping("mail-reminder")
     ResponseEntity<List<TrainersMailReminderDto>> getTrainers();
+
+    @GetMapping("get-transcript-info/{token}")
+    ResponseEntity<TranscriptInfo> getTranscriptInfoByUser(@PathVariable String token);
+
 }

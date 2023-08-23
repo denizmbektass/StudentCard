@@ -2,6 +2,7 @@ package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.FindStudentProfileResponseDto;
+import com.bilgeadam.dto.response.TranscriptInfo;
 import com.bilgeadam.dto.response.UserResponseDto;
 import com.bilgeadam.repository.entity.User;
 import com.bilgeadam.service.UserService;
@@ -82,7 +83,10 @@ public class UserController {
         return ResponseEntity.ok(userService.getNameAndSurnameWithId(userId));
     }
 
-
+    @GetMapping("get-transcript-info/{token}")
+    public ResponseEntity<TranscriptInfo> getTranscriptInfoByUser(@PathVariable String token){
+        return ResponseEntity.ok(userService.getTranscriptInfoByUser(token));
+    }
 
 
 }

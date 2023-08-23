@@ -21,4 +21,5 @@ public class Card extends BaseEntity {
     private String studentId;
     private Map<String,Integer> notes;
     private Integer totalNote;
+    private Double absence;
 }

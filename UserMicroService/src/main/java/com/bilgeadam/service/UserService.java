@@ -2,6 +2,7 @@ package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.FindStudentProfileResponseDto;
+import com.bilgeadam.dto.response.TranscriptInfo;
 import com.bilgeadam.dto.response.UserResponseDto;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.UserServiceException;
@@ -16,6 +17,7 @@ import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -114,7 +116,6 @@ public class UserService extends ServiceManager<User, String> {
             throw new UserServiceException(ErrorType.USER_NOT_EXIST);
         }
         return optionalUser.get().getName() + " " + optionalUser.get().getSurname();
-
     }
 
     public List<TrainersMailReminderDto> getTrainers() {
@@ -141,4 +142,18 @@ public class UserService extends ServiceManager<User, String> {
                 .toList();
     }
 
+    public TranscriptInfo getTranscriptInfoByUser(String token) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
+        if (studentId.isEmpty()) throw new UserServiceException(ErrorType.INVALID_TOKEN);
+        Optional<User> optionalUser = findById(studentId.get());
+        if (optionalUser.isEmpty()) throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        User user = optionalUser.get();
+        List<User> users = findAll();
+        String masterTrainer = users.stream().filter(x-> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
+                && x.getRoleList().contains(ERole.MASTER)).map(User::getName).toString();
+        String assistantTrainer = users.stream().filter(x-> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
+                && x.getRoleList().contains(ERole.TRAINER)).map(User::getName).toString();
+        return TranscriptInfo.builder().profilePicture(user.getProfilePicture()).startDate(new Date(user.getCreateDate()))
+                .endDate(new Date(user.getUpdateDate())).masterTrainer(masterTrainer).assistantTrainer(assistantTrainer).build();
+    }
 }
