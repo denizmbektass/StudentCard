@@ -23,7 +23,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping(REGISTER)
-    //@PreAuthorize("hasAuthority('MANAGER')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @CrossOrigin("*")
     public ResponseEntity<MessageResponseDto>register(@RequestBody RegisterRequestDto dto){
         return ResponseEntity.ok(authService.register(dto));
