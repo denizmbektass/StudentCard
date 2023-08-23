@@ -23,8 +23,12 @@ public class GroupService extends ServiceManager<Group,String> {
     }
 
     public Boolean saveGroup(GroupSaveRequestDto dto){
+        System.out.println(dto);
         if(!groupRepository.existsByGroupNameIgnoreCase(dto.getGroupName())){
-            save(IGroupMapper.INSTANCE.fromGroupSaveRequestDtoToGroup(dto));
+            Group group = IGroupMapper.INSTANCE.fromGroupSaveRequestDtoToGroup(dto);
+            System.out.println(group);
+            save(group);
+            System.out.println(group);
             return true;
         }
         throw new RuntimeException("Group Mevcutta Kayıtlı Durumda");
