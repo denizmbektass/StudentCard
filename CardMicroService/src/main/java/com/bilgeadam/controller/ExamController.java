@@ -20,6 +20,7 @@ import static com.bilgeadam.constants.ApiUrls.*;
 @RequiredArgsConstructor
 public class ExamController {
     private  final ExamService examService;
+    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @CrossOrigin("*")
     @PostMapping(CREATE)
     public ResponseEntity<MessageResponse> createExam(@RequestBody @Valid CreateExamRequestDto dto){
@@ -32,7 +33,7 @@ public class ExamController {
         return  ResponseEntity.ok(examService.findAllExams(token));
     }
 
-
+    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @PutMapping(UPDATE)
     @CrossOrigin("*")
     public ResponseEntity<MessageResponse> updateExam(@RequestBody UpdateExamRequestDto dto){
@@ -40,7 +41,7 @@ public class ExamController {
     }
 
 
-
+    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @DeleteMapping(DELETE+"/{examId}")
     @CrossOrigin("*")
     public ResponseEntity<MessageResponse> deleteExam(@PathVariable String examId){

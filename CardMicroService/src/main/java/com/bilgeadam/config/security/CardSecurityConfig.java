@@ -21,7 +21,7 @@ public class CardSecurityConfig {
         httpSecurity.authorizeRequests().antMatchers(
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
-                        "/api/v1/**").permitAll().anyRequest().authenticated()
+                        "/api/v1/**").permitAll()
                 .and()
                 .cors().and().csrf().disable();
         httpSecurity.addFilterBefore(getJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

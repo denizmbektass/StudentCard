@@ -22,17 +22,19 @@ import static com.bilgeadam.constants.ApiUrls.*;
 public class TrainerAssessmentController {
 
     private final TrainerAssessmentService trainerAssessmentService;
-
+    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @PostMapping(SAVE)
     @CrossOrigin("*")
     public ResponseEntity<TrainerAssessmentSaveResponseDto> saveTrainerAssessment(@RequestBody TrainerAssessmentSaveRequestDto dto){
         return ResponseEntity.ok(trainerAssessmentService.saveTrainerAssessment(dto));
     }
+    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @PostMapping(UPDATE)
     @CrossOrigin("*")
     public ResponseEntity<UpdateTrainerAssessmentResponseDto> updateTrainerAssessment(@RequestBody UpdateTrainerAssessmentRequestDto dto){
         return ResponseEntity.ok(trainerAssessmentService.updateTrainerAssessment(dto));
     }
+    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @DeleteMapping(DELETE)
     @CrossOrigin("*")
     public ResponseEntity<DeleteAssessmentResponseDto> deleteTrainerAssessment(@RequestParam String id){

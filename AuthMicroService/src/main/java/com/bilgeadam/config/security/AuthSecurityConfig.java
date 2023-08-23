@@ -21,7 +21,7 @@ public class AuthSecurityConfig {
         httpSecurity.authorizeRequests().antMatchers(
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
-                        "/api/v1/auth/**").permitAll().anyRequest().authenticated()
+                        "/api/v1/auth/**").permitAll()
                 .and()
                 .cors().and().csrf().disable();
         httpSecurity.addFilterBefore(getJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

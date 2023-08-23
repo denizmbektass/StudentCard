@@ -84,7 +84,7 @@ public class UserService extends ServiceManager<User, String> {
     }
     public String createToken(SelectUserCreateTokenDto dto){
         Optional<User> user = findById(dto.getStudentId());
-        Optional<String> token=jwtTokenManager.createToken(dto.getStudentId(), dto.getRole(),dto.getStatus(),user.get().getGroupNameList());
+        Optional<String> token=jwtTokenManager.createToken(dto.getStudentId(), dto.getRole(),dto.getStatus(),user.get().getGroupNameList(),user.get().getEmail());
         if(token.isEmpty()) throw  new UserServiceException(ErrorType.TOKEN_NOT_CREATED);
         return token.get();
     }
@@ -131,7 +131,7 @@ public class UserService extends ServiceManager<User, String> {
 
         System.out.println(" student"+" "+ groupName);
         List<User> trainer=findAll().stream()
-                .filter(x->x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.TRAINER))
+                .filter(x->x.getStatus().equals(EStatus.ACTIVE) && (x.getRoleList().contains(ERole.MASTER_TRAINER) || x.getRoleList().contains(ERole.ASSISTANT_TRAINER)))
                 .toList();
 
         System.out.println(" trainer"+" "+trainer);
