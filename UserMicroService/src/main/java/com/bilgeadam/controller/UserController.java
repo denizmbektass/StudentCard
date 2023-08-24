@@ -8,7 +8,6 @@ import com.bilgeadam.repository.entity.User;
 import com.bilgeadam.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -101,6 +100,11 @@ public class UserController {
     @GetMapping("get-name-and-surname-with-id/{userId}")
     public ResponseEntity<String> getNameAndSurnameWithId(@PathVariable String userId){
         return ResponseEntity.ok(userService.getNameAndSurnameWithId(userId));
+    }
+    @CrossOrigin("*")
+    @GetMapping("find-by-group-name-list/{groupName}")
+    public ResponseEntity<List<FindByGroupNameResponseDto>> findByGroupNameList(@PathVariable String groupName) {
+        return  ResponseEntity.ok(userService.findByGroupNameList(groupName));
     }
 
     @CrossOrigin("*")

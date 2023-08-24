@@ -150,6 +150,9 @@ public class UserService extends ServiceManager<User, String> {
                         .build())
                 .toList();
     }
+    public List<FindByGroupNameResponseDto> findByGroupNameList(String groupName) {
+        return IUserMapper.INSTANCE.toFindByGroupNameListResponseDto(userRepository.findByGroupNameListIgnoreCase(groupName));
+    }
 
     public TranscriptInfo getTranscriptInfoByUser(String token) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
