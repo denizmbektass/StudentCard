@@ -1,6 +1,7 @@
 package com.bilgeadam.mapper;
 
 import com.bilgeadam.dto.request.UserRequestDto;
+import com.bilgeadam.dto.response.FindByGroupNameResponseDto;
 import com.bilgeadam.dto.response.FindStudentProfileResponseDto;
 import com.bilgeadam.dto.response.GetNameAndSurnameByIdResponseDto;
 import com.bilgeadam.dto.response.UserResponseDto;
@@ -8,6 +9,8 @@ import com.bilgeadam.repository.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface IUserMapper {
@@ -19,4 +22,6 @@ public interface IUserMapper {
     UserResponseDto toUserResponseDto(final User user);
     FindStudentProfileResponseDto toFindStudentProfileResponseDto(final User user);
     GetNameAndSurnameByIdResponseDto toGetNameAndSurnameByIdResponseDto(final User user);
+
+    List<FindByGroupNameResponseDto> toFindByGroupNameListResponseDto(final List<User> user);
 }

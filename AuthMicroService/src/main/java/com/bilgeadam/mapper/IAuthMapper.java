@@ -1,5 +1,6 @@
 package com.bilgeadam.mapper;
 
+
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -8,4 +9,6 @@ import org.mapstruct.factory.Mappers;
 public interface IAuthMapper {
 
     IAuthMapper INSTANCE = Mappers.getMapper(IAuthMapper.class);
+
+
 }

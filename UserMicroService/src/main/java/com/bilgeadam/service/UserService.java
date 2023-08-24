@@ -4,6 +4,7 @@ import com.bilgeadam.dto.request.SearchUserRequestDto;
 import com.bilgeadam.dto.request.SelectUserCreateTokenDto;
 import com.bilgeadam.dto.request.UserRequestDto;
 import com.bilgeadam.dto.request.UserUpdateRequestDto;
+import com.bilgeadam.dto.response.FindByGroupNameResponseDto;
 import com.bilgeadam.dto.response.FindStudentProfileResponseDto;
 import com.bilgeadam.dto.response.UserResponseDto;
 import com.bilgeadam.exceptions.ErrorType;
@@ -115,5 +116,7 @@ public class UserService extends ServiceManager<User, String> {
         return optionalUser.get().getName() + " " + optionalUser.get().getSurname();
 
     }
-
+    public List<FindByGroupNameResponseDto> findByGroupNameList(String groupName) {
+        return IUserMapper.INSTANCE.toFindByGroupNameListResponseDto(userRepository.findByGroupNameListIgnoreCase(groupName));
+    }
 }

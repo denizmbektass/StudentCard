@@ -1,8 +1,6 @@
 package com.bilgeadam.controller;
 
-import com.bilgeadam.dto.request.LoginRequestDto;
-import com.bilgeadam.dto.request.RegisterRequestDto;
-import com.bilgeadam.dto.request.ResetPasswordRequestDto;
+import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.LoginResponseDto;
 import com.bilgeadam.dto.response.MessageResponseDto;
 import com.bilgeadam.service.AuthService;
@@ -13,6 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.List;
 
 import static com.bilgeadam.constants.ApiUrls.*;
 

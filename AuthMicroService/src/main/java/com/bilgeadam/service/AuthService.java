@@ -1,8 +1,6 @@
 package com.bilgeadam.service;
 
-import com.bilgeadam.dto.request.LoginRequestDto;
-import com.bilgeadam.dto.request.RegisterRequestDto;
-import com.bilgeadam.dto.request.ResetPasswordRequestDto;
+import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.LoginResponseDto;
 import com.bilgeadam.dto.response.MessageResponseDto;
 import com.bilgeadam.exceptions.AuthServiceException;
@@ -63,6 +61,7 @@ public class AuthService extends ServiceManager<Auth, String> {
         resetPasswordProducer.sendNewPassword(ResetPasswordModel.builder().email(auth.getEmail()).password(auth.getPassword()).build());
         return MessageResponseDto.builder().message("Register has been completed successfully, Password needs to be updated for activating the profile!").build();
     }
+
 
     public MessageResponseDto forgotMyPassword(String email) {
         Optional<Auth> auth = iAuthRepository.findByEmail(email);
