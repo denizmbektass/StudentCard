@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class TrainerAssessment extends BaseEntity{
     @Id
     private String trainerAssessmentId;
+    private String assessmentName;
     private Long score;
     private String description;
     private String studentId;

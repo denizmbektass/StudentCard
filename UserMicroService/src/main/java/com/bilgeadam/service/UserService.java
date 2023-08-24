@@ -118,27 +118,35 @@ public class UserService extends ServiceManager<User, String> {
     }
 
     public List<TrainersMailReminderDto> getTrainers() {
-        List<String> groupName=new ArrayList<>();
-
-        findAll().stream()
-                .filter(x->x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.STUDENT))
-                .forEach(x->{
-                    x.getGroupNameList().stream().forEach(y->{
-                        groupName.add(y);
-                    });
-                });
-
-        System.out.println(" student"+" "+ groupName);
-        List<User> trainer=findAll().stream()
-                .filter(x->x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.TRAINER))
-                .toList();
-
-        System.out.println(" trainer"+" "+trainer);
-        return trainer.stream().filter(x->x.getGroupNameList().stream().anyMatch(groupName::contains))
-                .map(y->TrainersMailReminderDto.builder()
-                        .groupName(y.getGroupNameList()).email(y.getEmail())
+        return findAll().stream()
+                .filter(x -> x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.ASSISTANT_TRAINER))
+                .map(x -> TrainersMailReminderDto.builder()
+                        .email(x.getEmail())
+                        .groupName(x.getGroupNameList())
                         .build())
                 .toList();
     }
 
+    public List<MastersMailReminderDto> getMasters(){
+        return findAll().stream()
+                .filter(x -> x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.MASTER))
+                .map(x -> MastersMailReminderDto.builder()
+                        .email(x.getEmail())
+                        .groupName(x.getGroupNameList())
+                        .build())
+                .toList();
+    }
+
+    public List<StudentsMailReminderDto> getStudents(){
+        return findAll().stream()
+                    .filter(x -> x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.STUDENT))
+                    .map(x -> StudentsMailReminderDto.builder()
+                            .studentId(x.getUserId())
+                            .name(x.getName())
+                            .surname(x.getSurname())
+                            .groupName(x.getGroupNameList())
+                            .egitimSaati(x.getEgitimSaati())
+                            .build())
+                    .toList();
+    }
 }

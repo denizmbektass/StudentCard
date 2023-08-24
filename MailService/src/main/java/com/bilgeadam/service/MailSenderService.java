@@ -27,7 +27,7 @@ public class MailSenderService {
         mailMessage.setFrom("${mailUsername}");
         mailMessage.setTo(model.getEmail());
         mailMessage.setSubject("Eğitmen Görüşü Hatırlatıcısı");
-        mailMessage.setText(model.getGroupName() + " grubundaki "+ " öğrencilere görüş bildirimi yapılmamıştır. Lütfen görüşünüzü yapınız.");
+        mailMessage.setText(model.getStudentName() + " isimli öğrenciye " + model.getAralik() + " yapılmamıştır. Lütfen görüşünüzü yapınız.");
         javaMailSender.send(mailMessage);
     }
 }
