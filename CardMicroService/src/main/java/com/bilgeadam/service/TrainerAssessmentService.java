@@ -48,7 +48,7 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         if(dto.getScore()==null)
             throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Puan boş bırakılamaz...");
 
-        Optional<String> studentId= jwtTokenManager.getIdFromToken(dto.getToken());
+        Optional<String> studentId= jwtTokenManager.getIdFromToken(dto.getStudenToken());
         TrainerAssessment trainerAssessment= ITrainerAssesmentMapper.INSTANCE.toTrainerAssesment(dto);
         trainerAssessment.setStudentId(studentId.get());
         List<TrainerAssessment> trainerAssessmentList = iTrainerAssesmentRepository.findAllByStudentId(studentId.get());
@@ -57,34 +57,34 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         int admingorussayisi = 1;
         if(!trainerAssessmentList.isEmpty()) {
             for (TrainerAssessment t : trainerAssessmentList) {
-                if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.MASTER_TRAINER)) {
+                if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.MASTER_TRAINER.name())) {
                     mastergorussayisi++;
                 }
-                if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.ASSISTANT_TRAINER)){
+                if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.ASSISTANT_TRAINER.name())){
                     trainergorussayisi++;
                 }
-                if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.ADMIN)){
+                if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.ADMIN.name())){
                     admingorussayisi++;
                 }
             }
-            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.MASTER_TRAINER)){
+            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.MASTER_TRAINER.name())){
                 trainerAssessment.setAssessmentName(mastergorussayisi + ". Master Görüş");
             }
-            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.ASSISTANT_TRAINER)){
+            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.ASSISTANT_TRAINER.name())){
                 trainerAssessment.setAssessmentName(trainergorussayisi + ". Trainer Görüş");
             }
-            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.ADMIN)){
+            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.ADMIN.name())){
                 trainerAssessment.setAssessmentName(admingorussayisi + ". Admin Görüş");
             }
         }
         else{
-            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.MASTER_TRAINER)){
+            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.MASTER_TRAINER.name())){
                 trainerAssessment.setAssessmentName("1. Master Görüş");
             }
-            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.ASSISTANT_TRAINER)){
+            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.ASSISTANT_TRAINER.name())){
                 trainerAssessment.setAssessmentName("1. Trainer Görüş");
             }
-            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.ADMIN)){
+            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.ADMIN.name())){
                 trainerAssessment.setAssessmentName("1. Admin Görüş");
             }
         }
@@ -140,8 +140,12 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
             if(sure == null)
                 throw new TrainerAssessmentException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND, "Öğrencinin eğitim süresi değeri null olamaz.");
             if (sure >= 1 && sure < 50) {
-                List<TrainerAssessment> masterAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("1. Master Görüş")).collect(Collectors.toList());
-                List<TrainerAssessment> trainerAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("1. Trainer Görüş")).collect(Collectors.toList());
+                List<TrainerAssessment> masterAssessmentList = gorusListesi.stream().filter(x ->
+                                x.getAssessmentName().equals("1. Master Görüş"))
+                        .collect(Collectors.toList());
+                List<TrainerAssessment> trainerAssessmentList = gorusListesi.stream().filter(x ->
+                                x.getAssessmentName().equals("1. Trainer Görüş"))
+                        .collect(Collectors.toList());
                 if (masterAssessmentList.isEmpty()) {
                     reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
                             .email(masters.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
@@ -154,77 +158,78 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
                             .email(trainers.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
                             .studentName(s.getName() + " " + s.getSurname())
                             .aralik("eğitim başlangıcı görüşü")
-                            .build());
-                }
-            } else if (sure >= 50 && sure < 100) {
-                List<TrainerAssessment> masterAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("2. Master Görüş")).collect(Collectors.toList());
-                List<TrainerAssessment> trainerAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("2. Trainer Görüş")).collect(Collectors.toList());
-                if (masterAssessmentList.isEmpty()) {
-                    reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
-                            .email(masters.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
-                            .studentName(s.getName() + " " + s.getSurname())
-                            .aralik("50. saat görüşü")
-                            .build());
-                }
-                if (trainerAssessmentList.isEmpty()) {
-                    reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
-                            .email(trainers.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
-                            .studentName(s.getName() + " " + s.getSurname())
-                            .aralik("50. saat görüşü")
-                            .build());
-                }
-            } else if (sure >= 100 && sure < 200) {
-                List<TrainerAssessment> masterAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("3. Master Görüş")).collect(Collectors.toList());
-                List<TrainerAssessment> trainerAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("3. Trainer Görüş")).collect(Collectors.toList());
-                if (masterAssessmentList.isEmpty()) {
-                    reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
-                            .email(masters.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
-                            .studentName(s.getName() + " " + s.getSurname())
-                            .aralik("100. saat görüşü")
-                            .build());
-                }
-                if (trainerAssessmentList.isEmpty()) {
-                    reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
-                            .email(trainers.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
-                            .studentName(s.getName() + " " + s.getSurname())
-                            .aralik("100. saat görüşü")
-                            .build());
-                }
-            } else if (sure >= 200 && sure < 300) {
-                List<TrainerAssessment> masterAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("4. Master Görüş")).collect(Collectors.toList());
-                List<TrainerAssessment> trainerAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("4. Trainer Görüş")).collect(Collectors.toList());
-                if (masterAssessmentList.isEmpty()) {
-                    reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
-                            .email(masters.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
-                            .studentName(s.getName() + " " + s.getSurname())
-                            .aralik("200. saat görüşü")
-                            .build());
-                }
-                if (trainerAssessmentList.isEmpty()) {
-                    reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
-                            .email(trainers.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
-                            .studentName(s.getName() + " " + s.getSurname())
-                            .aralik("200. saat görüşü")
-                            .build());
-                }
-            } else if (sure >= 300) {
-                List<TrainerAssessment> masterAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("5. Master Görüş")).collect(Collectors.toList());
-                List<TrainerAssessment> trainerAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("5. Trainer Görüş")).collect(Collectors.toList());
-                if (masterAssessmentList.isEmpty()) {
-                    reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
-                            .email(masters.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
-                            .studentName(s.getName() + " " + s.getSurname())
-                            .aralik("300. saat görüşü")
-                            .build());
-                }
-                if (trainerAssessmentList.isEmpty()) {
-                    reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
-                            .email(trainers.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
-                            .studentName(s.getName() + " " + s.getSurname())
-                            .aralik("300. saat görüşü")
                             .build());
                 }
             }
+                 else if (sure >= 50 && sure < 100) {
+                    List<TrainerAssessment> masterAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("2. Master Görüş")).collect(Collectors.toList());
+                    List<TrainerAssessment> trainerAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("2. Trainer Görüş")).collect(Collectors.toList());
+                    if (masterAssessmentList.isEmpty()) {
+                        reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
+                                .email(masters.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
+                                .studentName(s.getName() + " " + s.getSurname())
+                                .aralik("50. saat görüşü")
+                                .build());
+                    }
+                    if (trainerAssessmentList.isEmpty()) {
+                        reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
+                                .email(trainers.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
+                                .studentName(s.getName() + " " + s.getSurname())
+                                .aralik("50. saat görüşü")
+                                .build());
+                    }
+                } else if (sure >= 100 && sure < 200) {
+                    List<TrainerAssessment> masterAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("3. Master Görüş")).collect(Collectors.toList());
+                    List<TrainerAssessment> trainerAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("3. Trainer Görüş")).collect(Collectors.toList());
+                    if (masterAssessmentList.isEmpty()) {
+                        reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
+                                .email(masters.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
+                                .studentName(s.getName() + " " + s.getSurname())
+                                .aralik("100. saat görüşü")
+                                .build());
+                    }
+                    if (trainerAssessmentList.isEmpty()) {
+                        reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
+                                .email(trainers.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
+                                .studentName(s.getName() + " " + s.getSurname())
+                                .aralik("100. saat görüşü")
+                                .build());
+                    }
+                } else if (sure >= 200 && sure < 300) {
+                    List<TrainerAssessment> masterAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("4. Master Görüş")).collect(Collectors.toList());
+                    List<TrainerAssessment> trainerAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("4. Trainer Görüş")).collect(Collectors.toList());
+                    if (masterAssessmentList.isEmpty()) {
+                        reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
+                                .email(masters.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
+                                .studentName(s.getName() + " " + s.getSurname())
+                                .aralik("200. saat görüşü")
+                                .build());
+                    }
+                    if (trainerAssessmentList.isEmpty()) {
+                        reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
+                                .email(trainers.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
+                                .studentName(s.getName() + " " + s.getSurname())
+                                .aralik("200. saat görüşü")
+                                .build());
+                    }
+                } else if (sure >= 300) {
+                    List<TrainerAssessment> masterAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("5. Master Görüş")).collect(Collectors.toList());
+                    List<TrainerAssessment> trainerAssessmentList = gorusListesi.stream().filter(x -> x.getAssessmentName().equals("5. Trainer Görüş")).collect(Collectors.toList());
+                    if (masterAssessmentList.isEmpty()) {
+                        reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
+                                .email(masters.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
+                                .studentName(s.getName() + " " + s.getSurname())
+                                .aralik("300. saat görüşü")
+                                .build());
+                    }
+                    if (trainerAssessmentList.isEmpty()) {
+                        reminderMailProducer.sendReminderMail(ReminderMailModel.builder()
+                                .email(trainers.stream().filter(x -> x.getGroupName().contains(s.getGroupName().get(0))).toList().get(0).getEmail())
+                                .studentName(s.getName() + " " + s.getSurname())
+                                .aralik("300. saat görüşü")
+                                .build());
+                    }
+                }
         }
     }
 }
