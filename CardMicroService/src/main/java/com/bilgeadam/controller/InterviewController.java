@@ -23,23 +23,24 @@ import static com.bilgeadam.constants.ApiUrls.*;
 @RequiredArgsConstructor
 public class InterviewController {
     private final InterviewService interviewService;
-
+    //@PreAuthorize("hasAnyAuthority('ADMIN','WORKSHOP_TEAM')")
     @PostMapping(CREATE_INTERVIEW)
     @CrossOrigin("*")
     public ResponseEntity<CreateInterviewResponseDto> createInterview(@RequestBody CreateInterviewRequestDto dto){
         return ResponseEntity.ok(interviewService.createInterview(dto));
     }
-    //@PreAuthorize("hasAuthority('MANAGER')")
     @PostMapping(FIND_ALL_INTERVIEW)
     @CrossOrigin("*")
     public ResponseEntity<List<Interview>> findAllInterview(@RequestBody TokenRequestDto dto){
         return ResponseEntity.ok(interviewService.findAllInterviews(dto));
     }
+    //@PreAuthorize("hasAnyAuthority('ADMIN','WORKSHOP_TEAM')")
     @PostMapping(UPDATE_INTERVIEW)
     @CrossOrigin("*")
     public ResponseEntity<UpdateInterviewResponseDto> updateInterview(@RequestBody UpdateInterviewRequestDto dto){
         return ResponseEntity.ok(interviewService.updateInterview(dto));
     }
+    //@PreAuthorize("hasAnyAuthority('ADMIN','WORKSHOP_TEAM')")
     @DeleteMapping(DELETE_INTERVIEW)
     @CrossOrigin("*")
     public ResponseEntity<DeleteInterviewResponseDto> deleteInterview(@RequestParam String id){

@@ -2,6 +2,7 @@ package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.FindStudentProfileResponseDto;
+import com.bilgeadam.dto.response.TranscriptInfo;
 import com.bilgeadam.dto.response.UserResponseDto;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.UserServiceException;
@@ -16,6 +17,7 @@ import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -82,7 +84,7 @@ public class UserService extends ServiceManager<User, String> {
     }
     public String createToken(SelectUserCreateTokenDto dto){
         Optional<User> user = findById(dto.getStudentId());
-        Optional<String> token=jwtTokenManager.createToken(dto.getStudentId(), dto.getRole(),dto.getStatus(),user.get().getGroupNameList());
+        Optional<String> token=jwtTokenManager.createToken(dto.getStudentId(), dto.getRole(),dto.getStatus(),user.get().getGroupNameList(),user.get().getEmail());
         if(token.isEmpty()) throw  new UserServiceException(ErrorType.TOKEN_NOT_CREATED);
         return token.get();
     }
@@ -114,7 +116,6 @@ public class UserService extends ServiceManager<User, String> {
             throw new UserServiceException(ErrorType.USER_NOT_EXIST);
         }
         return optionalUser.get().getName() + " " + optionalUser.get().getSurname();
-
     }
 
     public List<TrainersMailReminderDto> getTrainers() {
@@ -129,7 +130,7 @@ public class UserService extends ServiceManager<User, String> {
 
     public List<MastersMailReminderDto> getMasters(){
         return findAll().stream()
-                .filter(x -> x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.MASTER))
+                .filter(x -> x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.MASTER_TRAINER))
                 .map(x -> MastersMailReminderDto.builder()
                         .email(x.getEmail())
                         .groupName(x.getGroupNameList())
@@ -137,16 +138,31 @@ public class UserService extends ServiceManager<User, String> {
                 .toList();
     }
 
-    public List<StudentsMailReminderDto> getStudents(){
+    public List<StudentsMailReminderDto> getStudents() {
         return findAll().stream()
-                    .filter(x -> x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.STUDENT))
-                    .map(x -> StudentsMailReminderDto.builder()
-                            .studentId(x.getUserId())
-                            .name(x.getName())
-                            .surname(x.getSurname())
-                            .groupName(x.getGroupNameList())
-                            .egitimSaati(x.getEgitimSaati())
-                            .build())
-                    .toList();
+                .filter(x -> x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.STUDENT))
+                .map(x -> StudentsMailReminderDto.builder()
+                        .studentId(x.getUserId())
+                        .name(x.getName())
+                        .surname(x.getSurname())
+                        .groupName(x.getGroupNameList())
+                        .egitimSaati(x.getEgitimSaati())
+                        .build())
+                .toList();
+    }
+
+    public TranscriptInfo getTranscriptInfoByUser(String token) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
+        if (studentId.isEmpty()) throw new UserServiceException(ErrorType.INVALID_TOKEN);
+        Optional<User> optionalUser = findById(studentId.get());
+        if (optionalUser.isEmpty()) throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        User user = optionalUser.get();
+        List<User> users = findAll();
+        String masterTrainer = users.stream().filter(x-> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
+                && x.getRoleList().contains(ERole.MASTER_TRAINER)).map(User::getName).toString();
+        String assistantTrainer = users.stream().filter(x-> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
+                && x.getRoleList().contains(ERole.ASSISTANT_TRAINER)).map(User::getName).toString();
+        return TranscriptInfo.builder().profilePicture(user.getProfilePicture()).startDate(new Date(user.getCreateDate()))
+                .endDate(new Date(user.getUpdateDate())).masterTrainer(masterTrainer).assistantTrainer(assistantTrainer).build();
     }
 }

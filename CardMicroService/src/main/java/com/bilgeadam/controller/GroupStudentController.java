@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/group-student")
 public class GroupStudentController {
     private final GroupStudentService groupStudentService;
-
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @CrossOrigin
     @PostMapping("/save-group-student")
     public ResponseEntity<Boolean> saveGroupStudent(@RequestBody SaveGroupStudentRequestDto dto){
@@ -28,13 +28,13 @@ public class GroupStudentController {
     public ResponseEntity<List<GroupStudentsResponseDto>> findAll(){
         return ResponseEntity.ok(groupStudentService.findAllGroupStudentList());
     }
-
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @CrossOrigin
     @DeleteMapping("/delete-by-id/{groupStudentId}")
     public ResponseEntity<Boolean> deleteGroupStudentById(@PathVariable String groupStudentId){
         return ResponseEntity.ok(groupStudentService.deleteGroupStudentById(groupStudentId));
     }
-
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @CrossOrigin
     @PutMapping("/update-group-student")
     public ResponseEntity<Boolean> updateGroupStudent(@RequestBody UpdateGroupStudentRequestDto dto){

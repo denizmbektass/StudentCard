@@ -33,7 +33,7 @@ public class JwtUserDetails implements UserDetailsService {
             });
 
             return User.builder()
-                    .username(auth.get().getEmail())// buralar düzenlenecek
+                    .username(auth.get().getEmail())
                     .password("")
                     .accountLocked(false)
                     .accountExpired(false)

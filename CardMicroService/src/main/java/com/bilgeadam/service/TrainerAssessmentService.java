@@ -57,38 +57,37 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         int admingorussayisi = 1;
         if(!trainerAssessmentList.isEmpty()) {
             for (TrainerAssessment t : trainerAssessmentList) {
-                if (dto.getToken().getRole().contains(ERole.MASTER)) {
+                if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.MASTER_TRAINER)) {
                     mastergorussayisi++;
                 }
-                if(dto.getToken().getRole().contains(ERole.TRAINER)){
+                if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.ASSISTANT_TRAINER)){
                     trainergorussayisi++;
                 }
-                if(dto.getToken().getRole().contains(ERole.ADMIN)){
+                if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.ADMIN)){
                     admingorussayisi++;
                 }
             }
-            if(dto.getToken().getRole().contains(ERole.MASTER)){
+            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.MASTER_TRAINER)){
                 trainerAssessment.setAssessmentName(mastergorussayisi + ". Master Görüş");
             }
-            if(dto.getToken().getRole().contains(ERole.TRAINER)){
+            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.ASSISTANT_TRAINER)){
                 trainerAssessment.setAssessmentName(trainergorussayisi + ". Trainer Görüş");
             }
-            if(dto.getToken().getRole().contains(ERole.ADMIN)){
+            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.ADMIN)){
                 trainerAssessment.setAssessmentName(admingorussayisi + ". Admin Görüş");
             }
         }
         else{
-            if(dto.getToken().getRole().contains(ERole.MASTER)){
+            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.MASTER_TRAINER)){
                 trainerAssessment.setAssessmentName("1. Master Görüş");
             }
-            if(dto.getToken().getRole().contains(ERole.TRAINER)){
+            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.ASSISTANT_TRAINER)){
                 trainerAssessment.setAssessmentName("1. Trainer Görüş");
             }
-            if(dto.getToken().getRole().contains(ERole.ADMIN)){
+            if(jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().contains(ERole.ADMIN)){
                 trainerAssessment.setAssessmentName("1. Admin Görüş");
             }
         }
-        trainerAssessment.setAssessmentName(" ");
         save(trainerAssessment);
         return ITrainerAssesmentMapper.INSTANCE.toSaveTrainerAssesment(trainerAssessment);
     }
@@ -130,11 +129,9 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
     //cron = "0 58 23 15 * ?"
     //fixedRate = 300000
     public void sendReminderMail (){
-        List<StudentsMailReminderDto> students = userManager.getStudents().getBody();
         List<TrainersMailReminderDto> trainers = userManager.getTrainers().getBody();
+        List<StudentsMailReminderDto> students = userManager.getStudents().getBody();
         List<MastersMailReminderDto> masters = userManager.getMasters().getBody();
-        System.out.println(" sadadfdg"+" "+trainers);
-        System.out.println(" sadadfdg"+" "+students);
         for(StudentsMailReminderDto s : students) {
             Double sure = s.getEgitimSaati();
             List<TrainerAssessment> gorusListesi = iTrainerAssesmentRepository.findAllByStudentId(s.getStudentId()).stream()

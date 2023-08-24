@@ -2,6 +2,7 @@ package com.bilgeadam.manager;
 
 import com.bilgeadam.dto.request.MastersMailReminderDto;
 import com.bilgeadam.dto.request.StudentsMailReminderDto;
+import com.bilgeadam.dto.request.TranscriptInfo;
 import com.bilgeadam.dto.request.TrainersMailReminderDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -24,4 +25,7 @@ public interface IUserManager {
 
     @GetMapping("mail-reminder-get-masters")
     ResponseEntity<List<MastersMailReminderDto>> getMasters();
+
+    @GetMapping("get-transcript-info/{token}")
+    ResponseEntity<TranscriptInfo> getTranscriptInfoByUser(@PathVariable String token);
 }

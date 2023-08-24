@@ -2,6 +2,7 @@ package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.FindStudentProfileResponseDto;
+import com.bilgeadam.dto.response.TranscriptInfo;
 import com.bilgeadam.dto.response.UserResponseDto;
 import com.bilgeadam.repository.entity.User;
 import com.bilgeadam.service.UserService;
@@ -22,34 +23,44 @@ import static com.bilgeadam.constants.ApiUrls.*;
 public class UserController {
     private final UserService userService;
 
-
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    @CrossOrigin("*")
     @PutMapping(UPDATE)
     public ResponseEntity<Boolean>updateUser(@RequestBody @Valid UserUpdateRequestDto dto){
         return ResponseEntity.ok(userService.updateUser(dto));
     }
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    @CrossOrigin("*")
     @PutMapping(DO_PASSIVE)
     public ResponseEntity<Boolean> doPassive(@RequestParam String id){
         return ResponseEntity.ok(userService.doPassive(id));
     }
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    @CrossOrigin("*")
     @PutMapping(SAFE_DELETE)
     public ResponseEntity<Boolean> safeDelete(@RequestParam String id){
         return ResponseEntity.ok(userService.safeDelete(id));
     }
-
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    @CrossOrigin("*")
     @PutMapping(SAVE)
     public  ResponseEntity<UserResponseDto> save(@RequestBody UserRequestDto dto){
         return ResponseEntity.ok(userService.save(dto));
     }
+
+    @CrossOrigin("*")
     @GetMapping("mail-reminder-get-trainers")
     public  ResponseEntity<List<TrainersMailReminderDto>> getTrainers(){
         return ResponseEntity.ok(userService.getTrainers());
     }
 
+    @CrossOrigin("*")
     @GetMapping("mail-reminder-get-masters")
     public  ResponseEntity<List<MastersMailReminderDto>> getMasters(){
         return ResponseEntity.ok(userService.getMasters());
     }
 
+    @CrossOrigin("*")
     @GetMapping("mail-reminder-get-students")
     public  ResponseEntity<List<StudentsMailReminderDto>> getStudents(){
         return ResponseEntity.ok(userService.getStudents());
@@ -79,7 +90,7 @@ public class UserController {
     public  ResponseEntity<FindStudentProfileResponseDto> findStudentProfile(@PathVariable String token){
         return  ResponseEntity.ok(userService.findStudentProfile(token));
     }
-    //@PreAuthorize("hasAuthority('MANAGER')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @CrossOrigin("*")
     @PutMapping("save-user-list")
     public  ResponseEntity<Boolean> saveUserList(@RequestBody List<UserRequestDto> dtoList){
@@ -92,7 +103,10 @@ public class UserController {
         return ResponseEntity.ok(userService.getNameAndSurnameWithId(userId));
     }
 
-
+    @GetMapping("get-transcript-info/{token}")
+    public ResponseEntity<TranscriptInfo> getTranscriptInfoByUser(@PathVariable String token){
+        return ResponseEntity.ok(userService.getTranscriptInfoByUser(token));
+    }
 
 
 }

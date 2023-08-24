@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.bilgeadam.dto.response.GetIdRoleStatusEmailFromTokenResponseDto;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.repository.enums.EStatus;
@@ -18,40 +19,41 @@ public class JwtTokenManager {
     private final String issuer = "StudentCard";
     private final String secretKey = "StudentCard";
     private final String audience = "audience";
-    public Optional<String> createToken(String id, List<String> role,EStatus status){
-        String token= null;
-        Long exDate = 1000L*60*150;
-        try{
+//    public Optional<String> createToken(String id, List<String> role,EStatus status){
+//        String token= null;
+//        Long exDate = 1000L*60*150;
+//        try{
+//
+//            token = JWT.create().withAudience(audience)
+//                    .withClaim("id",id)
+//                    //EMAİL EKLENECEK
+//                    .withClaim("howtopage","AuthMicroService")
+//                    .withClaim("lastjoin", System.currentTimeMillis())
+//                    .withClaim("role",role)
+//                    .withClaim("status", String.valueOf(status))
+//                    .withIssuer(issuer)
+//                    .withIssuedAt(new Date())
+//                    .withExpiresAt(new Date(System.currentTimeMillis()+exDate))
+//                    .sign(Algorithm.HMAC512(secretKey));
+//            return Optional.of(token);
+//        }catch (Exception exception){
+//            return Optional.empty();
+//        }
+//    }
 
-            token = JWT.create().withAudience(audience)
-                    .withClaim("id",id)
-                    .withClaim("howtopage","AuthMicroService")
-                    .withClaim("lastjoin", System.currentTimeMillis())
-                    .withClaim("role",role)
-                    .withClaim("status", String.valueOf(status))
-                    .withIssuer(issuer)
-                    .withIssuedAt(new Date())
-                    .withExpiresAt(new Date(System.currentTimeMillis()+exDate))
-                    .sign(Algorithm.HMAC512(secretKey));
-            return Optional.of(token);
-        }catch (Exception exception){
-            return Optional.empty();
-        }
-    }
-
-    public Boolean verifyToken(String token){
-        try{
-            Algorithm algorithm = Algorithm.HMAC512(secretKey);
-            JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer(issuer).withAudience(audience).build();
-            DecodedJWT decodedJWT = verifier.verify(token);
-            if(decodedJWT == null)
-                return false;
-        }catch (Exception exception){
-            return false;
-        }
-        return true;
-    }
+//    public Boolean verifyToken(String token){
+//        try{
+//            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+//            JWTVerifier verifier = JWT.require(algorithm)
+//                    .withIssuer(issuer).withAudience(audience).build();
+//            DecodedJWT decodedJWT = verifier.verify(token);
+//            if(decodedJWT == null)
+//                return false;
+//        }catch (Exception exception){
+//            return false;
+//        }
+//        return true;
+//    }
 
     public Optional<String> getIdFromToken(String token){
         try{
@@ -77,8 +79,37 @@ public class JwtTokenManager {
             DecodedJWT decodedJWT = verifier.verify(token);
             return decodedJWT.getClaim("groupname").asList(String.class);
     }
-
-    public List<String> getRoleFromToken(String token) {
+//
+//    public List<String> getRoleFromToken(String token) {
+//        try {
+//            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+//            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
+//            DecodedJWT decodedJWT = verifier.verify(token);
+//            if (decodedJWT == null) {
+//                throw new CardServiceException(ErrorType.INVALID_TOKEN);
+//            }
+//            List<String> role = decodedJWT.getClaim("role").asList(String.class);
+//            return role;
+//        } catch (Exception e) {
+//            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+//        }
+//    }
+//
+//    public EStatus getStatusFromToken(String token) {
+//        try {
+//            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+//            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
+//            DecodedJWT decodedJWT = verifier.verify(token);
+//            if (decodedJWT == null) {
+//                throw new CardServiceException(ErrorType.INVALID_TOKEN);
+//            }
+//            EStatus status = decodedJWT.getClaim("status").as(EStatus.class);   //DANIŞ
+//            return status;
+//        } catch (Exception e) {
+//            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+//        }
+//    }
+    public GetIdRoleStatusEmailFromTokenResponseDto getIdRoleStatusEmailFromToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC512(secretKey);
             JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
@@ -86,24 +117,19 @@ public class JwtTokenManager {
             if (decodedJWT == null) {
                 throw new CardServiceException(ErrorType.INVALID_TOKEN);
             }
+            EStatus status = decodedJWT.getClaim("status").as(EStatus.class);
             List<String> role = decodedJWT.getClaim("role").asList(String.class);
-            return role;
+            String id = decodedJWT.getClaim("id").asString();
+            String email = decodedJWT.getClaim("email").asString();
+            GetIdRoleStatusEmailFromTokenResponseDto getIdRoleStatusEmailFromTokenResponseDto = GetIdRoleStatusEmailFromTokenResponseDto.builder()
+                    .status(status)
+                    .email(email)
+                    .id(id)
+                    .role(role)
+                    .build();
+            return getIdRoleStatusEmailFromTokenResponseDto;
         } catch (Exception e) {
-            throw new CardServiceException(ErrorType.INVALID_TOKEN);
-        }
-    }
-
-    public EStatus getStatusFromToken(String token) {
-        try {
-            Algorithm algorithm = Algorithm.HMAC512(secretKey);
-            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
-            DecodedJWT decodedJWT = verifier.verify(token);
-            if (decodedJWT == null) {
-                throw new CardServiceException(ErrorType.INVALID_TOKEN);
-            }
-            EStatus status = decodedJWT.getClaim("status").as(EStatus.class);   //DANIŞ
-            return status;
-        } catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
         }
     }

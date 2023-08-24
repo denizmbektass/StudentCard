@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/group")
 public class GroupController {
     private final GroupService groupService;
-
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @CrossOrigin
     @PostMapping("/save")
     public ResponseEntity<Boolean> saveGroup(@RequestBody GroupSaveRequestDto dto){

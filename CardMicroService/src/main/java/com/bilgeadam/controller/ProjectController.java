@@ -20,7 +20,7 @@ import static com.bilgeadam.constants.ApiUrls.*;
 @RequestMapping(PROJECT)
 public class ProjectController {
     private final ProjectService projectService;
-
+    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @CrossOrigin
     @PostMapping(CREATE_PROJECT_SCORE)
     public ResponseEntity<CreateProjectScoreResponseDto> createProjectScore (@RequestBody CreateProjectScoreRequestDto dto){
@@ -37,24 +37,25 @@ public class ProjectController {
     public ResponseEntity<List<StudentProjectListResponseDto>> showStudentProjectList(@PathVariable String studentToken){
         return ResponseEntity.ok(projectService.showStudentProjectList(studentToken));
     }
-
+    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @CrossOrigin
     @PutMapping("/delete-student-project/{projectId}")
     public ResponseEntity<Boolean> deleteStudentProject(@PathVariable String projectId){
         return ResponseEntity.ok(projectService.deleteStudentProject(projectId));
     }
+    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @CrossOrigin
     @PutMapping("/update-student-project")
     public ResponseEntity<UpdateProjectResponseDto> updateStudentProject(@RequestBody UpdateProjectRequestDto dto){
         return ResponseEntity.ok(projectService.updateStudentProject(dto));
     }
-
+    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @CrossOrigin
     @PostMapping("/create-project-type")
     public ResponseEntity<String> createProjectType (@RequestBody CreateProjectTypeRequestDto dto){
         return ResponseEntity.ok(projectService.createProjectType(dto));
     }
-
+    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @CrossOrigin
     @PutMapping("delete-project-type/{projectTypeId}")
     public ResponseEntity<Boolean> deleteProjectType(@PathVariable String projectTypeId){

@@ -47,7 +47,7 @@ public class AuthService extends ServiceManager<Auth, String> {
             throw new AuthServiceException(ErrorType.USER_DELETED);
         List<ERole> role = authOptional.get().getRole();
         List<String> roles = role.stream().map(x -> x.name()).toList();
-        Optional<String> token = jwtTokenManager.createToken(authOptional.get().getAuthId(), roles, authOptional.get().getStatus());
+        Optional<String> token = jwtTokenManager.createToken(authOptional.get().getAuthId(), roles, authOptional.get().getStatus(), authOptional.get().getEmail());
         if (token.isEmpty())
             throw new AuthServiceException(ErrorType.TOKEN_NOT_CREATED);
         return LoginResponseDto.builder().token(token.get()).message("Login Successfully").role(roles).build();

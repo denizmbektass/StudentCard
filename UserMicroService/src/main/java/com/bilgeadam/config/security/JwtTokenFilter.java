@@ -1,5 +1,6 @@
 package com.bilgeadam.config.security;
 
+import com.bilgeadam.dto.response.GetIdRoleStatusEmailFromTokenResponseDto;
 import com.bilgeadam.exceptions.UserServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.repository.enums.EStatus;
@@ -30,15 +31,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             final String userHeader = request.getHeader("Authorization");
         if (userHeader!=null&&userHeader.startsWith("Bearer ")) {
             String token = userHeader.substring(7);
-            Optional<String> id = jwtTokenManager.getIdFromToken(token);
-            List<String> userRole = jwtTokenManager.getRoleFromToken(token);
-            Optional<EStatus> status = Optional.of(jwtTokenManager.getStatusFromToken(token));
+            GetIdRoleStatusEmailFromTokenResponseDto dto = jwtTokenManager.getIdRoleStatusEmailFromToken(token);
+            Optional<String> email = Optional.of(dto.getEmail());
+            List<String> userRole = dto.getRole();
+            Optional<EStatus> status = Optional.of(dto.getStatus());
             if (!status.isPresent())
                 throw new UserServiceException(ErrorType.INVALID_TOKEN);
             else if (!status.get().toString().equals("ACTIVE"))
                 throw new UserServiceException(ErrorType.STATUS_NOT_ACTIVE);
             else if (!userRole.isEmpty()) {
-                UserDetails userDetails = jwtUserDetails.loadUserByRole(userRole,id.get());
+                UserDetails userDetails = jwtUserDetails.loadUserByEmail(userRole,email.get());
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
