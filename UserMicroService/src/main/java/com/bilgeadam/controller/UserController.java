@@ -103,6 +103,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getNameAndSurnameWithId(userId));
     }
 
+    @CrossOrigin("*")
     @GetMapping("get-transcript-info/{token}")
     public ResponseEntity<TranscriptInfo> getTranscriptInfoByUser(@PathVariable String token){
         return ResponseEntity.ok(userService.getTranscriptInfoByUser(token));
