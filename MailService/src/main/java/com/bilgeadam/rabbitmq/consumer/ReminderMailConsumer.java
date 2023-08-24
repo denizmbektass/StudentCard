@@ -12,7 +12,7 @@ public class ReminderMailConsumer {
     private final MailSenderService mailSenderService;
 
     @RabbitListener(queues = "reminder-mail-queue")
-    public void sendNewPassword(ReminderMailModel model){
+    public void sendReminderMail(ReminderMailModel model){
         mailSenderService.sendTrainerAssessmentReminder(model);
     }
 }

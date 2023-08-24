@@ -119,25 +119,34 @@ public class UserService extends ServiceManager<User, String> {
     }
 
     public List<TrainersMailReminderDto> getTrainers() {
-        List<String> groupName=new ArrayList<>();
-
-        findAll().stream()
-                .filter(x->x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.STUDENT))
-                .forEach(x->{
-                    x.getGroupNameList().stream().forEach(y->{
-                        groupName.add(y);
-                    });
-                });
-
-        System.out.println(" student"+" "+ groupName);
-        List<User> trainer=findAll().stream()
-                .filter(x->x.getStatus().equals(EStatus.ACTIVE) && (x.getRoleList().contains(ERole.MASTER_TRAINER) || x.getRoleList().contains(ERole.ASSISTANT_TRAINER)))
+        return findAll().stream()
+                .filter(x -> x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.ASSISTANT_TRAINER))
+                .map(x -> TrainersMailReminderDto.builder()
+                        .email(x.getEmail())
+                        .groupName(x.getGroupNameList())
+                        .build())
                 .toList();
+    }
 
-        System.out.println(" trainer"+" "+trainer);
-        return trainer.stream().filter(x->x.getGroupNameList().stream().anyMatch(groupName::contains))
-                .map(y->TrainersMailReminderDto.builder()
-                        .groupName(y.getGroupNameList()).email(y.getEmail())
+    public List<MastersMailReminderDto> getMasters(){
+        return findAll().stream()
+                .filter(x -> x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.MASTER_TRAINER))
+                .map(x -> MastersMailReminderDto.builder()
+                        .email(x.getEmail())
+                        .groupName(x.getGroupNameList())
+                        .build())
+                .toList();
+    }
+
+    public List<StudentsMailReminderDto> getStudents() {
+        return findAll().stream()
+                .filter(x -> x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.STUDENT))
+                .map(x -> StudentsMailReminderDto.builder()
+                        .studentId(x.getUserId())
+                        .name(x.getName())
+                        .surname(x.getSurname())
+                        .groupName(x.getGroupNameList())
+                        .egitimSaati(x.getEgitimSaati())
                         .build())
                 .toList();
     }
@@ -150,9 +159,9 @@ public class UserService extends ServiceManager<User, String> {
         User user = optionalUser.get();
         List<User> users = findAll();
         String masterTrainer = users.stream().filter(x-> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
-                && x.getRoleList().contains(ERole.MASTER)).map(User::getName).toString();
+                && x.getRoleList().contains(ERole.MASTER_TRAINER)).map(User::getName).toString();
         String assistantTrainer = users.stream().filter(x-> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
-                && x.getRoleList().contains(ERole.TRAINER)).map(User::getName).toString();
+                && x.getRoleList().contains(ERole.ASSISTANT_TRAINER)).map(User::getName).toString();
         return TranscriptInfo.builder().profilePicture(user.getProfilePicture()).startDate(new Date(user.getCreateDate()))
                 .endDate(new Date(user.getUpdateDate())).masterTrainer(masterTrainer).assistantTrainer(assistantTrainer).build();
     }

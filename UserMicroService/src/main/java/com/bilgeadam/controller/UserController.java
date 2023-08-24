@@ -47,10 +47,23 @@ public class UserController {
     public  ResponseEntity<UserResponseDto> save(@RequestBody UserRequestDto dto){
         return ResponseEntity.ok(userService.save(dto));
     }
+
     @CrossOrigin("*")
-    @GetMapping("mail-reminder")
+    @GetMapping("mail-reminder-get-trainers")
     public  ResponseEntity<List<TrainersMailReminderDto>> getTrainers(){
         return ResponseEntity.ok(userService.getTrainers());
+    }
+
+    @CrossOrigin("*")
+    @GetMapping("mail-reminder-get-masters")
+    public  ResponseEntity<List<MastersMailReminderDto>> getMasters(){
+        return ResponseEntity.ok(userService.getMasters());
+    }
+
+    @CrossOrigin("*")
+    @GetMapping("mail-reminder-get-students")
+    public  ResponseEntity<List<StudentsMailReminderDto>> getStudents(){
+        return ResponseEntity.ok(userService.getStudents());
     }
     //@PreAuthorize("hasAuthority('MANAGER')")
     @CrossOrigin("*")

@@ -33,4 +33,5 @@ public class User extends BaseEntity {
     @Builder.Default
     private EStatus status = EStatus.ACTIVE;
     private String profilePicture;
+    private Double egitimSaati;
 }
