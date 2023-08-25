@@ -22,3 +22,8 @@ spring:
           auth: true
           starttls:
             enable: true
+
+
+rabbitmq:
+  queueActivationLink: activation-link-mail-queue
+  activationLinkBindingKey: activation-link-binding-key

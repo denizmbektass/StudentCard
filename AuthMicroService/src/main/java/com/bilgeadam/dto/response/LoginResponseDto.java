@@ -15,5 +15,6 @@ public class LoginResponseDto {
     String token;
     List<String> role;
     String message;
+    String status;
 
 }
