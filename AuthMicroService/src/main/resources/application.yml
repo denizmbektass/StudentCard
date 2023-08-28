@@ -23,3 +23,7 @@ spring:
 #    user:
 #      name: kullanici
 #      password: 12345
+
+rabbitmq:
+  queueActivationLink: activation-link-mail-queue
+  activationLinkBindingKey: activation-link-binding-key
