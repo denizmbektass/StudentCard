@@ -1,7 +1,10 @@
 package com.bilgeadam.controller;
 
+import com.bilgeadam.dto.request.GroupStudentAttendanceRequestDto;
 import com.bilgeadam.dto.request.SaveGroupStudentRequestDto;
+import com.bilgeadam.dto.request.UpdateGroupStudentAttendanceRequestDto;
 import com.bilgeadam.dto.request.UpdateGroupStudentRequestDto;
+import com.bilgeadam.dto.response.GroupStudentAttendanceResponseDto;
 import com.bilgeadam.dto.response.GroupStudentsResponseDto;
 import com.bilgeadam.dto.response.ShowGroupInformationListResponseDto;
 import com.bilgeadam.service.GroupStudentService;
@@ -9,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -45,6 +49,18 @@ public class GroupStudentController {
     @GetMapping("/show-group-information-list")
     public ResponseEntity<List<ShowGroupInformationListResponseDto>> showGroupInformationList(){
         return ResponseEntity.ok(groupStudentService.showGroupInformationList());
+    }
+
+    @CrossOrigin
+    @PostMapping("/show-group-student-attendance")
+    public ResponseEntity<GroupStudentAttendanceResponseDto> showGroupStudentAttendance(@RequestBody @Valid GroupStudentAttendanceRequestDto dto){
+        return ResponseEntity.ok(groupStudentService.showGroupStudentAttendance(dto));
+    }
+
+    @CrossOrigin
+    @PutMapping("/update-group-student-attendance")
+    public ResponseEntity<Boolean> updateGroupAttendance(@RequestBody @Valid UpdateGroupStudentAttendanceRequestDto dto){
+        return ResponseEntity.ok(groupStudentService.updateGroupAttendance(dto));
     }
 
 

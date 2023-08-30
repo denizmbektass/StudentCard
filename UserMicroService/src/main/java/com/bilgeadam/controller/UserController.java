@@ -1,9 +1,7 @@
 package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.*;
-import com.bilgeadam.dto.response.FindStudentProfileResponseDto;
-import com.bilgeadam.dto.response.TranscriptInfo;
-import com.bilgeadam.dto.response.UserResponseDto;
+import com.bilgeadam.dto.response.*;
 import com.bilgeadam.repository.entity.User;
 import com.bilgeadam.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -111,6 +109,24 @@ public class UserController {
     @GetMapping("get-transcript-info/{token}")
     public ResponseEntity<TranscriptInfo> getTranscriptInfoByUser(@PathVariable String token){
         return ResponseEntity.ok(userService.getTranscriptInfoByUser(token));
+    }
+
+    @CrossOrigin("*")
+    @PostMapping("get-all-students-without-internship")
+    public ResponseEntity<List<GroupStudentResponseDto>> getAllStudentsWithoutInternship(@RequestBody GroupStudentRequestDto dto){
+        return ResponseEntity.ok(userService.getAllStudentsWithoutInternship(dto));
+    }
+
+    @CrossOrigin("*")
+    @PutMapping("update-user-internship-status-to-active/{userId}")
+    public ResponseEntity<Boolean> updateUserInternShipStatusToActive(@PathVariable String userId){
+        return ResponseEntity.ok(userService.updateUserInternShipStatus(userId));
+    }
+
+    @CrossOrigin("*")
+    @PutMapping("update-user-internship-status-to-deleted/{userId}")
+    public ResponseEntity<Boolean> updateUserInternShipStatusToDeleted(@PathVariable String userId){
+        return ResponseEntity.ok(userService.updateUserInternShipStatusToDeleted(userId));
     }
 
 

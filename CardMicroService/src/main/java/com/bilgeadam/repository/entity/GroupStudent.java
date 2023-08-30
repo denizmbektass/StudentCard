@@ -16,6 +16,7 @@ public class GroupStudent extends BaseEntity {
     @Id
     private String groupStudentId;
     private String groupId;
+    private String userId;
     private String name;
     private String surname;
 }

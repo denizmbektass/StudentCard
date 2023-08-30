@@ -8,6 +8,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 
@@ -28,4 +29,11 @@ public interface IUserManager {
 
     @GetMapping("get-transcript-info/{token}")
     ResponseEntity<TranscriptInfo> getTranscriptInfoByUser(@PathVariable String token);
+
+    @PutMapping("update-user-internship-status-to-active/{userId}")
+    ResponseEntity<Boolean> updateUserInternShipStatusToActive(@PathVariable String userId);
+
+    @PutMapping("update-user-internship-status-to-deleted/{userId}")
+    ResponseEntity<Boolean> updateUserInternShipStatusToDeleted(@PathVariable String userId);
+
 }

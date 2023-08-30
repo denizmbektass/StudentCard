@@ -1,9 +1,7 @@
 package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.*;
-import com.bilgeadam.dto.response.FindStudentProfileResponseDto;
-import com.bilgeadam.dto.response.TranscriptInfo;
-import com.bilgeadam.dto.response.UserResponseDto;
+import com.bilgeadam.dto.response.*;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.UserServiceException;
 import com.bilgeadam.converter.UserConverter;
@@ -16,11 +14,9 @@ import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.sql.SQLOutput;
+import java.util.*;
 import java.sql.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -167,5 +163,30 @@ public class UserService extends ServiceManager<User, String> {
                 && x.getRoleList().contains(ERole.ASSISTANT_TRAINER)).map(User::getName).toString();
         return TranscriptInfo.builder().profilePicture(user.getProfilePicture()).startDate(new Date(user.getCreateDate()))
                 .endDate(new Date(user.getUpdateDate())).masterTrainer(masterTrainer).assistantTrainer(assistantTrainer).build();
+    }
+
+    public List<GroupStudentResponseDto> getAllStudentsWithoutInternship(GroupStudentRequestDto dto){
+        List<User> userList = userRepository.findUsersByGroupNameListAndInternshipStatus(dto.getGroupName(),Arrays.asList(ERole.STUDENT));
+        System.out.println(userList);
+        List<GroupStudentResponseDto> groupStudentResponseDtoList = userList.stream().map(user ->
+            IUserMapper.INSTANCE.toGroupStudentResponseDto(user)
+        ).collect(Collectors.toList());
+        return groupStudentResponseDtoList;
+    }
+
+    public Boolean updateUserInternShipStatus(String userId) {
+        User user = findById(userId).orElseThrow(()->{throw new UserServiceException(ErrorType.USER_NOT_EXIST);});
+        user.setInternShipStatus(EStatus.ACTIVE);
+        update(user);
+        return true;
+    }
+
+    public Boolean updateUserInternShipStatusToDeleted(String userId) {
+        System.out.println(userId);
+        System.out.println("2321321321");
+        User user = findById(userId).orElseThrow(()->{throw new UserServiceException(ErrorType.USER_NOT_EXIST);});
+        user.setInternShipStatus(EStatus.DELETED);
+        update(user);
+        return true;
     }
 }

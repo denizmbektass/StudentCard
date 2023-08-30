@@ -53,7 +53,7 @@ public class GroupService extends ServiceManager<Group,String> {
         if(optionalGroup.isEmpty()){
             throw new RuntimeException("Grup Bulunamadı");
         }
-        List<AttendanceSearchResponseDto> responseDtoList = new ArrayList<>();
+            List<AttendanceSearchResponseDto> responseDtoList = new ArrayList<>();
             Date start = optionalGroup.get().getStartingDate();
             Date end = optionalGroup.get().getEndingDate();
             String groupName = optionalGroup.get().getGroupName();
@@ -62,10 +62,10 @@ public class GroupService extends ServiceManager<Group,String> {
             while(start.before(end) || start.equals(end)){
                 int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
                 if (dayOfWeek != Calendar.SATURDAY && dayOfWeek != Calendar.SUNDAY) {
-                    responseDtoList.add(AttendanceSearchResponseDto.builder()
-                            .currentDate(start)
-                            .groupName(groupName)
-                            .build());
+                        responseDtoList.add(AttendanceSearchResponseDto.builder()
+                                .currentDate(start)
+                                .groupName(groupName)
+                                .build());
                 }
                 calendar.add(Calendar.DAY_OF_YEAR, 1);
                 start = calendar.getTime();

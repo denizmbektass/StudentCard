@@ -1,10 +1,7 @@
 package com.bilgeadam.mapper;
 
 import com.bilgeadam.dto.request.UserRequestDto;
-import com.bilgeadam.dto.response.FindByGroupNameResponseDto;
-import com.bilgeadam.dto.response.FindStudentProfileResponseDto;
-import com.bilgeadam.dto.response.GetNameAndSurnameByIdResponseDto;
-import com.bilgeadam.dto.response.UserResponseDto;
+import com.bilgeadam.dto.response.*;
 import com.bilgeadam.repository.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -22,6 +19,7 @@ public interface IUserMapper {
     UserResponseDto toUserResponseDto(final User user);
     FindStudentProfileResponseDto toFindStudentProfileResponseDto(final User user);
     GetNameAndSurnameByIdResponseDto toGetNameAndSurnameByIdResponseDto(final User user);
+    GroupStudentResponseDto toGroupStudentResponseDto(final User user);
 
     List<FindByGroupNameResponseDto> toFindByGroupNameListResponseDto(final List<User> user);
 }
