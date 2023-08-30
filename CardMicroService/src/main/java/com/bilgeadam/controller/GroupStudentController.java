@@ -56,13 +56,13 @@ public class GroupStudentController {
     public ResponseEntity<GroupStudentAttendanceResponseDto> showGroupStudentAttendance(@RequestBody @Valid GroupStudentAttendanceRequestDto dto){
         return ResponseEntity.ok(groupStudentService.showGroupStudentAttendance(dto));
     }
-
+    /*
     @CrossOrigin
     @PutMapping("/update-group-student-attendance")
     public ResponseEntity<Boolean> updateGroupAttendance(@RequestBody @Valid UpdateGroupStudentAttendanceRequestDto dto){
         return ResponseEntity.ok(groupStudentService.updateGroupAttendance(dto));
     }
-
+*/
 
 
 
