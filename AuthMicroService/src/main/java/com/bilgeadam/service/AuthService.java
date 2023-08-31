@@ -62,9 +62,15 @@ public class AuthService extends ServiceManager<Auth, String> {
         if (authOptional.isPresent())
             throw new AuthServiceException(ErrorType.EXIST_BY_EMAIL);
         String password = CodeGenerator.generateCode();
-        Auth auth = Auth.builder().role(dto.getRole().stream().map(x-> ERole.valueOf(x.toUpperCase())).toList()).email(dto.getEmail()).password(password).build();
+ /*       Auth auth = Auth.builder()
+                .role(dto.getRole().stream().map(x-> ERole.valueOf(x.toUpperCase())).toList())
+                .email(dto.getEmail())
+                .password(password)
+                .build();*/
+        Auth auth=IAuthMapper.INSTANCE.toAuth(dto,password);
         auth.setStatus(EStatus.INACTIVE);
         save(auth);
+        System.out.println(auth.getPassword());
         resetPasswordProducer.sendNewPassword(ResetPasswordModel.builder().email(auth.getEmail()).password(auth.getPassword()).build());
         return MessageResponseDto.builder().message("Register has been completed successfully, Password needs to be updated for activating the profile!").build();
     }
