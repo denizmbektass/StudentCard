@@ -17,6 +17,11 @@ import java.util.List;
 public class RegisterRequestDto {
     @Email(message = "Please enter a valid e-mail address")
     private String email;
+    private String name;
+    private String userId;
+    private String surname;
     @Builder.Default
     private List<String> role = new ArrayList<>();
+
+
 }
