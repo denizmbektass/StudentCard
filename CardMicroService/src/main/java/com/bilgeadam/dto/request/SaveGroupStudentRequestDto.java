@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
@@ -18,4 +19,6 @@ public class SaveGroupStudentRequestDto {
     private String name;
     @NotBlank(message = "Soyisim Eksik Girismiştir")
     private String surname;
+    @NotNull(message = "Öğrenci Id'si Eksik Girilmiştir")
+    private String userId;
 }

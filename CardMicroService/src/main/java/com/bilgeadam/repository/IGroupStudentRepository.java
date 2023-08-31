@@ -20,6 +20,10 @@ public interface IGroupStudentRepository extends MongoRepository<GroupStudent, S
 
     List<GroupStudent> findAllByGroupId(String groupId);
 
+    Boolean existsByUserId(String userId);
+
+
+
 
 
 }

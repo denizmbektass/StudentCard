@@ -55,23 +55,23 @@ public class JwtTokenManager {
 //        return true;
 //    }
 //
-//    public Optional<String> getIdFromToken(String token){
-//        try{
-//            Algorithm algorithm = Algorithm.HMAC512(secretKey);
-//            JWTVerifier verifier = JWT.require(algorithm)
-//                    .withIssuer(issuer).withAudience(audience).build();
-//            DecodedJWT decodedJWT = verifier.verify(token);
-//            if(decodedJWT == null)
-//                return Optional.empty();
-//            String id = decodedJWT.getClaim("id").asString();
-////            String howToPage = decodedJWT.getClaim("howtopage").asString();
-////            System.out.println("howtopage....: "+ howToPage);
-//            return Optional.of(id);
-//        }catch (Exception exception){
-//            return Optional.empty();
-//        }
-//    }
-//
+    public Optional<String> getIdFromToken(String token){
+        try{
+            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer(issuer).withAudience(audience).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            if(decodedJWT == null)
+                return Optional.empty();
+            String id = decodedJWT.getClaim("id").asString();
+            String howToPage = decodedJWT.getClaim("howtopage").asString();
+            System.out.println("howtopage....: "+ howToPage);
+           return Optional.of(id);
+       }catch (Exception exception){
+           return Optional.empty();
+       }
+    }
+
 //    public List<String> getRoleFromToken(String token) {
 //        try {
 //            Algorithm algorithm = Algorithm.HMAC512(secretKey);

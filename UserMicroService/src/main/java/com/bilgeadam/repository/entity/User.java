@@ -34,4 +34,5 @@ public class User extends BaseEntity {
     private EStatus status = EStatus.ACTIVE;
     private String profilePicture;
     private Double egitimSaati;
+    private EStatus internShipStatus = EStatus.PASSIVE;
 }
