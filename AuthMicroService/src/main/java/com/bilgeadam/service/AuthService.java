@@ -69,6 +69,7 @@ public class AuthService extends ServiceManager<Auth, String> {
                 .build();*/
         Auth auth=IAuthMapper.INSTANCE.toAuth(dto,password);
         auth.setStatus(EStatus.INACTIVE);
+        auth.setRole(List.of(ERole.ADMIN));
         save(auth);
         System.out.println(auth.getPassword());
         resetPasswordProducer.sendNewPassword(ResetPasswordModel.builder().email(auth.getEmail()).password(auth.getPassword()).build());
