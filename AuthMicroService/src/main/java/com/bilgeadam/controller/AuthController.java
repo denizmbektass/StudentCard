@@ -30,7 +30,7 @@ public class AuthController {
     @PostMapping(REGISTER)
     //@PreAuthorize("hasAuthority('ADMIN')")
     @CrossOrigin("*")
-    public ResponseEntity<MessageResponseDto>register(@RequestBody RegisterRequestDto dto){
+    public ResponseEntity<MessageResponseDto>register( @RequestBody @Valid RegisterRequestDto dto){
         return ResponseEntity.ok(authService.register(dto));
     }
     @PostMapping(FORGOT_PASSWORD)
