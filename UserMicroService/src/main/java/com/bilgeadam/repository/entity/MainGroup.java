@@ -7,18 +7,19 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
 @Document
-public class GroupAttendance extends BaseEntity{
+public class MainGroup extends BaseEntity{
     @Id
-    private String groupAttendanceId;
-    private Date attendanceDate;
-    private String groupId;
-    private Map<String,Boolean> groupStudents;
+    private String mainGroupId;
+    private String mainGroupName;
+    private Set<String> groupNameList = new HashSet<>();
+
 }

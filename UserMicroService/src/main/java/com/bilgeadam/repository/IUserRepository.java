@@ -14,6 +14,6 @@ public interface IUserRepository extends MongoRepository<User,String> {
     List<User> findByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndPhoneNumberContaining(String name, String surname , String email, String phoneNumber);
     List<User> findByGroupNameListIgnoreCase(String groupName);
 
-    @Query("{'groupNameList': ?0, 'internShipStatus': { $ne: 'ACTIVE' },'roleList': {$in: ?1} }")
+    @Query("{'groupNameList': { $regex: ?0, $options: 'i' }, 'internShipStatus': { $ne: 'ACTIVE' }, 'roleList': { $in: ?1 } }")
     List<User> findUsersByGroupNameListAndInternshipStatus(String groupNameList, List<ERole> eRole);
 }

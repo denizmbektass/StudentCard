@@ -14,7 +14,6 @@ import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLOutput;
 import java.util.*;
 import java.sql.Date;
 import java.util.stream.Collectors;
@@ -24,13 +23,21 @@ public class UserService extends ServiceManager<User, String> {
     private final IUserRepository userRepository;
     private final UserConverter userConverter;
     private final JwtTokenManager jwtTokenManager;
+    private final MainGroupService mainGroupService;
+    private final GroupService groupService;
 
 
-    public UserService(IUserRepository userRepository, UserConverter userConverter,JwtTokenManager jwtTokenManager) {
+    public UserService(IUserRepository userRepository,
+                       UserConverter userConverter,
+                       JwtTokenManager jwtTokenManager,
+                       MainGroupService mainGroupService,
+                       GroupService groupService) {
         super(userRepository);
         this.userRepository = userRepository;
         this.userConverter = userConverter;
         this.jwtTokenManager = jwtTokenManager;
+        this.mainGroupService = mainGroupService;
+        this.groupService = groupService;
     }
 
     public Boolean updateUser(UserUpdateRequestDto dto) {
@@ -71,6 +78,7 @@ public class UserService extends ServiceManager<User, String> {
     }
 
     public UserResponseDto save (UserRequestDto dto){
+        groupService.addSubGroupToGroup(dto.getGroupNameList());
         User user = IUserMapper.INSTANCE.toUser(dto);
         save(user);
        return IUserMapper.INSTANCE.toUserResponseDto(user);
@@ -166,6 +174,7 @@ public class UserService extends ServiceManager<User, String> {
     }
 
     public List<GroupStudentResponseDto> getAllStudentsWithoutInternship(GroupStudentRequestDto dto){
+        System.out.println(dto);
         List<User> userList = userRepository.findUsersByGroupNameListAndInternshipStatus(dto.getGroupName(),Arrays.asList(ERole.STUDENT));
         System.out.println(userList);
         List<GroupStudentResponseDto> groupStudentResponseDtoList = userList.stream().map(user ->

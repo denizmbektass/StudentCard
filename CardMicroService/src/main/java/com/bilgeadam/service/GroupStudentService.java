@@ -10,7 +10,7 @@ import com.bilgeadam.dto.response.GroupStudentsResponseDto;
 import com.bilgeadam.dto.response.ShowGroupInformationListResponseDto;
 import com.bilgeadam.manager.IUserManager;
 import com.bilgeadam.mapper.IGroupAttendanceMapper;
-import com.bilgeadam.repository.entity.Group;
+import com.bilgeadam.repository.entity.InternshipGroup;
 import com.bilgeadam.repository.entity.GroupAttendance;
 import com.bilgeadam.repository.view.VwGroupResponseDto;
 import com.bilgeadam.repository.view.VwGroupStudentResponseDto;
@@ -21,7 +21,6 @@ import com.bilgeadam.repository.entity.GroupStudent;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,30 +30,30 @@ import java.util.stream.Collectors;
 @Service
 public class GroupStudentService extends ServiceManager<GroupStudent, String> {
     private final IGroupStudentRepository groupStudentRepository;
-    private final GroupService groupService;
+    private final InternshipGroupService internshipGroupService;
     private final IUserManager userManager;
     private final GroupAttendanceService groupAttendanceService;
 
 
     public GroupStudentService(IGroupStudentRepository addGroupStudentRepository,
-                               GroupService groupService,
+                               InternshipGroupService internshipGroupService,
                                IUserManager userManager,
                                GroupAttendanceService groupAttendanceService) {
         super(addGroupStudentRepository);
         this.groupStudentRepository = addGroupStudentRepository;
-        this.groupService = groupService;
+        this.internshipGroupService = internshipGroupService;
         this.userManager = userManager;
         this.groupAttendanceService = groupAttendanceService;
     }
 
     public Boolean saveAddGroupStudent(SaveGroupStudentRequestDto dto){
-        Optional<Group> group = groupService.findGroupByGroupName(dto.getGroupName());
+        Optional<InternshipGroup> group = internshipGroupService.findGroupByGroupName(dto.getGroupName());
         if(group.isEmpty()){
             throw new RuntimeException("Grup isminin veritabanında kaydı bulunmamaktadır.");
         }
         if(!groupStudentRepository.existsByUserId(dto.getUserId()) && userManager.updateUserInternShipStatusToActive(dto.getUserId()).getBody()) {
             GroupStudent groupStudent = IGroupStudentMapper.INSTANCE.fromSaveGroupStudentRequestDtoToGroupStudent(dto);
-            groupStudent.setGroupId(group.get().getGroupId());
+            groupStudent.setGroupId(group.get().getInternShipGroupId());
             save(groupStudent);
             List<GroupAttendance> groupAttendanceList = groupAttendanceService.findByGroupId(groupStudent.getGroupId());
             groupAttendanceList.forEach(groupAttendance -> {
@@ -70,10 +69,10 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
         List<VwGroupStudentResponseDto> vwGroupStudentList = groupStudentRepository.findAllGroupStudentList();
         List<GroupStudentsResponseDto> groupStudentList = vwGroupStudentList.stream()
                 .map(x -> {
-                    Group group = groupService.findById(x.getGroupId())
+                    InternshipGroup internshipGroup = internshipGroupService.findById(x.getGroupId())
                             .orElseThrow(() -> new RuntimeException("Grup veritabanında mevcut değildir."));
                     return GroupStudentsResponseDto.builder()
-                            .groupName(group.getGroupName())
+                            .groupName(internshipGroup.getGroupName())
                             .name(x.getName())
                             .surname(x.getSurname())
                             .groupStudentId(x.getGroupStudentId())
@@ -105,11 +104,11 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
         if(groupStudent.isEmpty()){
             throw new RuntimeException("Veritabanında kayıtlı böyle bir öğrenci bulunmamaktadır.");
         }
-        Optional<Group> group = groupService.findGroupByGroupName(dto.getGroupName());
+        Optional<InternshipGroup> group = internshipGroupService.findGroupByGroupName(dto.getGroupName());
         if(group.isEmpty()){
             throw new RuntimeException("Grup isminin veritabanında kaydı bulunmamaktadır.");
         }
-        groupStudent.get().setGroupId(group.get().getGroupId());
+        groupStudent.get().setGroupId(group.get().getInternShipGroupId());
         groupStudent.get().setName(dto.getName());
         groupStudent.get().setSurname(dto.getSurname());
         update(groupStudent.get());
@@ -117,18 +116,20 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
     }
 
     public List<ShowGroupInformationListResponseDto> showGroupInformationList(){
-        List<VwGroupResponseDto> vwGroupList = groupService.findAllGroupNames();
+        List<VwGroupResponseDto> vwGroupList = internshipGroupService.findAllGroupNames();
+        System.out.println(vwGroupList);
         List<ShowGroupInformationListResponseDto> dto = new ArrayList<>();
         vwGroupList.stream().forEach(group->{
-            Integer groupCount = groupStudentRepository.countAllByGroupId(group.getGroupId());
+            Integer groupCount = groupStudentRepository.countAllByGroupId(group.getInternShipGroupId());
             if(groupCount>0){
                 dto.add(ShowGroupInformationListResponseDto.builder()
-                        .groupId(group.getGroupId())
+                        .internShipGroupId(group.getInternShipGroupId())
                         .groupName(group.getGroupName())
                         .numberOfStudent(groupCount)
                         .build());
             }
         });
+        System.out.println(dto);
         return dto;
     }
 
@@ -136,7 +137,7 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
 
     public GroupStudentAttendanceResponseDto showGroupStudentAttendance(GroupStudentAttendanceRequestDto dto){
         Optional<GroupAttendance> optionalGroupAttendance = groupAttendanceService.findByAttendanceDateAndGroupId(dto.getCurrentDate(), dto.getGroupId());
-        Optional<Group> optionalGroup = groupService.findById(dto.getGroupId());
+        Optional<InternshipGroup> optionalGroup = internshipGroupService.findById(dto.getGroupId());
         if(optionalGroup.isEmpty()) throw new RuntimeException("Grup veritabanında kayıtlı değildir.");
         GroupStudentAttendanceResponseDto groupStudentAttendanceResponseDto;
         if(optionalGroupAttendance.isEmpty()){
@@ -163,27 +164,32 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
         return groupStudentAttendanceResponseDto;
     }
 
-    /*
-    public Boolean updateGroupAttendance(UpdateGroupStudentAttendanceRequestDto dto){
+
+    public Boolean updateGroupAttendance(UpdateGroupStudentAttendanceRequestDto dto) {
+        System.out.println(dto);
         Optional<GroupAttendance> optionalGroupAttendance = groupAttendanceService
                 .findByAttendanceDateAndGroupId(dto.getAttendanceDate(), dto.getGroupId());
+        System.out.println(optionalGroupAttendance);
         if (optionalGroupAttendance.isEmpty())
             throw new RuntimeException("Grup attendance veritabanında kayıtlı değildir");
-        if(!dto.getGroupId().equals(optionalGroupAttendance.get().getGroupId())) {
+        System.out.println(dto.getGroupId());
+        System.out.println(optionalGroupAttendance.get().getGroupId());
+        if(dto.getGroupId().equals(optionalGroupAttendance.get().getGroupId())) {
             Map<String, Boolean> groupStudentList = optionalGroupAttendance.get().getGroupStudents();
             System.out.println(dto);
             dto.getGroupStudents().entrySet().forEach(x -> {
                 groupStudentList.put(x.getKey(), x.getValue());
+                System.out.println(groupStudentList.put(x.getKey(), x.getValue()));
             });
             System.out.println(dto);
+            System.out.println("SES");
             optionalGroupAttendance.get().setGroupStudents(groupStudentList);
             groupAttendanceService.update(optionalGroupAttendance.get());
+            System.out.println("SES");
+
+            System.out.println(optionalGroupAttendance.get());
         }
+        System.out.println("true");
         return true;
     }
-    */
-
-
-
-
 }

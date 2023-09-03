@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/group-student")
+@RequestMapping("/api/v1/group-student")
 public class GroupStudentController {
     private final GroupStudentService groupStudentService;
     //@PreAuthorize("hasAuthority('ADMIN')")
@@ -56,13 +56,13 @@ public class GroupStudentController {
     public ResponseEntity<GroupStudentAttendanceResponseDto> showGroupStudentAttendance(@RequestBody @Valid GroupStudentAttendanceRequestDto dto){
         return ResponseEntity.ok(groupStudentService.showGroupStudentAttendance(dto));
     }
-    /*
+
     @CrossOrigin
     @PutMapping("/update-group-student-attendance")
     public ResponseEntity<Boolean> updateGroupAttendance(@RequestBody @Valid UpdateGroupStudentAttendanceRequestDto dto){
         return ResponseEntity.ok(groupStudentService.updateGroupAttendance(dto));
     }
-*/
+
 
 
 
