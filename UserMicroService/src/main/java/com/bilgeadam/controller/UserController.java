@@ -129,6 +129,23 @@ public class UserController {
     public ResponseEntity<Boolean> updateUserInternShipStatusToDeleted(@PathVariable String userId){
         return ResponseEntity.ok(userService.updateUserInternShipStatusToDeleted(userId));
     }
+    @Hidden
+    @PostMapping("save-manager-for-user-service")
+    @CrossOrigin("*")
+     public ResponseEntity<String> registerManagerForUser(@RequestBody RegisterRequestDto dto){
+        return ResponseEntity.ok(userService.registerManagerForUser(dto));
+    }
+
+    @GetMapping("get-user-name-and-surname-from-token-for-login/{token}")
+    @CrossOrigin("*")
+    public ResponseEntity<GetNameAndSurnameByIdResponseDto> getUserNameAndSurnameFromToken(@PathVariable String token){
+        return ResponseEntity.ok(userService.getUserNameAndSurnameFromToken(token));
+    }
+    @PostMapping("change-password-from-user/{token}")
+    @CrossOrigin("*")
+    public ResponseEntity<Boolean> changePassword(@RequestBody ChangePasswordRequestDto dto,@PathVariable String token){
+        return ResponseEntity.ok(userService.changePassword(dto,token));
+    }
 
     @Hidden
     @GetMapping("get-group-name-for-student/{userId}")

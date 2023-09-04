@@ -5,6 +5,7 @@ import com.bilgeadam.dto.response.*;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.UserServiceException;
 import com.bilgeadam.converter.UserConverter;
+import com.bilgeadam.manager.IAuthManager;
 import com.bilgeadam.mapper.IUserMapper;
 import com.bilgeadam.repository.IUserRepository;
 import com.bilgeadam.repository.enums.ERole;
@@ -23,6 +24,7 @@ public class UserService extends ServiceManager<User, String> {
     private final IUserRepository userRepository;
     private final UserConverter userConverter;
     private final JwtTokenManager jwtTokenManager;
+    private final IAuthManager authManager;
     private final MainGroupService mainGroupService;
     private final GroupService groupService;
 
@@ -31,11 +33,13 @@ public class UserService extends ServiceManager<User, String> {
                        UserConverter userConverter,
                        JwtTokenManager jwtTokenManager,
                        MainGroupService mainGroupService,
-                       GroupService groupService) {
+                       GroupService groupService,
+                       IAuthManager authManager) {
         super(userRepository);
         this.userRepository = userRepository;
         this.userConverter = userConverter;
         this.jwtTokenManager = jwtTokenManager;
+        this.authManager = authManager;
         this.mainGroupService = mainGroupService;
         this.groupService = groupService;
     }
@@ -104,19 +108,19 @@ public class UserService extends ServiceManager<User, String> {
         return  true;
     }
 
-    public FindStudentProfileResponseDto  findStudentProfile(String token){
+    public FindStudentProfileResponseDto findStudentProfile(String token) {
         String userId = jwtTokenManager.getIdFromToken(token).orElseThrow(() -> {
             throw new UserServiceException(ErrorType.INVALID_TOKEN);
         });
-        User user = findById(userId).orElseThrow(()->{
+        User user = findById(userId).orElseThrow(() -> {
             throw new UserServiceException(ErrorType.USER_NOT_EXIST);
         });
         return IUserMapper.INSTANCE.toFindStudentProfileResponseDto(user);
     }
 
-    public String getNameAndSurnameWithId(String userId){
-        Optional<User> optionalUser= userRepository.findById(userId);
-        if (optionalUser.isEmpty()){
+    public String getNameAndSurnameWithId(String userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
             throw new UserServiceException(ErrorType.USER_NOT_EXIST);
         }
         return optionalUser.get().getName() + " " + optionalUser.get().getSurname();
@@ -132,7 +136,7 @@ public class UserService extends ServiceManager<User, String> {
                 .toList();
     }
 
-    public List<MastersMailReminderDto> getMasters(){
+    public List<MastersMailReminderDto> getMasters() {
         return findAll().stream()
                 .filter(x -> x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.MASTER_TRAINER))
                 .map(x -> MastersMailReminderDto.builder()
@@ -165,19 +169,16 @@ public class UserService extends ServiceManager<User, String> {
         if (optionalUser.isEmpty()) throw new UserServiceException(ErrorType.USER_NOT_EXIST);
         User user = optionalUser.get();
         List<User> users = findAll();
-        //TODO getName ve surname alacak şekilde string oluşturulmalı
         String masterTrainer = users.stream().filter(x-> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
                 && x.getRoleList().contains(ERole.MASTER_TRAINER)).map(u -> u.getName() +" " +u.getSurname()
         ).toString();
         String assistantTrainer = users.stream().filter(x-> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
                 && x.getRoleList().contains(ERole.ASSISTANT_TRAINER)).map(User::getName).toString();
-        //TODO endDate içerisinde updatedate yerine user da passive(mezun olma tarihi) tutulup çekilmeli
         return TranscriptInfo.builder().profilePicture(user.getProfilePicture()).startDate(new Date(user.getCreateDate()))
                 .endDate(new Date(user.getUpdateDate())).masterTrainer(masterTrainer).assistantTrainer(assistantTrainer).build();
     }
 
     public List<GroupStudentResponseDto> getAllStudentsWithoutInternship(GroupStudentRequestDto dto){
-        System.out.println(dto);
         List<User> userList = userRepository.findUsersByGroupNameListAndInternshipStatus(dto.getGroupName(),Arrays.asList(ERole.STUDENT));
         System.out.println(userList);
         List<GroupStudentResponseDto> groupStudentResponseDtoList = userList.stream().map(user ->
@@ -210,4 +211,49 @@ public class UserService extends ServiceManager<User, String> {
         groupNames.addAll(user.get().getGroupNameList());
         return groupNames;
     }
+
+    public String registerManagerForUser(RegisterRequestDto dto) {
+        User user = IUserMapper.INSTANCE.toUserFromRegisterRequestDto(dto);
+        user.setRoleList(List.of(ERole.ADMIN));
+        save(user);
+        return user.getUserId();
+    }
+
+    /**
+     * Bu method giriş aksiyonu için yazılmış olup. Giriş yapan öğrenci-admin-trainer'lar'ın profil bilgilerinde kullanılacaktır.
+     *
+     * @param token
+     * @return
+     */
+    public GetNameAndSurnameByIdResponseDto getUserNameAndSurnameFromToken(String token) {
+        Optional<String> optionalUserId = jwtTokenManager.getIdFromTokenForUserId(token);
+        if (optionalUserId.isEmpty()) {
+            throw new UserServiceException(ErrorType.INVALID_TOKEN);
+        }
+        Optional<User> user = userRepository.findById(optionalUserId.get());
+        if (user.isEmpty()) {
+            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        }
+        return IUserMapper.INSTANCE.toGetNameAndSurnameByIdResponseDtoFromUser(user.get());
+
+    }
+
+    public Boolean changePassword(ChangePasswordRequestDto dto,String token) {
+        Optional<String> optionalUserId = jwtTokenManager.getIdFromTokenForUserId(token);
+        if (optionalUserId.isEmpty()) {
+            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        }
+        GetAuthInfoForChangePassword getAuthInfoForChangePassword = authManager.getAuthInfoForChangePassword(optionalUserId.get()).getBody();
+        if (!getAuthInfoForChangePassword.getPassword().equals(dto.getLastPassword())) {
+            throw new UserServiceException(ErrorType.USER_WRONG_PASSWORD);
+        }
+        if (!dto.getNewPassword().equals(dto.getReNewPassword()))
+            throw new UserServiceException(ErrorType.PASSWORD_UNMATCH);
+        ChangePasswordResponseDto dto1=ChangePasswordResponseDto.builder()
+                .newPassword(dto.getNewPassword())
+                .userId(optionalUserId.get()).build();
+        authManager.changePasswordFromUser(dto1);
+        return true;
+    }
+
 }

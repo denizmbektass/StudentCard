@@ -20,6 +20,8 @@ public enum ErrorType {
     INVALID_TOKEN(5001,"Token not created",HttpStatus.BAD_REQUEST),
     INTERNAL_ERROR(5100,"Eternal Error",HttpStatus.INTERNAL_SERVER_ERROR),
     BAD_REQUEST(4100,"Parameter Error",HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND (4200,"User not found", HttpStatus.BAD_REQUEST),
+
 ;
 
 

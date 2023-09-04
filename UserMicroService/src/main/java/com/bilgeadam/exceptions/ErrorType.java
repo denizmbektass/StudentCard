@@ -19,7 +19,7 @@ public enum ErrorType {
     INTERNAL_ERROR(5100,"Eternal Error",HttpStatus.INTERNAL_SERVER_ERROR),
     BAD_REQUEST(4100,"Parameter Error",HttpStatus.BAD_REQUEST),
     USER_NOT_EXIST(500,"User not exist",HttpStatus.BAD_REQUEST),
-
+    USER_WRONG_PASSWORD(4006,"Your last password is not correct",HttpStatus.BAD_REQUEST),
 
 
 
