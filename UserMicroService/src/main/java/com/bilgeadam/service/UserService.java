@@ -5,6 +5,7 @@ import com.bilgeadam.dto.response.*;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.UserServiceException;
 import com.bilgeadam.converter.UserConverter;
+import com.bilgeadam.manager.IAuthManager;
 import com.bilgeadam.mapper.IUserMapper;
 import com.bilgeadam.repository.IUserRepository;
 import com.bilgeadam.repository.enums.ERole;
@@ -14,7 +15,6 @@ import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLOutput;
 import java.util.*;
 import java.sql.Date;
 import java.util.stream.Collectors;
@@ -24,13 +24,14 @@ public class UserService extends ServiceManager<User, String> {
     private final IUserRepository userRepository;
     private final UserConverter userConverter;
     private final JwtTokenManager jwtTokenManager;
+    private final IAuthManager authManager;
 
-
-    public UserService(IUserRepository userRepository, UserConverter userConverter,JwtTokenManager jwtTokenManager) {
+    public UserService(IUserRepository userRepository, UserConverter userConverter, JwtTokenManager jwtTokenManager, IAuthManager authManager) {
         super(userRepository);
         this.userRepository = userRepository;
         this.userConverter = userConverter;
         this.jwtTokenManager = jwtTokenManager;
+        this.authManager = authManager;
     }
 
     public Boolean updateUser(UserUpdateRequestDto dto) {
@@ -70,45 +71,49 @@ public class UserService extends ServiceManager<User, String> {
         return true;
     }
 
-    public UserResponseDto save (UserRequestDto dto){
+    public UserResponseDto save(UserRequestDto dto) {
         User user = IUserMapper.INSTANCE.toUser(dto);
         save(user);
-       return IUserMapper.INSTANCE.toUserResponseDto(user);
-    }
-    public List<User> searchUser(SearchUserRequestDto dto){
-      return   userRepository.findByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndPhoneNumberContaining( dto.getName(), dto.getSurname(), dto.getEmail(), dto.getPhoneNumber());
-    }
-    public String createToken(SelectUserCreateTokenDto dto){
-        Optional<User> user = findById(dto.getStudentId());
-        Optional<String> token=jwtTokenManager.createToken(dto.getStudentId(), dto.getRole(),dto.getStatus(),user.get().getGroupNameList(),user.get().getEmail());
-        if(token.isEmpty()) throw  new UserServiceException(ErrorType.TOKEN_NOT_CREATED);
-        return token.get();
-    }
-    public String getIdFromToken(String token){
-        Optional<String> userId=jwtTokenManager.getIdFromToken(token);
-        if (userId.isEmpty())throw  new UserServiceException(ErrorType.INVALID_TOKEN);
-        return  userId.get();
-    }
-    public Boolean saveUserList(List<UserRequestDto> dtoList ){
-       dtoList.stream().forEach(dto -> {
-         save(dto);
-       });
-        return  true;
+        return IUserMapper.INSTANCE.toUserResponseDto(user);
     }
 
-    public FindStudentProfileResponseDto  findStudentProfile(String token){
+    public List<User> searchUser(SearchUserRequestDto dto) {
+        return userRepository.findByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndPhoneNumberContaining(dto.getName(), dto.getSurname(), dto.getEmail(), dto.getPhoneNumber());
+    }
+
+    public String createToken(SelectUserCreateTokenDto dto) {
+        Optional<User> user = findById(dto.getStudentId());
+        Optional<String> token = jwtTokenManager.createToken(dto.getStudentId(), dto.getRole(), dto.getStatus(), user.get().getGroupNameList(), user.get().getEmail());
+        if (token.isEmpty()) throw new UserServiceException(ErrorType.TOKEN_NOT_CREATED);
+        return token.get();
+    }
+
+    public String getIdFromToken(String token) {
+        Optional<String> userId = jwtTokenManager.getIdFromToken(token);
+        if (userId.isEmpty()) throw new UserServiceException(ErrorType.INVALID_TOKEN);
+        return userId.get();
+    }
+
+    public Boolean saveUserList(List<UserRequestDto> dtoList) {
+        dtoList.stream().forEach(dto -> {
+            save(dto);
+        });
+        return true;
+    }
+
+    public FindStudentProfileResponseDto findStudentProfile(String token) {
         String userId = jwtTokenManager.getIdFromToken(token).orElseThrow(() -> {
             throw new UserServiceException(ErrorType.INVALID_TOKEN);
         });
-        User user = findById(userId).orElseThrow(()->{
+        User user = findById(userId).orElseThrow(() -> {
             throw new UserServiceException(ErrorType.USER_NOT_EXIST);
         });
         return IUserMapper.INSTANCE.toFindStudentProfileResponseDto(user);
     }
 
-    public String getNameAndSurnameWithId(String userId){
-        Optional<User> optionalUser= userRepository.findById(userId);
-        if (optionalUser.isEmpty()){
+    public String getNameAndSurnameWithId(String userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
             throw new UserServiceException(ErrorType.USER_NOT_EXIST);
         }
         return optionalUser.get().getName() + " " + optionalUser.get().getSurname();
@@ -124,7 +129,7 @@ public class UserService extends ServiceManager<User, String> {
                 .toList();
     }
 
-    public List<MastersMailReminderDto> getMasters(){
+    public List<MastersMailReminderDto> getMasters() {
         return findAll().stream()
                 .filter(x -> x.getStatus().equals(EStatus.ACTIVE) && x.getRoleList().contains(ERole.MASTER_TRAINER))
                 .map(x -> MastersMailReminderDto.builder()
@@ -146,6 +151,7 @@ public class UserService extends ServiceManager<User, String> {
                         .build())
                 .toList();
     }
+
     public List<FindByGroupNameResponseDto> findByGroupNameList(String groupName) {
         return IUserMapper.INSTANCE.toFindByGroupNameListResponseDto(userRepository.findByGroupNameListIgnoreCase(groupName));
     }
@@ -157,25 +163,27 @@ public class UserService extends ServiceManager<User, String> {
         if (optionalUser.isEmpty()) throw new UserServiceException(ErrorType.USER_NOT_EXIST);
         User user = optionalUser.get();
         List<User> users = findAll();
-        String masterTrainer = users.stream().filter(x-> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
+        String masterTrainer = users.stream().filter(x -> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
                 && x.getRoleList().contains(ERole.MASTER_TRAINER)).map(User::getName).toString();
-        String assistantTrainer = users.stream().filter(x-> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
+        String assistantTrainer = users.stream().filter(x -> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
                 && x.getRoleList().contains(ERole.ASSISTANT_TRAINER)).map(User::getName).toString();
         return TranscriptInfo.builder().profilePicture(user.getProfilePicture()).startDate(new Date(user.getCreateDate()))
                 .endDate(new Date(user.getUpdateDate())).masterTrainer(masterTrainer).assistantTrainer(assistantTrainer).build();
     }
 
-    public List<GroupStudentResponseDto> getAllStudentsWithoutInternship(GroupStudentRequestDto dto){
-        List<User> userList = userRepository.findUsersByGroupNameListAndInternshipStatus(dto.getGroupName(),Arrays.asList(ERole.STUDENT));
+    public List<GroupStudentResponseDto> getAllStudentsWithoutInternship(GroupStudentRequestDto dto) {
+        List<User> userList = userRepository.findUsersByGroupNameListAndInternshipStatus(dto.getGroupName(), Arrays.asList(ERole.STUDENT));
         System.out.println(userList);
         List<GroupStudentResponseDto> groupStudentResponseDtoList = userList.stream().map(user ->
-            IUserMapper.INSTANCE.toGroupStudentResponseDto(user)
+                IUserMapper.INSTANCE.toGroupStudentResponseDto(user)
         ).collect(Collectors.toList());
         return groupStudentResponseDtoList;
     }
 
     public Boolean updateUserInternShipStatus(String userId) {
-        User user = findById(userId).orElseThrow(()->{throw new UserServiceException(ErrorType.USER_NOT_EXIST);});
+        User user = findById(userId).orElseThrow(() -> {
+            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        });
         user.setInternShipStatus(EStatus.ACTIVE);
         update(user);
         return true;
@@ -184,9 +192,56 @@ public class UserService extends ServiceManager<User, String> {
     public Boolean updateUserInternShipStatusToDeleted(String userId) {
         System.out.println(userId);
         System.out.println("2321321321");
-        User user = findById(userId).orElseThrow(()->{throw new UserServiceException(ErrorType.USER_NOT_EXIST);});
+        User user = findById(userId).orElseThrow(() -> {
+            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        });
         user.setInternShipStatus(EStatus.DELETED);
         update(user);
         return true;
     }
+
+    public String registerManagerForUser(RegisterRequestDto dto) {
+        User user = IUserMapper.INSTANCE.toUserFromRegisterRequestDto(dto);
+        user.setRoleList(List.of(ERole.ADMIN));
+        save(user);
+        return user.getUserId();
+    }
+
+    /**
+     * Bu method giriş aksiyonu için yazılmış olup. Giriş yapan öğrenci-admin-trainer'lar'ın profil bilgilerinde kullanılacaktır.
+     *
+     * @param token
+     * @return
+     */
+    public GetNameAndSurnameByIdResponseDto getUserNameAndSurnameFromToken(String token) {
+        Optional<String> optionalUserId = jwtTokenManager.getIdFromTokenForUserId(token);
+        if (optionalUserId.isEmpty()) {
+            throw new UserServiceException(ErrorType.INVALID_TOKEN);
+        }
+        Optional<User> user = userRepository.findById(optionalUserId.get());
+        if (user.isEmpty()) {
+            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        }
+        return IUserMapper.INSTANCE.toGetNameAndSurnameByIdResponseDtoFromUser(user.get());
+
+    }
+
+    public Boolean changePassword(ChangePasswordRequestDto dto,String token) {
+        Optional<String> optionalUserId = jwtTokenManager.getIdFromTokenForUserId(token);
+        if (optionalUserId.isEmpty()) {
+            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        }
+        GetAuthInfoForChangePassword getAuthInfoForChangePassword = authManager.getAuthInfoForChangePassword(optionalUserId.get()).getBody();
+        if (!getAuthInfoForChangePassword.getPassword().equals(dto.getLastPassword())) {
+            throw new UserServiceException(ErrorType.USER_WRONG_PASSWORD);
+        }
+        if (!dto.getNewPassword().equals(dto.getReNewPassword()))
+            throw new UserServiceException(ErrorType.PASSWORD_UNMATCH);
+        ChangePasswordResponseDto dto1=ChangePasswordResponseDto.builder()
+                .newPassword(dto.getNewPassword())
+                .userId(optionalUserId.get()).build();
+        authManager.changePasswordFromUser(dto1);
+        return true;
+    }
+
 }

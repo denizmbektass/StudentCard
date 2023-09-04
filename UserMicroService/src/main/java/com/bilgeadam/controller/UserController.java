@@ -4,6 +4,7 @@ import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.*;
 import com.bilgeadam.repository.entity.User;
 import com.bilgeadam.service.UserService;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -127,6 +128,23 @@ public class UserController {
     @PutMapping("update-user-internship-status-to-deleted/{userId}")
     public ResponseEntity<Boolean> updateUserInternShipStatusToDeleted(@PathVariable String userId){
         return ResponseEntity.ok(userService.updateUserInternShipStatusToDeleted(userId));
+    }
+    @Hidden
+    @PostMapping("save-manager-for-user-service")
+    @CrossOrigin("*")
+     public ResponseEntity<String> registerManagerForUser(@RequestBody RegisterRequestDto dto){
+        return ResponseEntity.ok(userService.registerManagerForUser(dto));
+    }
+
+    @GetMapping("get-user-name-and-surname-from-token-for-login/{token}")
+    @CrossOrigin("*")
+    public ResponseEntity<GetNameAndSurnameByIdResponseDto> getUserNameAndSurnameFromToken(@PathVariable String token){
+        return ResponseEntity.ok(userService.getUserNameAndSurnameFromToken(token));
+    }
+    @PostMapping("change-password-from-user/{token}")
+    @CrossOrigin("*")
+    public ResponseEntity<Boolean> changePassword(@RequestBody ChangePasswordRequestDto dto,@PathVariable String token){
+        return ResponseEntity.ok(userService.changePassword(dto,token));
     }
 
 

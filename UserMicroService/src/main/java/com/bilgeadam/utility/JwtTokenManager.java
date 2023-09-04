@@ -131,4 +131,20 @@ public class JwtTokenManager {
             throw new UserServiceException(ErrorType.INVALID_TOKEN);
         }
     }
+
+
+    public Optional<String> getIdFromTokenForUserId(String token){
+        try{
+            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer(issuer).withAudience(audience).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            if(decodedJWT == null)
+                return Optional.empty();
+            String id = decodedJWT.getClaim("userId").asString();
+            return Optional.of(id);
+        }catch (Exception exception){
+            return Optional.empty();
+        }
+    }
 }

@@ -12,7 +12,7 @@ public interface IAuthRepository extends MongoRepository<Auth, String> {
     Optional<Auth> findByEmail(String email);
 
     Optional<Auth> findByEmailAndPassword(String email,String password);
-
+    Optional<Auth> findByUserId(String userId);
 
 
 }

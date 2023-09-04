@@ -1,10 +1,13 @@
 package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.*;
+import com.bilgeadam.dto.response.ChangePasswordResponseDto;
+import com.bilgeadam.dto.response.GetAuthInfoForChangePassword;
 import com.bilgeadam.dto.response.LoginResponseDto;
 import com.bilgeadam.dto.response.MessageResponseDto;
 import com.bilgeadam.service.AuthService;
 import feign.Param;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -61,6 +64,16 @@ public class AuthController {
             return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
         }
         return ResponseEntity.ok(authService.activateUser(token));
+    }
+    @Hidden
+    @CrossOrigin("*")
+    @GetMapping("get-auth-info-for-user-change-password/{userId}")
+    public ResponseEntity<GetAuthInfoForChangePassword> getAuthInfoForChangePassword(@PathVariable String userId){
+        return ResponseEntity.ok(authService.getAuthInfoForChangePassword(userId));
+    }
+    @PostMapping("change-password-from-user")
+    ResponseEntity<Boolean> changePasswordFromUser(@RequestBody ChangePasswordResponseDto dto){
+        return ResponseEntity.ok(authService.changePasswordForAuth(dto));
     }
 
 }
