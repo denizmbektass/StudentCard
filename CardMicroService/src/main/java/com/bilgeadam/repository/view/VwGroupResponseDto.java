@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class VwGroupResponseDto {
-    private String groupId;
+    private String internShipGroupId;
     private String groupName;
 }

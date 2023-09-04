@@ -8,17 +8,17 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
-import java.util.Map;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
 @Document
-public class GroupAttendance extends BaseEntity{
+public class InternshipGroup extends BaseEntity {
     @Id
-    private String groupAttendanceId;
-    private Date attendanceDate;
-    private String groupId;
-    private Map<String,Boolean> groupStudents;
+    private String internShipGroupId;
+    private String mainGroupId;
+    private String groupName;
+    private Date startingDate;
+    private Date endingDate;
 }

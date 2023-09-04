@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ShowGroupInformationListResponseDto {
-    private String internShipGroupId;
+public class FindByMainGroupIdResponseDto {
+    private String mainGroupId;
     private String groupName;
-    private Integer numberOfStudent;
 }
