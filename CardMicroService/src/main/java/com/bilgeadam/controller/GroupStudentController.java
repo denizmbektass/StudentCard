@@ -7,6 +7,7 @@ import com.bilgeadam.dto.request.UpdateGroupStudentRequestDto;
 import com.bilgeadam.dto.response.GroupStudentAttendanceResponseDto;
 import com.bilgeadam.dto.response.GroupStudentsResponseDto;
 import com.bilgeadam.dto.response.ShowGroupInformationListResponseDto;
+import com.bilgeadam.repository.entity.InternshipGroup;
 import com.bilgeadam.service.GroupStudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +62,12 @@ public class GroupStudentController {
     @PutMapping("/update-group-student-attendance")
     public ResponseEntity<Boolean> updateGroupAttendance(@RequestBody @Valid UpdateGroupStudentAttendanceRequestDto dto){
         return ResponseEntity.ok(groupStudentService.updateGroupAttendance(dto));
+    }
+
+    @CrossOrigin
+    @DeleteMapping("/delete-registered-group-list/{internshipGroupId}")
+    public ResponseEntity<Boolean> deleteRegisteredGroupList(@PathVariable String internshipGroupId) {
+        return ResponseEntity.ok(groupStudentService.deleteRegisteredGroupList(internshipGroupId));
     }
 
 

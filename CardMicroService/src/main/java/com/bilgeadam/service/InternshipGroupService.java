@@ -106,4 +106,8 @@ public class InternshipGroupService extends ServiceManager<InternshipGroup,Strin
     public List<InternshipGroup> findAllRegisteredGroupList(String mainGroupId) {
         return internshipGroupRepository.findByMainGroupId(mainGroupId);
     }
+
+
+
+
 }

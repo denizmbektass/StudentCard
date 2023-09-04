@@ -166,30 +166,44 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
 
 
     public Boolean updateGroupAttendance(UpdateGroupStudentAttendanceRequestDto dto) {
-        System.out.println(dto);
         Optional<GroupAttendance> optionalGroupAttendance = groupAttendanceService
                 .findByAttendanceDateAndGroupId(dto.getAttendanceDate(), dto.getGroupId());
-        System.out.println(optionalGroupAttendance);
         if (optionalGroupAttendance.isEmpty())
             throw new RuntimeException("Grup attendance veritabanında kayıtlı değildir");
-        System.out.println(dto.getGroupId());
-        System.out.println(optionalGroupAttendance.get().getGroupId());
         if(dto.getGroupId().equals(optionalGroupAttendance.get().getGroupId())) {
             Map<String, Boolean> groupStudentList = optionalGroupAttendance.get().getGroupStudents();
-            System.out.println(dto);
             dto.getGroupStudents().entrySet().forEach(x -> {
                 groupStudentList.put(x.getKey(), x.getValue());
-                System.out.println(groupStudentList.put(x.getKey(), x.getValue()));
             });
-            System.out.println(dto);
-            System.out.println("SES");
             optionalGroupAttendance.get().setGroupStudents(groupStudentList);
             groupAttendanceService.update(optionalGroupAttendance.get());
-            System.out.println("SES");
-
-            System.out.println(optionalGroupAttendance.get());
         }
-        System.out.println("true");
+        return true;
+    }
+
+
+    public Boolean deleteRegisteredGroupList(String internshipGroupId) {
+        internshipGroupService.findById(internshipGroupId).orElseThrow(()->{
+            throw new RuntimeException("Staj Grubu veritabanında kayıtlı değildir.");
+        });
+        System.out.println(1);
+        internshipGroupService.deleteById(internshipGroupId);
+        System.out.println(2);
+
+        List<GroupAttendance> groupAttendanceList = groupAttendanceService.findByGroupId(internshipGroupId);
+        groupAttendanceList.forEach(attendance -> {
+            groupAttendanceService.deleteById(attendance.getGroupAttendanceId());
+        });
+        System.out.println(3);
+
+        List<GroupStudent> groupStudentList = groupStudentRepository.findAllByGroupId(internshipGroupId);
+        groupStudentList.forEach(groupStudent -> {
+            userManager.updateUserInternShipStatusToDeleted(groupStudent.getUserId());
+            deleteById(groupStudent.getGroupStudentId());
+        });
+        System.out.println(4);
+
+
         return true;
     }
 }
