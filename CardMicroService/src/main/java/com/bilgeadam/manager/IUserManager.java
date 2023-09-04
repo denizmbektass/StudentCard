@@ -36,4 +36,6 @@ public interface IUserManager {
     @PutMapping("update-user-internship-status-to-deleted/{userId}")
     ResponseEntity<Boolean> updateUserInternShipStatusToDeleted(@PathVariable String userId);
 
+    @GetMapping("get-group-name-for-student/{userId}")
+    ResponseEntity<List<String>> findGroupNameForStudent(@PathVariable String userId);
 }

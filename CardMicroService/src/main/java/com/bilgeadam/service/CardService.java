@@ -9,14 +9,12 @@ import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.manager.IUserManager;
 import com.bilgeadam.repository.ICardRepository;
 import com.bilgeadam.repository.entity.Card;
+import com.bilgeadam.repository.entity.CardParameter;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CardService extends ServiceManager<Card,String> {
@@ -87,5 +85,15 @@ public class CardService extends ServiceManager<Card,String> {
                 .notes(card.getNotes()).absence(card.getAbsence()).assistantTrainer(transcriptInfo.getAssistantTrainer())
                 .masterTrainer(transcriptInfo.getMasterTrainer()).groupName(groupNames)
                 .startDate(transcriptInfo.getStartDate()).endDate(transcriptInfo.getEndDate()).build();
+    }
+
+    public Map<String,Integer> getCardParameterForStudent(String token) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
+        if(studentId.isEmpty())
+            throw new AssignmentException(ErrorType.INVALID_TOKEN);
+        List<String> groupNameForStudent = userManager.findGroupNameForStudent(studentId.get()).getBody();
+        CardParameter cardParameter = cardParameterService.getCardParameterByGroupName(groupNameForStudent);
+        Map<String, Integer> parameters = cardParameter.getParameters();
+        return parameters;
     }
 }

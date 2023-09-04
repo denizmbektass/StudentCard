@@ -84,7 +84,7 @@ public class InterviewService extends ServiceManager<Interview, String> {
     }
     public Integer getInterviewNote(String studentId){
         return (int) Math.floor(interviewRepository.findAllByStudentId(studentId).stream()
-                .mapToLong(x->x.getScore()).average().orElseThrow(()-> new InterviewServiceException(ErrorType.INTERVIEW_NOT_FOUND)));
+                .mapToLong(x->x.getScore()).average().orElse(0));
     }
     public List<Interview> findAllInterviews(TokenRequestDto dto) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());

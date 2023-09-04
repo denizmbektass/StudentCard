@@ -22,7 +22,7 @@ public class CardParameterService extends ServiceManager<CardParameter,String> {
     }
 
 
-    CardParameter getCardParameterByGroupName(List<String> groupName){
+    public CardParameter getCardParameterByGroupName(List<String> groupName){
         return findAll().stream().filter(x-> groupName.contains(x.getGroupName()))
                 .max(Comparator.comparingLong(CardParameter::getCreateDate))
                 .orElseThrow(()-> new CardServiceException(ErrorType.CARD_PARAMETER_NOT_FOUND));

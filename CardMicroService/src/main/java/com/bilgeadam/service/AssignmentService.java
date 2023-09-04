@@ -70,7 +70,7 @@ public class AssignmentService extends ServiceManager<Assignment,String> {
 
     public Integer getAssignmentNote(String studentId){
         return (int) Math.floor(assignmentRepository.findAllByStudentId(studentId).stream()
-                .mapToLong(x->x.getScore()).average().orElseThrow(()-> new AssignmentException(ErrorType.ASSIGNMENT_NOT_FOUND)));
+                .mapToLong(x->x.getScore()).average().orElse(0));
     }
 
     public Boolean deleteAssignment(String assignmentId) {

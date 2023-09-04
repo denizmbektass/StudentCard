@@ -63,7 +63,7 @@ public class ExamService extends ServiceManager<Exam,String> {
     }
     public Integer getExamNote(String studentId){
         return (int) Math.floor(examRepository.findAllByStudentId(studentId).stream()
-                .mapToLong(x->x.getScore()).average().orElseThrow(()-> new ExamException(ErrorType.EXAM_NOT_FOUND)));
+                .mapToLong(x->x.getScore()).average().orElse(0));
     }
     public MessageResponse updateExam(UpdateExamRequestDto dto){
       Optional<Exam> exam = findById(dto.getExamId());
