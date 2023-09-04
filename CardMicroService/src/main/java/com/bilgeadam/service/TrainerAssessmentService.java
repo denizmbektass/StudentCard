@@ -109,7 +109,7 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
     }
     public Integer getTrainerAssessmentNote(String studentId){
         return (int) Math.floor(iTrainerAssesmentRepository.findAllByStudentId(studentId).stream()
-                .mapToLong(x->x.getScore()).average().orElseThrow(()-> new TrainerAssessmentException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND)));
+                .mapToLong(x->x.getScore()).average().orElse(0));
     }
     public DeleteAssessmentResponseDto deleteTrainerAssessment(String id){
         Optional<TrainerAssessment> trainerAssessment=iTrainerAssesmentRepository.findById(id);

@@ -165,10 +165,13 @@ public class UserService extends ServiceManager<User, String> {
         if (optionalUser.isEmpty()) throw new UserServiceException(ErrorType.USER_NOT_EXIST);
         User user = optionalUser.get();
         List<User> users = findAll();
+        //TODO getName ve surname alacak şekilde string oluşturulmalı
         String masterTrainer = users.stream().filter(x-> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
-                && x.getRoleList().contains(ERole.MASTER_TRAINER)).map(User::getName).toString();
+                && x.getRoleList().contains(ERole.MASTER_TRAINER)).map(u -> u.getName() +" " +u.getSurname()
+        ).toString();
         String assistantTrainer = users.stream().filter(x-> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
                 && x.getRoleList().contains(ERole.ASSISTANT_TRAINER)).map(User::getName).toString();
+        //TODO endDate içerisinde updatedate yerine user da passive(mezun olma tarihi) tutulup çekilmeli
         return TranscriptInfo.builder().profilePicture(user.getProfilePicture()).startDate(new Date(user.getCreateDate()))
                 .endDate(new Date(user.getUpdateDate())).masterTrainer(masterTrainer).assistantTrainer(assistantTrainer).build();
     }
@@ -197,5 +200,14 @@ public class UserService extends ServiceManager<User, String> {
         user.setInternShipStatus(EStatus.DELETED);
         update(user);
         return true;
+    }
+
+    //Grup isimlerini almak için
+    public List<String> findGroupNameForStudent(String userId) {
+        Optional<User> user = findById(userId);
+        if (user.isEmpty()) throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        List<String> groupNames = new ArrayList<>();
+        groupNames.addAll(user.get().getGroupNameList());
+        return groupNames;
     }
 }

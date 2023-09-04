@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 import static com.bilgeadam.constants.ApiUrls.*;
 
 @RestController
@@ -19,5 +21,11 @@ public class CardController {
     @GetMapping("/get-card/{token}")
     public ResponseEntity<CardResponseDto> getCardByStudent(@PathVariable String token){
         return ResponseEntity.ok(cardService.getCardByStudent(token));
+    }
+
+    @CrossOrigin("*")
+    @GetMapping("/get-card-parameter-for-student/{token}")
+    public ResponseEntity<Map<String,Integer>> getCardParameterForStudent(@PathVariable String token) {
+        return ResponseEntity.ok(cardService.getCardParameterForStudent(token));
     }
 }

@@ -55,7 +55,7 @@ public class InternshipSuccessRateService extends ServiceManager<InternshipSucce
     }
     public Integer getInternshipNote(String studentId){
         return (int) Math.floor(internshipSuccessRateRepository.findAllByUserId(studentId).stream()
-                .mapToLong(x->x.getScore()).average().orElseThrow(()-> new CardServiceException(ErrorType.INTERNSHIP_NOT_FOUND)));
+                .mapToLong(x->x.getScore()).average().orElse(0));
     }
     public Boolean deleteSelectedInternship(String internshipId) {
         Optional<InternshipSuccessRate> deletedInternship = findById(internshipId);

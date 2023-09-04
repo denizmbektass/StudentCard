@@ -4,6 +4,7 @@ import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.*;
 import com.bilgeadam.repository.entity.User;
 import com.bilgeadam.service.UserService;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -129,5 +130,10 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUserInternShipStatusToDeleted(userId));
     }
 
+    @Hidden
+    @GetMapping("get-group-name-for-student/{userId}")
+    public ResponseEntity<List<String>> findGroupNameForStudent(@PathVariable String userId){
+        return ResponseEntity.ok(userService.findGroupNameForStudent(userId));
+    }
 
 }
