@@ -256,4 +256,22 @@ public class UserService extends ServiceManager<User, String> {
         return true;
     }
 
+    /**
+     * Bu method giriş işlemi ardından öğrencinin profilini görüntüler --->
+     * @param token
+     */
+    public FindStudentProfileResponseDto getUserProfile(String token){
+        String userId= jwtTokenManager.getIdFromTokenForUserId(token).orElseThrow(
+                ()-> {
+                    throw new UserServiceException(ErrorType.INVALID_TOKEN);
+                });
+        Optional<User> user = findById(userId);
+        if (user.isEmpty())
+            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        return IUserMapper.INSTANCE.toFindStudentProfileResponseDto(user.get());
+    }
+
+
+
+
 }
