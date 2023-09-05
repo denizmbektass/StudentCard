@@ -150,4 +150,5 @@ public class AuthService extends ServiceManager<Auth, String> {
         update(optionalAuth.get());
         return true;
     }
+
 }

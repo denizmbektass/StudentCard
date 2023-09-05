@@ -78,8 +78,8 @@ public class UserController {
     }
     //@PreAuthorize("hasAuthority('MANAGER')")
     @CrossOrigin("*")
-    @PostMapping("get-id-from-token")
-    public  ResponseEntity<String> getIdFromToken( String token){
+    @PostMapping("get-id-from-token/{token}")
+    public  ResponseEntity<String> getIdFromToken(@PathVariable String token){
         return  ResponseEntity.ok(userService.getIdFromToken(token));
     }
     //@PreAuthorize("hasAuthority('MANAGER')")
@@ -151,6 +151,11 @@ public class UserController {
     @GetMapping("get-group-name-for-student/{userId}")
     public ResponseEntity<List<String>> findGroupNameForStudent(@PathVariable String userId){
         return ResponseEntity.ok(userService.findGroupNameForStudent(userId));
+    }
+    @GetMapping("get-user-profile-for-profile-page/{token}")
+    @CrossOrigin("*")
+    public ResponseEntity<FindStudentProfileResponseDto> getUserProfile(@PathVariable String token){
+        return ResponseEntity.ok(userService.getUserProfile(token));
     }
 
 }
