@@ -41,14 +41,18 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
     }
 
     public TrainerAssessmentSaveResponseDto saveTrainerAssessment(TrainerAssessmentSaveRequestDto dto){
+        System.out.println(dto);
+        System.out.println(1);
         if (dto.getScore()<0 || dto.getScore()>10)
             throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Puan 1 ile 10 arasında olmak zorundadır...");
         if(dto.getDescription().isEmpty())
             throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Görüş boş bırakılamaz...");
         if(dto.getScore()==null)
             throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Puan boş bırakılamaz...");
-
+        System.out.println(2);
         Optional<String> studentId= jwtTokenManager.getIdFromToken(dto.getStudenToken());
+        System.out.println(studentId);
+        System.out.println(4);
         TrainerAssessment trainerAssessment= ITrainerAssesmentMapper.INSTANCE.toTrainerAssesment(dto);
         trainerAssessment.setStudentId(studentId.get());
         List<TrainerAssessment> trainerAssessmentList = iTrainerAssesmentRepository.findAllByStudentId(studentId.get());

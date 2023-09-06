@@ -10,6 +10,9 @@ ext {
             jwt           : "4.4.0",
             circuitbreaker: "2.1.6",
             junit         : "5.8.1",
+            totp          : "1.0",
+            commonscodec  : "1.10",
+            zxing         : "3.4.1",
     ]
 
     libs = [
@@ -47,5 +50,11 @@ ext {
             junitJupiterApi                 : "org.junit.jupiter:junit-jupiter-api:$versions.junit",
             junitJupiterEngine              : "org.junit.jupiter:junit-jupiter-engine:$versions.junit",
 
+            //Totp The Time-based One-Time Password algorithm
+            totp                           : "de.taimos:totp:$versions.totp",
+            //Codec for converting inputs to hex and base32.
+            commonscodec                   : "commons-codec:commons-codec:$versions.commonscodec",
+            //zxing for qr generating
+            zxing                          : "com.google.zxing:javase:$versions.zxing"
     ]
 }
