@@ -5,6 +5,7 @@ public class ApiUrls {
     public static final String VERSION = "api/v1";
     public static final String CARD = VERSION+"/card";
     public static final String TRAINER_ASSESSMENT = VERSION+"/trainer-assessment";
+    public static final String TRANSCRIPT_DEFAULT = VERSION+"/transcript-default";
     public static final String SAVE = "/save";
     public static final String UPDATE = "/update";
     public static final String DELETE = "/delete";
