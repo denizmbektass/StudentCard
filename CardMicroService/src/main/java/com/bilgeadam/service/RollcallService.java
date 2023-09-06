@@ -5,6 +5,7 @@ import com.bilgeadam.dto.response.MessageResponse;
 import com.bilgeadam.exceptions.ErrorType;
 
 import com.bilgeadam.exceptions.RollcallException;
+import com.bilgeadam.repository.IRollcallRepository;
 import com.bilgeadam.repository.entity.Rollcall;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
@@ -19,8 +20,10 @@ import java.util.stream.Collectors;
 @Service
 public class RollcallService extends ServiceManager <Rollcall,String> {
     private final JwtTokenManager jwtTokenManager;
-    public RollcallService(MongoRepository<Rollcall, String> repository, JwtTokenManager jwtTokenManager) {
-        super(repository);
+    private final IRollcallRepository rollcallRepository;
+    public RollcallService(IRollcallRepository rollcallRepository, JwtTokenManager jwtTokenManager) {
+        super(rollcallRepository);
+        this.rollcallRepository = rollcallRepository;
         this.jwtTokenManager =jwtTokenManager;
     }
 

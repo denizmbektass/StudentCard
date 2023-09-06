@@ -130,4 +130,21 @@ public class JwtTokenManager {
             throw new AuthServiceException(ErrorType.INVALID_TOKEN);
         }
     }
+
+    public Optional<String> createTokenForQr(String id){
+        String token= null;
+        Long exDate = 1000L*60*150;
+        try{
+            token = JWT.create().withAudience(audience)
+                    .withClaim("id",id)
+                    .withClaim("howtopage","AuthMicroService")
+                    .withIssuer(issuer)
+                    .withIssuedAt(new Date())
+                    .withExpiresAt(new Date(System.currentTimeMillis()+exDate))
+                    .sign(Algorithm.HMAC512(secretKey));
+            return Optional.of(token);
+        }catch (Exception exception){
+            return Optional.empty();
+        }
+    }
 }
