@@ -1,6 +1,7 @@
 package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.TranscriptDefaultRequestDto;
+import com.bilgeadam.dto.response.GetDefaultTranscriptResponseDto;
 import com.bilgeadam.dto.response.TranscriptDefaultResponseDto;
 import com.bilgeadam.repository.view.VwGroupName;
 import com.bilgeadam.service.TranskriptDefaultService;
@@ -28,4 +29,10 @@ public class TranscriptDefaultController {
         return ResponseEntity.ok(transkriptDefaultService.creatingTranscriptDatas(transcriptDefaultRequestDto));
     }
 
+    @CrossOrigin("*")
+    @GetMapping("/get-default-transcript-info-by-name/{mainGroupName}")
+    public ResponseEntity<GetDefaultTranscriptResponseDto> getDefaultTranscriptInfoByName(@PathVariable String mainGroupName){
+        return ResponseEntity.ok(transkriptDefaultService.getDefaultTranscriptInfoByName(mainGroupName));
     }
+
+}

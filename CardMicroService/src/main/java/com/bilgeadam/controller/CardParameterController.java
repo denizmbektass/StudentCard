@@ -3,6 +3,8 @@ package com.bilgeadam.controller;
 import static com.bilgeadam.constants.ApiUrls.*;
 
 import com.bilgeadam.dto.request.CreateCardParameterRequestDto;
+import com.bilgeadam.dto.request.GetDefaultTranscriptInfoByNameRequestDto;
+import com.bilgeadam.dto.response.GetDefaultTranscriptInfoByNameResponseDto;
 import com.bilgeadam.repository.entity.CardParameter;
 import com.bilgeadam.service.CardParameterService;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +31,13 @@ public class CardParameterController {
     public ResponseEntity<List<CardParameter>> findAllCardParameters(){
         return ResponseEntity.ok( cardParameterService.findAll());
     }
+
+    @PostMapping("/get-group-card-parameter-by-group-name")
+    @CrossOrigin("*")
+    public ResponseEntity<GetDefaultTranscriptInfoByNameResponseDto> getGroupCardParameterByGroupName(@RequestBody GetDefaultTranscriptInfoByNameRequestDto dto){
+        return ResponseEntity.ok(cardParameterService.getGroupCardParameterByGroupName(dto));
+    }
+
+
 
 }
