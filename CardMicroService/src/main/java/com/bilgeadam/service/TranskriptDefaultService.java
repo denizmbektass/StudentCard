@@ -1,6 +1,7 @@
 package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.TranscriptDefaultRequestDto;
+import com.bilgeadam.dto.response.GetDefaultTranscriptResponseDto;
 import com.bilgeadam.dto.response.TranscriptDefaultResponseDto;
 import com.bilgeadam.manager.IMainGroupManager;
 import com.bilgeadam.mapper.ITranscriptDefaultMapper;
@@ -46,5 +47,16 @@ public class TranskriptDefaultService extends ServiceManager<TranskriptDefault,S
             save(transkriptDefault);
         }
         return true;
+    }
+
+    public GetDefaultTranscriptResponseDto getDefaultTranscriptInfoByName(String mainGroupName){
+        TranskriptDefault transkriptDefault = transkriptDefaultRepository.findOptionalByMainGroupName( mainGroupName).orElseThrow(()->{
+            throw new RuntimeException("Transript Bilgisi bulunamadı.");
+        });
+        return ITranscriptDefaultMapper.INSTANCE.fromTranscriptDefaultToGetDefaultTranscriptResponseDto(transkriptDefault);
+    }
+
+    public Optional<TranskriptDefault> findOptionalByMainGroupName(String mainGroupName){
+        return transkriptDefaultRepository.findOptionalByMainGroupName(mainGroupName);
     }
 }
