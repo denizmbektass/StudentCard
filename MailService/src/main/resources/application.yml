@@ -4,7 +4,7 @@ spring:
   rabbitmq:
     host: localhost
     port: 5672
-    username: Java7
+    username: user
     password: root
   #  zipkin:
   #    enabled: true
@@ -16,3 +16,4 @@ spring:
 rabbitmq:
   queueActivationLink: activation-link-mail-queue
   activationLinkBindingKey: activation-link-binding-key
+  registerStudentAndTrainerQueue: register-student-and-trainer-queue

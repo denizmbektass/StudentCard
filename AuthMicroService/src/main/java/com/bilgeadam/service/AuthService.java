@@ -10,8 +10,10 @@ import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.manager.IUserManager;
 import com.bilgeadam.mapper.IAuthMapper;
 import com.bilgeadam.rabbitmq.model.ActivationLinkMailModel;
+import com.bilgeadam.rabbitmq.model.RegisterStudentAndTrainerModel;
 import com.bilgeadam.rabbitmq.model.ResetPasswordModel;
 import com.bilgeadam.rabbitmq.producer.ActivationLinkProducer;
+import com.bilgeadam.rabbitmq.producer.RegisterStudentAndTrainerProducer;
 import com.bilgeadam.rabbitmq.producer.ResetPasswordProducer;
 import com.bilgeadam.repository.IAuthRepository;
 import com.bilgeadam.repository.entity.Auth;
@@ -34,8 +36,9 @@ public class AuthService extends ServiceManager<Auth, String> {
     private final IUserManager userManager;
     private final IAuthMapper iAuthMapper;
     private final ActivationLinkProducer activationLinkProducer;
+    private final RegisterStudentAndTrainerProducer registerStudentAndTrainerProducer;
 
-    public AuthService(ResetPasswordProducer resetPasswordProducer, IAuthRepository iAuthRepository, JwtTokenManager jwtTokenManager, IUserManager userManager, IAuthMapper iAuthMapper, ActivationLinkProducer activationLinkProducer) {
+    public AuthService(ResetPasswordProducer resetPasswordProducer, IAuthRepository iAuthRepository, JwtTokenManager jwtTokenManager, IUserManager userManager, IAuthMapper iAuthMapper, ActivationLinkProducer activationLinkProducer,RegisterStudentAndTrainerProducer registerStudentAndTrainerProducer) {
         super(iAuthRepository);
         this.resetPasswordProducer = resetPasswordProducer;
         this.iAuthRepository = iAuthRepository;
@@ -43,6 +46,7 @@ public class AuthService extends ServiceManager<Auth, String> {
         this.userManager = userManager;
         this.iAuthMapper = iAuthMapper;
         this.activationLinkProducer = activationLinkProducer;
+        this.registerStudentAndTrainerProducer = registerStudentAndTrainerProducer;
     }
 
     public LoginResponseDto login(LoginRequestDto dto) {
@@ -161,5 +165,19 @@ public class AuthService extends ServiceManager<Auth, String> {
         Optional<Auth> optionalAuth=iAuthRepository.findById(authId.get());
         if (optionalAuth.isEmpty()) throw new AuthServiceException(ErrorType.USER_NOT_FOUND);
         return optionalAuth.get().getRole();
+    }
+    public MessageResponseDto registerStudentAndTrainer(RegisterStudentAndTrainerRequestDto dto) {
+        Optional<Auth> authOptional = iAuthRepository.findByEmail(dto.getEmail());
+        if (authOptional.isPresent())
+            throw new AuthServiceException(ErrorType.EXIST_BY_EMAIL);
+        String password = CodeGenerator.generateCode();
+        Auth auth = IAuthMapper.INSTANCE.toAuth(dto, password);
+        auth.setStatus(EStatus.INACTIVE);
+        save(auth);
+        registerStudentAndTrainerProducer.registerStudentAndTrainer(RegisterStudentAndTrainerModel.builder()
+                .email(auth.getEmail())
+                .password(auth.getPassword())
+                .build());
+        return MessageResponseDto.builder().message("Register has been completed successfully, Password needs to be updated for activating the profile!").build();
     }
 }

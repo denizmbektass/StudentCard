@@ -82,5 +82,10 @@ public class AuthController {
     public ResponseEntity<List<ERole>> getRoleFromToken(@PathVariable String token){
         return ResponseEntity.ok(authService.getRoleFromToken(token));
     }
+    @PostMapping("register-student-and-trainer")
+    @CrossOrigin("*")
+    public ResponseEntity<MessageResponseDto>registerStudentAndTrainer( @RequestBody @Valid RegisterStudentAndTrainerRequestDto dto){
+        return ResponseEntity.ok(authService.registerStudentAndTrainer(dto));
+    }
 
 }

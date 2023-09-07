@@ -41,4 +41,17 @@ public class RabbitmqConfig {
         return BindingBuilder.bind(activationLinkQueue).to(authDirectExchange).with(activationLinkBindingKey);
     }
 
+    @Value("${rabbitmq.registerStudentAndTrainerBindingKey}")
+    private String registerStudentAndTrainerBindingKey;
+    @Value("${rabbitmq.registerStudentAndTrainerQueue}")
+    private String registerStudentAndTrainerQueue;
+
+    @Bean
+    Queue registerStudentAndTrainerQueue(){return  new Queue(registerStudentAndTrainerQueue);}
+
+    @Bean
+    public Binding registerStudentAndTrainerBindingKey(final Queue registerStudentAndTrainerQueue, final DirectExchange authDirectExchange){
+        return BindingBuilder.bind(registerStudentAndTrainerQueue).to(authDirectExchange).with(registerStudentAndTrainerBindingKey);
+    }
+
 }

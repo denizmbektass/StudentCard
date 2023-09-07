@@ -27,3 +27,6 @@ spring:
 rabbitmq:
   queueActivationLink: activation-link-mail-queue
   activationLinkBindingKey: activation-link-binding-key
+  registerStudentAndTrainerBindingKey: register-student-and-trainer-binding-key
+  registerStudentAndTrainerQueue: register-student-and-trainer-queue
+  authDirectExchange: auth-direct-exchange
