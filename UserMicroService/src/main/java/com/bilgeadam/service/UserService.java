@@ -270,7 +270,24 @@ public class UserService extends ServiceManager<User, String> {
             throw new UserServiceException(ErrorType.USER_NOT_EXIST);
         return IUserMapper.INSTANCE.toFindStudentProfileResponseDto(user.get());
     }
+    public Boolean saveProfileImage(SaveProfileImageRequestDto dto){
+        Optional<String> userId = jwtTokenManager.getIdFromTokenForUserId(dto.getToken());
+        if (userId.isEmpty()) throw new UserServiceException(ErrorType.INVALID_TOKEN);
+        Optional<User> optionalUser= userRepository.findById(userId.get());
+        System.out.println(dto.getProfilePicture());
+        optionalUser.get().setProfilePicture(dto.getProfilePicture());
+        update(optionalUser.get());
+        return true;
+    }
 
+    public String getProfileImage(String token){
+        Optional<String> userId= jwtTokenManager.getIdFromTokenForUserId(token);
+        if (userId.isEmpty()) throw new UserServiceException(ErrorType.INVALID_TOKEN);
+        Optional<User> optionalUser= userRepository.findById(userId.get());
+        if (optionalUser.isEmpty())throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        String response= optionalUser.get().getProfilePicture();
+        return response;
+    }
 
 
 

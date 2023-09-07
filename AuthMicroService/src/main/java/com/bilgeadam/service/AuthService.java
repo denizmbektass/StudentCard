@@ -150,5 +150,11 @@ public class AuthService extends ServiceManager<Auth, String> {
         update(optionalAuth.get());
         return true;
     }
-
+    public List<ERole> getRoleFromToken(String token){
+        Optional<String> authId= jwtTokenManager.getIdFromToken(token);
+        if (authId.isEmpty()) throw new AuthServiceException(ErrorType.INVALID_TOKEN);
+        Optional<Auth> optionalAuth=iAuthRepository.findById(authId.get());
+        if (optionalAuth.isEmpty()) throw new AuthServiceException(ErrorType.USER_NOT_FOUND);
+        return optionalAuth.get().getRole();
+    }
 }

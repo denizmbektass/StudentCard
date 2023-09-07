@@ -5,6 +5,7 @@ import com.bilgeadam.dto.response.ChangePasswordResponseDto;
 import com.bilgeadam.dto.response.GetAuthInfoForChangePassword;
 import com.bilgeadam.dto.response.LoginResponseDto;
 import com.bilgeadam.dto.response.MessageResponseDto;
+import com.bilgeadam.repository.enums.ERole;
 import com.bilgeadam.service.AuthService;
 import feign.Param;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -72,8 +73,14 @@ public class AuthController {
         return ResponseEntity.ok(authService.getAuthInfoForChangePassword(userId));
     }
     @PostMapping("change-password-from-user")
-    ResponseEntity<Boolean> changePasswordFromUser(@RequestBody ChangePasswordResponseDto dto){
+   public ResponseEntity<Boolean> changePasswordFromUser(@RequestBody ChangePasswordResponseDto dto){
         return ResponseEntity.ok(authService.changePasswordForAuth(dto));
+    }
+
+    @GetMapping("get-role-from-token/{token}")
+    @CrossOrigin("*")
+    public ResponseEntity<List<ERole>> getRoleFromToken(@PathVariable String token){
+        return ResponseEntity.ok(authService.getRoleFromToken(token));
     }
 
 }

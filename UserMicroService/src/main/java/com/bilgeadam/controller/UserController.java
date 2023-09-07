@@ -3,6 +3,7 @@ package com.bilgeadam.controller;
 import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.*;
 import com.bilgeadam.repository.entity.User;
+import com.bilgeadam.repository.enums.ERole;
 import com.bilgeadam.service.UserService;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
@@ -156,6 +157,17 @@ public class UserController {
     @CrossOrigin("*")
     public ResponseEntity<FindStudentProfileResponseDto> getUserProfile(@PathVariable String token){
         return ResponseEntity.ok(userService.getUserProfile(token));
+    }
+
+    @PostMapping("save-profile-image")
+    @CrossOrigin("*")
+    public ResponseEntity<Boolean> saveProfileImage(@RequestBody SaveProfileImageRequestDto dto){
+        return ResponseEntity.ok(userService.saveProfileImage(dto));
+    }
+    @GetMapping("get-user-profile-image/{token}")
+    @CrossOrigin("*")
+    public ResponseEntity<String> getUserProfileImage(@PathVariable String token){
+        return ResponseEntity.ok(userService.getProfileImage(token));
     }
 
 }
