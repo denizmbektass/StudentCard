@@ -29,4 +29,12 @@ public class RabbitmqConfig {
         return new Queue(activationLinkQueue);
     }
 
+
+    @Value("${rabbitmq.registerStudentAndTrainerQueue}")
+    private String registerStudentAndTrainerQueue ;
+    @Bean
+    Queue registerStudentAndTrainerQueue(){
+        return new Queue(registerStudentAndTrainerQueue);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.bilgeadam.service;
 
 
 import com.bilgeadam.rabbitmq.model.ActivationLinkMailModel;
+import com.bilgeadam.rabbitmq.model.RegisterStudentAndTrainerModel;
 import com.bilgeadam.rabbitmq.model.ReminderMailModel;
 import com.bilgeadam.rabbitmq.model.ResetPasswordModel;
 import com.bilgeadam.utility.JwtTokenProvider;
@@ -43,6 +44,13 @@ public class MailSenderService {
         preConfiguredMessage.setText("Dear User, \n"
                 + "If you want to activate your profile, please click the link at the below!"
                 + "\n" + linkActivateUserLink);
+        javaMailSender.send(preConfiguredMessage);
+    }
+
+    public void registerStudentAndTrainer(RegisterStudentAndTrainerModel model) {
+        preConfiguredMessage.setTo(model.getEmail());
+        preConfiguredMessage.setSubject("Password");
+        preConfiguredMessage.setText("Your password : " + model.getPassword());
         javaMailSender.send(preConfiguredMessage);
     }
 
