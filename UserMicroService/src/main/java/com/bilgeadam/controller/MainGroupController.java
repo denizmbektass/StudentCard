@@ -17,9 +17,9 @@ public class MainGroupController {
     private final MainGroupService mainGroupService;
 
     @CrossOrigin("*")
-    @PostMapping("/save")
-    public ResponseEntity<Boolean> save(@RequestBody MainGroup group){
-        return ResponseEntity.ok(mainGroupService.saveGroup(group));
+    @PostMapping("/save/{mainGroupName}")
+    public ResponseEntity<Boolean> save(@PathVariable String mainGroupName){
+        return ResponseEntity.ok(mainGroupService.saveGroup(mainGroupName));
     }
 
     @CrossOrigin("*")

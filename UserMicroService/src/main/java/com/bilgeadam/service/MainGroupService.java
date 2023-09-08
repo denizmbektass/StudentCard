@@ -19,8 +19,8 @@ public class MainGroupService extends ServiceManager<MainGroup,String> {
         this.mainGroupRepository = mainGroupRepository;
     }
 
-    public Boolean saveGroup(MainGroup group){
-        save(group);
+    public Boolean saveGroup(String mainGroupName){
+        save(MainGroup.builder().mainGroupName(mainGroupName).build());
         return true;
     }
 
