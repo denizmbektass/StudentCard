@@ -22,10 +22,9 @@ import java.util.List;
 public class Auth extends BaseEntity {
     @Id
     private String authId;
-
-   private String userId;
-   private String name;
-   private String surname;
+    private String userId;
+    private String name;
+    private String surname;
     /**
      * if two users have the same e-mail, DB will be found the first one, second one is never be shown.
      * Because of that we use the unique value for e-mails
