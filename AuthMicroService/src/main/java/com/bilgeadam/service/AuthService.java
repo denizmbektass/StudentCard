@@ -125,18 +125,12 @@ public class AuthService extends ServiceManager<Auth, String> {
     }
 
     public Boolean activateUser(String token) {
-        System.out.println("Buradayım");
         String authId = jwtTokenManager.getIdFromToken(token).orElseThrow(() -> {
             throw new AuthServiceException(ErrorType.INVALID_TOKEN);
         });
-        System.out.println(authId);
         Optional<Auth> optionalAuth = findById(authId);
-        System.out.println(optionalAuth);
         optionalAuth.get().setStatus(EStatus.ACTIVE);
-        System.out.println("UPDATE ÖNCESI");
         update(optionalAuth.get());
-
-        System.out.println("UPDATE SONRASI");
         return true;
     }
 
