@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/card-parameter")
+@RequestMapping(CARDPARAMETER)
 @RequiredArgsConstructor
 public class CardParameterController {
     private final CardParameterService cardParameterService;
