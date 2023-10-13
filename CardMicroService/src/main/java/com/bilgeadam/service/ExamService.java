@@ -3,6 +3,7 @@ package com.bilgeadam.service;
 import com.bilgeadam.dto.request.CreateExamRequestDto;
 
 import com.bilgeadam.dto.request.UpdateExamRequestDto;
+import com.bilgeadam.dto.response.AverageExamResponseDto;
 import com.bilgeadam.dto.response.ExamResponseDto;
 import com.bilgeadam.dto.response.MessageResponse;
 
@@ -100,4 +101,18 @@ public class ExamService extends ServiceManager<Exam,String> {
                 .map(y-> y.getTitle()).collect(Collectors.toSet());
 
     }
+
+    public AverageExamResponseDto averageExam(String studentId){
+        List<Exam> exams = examRepository.findAllByStudentId(studentId);
+        if (exams.isEmpty()){
+            return new AverageExamResponseDto(studentId, 0.0);
+        }
+        double totalScore = 0.0;
+        for (Exam exam: exams) {
+            totalScore += exam.getScore();
+        }
+        double averageScore = totalScore / exams.size();
+        return new AverageExamResponseDto(studentId,averageScore);
+    }
+
 }

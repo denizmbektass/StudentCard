@@ -26,6 +26,7 @@ public class ApiUrls {
     public static final String INTERNSHIP = VERSION + "/internship";
     public static final String ADD_SCORE_AND_COMMENT = "/add-score-and-comment";
     public static final String ABSENCE = "/absence";
+    public static final String AVERAGE = "/average-exam/{studentId}";
 
 
 }
