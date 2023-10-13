@@ -3,6 +3,7 @@ package com.bilgeadam.controller;
 import com.bilgeadam.dto.request.CreateExamRequestDto;
 import com.bilgeadam.dto.request.FindByStudentIdRequestDto;
 import com.bilgeadam.dto.request.UpdateExamRequestDto;
+import com.bilgeadam.dto.response.AverageExamResponseDto;
 import com.bilgeadam.dto.response.ExamResponseDto;
 import com.bilgeadam.dto.response.MessageResponse;
 import com.bilgeadam.service.ExamService;
@@ -55,5 +56,11 @@ public class ExamController {
 
         return ResponseEntity.ok(examService.getAllTitles(token));
 }
+
+    @GetMapping(AVERAGE)
+    @CrossOrigin("*")
+    public ResponseEntity<AverageExamResponseDto> getAverageExam(@PathVariable String studentId){
+        return ResponseEntity.ok(examService.averageExam(studentId));
+    }
 
 }

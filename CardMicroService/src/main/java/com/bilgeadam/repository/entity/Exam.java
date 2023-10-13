@@ -23,5 +23,5 @@ public class Exam extends BaseEntity{
     private String statement;
     private String studentId;
     private List<String> groupNames;
-
+    private double averageScore;
 }
