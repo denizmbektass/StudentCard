@@ -1,5 +1,7 @@
 package com.bilgeadam.service;
 
+import com.bilgeadam.exceptions.ErrorType;
+import com.bilgeadam.exceptions.UserServiceException;
 import com.bilgeadam.repository.IMainGroupRepository;
 import com.bilgeadam.repository.entity.MainGroup;
 import com.bilgeadam.repository.view.VwGroupName;
@@ -35,7 +37,7 @@ public class MainGroupService extends ServiceManager<MainGroup,String> {
 
     public Set<String> getSubGroupNamesByMainGroupId(String mainGroupId){
         MainGroup mainGroup = findById(mainGroupId).orElseThrow(()->{
-            throw new RuntimeException("Main Grup Veritabanında kayıtlı değildir.");
+            throw new UserServiceException(ErrorType.GROUP_NOT_FOUND);
         });
         return mainGroup.getGroupNameList();
     }

@@ -1,6 +1,7 @@
 package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.CreateProjectTypeRequestDto;
+import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.ProjectException;
 import com.bilgeadam.mapper.IProjectTypeMapper;
@@ -27,7 +28,7 @@ public class ProjectTypeService extends ServiceManager<ProjectType, String> {
     public ProjectType createProjectType(CreateProjectTypeRequestDto dto) {
         Optional<ProjectType> optionalProjectType= iProjectTypeRepository.findByProjectTypeIgnoreCase(dto.getProjectType());
         if (optionalProjectType.isPresent()){
-            throw new ProjectException(ErrorType.PROJECT_TYPE_DUBLICATE);
+            throw new CardServiceException(ErrorType.PROJECT_TYPE_DUBLICATE);
         }
         System.out.println(optionalProjectType);
         return save(IProjectTypeMapper.INSTANCE.toProjectType(dto));
@@ -36,10 +37,10 @@ public class ProjectTypeService extends ServiceManager<ProjectType, String> {
     public Boolean deleteProjectType(String projectType){
         Optional<ProjectType> optionalProjectType = iProjectTypeRepository.findByProjectTypeIgnoreCase(projectType);
         if (optionalProjectType.isEmpty()){
-            throw new ProjectException(ErrorType.PROJECT_TYPE_NOT_FOUND);
+            throw new CardServiceException(ErrorType.PROJECT_TYPE_NOT_FOUND);
         }
         if(!optionalProjectType.get().getStatus().equals(EStatus.ACTIVE)){
-            throw new ProjectException(ErrorType.PROJECT_TYPE_STATUS);
+            throw new CardServiceException(ErrorType.PROJECT_TYPE_STATUS);
         }
         optionalProjectType.get().setStatus(EStatus.DELETED);
         System.out.println(optionalProjectType);

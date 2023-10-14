@@ -1,5 +1,7 @@
 package com.bilgeadam.service;
 
+import com.bilgeadam.exceptions.ErrorType;
+import com.bilgeadam.exceptions.UserServiceException;
 import com.bilgeadam.repository.IGroupRepository;
 import com.bilgeadam.repository.entity.MainGroup;
 import com.bilgeadam.repository.entity.Group;
@@ -34,7 +36,7 @@ public class GroupService extends ServiceManager<Group,String> {
                     if(subGroupName.toUpperCase().contains(x.toUpperCase())){
                         System.out.println(mainGroupService.findByGroupName(x));
                         MainGroup group = mainGroupService.findByGroupName(x).orElseThrow(()->{
-                            throw new RuntimeException("Grup veritabanında mevcut değildir.");
+                            throw new UserServiceException(ErrorType.GROUP_NOT_FOUND);
                         });
                         group.getGroupNameList().add(subGroupName);
                         save(Group.builder()

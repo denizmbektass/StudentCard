@@ -60,14 +60,14 @@ public class InternshipSuccessRateService extends ServiceManager<InternshipSucce
     public Boolean deleteSelectedInternship(String internshipId) {
         Optional<InternshipSuccessRate> deletedInternship = findById(internshipId);
         if (deletedInternship.isEmpty())
-            throw new RuntimeException("Bu staj zaten bulunamadı.");
+            throw new CardServiceException(ErrorType.INTERNSHIP_NOT_FOUND);
         deleteById(deletedInternship.get().getInternshipSuccessRateId());
         return true;
     }
     public Boolean updateSelectedInternship(UpdateInternshipRequestDto dto) {
         Optional<InternshipSuccessRate> getInternship = internshipSuccessRateRepository.findById(dto.getInternshipSuccessRateId());
         if (getInternship.isEmpty())
-            throw new RuntimeException("Bu staj zaten bulunamadı.");
+            throw new CardServiceException(ErrorType.INTERNSHIP_NOT_FOUND);
         InternshipSuccessRate updatedInternship = IInternshipSuccessRateMapper.INSTANCE.toUpdateInternshipFromInternship(dto, getInternship.get());
         update(updatedInternship);
         return true;

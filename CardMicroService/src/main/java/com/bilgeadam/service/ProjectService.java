@@ -7,6 +7,7 @@ import com.bilgeadam.dto.response.CreateProjectScoreResponseDto;
 import com.bilgeadam.dto.response.StudentProjectListResponseDto;
 import com.bilgeadam.dto.response.UpdateProjectResponseDto;
 import com.bilgeadam.exceptions.AssignmentException;
+import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.ProjectException;
 import com.bilgeadam.manager.IUserManager;
@@ -45,16 +46,16 @@ public class ProjectService extends ServiceManager<Project,String> {
     public CreateProjectScoreResponseDto createProjectScore(CreateProjectScoreRequestDto dto){
         Optional<String> userId=jwtTokenManager.getIdFromToken(dto.getToken());
         if (userId.isEmpty()){
-              throw new RuntimeException("Böyle bir kullanıcı bulunamadı ..");
+              throw new CardServiceException(ErrorType.USER_NOT_FOUND);
         }
         if(dto.getProjectScore()==null)
-            throw new RuntimeException("Proje notu boş bırakılamaz...");
+            throw new CardServiceException(ErrorType.PROJECT_POINT_EMPTY);
         if(dto.getDescription().isBlank())
-            throw new RuntimeException("AÇıklama boş bırakılamaz...");
+            throw new CardServiceException(ErrorType.DESCRIPTION_EMPTY);
         if(dto.getProjectScore()==null)
-            throw new RuntimeException("Proje notu boş bırakılamaz...");
+            throw new CardServiceException(ErrorType.PROJECT_POINT_EMPTY);
         if(dto.getProjectType().toString().isEmpty())
-            throw new RuntimeException("Proje tipi boş bırakılamaz...");
+            throw new CardServiceException(ErrorType.PROJECT_TYPE_EMPTY);
         Project project = IProjectMapper.INSTANCE.toProject(dto);
         project.setUserId(userId.get());
         save(project);
@@ -63,7 +64,7 @@ public class ProjectService extends ServiceManager<Project,String> {
 
 
     public List<StudentProjectListResponseDto> showStudentProjectList(String studentToken) {
-        String userId = jwtTokenManager.getIdFromToken(studentToken).orElseThrow(()->{throw new RuntimeException("USER NOT FOUND");});
+        String userId = jwtTokenManager.getIdFromToken(studentToken).orElseThrow(()->{throw new CardServiceException(ErrorType.USER_NOT_FOUND);});
         String studentNameAndSurname = userManager.getNameAndSurnameWithId(userId).getBody();
         List<Project> projectList = iProjectRepository.findAllByUserId(userId);
         List<StudentProjectListResponseDto> studentProjectListResponseDtoList = projectList.stream().filter(project -> project.getStatus() == EStatus.ACTIVE)
@@ -83,7 +84,7 @@ public class ProjectService extends ServiceManager<Project,String> {
                 .mapToLong(x->x.getProjectScore()).average().orElse(0));
     }
     public Boolean deleteStudentProject(String projectId) {
-        Project project = findById(projectId).orElseThrow(()->{throw new RuntimeException("Project Not Found");});
+        Project project = findById(projectId).orElseThrow(()->{throw new CardServiceException(ErrorType.PROJECT_NOT_FOUND);});
         project.setStatus(EStatus.DELETED);
         update(project);
         return true;
@@ -92,12 +93,12 @@ public class ProjectService extends ServiceManager<Project,String> {
     public UpdateProjectResponseDto updateStudentProject(UpdateProjectRequestDto dto){
         Optional<Project> project = findById(dto.getProjectId());
         if (project.isEmpty()){
-            throw new RuntimeException("Böyle bir proje bulunamadı");
+            throw new CardServiceException(ErrorType.PROJECT_NOT_FOUND);
         }
         if(dto.getProjectScore()==null)
-            throw new RuntimeException("Proje notu boş bırakılamaz...");
+            throw new CardServiceException(ErrorType.PROJECT_POINT_EMPTY);
         if(dto.getDescription().isBlank())
-            throw new RuntimeException("AÇıklama boş bırakılamaz...");
+            throw new CardServiceException(ErrorType.DESCRIPTION_EMPTY);
 
 
         update(IProjectMapper.INSTANCE.updateProjectRequestDtoTOProject(dto,project.get()));

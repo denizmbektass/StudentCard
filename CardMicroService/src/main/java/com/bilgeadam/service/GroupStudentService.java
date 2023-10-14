@@ -8,6 +8,8 @@ import com.bilgeadam.dto.request.UpdateGroupStudentRequestDto;
 import com.bilgeadam.dto.response.GroupStudentAttendanceResponseDto;
 import com.bilgeadam.dto.response.GroupStudentsResponseDto;
 import com.bilgeadam.dto.response.ShowGroupInformationListResponseDto;
+import com.bilgeadam.exceptions.CardServiceException;
+import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.manager.IUserManager;
 import com.bilgeadam.mapper.IGroupAttendanceMapper;
 import com.bilgeadam.repository.entity.InternshipGroup;
@@ -49,7 +51,7 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
     public Boolean saveAddGroupStudent(SaveGroupStudentRequestDto dto){
         Optional<InternshipGroup> group = internshipGroupService.findGroupByGroupName(dto.getGroupName());
         if(group.isEmpty()){
-            throw new RuntimeException("Grup isminin veritabanında kaydı bulunmamaktadır.");
+            throw new CardServiceException(ErrorType.GROUP_NOT_FOUND);
         }
         if(!groupStudentRepository.existsByUserId(dto.getUserId()) && userManager.updateUserInternShipStatusToActive(dto.getUserId()).getBody()) {
             GroupStudent groupStudent = IGroupStudentMapper.INSTANCE.fromSaveGroupStudentRequestDtoToGroupStudent(dto);
@@ -62,7 +64,7 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
             });
             return true;
         }
-        throw new RuntimeException("Öğrencinin veritabanında kaydı bulunmamaktadır.");
+        throw new CardServiceException(ErrorType.STUDENT_NOT_FOUND);
     }
 
     public List<GroupStudentsResponseDto> findAllGroupStudentList(){
@@ -70,7 +72,7 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
         List<GroupStudentsResponseDto> groupStudentList = vwGroupStudentList.stream()
                 .map(x -> {
                     InternshipGroup internshipGroup = internshipGroupService.findById(x.getGroupId())
-                            .orElseThrow(() -> new RuntimeException("Grup veritabanında mevcut değildir."));
+                            .orElseThrow(() -> new CardServiceException(ErrorType.GROUP_NOT_FOUND));
                     return GroupStudentsResponseDto.builder()
                             .groupName(internshipGroup.getGroupName())
                             .name(x.getName())
@@ -85,7 +87,7 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
     public Boolean deleteGroupStudentById(String groupStudentId){
         if(groupStudentRepository.existsByGroupStudentId(groupStudentId)){
             GroupStudent groupStudent = groupStudentRepository.findById(groupStudentId).orElseThrow(()->{
-                throw new RuntimeException("NO STUDENT FOUND");
+                throw new CardServiceException(ErrorType.STUDENT_NOT_FOUND);
             });
             userManager.updateUserInternShipStatusToDeleted(groupStudent.getUserId());
             List<GroupAttendance> groupAttendanceList = groupAttendanceService.findByGroupId(groupStudent.getGroupId());
@@ -96,17 +98,17 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
             deleteById(groupStudentId);
             return true;
         }
-        throw new RuntimeException("Bu ID'ye sahip mevcut bir öğrenci bulunmamaktadır.");
+        throw new CardServiceException(ErrorType.STUDENT_ID_NOT_FOUND);
     }
 
     public Boolean updateGroupStudent(UpdateGroupStudentRequestDto dto){
         Optional<GroupStudent> groupStudent = findById(dto.getGroupStudentId());
         if(groupStudent.isEmpty()){
-            throw new RuntimeException("Veritabanında kayıtlı böyle bir öğrenci bulunmamaktadır.");
+            throw new CardServiceException(ErrorType.STUDENT_NOT_FOUND);
         }
         Optional<InternshipGroup> group = internshipGroupService.findGroupByGroupName(dto.getGroupName());
         if(group.isEmpty()){
-            throw new RuntimeException("Grup isminin veritabanında kaydı bulunmamaktadır.");
+            throw new CardServiceException(ErrorType.GROUP_NOT_FOUND);
         }
         groupStudent.get().setGroupId(group.get().getInternShipGroupId());
         groupStudent.get().setName(dto.getName());
@@ -138,7 +140,7 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
     public GroupStudentAttendanceResponseDto showGroupStudentAttendance(GroupStudentAttendanceRequestDto dto){
         Optional<GroupAttendance> optionalGroupAttendance = groupAttendanceService.findByAttendanceDateAndGroupId(dto.getCurrentDate(), dto.getGroupId());
         Optional<InternshipGroup> optionalGroup = internshipGroupService.findById(dto.getGroupId());
-        if(optionalGroup.isEmpty()) throw new RuntimeException("Grup veritabanında kayıtlı değildir.");
+        if(optionalGroup.isEmpty()) throw new CardServiceException(ErrorType.GROUP_NOT_FOUND);
         GroupStudentAttendanceResponseDto groupStudentAttendanceResponseDto;
         if(optionalGroupAttendance.isEmpty()){
             //Database'de ilk defa kaydı açılacaksa
@@ -169,7 +171,7 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
         Optional<GroupAttendance> optionalGroupAttendance = groupAttendanceService
                 .findByAttendanceDateAndGroupId(dto.getAttendanceDate(), dto.getGroupId());
         if (optionalGroupAttendance.isEmpty())
-            throw new RuntimeException("Grup attendance veritabanında kayıtlı değildir");
+            throw new CardServiceException(ErrorType.ABSENCE_NOT_FOUND);
         if(dto.getGroupId().equals(optionalGroupAttendance.get().getGroupId())) {
             Map<String, Boolean> groupStudentList = optionalGroupAttendance.get().getGroupStudents();
             dto.getGroupStudents().entrySet().forEach(x -> {
@@ -184,7 +186,7 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
 
     public Boolean deleteRegisteredGroupList(String internshipGroupId) {
         internshipGroupService.findById(internshipGroupId).orElseThrow(()->{
-            throw new RuntimeException("Staj Grubu veritabanında kayıtlı değildir.");
+            throw new CardServiceException(ErrorType.INTERNSHIP_NOT_FOUND);
         });
         System.out.println(1);
         internshipGroupService.deleteById(internshipGroupId);

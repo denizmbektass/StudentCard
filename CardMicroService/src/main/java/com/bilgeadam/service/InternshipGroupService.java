@@ -4,6 +4,8 @@ import com.bilgeadam.dto.request.GroupSaveRequestDto;
 import com.bilgeadam.dto.response.AttendanceSearchResponseDto;
 import com.bilgeadam.dto.response.FindAllUnRegisteredGroupListResponseDto;
 import com.bilgeadam.dto.response.FindByMainGroupIdResponseDto;
+import com.bilgeadam.exceptions.CardServiceException;
+import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.manager.IMainGroupManager;
 import com.bilgeadam.mapper.IInternshipGroupMapper;
 import com.bilgeadam.repository.IInternshipGroupRepository;
@@ -35,7 +37,7 @@ public class InternshipGroupService extends ServiceManager<InternshipGroup,Strin
             System.out.println(internshipGroup);
             return true;
         }
-        throw new RuntimeException("Group Mevcutta Kayıtlı Durumda");
+        throw new CardServiceException(ErrorType.GROUP_ALREADY_EXIST);
     }
 
     public List<FindByMainGroupIdResponseDto> findByMainGroupId(String mainGroupId){
@@ -57,7 +59,7 @@ public class InternshipGroupService extends ServiceManager<InternshipGroup,Strin
     public List<AttendanceSearchResponseDto> showAttendanceSearchList(String groupId){
         Optional<InternshipGroup> optionalGroup = findById(groupId);
         if(optionalGroup.isEmpty()){
-            throw new RuntimeException("Grup Bulunamadı");
+            throw new CardServiceException(ErrorType.GROUP_NOT_FOUND);
         }
             List<AttendanceSearchResponseDto> responseDtoList = new ArrayList<>();
             Date start = optionalGroup.get().getStartingDate();

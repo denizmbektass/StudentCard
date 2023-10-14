@@ -7,7 +7,7 @@ import com.bilgeadam.dto.request.UpdateInterviewRequestDto;
 import com.bilgeadam.dto.response.CreateInterviewResponseDto;
 import com.bilgeadam.dto.response.DeleteInterviewResponseDto;
 import com.bilgeadam.dto.response.UpdateInterviewResponseDto;
-import com.bilgeadam.exceptions.AssignmentException;
+import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.InterviewServiceException;
 import com.bilgeadam.mapper.IInterviewMapper;
@@ -37,13 +37,13 @@ public class InterviewService extends ServiceManager<Interview, String> {
     public CreateInterviewResponseDto createInterview(CreateInterviewRequestDto dto) {
         //if check ile böyle bir student var mı eklenebilir user micro service oluşturulduktan sonra.
         if(dto.getInterviewType().isBlank())
-            throw  new InterviewServiceException(ErrorType.BAD_REQUEST,"Mülakat Türü Boş bırakılamaz");
+            throw  new CardServiceException(ErrorType.INTERVIEW_TYPE_EMPTY);
         if (dto.getScore()<0 || dto.getScore()>100)
-            throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Puan 0 ile 100 arasında olmak zorundadır...");
+            throw new CardServiceException(ErrorType.INTERVIEW_SCORE_NUMBER_RANGE);
         if(dto.getDescription().isBlank())
-            throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Görüş boş bırakılamaz...");
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_EMPTY);
         if(dto.getScore()==null)
-            throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Puan boş bırakılamaz...");
+            throw new InterviewServiceException(ErrorType.POINT_EMPTY);
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());
         Interview interview = IInterviewMapper.INSTANCE.toInterview(dto);
         interview.setStudentId(studentId.get());
@@ -54,16 +54,16 @@ public class InterviewService extends ServiceManager<Interview, String> {
     public UpdateInterviewResponseDto updateInterview(UpdateInterviewRequestDto dto) {
         Optional<Interview> interview = interviewRepository.findById(dto.getInterviewId());
         if (interview.isEmpty()) {
-            throw new InterviewServiceException(ErrorType.INTERVIEW_NOT_FOUND);
+            throw new CardServiceException(ErrorType.INTERVIEW_NOT_FOUND);
         }
         if(dto.getDescription().isBlank())
-            throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Görüş boş bırakılamaz...");
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_EMPTY);
         if(dto.getScore()==null)
-            throw new InterviewServiceException(ErrorType.BAD_REQUEST,"Puan boş bırakılamaz...");
+            throw new CardServiceException(ErrorType.POINT_EMPTY);
         if(dto.getInterviewType().isBlank())
-            throw  new InterviewServiceException(ErrorType.BAD_REQUEST,"Mülakat Türü Boş bırakılamaz");
+            throw  new CardServiceException(ErrorType.INTERVIEW_TYPE_EMPTY);
         if(dto.getName().isBlank())
-            throw  new InterviewServiceException(ErrorType.BAD_REQUEST,"Mülakat Adı Boş bırakılamaz");
+            throw  new CardServiceException(ErrorType.INTERVIEW_NAME_EMPTY);
         Interview toUpdateInterview = interview.get();
         toUpdateInterview.setDescription(dto.getDescription());
         toUpdateInterview.setName(dto.getName());
@@ -76,7 +76,7 @@ public class InterviewService extends ServiceManager<Interview, String> {
     public DeleteInterviewResponseDto deleteInterview(String id) {
         Optional<Interview> interview = interviewRepository.findById(id);
         if (interview.isEmpty()) {
-            throw new InterviewServiceException(ErrorType.INTERVIEW_NOT_FOUND);
+            throw new CardServiceException(ErrorType.INTERVIEW_NOT_FOUND);
         }
         interview.get().setEStatus(EStatus.DELETED);
         update(interview.get());
