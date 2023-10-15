@@ -3,6 +3,7 @@ package com.bilgeadam.controller;
 import com.bilgeadam.dto.response.CardResponseDto;
 import com.bilgeadam.repository.entity.Card;
 import com.bilgeadam.service.CardService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +18,17 @@ import static com.bilgeadam.constants.ApiUrls.*;
 public class CardController {
     private final CardService cardService;
 
+    @Operation(summary = "Öğrenciye ait kartı alma işlemi",
+            description = "Belirtilen token kullanılarak öğrenciye ait kartı alır.")
     @CrossOrigin("*")
     @GetMapping("/get-card/{token}")
     public ResponseEntity<CardResponseDto> getCardByStudent(@PathVariable String token){
         return ResponseEntity.ok(cardService.getCardByStudent(token));
     }
 
+
+    @Operation(summary = "Öğrenci için kart parametrelerini alma işlemi",
+            description = "Belirtilen token kullanılarak öğrenci için kart parametrelerini alır.")
     @CrossOrigin("*")
     @GetMapping("/get-card-parameter-for-student/{token}")
     public ResponseEntity<Map<String,Integer>> getCardParameterForStudent(@PathVariable String token) {
