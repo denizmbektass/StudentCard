@@ -4,6 +4,7 @@ import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.DeleteAssessmentResponseDto;
 import com.bilgeadam.dto.response.TrainerAssessmentSaveResponseDto;
 import com.bilgeadam.dto.response.UpdateTrainerAssessmentResponseDto;
+import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.TrainerAssessmentException;
 import com.bilgeadam.manager.IUserManager;
@@ -44,11 +45,11 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         System.out.println(dto);
         System.out.println(1);
         if (dto.getScore()<0 || dto.getScore()>10)
-            throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Puan 1 ile 10 arasında olmak zorundadır...");
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
         if(dto.getDescription().isEmpty())
-            throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Görüş boş bırakılamaz...");
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_EMPTY);
         if(dto.getScore()==null)
-            throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Puan boş bırakılamaz...");
+            throw new CardServiceException(ErrorType.POINT_EMPTY);
         System.out.println(2);
         Optional<String> studentId= jwtTokenManager.getIdFromToken(dto.getStudenToken());
         System.out.println(studentId);
@@ -99,11 +100,11 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
     public UpdateTrainerAssessmentResponseDto updateTrainerAssessment(UpdateTrainerAssessmentRequestDto dto){
         Optional<TrainerAssessment> trainerAssessment=iTrainerAssesmentRepository.findById(dto.getAssessmentId());
         if(trainerAssessment.isEmpty())
-            throw new TrainerAssessmentException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
         if(dto.getDescription().isEmpty())
-            throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Görüş boş bırakılamaz...");
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_EMPTY);
         if(dto.getScore()==null)
-            throw new TrainerAssessmentException(ErrorType.BAD_REQUEST,"Puan boş bırakılamaz...");
+            throw new CardServiceException(ErrorType.POINT_EMPTY);
         TrainerAssessment trainerAssessmentUpdate = trainerAssessment.get();
         trainerAssessmentUpdate.setScore(dto.getScore());
         trainerAssessmentUpdate.setDescription(dto.getDescription());
@@ -118,7 +119,7 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
     public DeleteAssessmentResponseDto deleteTrainerAssessment(String id){
         Optional<TrainerAssessment> trainerAssessment=iTrainerAssesmentRepository.findById(id);
         if(trainerAssessment.isEmpty())
-            throw new TrainerAssessmentException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
         trainerAssessment.get().setEStatus(EStatus.DELETED);
         update(trainerAssessment.get());
         return ITrainerAssesmentMapper.INSTANCE.toDeleteTrainerAssesment(trainerAssessment.get());
@@ -142,7 +143,7 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
                     .filter(x -> x.getEStatus().equals(EStatus.ACTIVE))
                     .collect(Collectors.toList());
             if(sure == null)
-                throw new TrainerAssessmentException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND, "Öğrencinin eğitim süresi değeri null olamaz.");
+                throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
             if (sure >= 1 && sure < 50) {
                 List<TrainerAssessment> masterAssessmentList = gorusListesi.stream().filter(x ->
                                 x.getAssessmentName().equals("1. Master Görüş"))

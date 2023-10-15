@@ -8,6 +8,7 @@ import com.bilgeadam.dto.response.ExamResponseDto;
 import com.bilgeadam.dto.response.MessageResponse;
 
 import com.bilgeadam.exceptions.AssignmentException;
+import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.ExamException;
 import com.bilgeadam.mapper.IExamMapper;
@@ -40,13 +41,13 @@ public class ExamService extends ServiceManager<Exam,String> {
 
     public MessageResponse createExam (CreateExamRequestDto dto){
         if(dto.getScore()>100||dto.getScore()<0)
-            throw new ExamException(ErrorType.BAD_REQUEST,"Sınav notu 100'den büyük veya 0'dan küçük olamaz...");
+            throw new CardServiceException(ErrorType.EXAM_NUMBER_RANGE);
        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
        if(studentId.isEmpty())
-           throw new ExamException(ErrorType.INVALID_TOKEN);
+           throw new CardServiceException(ErrorType.INVALID_TOKEN);
        List<String> groupNameList = jwtTokenManager.getGroupNameFromToken(dto.getStudentToken());
         if(groupNameList.isEmpty())
-            throw new ExamException(ErrorType.INVALID_TOKEN);
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
         Exam exam = examMapper.toExam(dto);
         exam.setStudentId(studentId.get());
         exam.setGroupNames(groupNameList);
@@ -57,7 +58,7 @@ public class ExamService extends ServiceManager<Exam,String> {
     public List<ExamResponseDto> findAllExams(String token){
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
         if(studentId.isEmpty())
-        { throw new ExamException(ErrorType.INVALID_TOKEN);}
+        { throw new CardServiceException(ErrorType.INVALID_TOKEN);}
 
         return examRepository.findAllByStudentId(studentId.get()).stream().map(exam ->
             examMapper.toExamResponseDto(exam)).toList();
@@ -69,7 +70,7 @@ public class ExamService extends ServiceManager<Exam,String> {
     public MessageResponse updateExam(UpdateExamRequestDto dto){
       Optional<Exam> exam = findById(dto.getExamId());
         if(exam.isEmpty())
-            throw new ExamException(ErrorType.EXAM_NOT_FOUND);
+            throw new CardServiceException(ErrorType.EXAM_NOT_FOUND);
         Exam update = exam.get();
         update.setStatement(dto.getStatement());
         update.setTitle(dto.getTitle());
@@ -88,7 +89,7 @@ public class ExamService extends ServiceManager<Exam,String> {
     public Boolean deleteExam(String examId) {
         Optional<Exam> exam = findById(examId);
         if (exam.isEmpty())
-            throw new ExamException(ErrorType.EXAM_NOT_FOUND);
+            throw new CardServiceException(ErrorType.EXAM_NOT_FOUND);
         deleteById(examId);
         return true;
     }
@@ -96,7 +97,7 @@ public class ExamService extends ServiceManager<Exam,String> {
     public Set<String> getAllTitles(String token) {
         List<String> groupNames = jwtTokenManager.getGroupNameFromToken(token);
         if(groupNames.isEmpty())
-            throw new ExamException(ErrorType.INVALID_TOKEN);
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
         return findAll().stream().filter(x -> x.getGroupNames().stream().anyMatch(groupNames::contains))
                 .map(y-> y.getTitle()).collect(Collectors.toSet());
 

@@ -3,6 +3,7 @@ package com.bilgeadam.service;
 import com.bilgeadam.dto.request.AddAbsenceRequestDto;
 import com.bilgeadam.dto.response.ShowUserAbsenceInformationResponseDto;
 import com.bilgeadam.exceptions.AbsenceException;
+import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.mapper.IAbsenceMapper;
 import com.bilgeadam.repository.IAbsenceRepository;
@@ -31,11 +32,11 @@ public class AbsenceService extends ServiceManager<Absence,String> {
 
     public ShowUserAbsenceInformationResponseDto showUserAbsenceInformation(String token){
         String userId = jwtTokenManager.getIdFromToken(token).orElseThrow(()->{
-            throw new AbsenceException(ErrorType.USER_NOT_EXIST);
+            throw new CardServiceException(ErrorType.USER_NOT_EXIST);
         });
         List<Absence> absenceList = absenceRepository.findByUserId(userId);
         if(absenceList.isEmpty())
-            throw new AbsenceException(ErrorType.ABSENCE_NOT_FOUND);
+            throw new CardServiceException(ErrorType.ABSENCE_NOT_FOUND);
         byte sumOfAbsencePercentageGroup1 = 0;
         byte sumOfAbsencePercentageGroup2 = 0;
         for(Absence absence : absenceList){

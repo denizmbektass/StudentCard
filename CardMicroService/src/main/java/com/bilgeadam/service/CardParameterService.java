@@ -49,7 +49,7 @@ public class CardParameterService extends ServiceManager<CardParameter,String> {
         GetDefaultTranscriptInfoByNameResponseDto responseDto;
         if(cardParameter.isEmpty()){
             TranskriptDefault transkriptDefault = transkriptDefaultService.findOptionalByMainGroupName(dto.getMainGroupName()).orElseThrow(()->{
-                throw new RuntimeException("Ana Grup Transkript bulunamadı.");
+                throw new CardServiceException(ErrorType.TRANSCRIPT_NOT_FOUND);
             });
             Map<String,Integer> parameters = new HashMap<>();
             parameters.put("Assignment",transkriptDefault.getHomeworkPercentage());

@@ -5,6 +5,7 @@ import com.bilgeadam.dto.request.TranscriptInfo;
 import com.bilgeadam.dto.response.CardResponseDto;
 import com.bilgeadam.dto.response.ShowUserAbsenceInformationResponseDto;
 import com.bilgeadam.exceptions.AssignmentException;
+import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.manager.IUserManager;
 import com.bilgeadam.repository.ICardRepository;
@@ -52,10 +53,10 @@ public class CardService extends ServiceManager<Card,String> {
     public CardResponseDto getCardByStudent(String token) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
         if(studentId.isEmpty())
-            throw new AssignmentException(ErrorType.INVALID_TOKEN);
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
         List<String> groupNames = jwtTokenManager.getGroupNameFromToken(token);
         if(groupNames.isEmpty())
-            throw new AssignmentException(ErrorType.INVALID_TOKEN);
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
         Map<String,Integer> parameters = cardParameterService.getCardParameterByGroupName(groupNames).getParameters();
         Card card = Card.builder().studentId(studentId.get()).build();
         Integer assignmentNote = assignmentService.getAssignmentNote(studentId.get());
@@ -90,7 +91,7 @@ public class CardService extends ServiceManager<Card,String> {
     public Map<String,Integer> getCardParameterForStudent(String token) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
         if(studentId.isEmpty())
-            throw new AssignmentException(ErrorType.INVALID_TOKEN);
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
         List<String> groupNameForStudent = userManager.findGroupNameForStudent(studentId.get()).getBody();
         CardParameter cardParameter = cardParameterService.getCardParameterByGroupName(groupNameForStudent);
         Map<String, Integer> parameters = cardParameter.getParameters();

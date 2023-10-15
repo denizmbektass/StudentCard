@@ -141,7 +141,7 @@ public class AuthService extends ServiceManager<Auth, String> {
      */
     public GetAuthInfoForChangePassword getAuthInfoForChangePassword(String userId) {
         Optional<Auth> optionalAuth= iAuthRepository.findByUserId(userId);
-        if (optionalAuth.isEmpty()) throw new RuntimeException("Böyle bir kullanıcı bulunmamaktadır.");
+        if (optionalAuth.isEmpty()) throw new AuthServiceException(ErrorType.USER_NOT_FOUND);
         return  GetAuthInfoForChangePassword.builder().password(optionalAuth.get().getPassword()).userId(userId).build();
     }
 

@@ -5,6 +5,7 @@ import com.bilgeadam.dto.request.FindByStudentIdRequestDto;
 import com.bilgeadam.dto.request.UpdateAssignmentRequestDto;
 import com.bilgeadam.dto.response.AssignmentResponseDto;
 import com.bilgeadam.exceptions.AssignmentException;
+import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.mapper.IAssignmentMapper;
 import com.bilgeadam.repository.IAssignmentRepository;
@@ -33,13 +34,13 @@ public class AssignmentService extends ServiceManager<Assignment,String> {
 
     public Boolean createAssignment(AssignmentRequestDto dto){
         if(dto.getScore()>100||dto.getScore()<0)
-            throw new AssignmentException(ErrorType.BAD_REQUEST,"Ödev notu 100'den büyük veya 0'dan küçük olamaz...");
+            throw new CardServiceException(ErrorType.HW_NUMBER_RANGE);
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
         if(studentId.isEmpty())
-            throw new AssignmentException(ErrorType.INVALID_TOKEN);
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
         List<String> groupNames = jwtTokenManager.getGroupNameFromToken(dto.getStudentToken());
         if(groupNames.isEmpty())
-            throw new AssignmentException(ErrorType.INVALID_TOKEN);
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
         Assignment assignment = assignmentMapper.toAssignment(dto);
         assignment.setGroupNames(groupNames);
         assignment.setStudentId(studentId.get());
@@ -50,7 +51,7 @@ public class AssignmentService extends ServiceManager<Assignment,String> {
     public List<AssignmentResponseDto> findAllAssignments(String token) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
         if(studentId.isEmpty())
-            throw new AssignmentException(ErrorType.INVALID_TOKEN);
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
         return assignmentRepository.findAllByStudentId(studentId.get()).stream()
                 .map(assignment -> assignmentMapper.fromAssignment(assignment))
                 .toList();
@@ -59,7 +60,7 @@ public class AssignmentService extends ServiceManager<Assignment,String> {
     public Boolean updateAssignment(UpdateAssignmentRequestDto dto) {
         Optional<Assignment> assignment = findById(dto.getAssignmentId());
         if (assignment.isEmpty())
-            throw new AssignmentException(ErrorType.ASSIGNMENT_NOT_FOUND);
+            throw new CardServiceException(ErrorType.ASSIGNMENT_NOT_FOUND);
         Assignment toUpdate = assignment.get();
         toUpdate.setTitle(dto.getTitle());
         toUpdate.setScore(dto.getScore());
@@ -76,7 +77,7 @@ public class AssignmentService extends ServiceManager<Assignment,String> {
     public Boolean deleteAssignment(String assignmentId) {
         Optional<Assignment> assignment = findById(assignmentId);
         if (assignment.isEmpty())
-            throw new AssignmentException(ErrorType.ASSIGNMENT_NOT_FOUND);
+            throw new CardServiceException(ErrorType.ASSIGNMENT_NOT_FOUND);
         deleteById(assignmentId);
         return true;
     }
@@ -84,7 +85,7 @@ public class AssignmentService extends ServiceManager<Assignment,String> {
     public Set<String> getAllTitles(String token) {
         List<String> groupNames = jwtTokenManager.getGroupNameFromToken(token);
         if(groupNames.isEmpty())
-            throw new AssignmentException(ErrorType.INVALID_TOKEN);
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
         return findAll().stream().filter(x -> x.getGroupNames().stream().anyMatch(groupNames::contains))
                 .map(y-> y.getTitle()).collect(Collectors.toSet());
     }

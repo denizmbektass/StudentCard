@@ -58,10 +58,10 @@ public class SecretKeyService extends ServiceManager<SecretKey,String> {
 
     public String generateTotpCode(String token) {
         String authId = jwtTokenManager.getIdFromToken(token).orElseThrow(() -> {
-            throw new RuntimeException("Token hatası");
+            throw new AuthServiceException(ErrorType.TOKEN_NOT_CREATED);
         });
         SecretKey secretKey = secretKeyRepository.findByAuthId(authId).orElseThrow(() -> {
-            throw new RuntimeException("Kullanıcı bulunamadı");
+            throw new AuthServiceException(ErrorType.USER_NOT_FOUND);
         });
         return CodeGenerator.getTOTPCode(secretKey.getSecretKey());
     }
@@ -69,7 +69,7 @@ public class SecretKeyService extends ServiceManager<SecretKey,String> {
     public String generateQRCode(String token)
             throws WriterException, IOException {
         String authId = jwtTokenManager.getIdFromToken(token).orElseThrow(() -> {
-            throw new RuntimeException("Token hatası");
+            throw new AuthServiceException(ErrorType.TOKEN_NOT_CREATED);
         });
         String barCodeData = "";
         String secretKey = "";
@@ -97,10 +97,10 @@ public class SecretKeyService extends ServiceManager<SecretKey,String> {
 
     public LoginResponseDto loginWithQrCode(LoginQrRequestDto dto){
         String authId = jwtTokenManager.getIdFromToken(dto.getToken()).orElseThrow(() -> {
-            throw new RuntimeException("Token hatası");
+            throw new AuthServiceException(ErrorType.TOKEN_NOT_CREATED);
         });
         SecretKey secretKey = secretKeyRepository.findByAuthId(authId).orElseThrow(()->{
-            throw new RuntimeException("Secret key bulunamdı");
+            throw new AuthServiceException(ErrorType.SECRET_KEY_NOT_FOUND);
         });
         String totpCode = CodeGenerator.getTOTPCode(secretKey.getSecretKey());
         System.out.println(totpCode);
@@ -117,7 +117,7 @@ public class SecretKeyService extends ServiceManager<SecretKey,String> {
             String authStatus = auth.getStatus().toString();
             return LoginResponseDto.builder().token(newToken.get()).message("Login Successfully").role(roles).status(authStatus).build();
         }else{
-            throw new RuntimeException("Girilen kod geçerli değil.");
+            throw new AuthServiceException(ErrorType.CODE_NO_VALID);
         }
 
     }
