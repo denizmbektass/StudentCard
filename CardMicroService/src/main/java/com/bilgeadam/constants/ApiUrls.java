@@ -28,6 +28,6 @@ public class ApiUrls {
     public static final String ABSENCE = "/absence";
     public static final String CARDPARAMETER = VERSION + "/card-parameter";
     public static final String AVERAGE = "/average-exam/{studentId}";
-
+    public static final String ASSIGNMENT_AVERAGE = "/get-assignment-average";
 
 }
