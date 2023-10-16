@@ -17,7 +17,7 @@ public class Absence extends BaseEntity {
     @Id
     private String absenceId;
     @Builder.Default
-    private static final byte hourOfAbsenceLimit = 66;
+    public static final byte HOUR_OF_ABSENCE_LIMIT = 66;
     private byte hourOfAbsence;
     private String userId;
     private String group;
