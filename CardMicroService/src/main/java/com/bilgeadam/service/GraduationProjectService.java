@@ -14,21 +14,19 @@ import java.util.Optional;
 
 @Service
 public class GraduationProjectService extends ServiceManager<GraduationProject,String> {
-    private final IGraduationProject iGraduationProject;
     private final JwtTokenManager jwtTokenManager;
     private final IGraduationProjectMapper iGraduationProjectMapper;
 
     public GraduationProjectService(IGraduationProject iGraduationProject, JwtTokenManager jwtTokenManager, IGraduationProjectMapper iGraduationProjectMapper) {
         super(iGraduationProject);
-        this.iGraduationProject = iGraduationProject;
         this.jwtTokenManager = jwtTokenManager;
         this.iGraduationProjectMapper = iGraduationProjectMapper;
     }
 
 
     public MessageResponse createGradutainProject(CreateGraduationProjectRequestDto dto) {
-        if((dto.getInterestLevel()>100||dto.getInterestLevel()<0) && (dto.getPresentation()>100||dto.getPresentation()<0) && (dto.getMeetingAttendance()>100 ||dto.getMeetingAttendance()>100) && (dto.getRetroScore()>100 ||dto.getRetroScore()<0) && (dto.getTeamworkCompatibility()>100 ||dto.getTeamworkCompatibility()<0))
-            throw new CardServiceException(ErrorType.EXAM_NUMBER_RANGE);
+        if((dto.getInterestLevel()>100||dto.getInterestLevel()<0) && (dto.getPresentation()>100||dto.getPresentation()<0) && (dto.getMeetingAttendance()>100 ||dto.getMeetingAttendance()<0) && (dto.getRetroScore()>100 ||dto.getRetroScore()<0) && (dto.getTeamworkCompatibility()>100 ||dto.getTeamworkCompatibility()<0))
+            throw new CardServiceException(ErrorType.GRADUATION_NUMBER_RANGE);
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
         if(studentId.isEmpty())
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
