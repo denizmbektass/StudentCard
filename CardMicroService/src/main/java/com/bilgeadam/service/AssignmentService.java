@@ -14,6 +14,7 @@ import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -88,5 +89,18 @@ public class AssignmentService extends ServiceManager<Assignment,String> {
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
         return findAll().stream().filter(x -> x.getGroupNames().stream().anyMatch(groupNames::contains))
                 .map(y-> y.getTitle()).collect(Collectors.toSet());
+    }
+
+    public Double getAssignmentAverage(String studentId){
+        List<Double> notes = new ArrayList<>();
+        notes.add(Double.valueOf(getAssignmentNote(studentId)));
+        if(!notes.isEmpty()){
+            double sumNotes = notes.stream().mapToDouble(note->note).sum();
+            double result;
+            result = sumNotes/notes.size();
+            return result;
+        }else{
+            return (double) 0;
+        }
     }
 }

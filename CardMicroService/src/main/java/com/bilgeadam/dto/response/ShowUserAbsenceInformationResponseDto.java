@@ -13,7 +13,7 @@ public class ShowUserAbsenceInformationResponseDto {
     private Double group1Percentage;
     private Double group2Percentage;
     private String groupName;
-    private byte group1AbsenceNumber;
-    private byte group2AbsenceNumber;
+    private int group1AbsenceNumber;
+    private int group2AbsenceNumber;
 
 }
