@@ -37,29 +37,29 @@ public class AbsenceService extends ServiceManager<Absence,String> {
         List<Absence> absenceList = absenceRepository.findByUserId(userId);
         if(absenceList.isEmpty())
             throw new CardServiceException(ErrorType.ABSENCE_NOT_FOUND);
-        byte sumOfAbsencePercentageGroup1 = 0;
-        byte sumOfAbsencePercentageGroup2 = 0;
+        int sumOfAbsenceHoursGroup1 = 0;
+        int sumOfAbsenceHoursGroup2 = 0;
+        int sumOfTotalCourseHoursGroup1 = 0;
+        int sumOfTotalCourseHoursGroup2 = 0;
         for(Absence absence : absenceList){
             if(absence.getGroup().equals("Group1")){
-                sumOfAbsencePercentageGroup1 += absence.getHourOfAbsence();
+                sumOfAbsenceHoursGroup1 += absence.getHourOfAbsence();
+                sumOfTotalCourseHoursGroup1 += absence.getTotalCourseHours();
             }else if(absence.getGroup().equals("Group2")){
-                sumOfAbsencePercentageGroup2 += absence.getHourOfAbsence();
+                sumOfAbsenceHoursGroup2 += absence.getHourOfAbsence();
+                sumOfTotalCourseHoursGroup2 += absence.getTotalCourseHours();
             }
         }
-        double absencePercentageGroup1 = 100 -((sumOfAbsencePercentageGroup1)*100 / absenceList.get(0).getHourOfAbsenceLimit()/2);
-        double absencePercentageGroup2 = 100 -((sumOfAbsencePercentageGroup2)*100 / absenceList.get(0).getHourOfAbsenceLimit()/2);
-        System.out.println("Group1: " + absencePercentageGroup1);
-        System.out.println("Group2: " + absencePercentageGroup2);
-        System.out.println("1.:"+sumOfAbsencePercentageGroup1);
-        System.out.println("2.:"+sumOfAbsencePercentageGroup2);
+        double absenceSuccessGroup1 = 100 *((double) (sumOfTotalCourseHoursGroup1 - sumOfAbsenceHoursGroup1) / sumOfTotalCourseHoursGroup1);
+        double absenceSuccessGroup2 = 100 *((double)(sumOfTotalCourseHoursGroup2 - sumOfAbsenceHoursGroup2) / sumOfTotalCourseHoursGroup2);
 
         String groupName = absenceList.get(0).getGroupName();
         return ShowUserAbsenceInformationResponseDto.builder()
-                .group1Percentage(absencePercentageGroup1)
-                .group2Percentage(absencePercentageGroup2)
+                .group1Percentage(absenceSuccessGroup1)
+                .group2Percentage(absenceSuccessGroup2)
                 .groupName(groupName)
-                .group1AbsenceNumber(sumOfAbsencePercentageGroup1)
-                .group2AbsenceNumber(sumOfAbsencePercentageGroup2)
+                .group1AbsenceNumber(sumOfAbsenceHoursGroup1)
+                .group2AbsenceNumber(sumOfAbsenceHoursGroup2)
                 .build();
     }
 

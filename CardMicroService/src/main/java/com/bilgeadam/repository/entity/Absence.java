@@ -17,10 +17,11 @@ public class Absence extends BaseEntity {
     @Id
     private String absenceId;
     @Builder.Default
-    private byte hourOfAbsenceLimit = 66;
+    public static final byte HOUR_OF_ABSENCE_LIMIT = 66;
     private byte hourOfAbsence;
     private String userId;
     private String group;
     private String groupName;
     private Long absenceDate;
+    private short totalCourseHours;
 }
