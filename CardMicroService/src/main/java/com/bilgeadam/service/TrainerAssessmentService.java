@@ -6,7 +6,6 @@ import com.bilgeadam.dto.response.TrainerAssessmentSaveResponseDto;
 import com.bilgeadam.dto.response.UpdateTrainerAssessmentResponseDto;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
-import com.bilgeadam.exceptions.TrainerAssessmentException;
 import com.bilgeadam.manager.IUserManager;
 import com.bilgeadam.mapper.ITrainerAssesmentMapper;
 import com.bilgeadam.rabbitmq.model.ReminderMailModel;
@@ -19,10 +18,11 @@ import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.bilgeadam.constants.ApiUrls.*;
 
 @Service
 public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,String> {
@@ -41,6 +41,16 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         this.userManager = userManager;
     }
 
+    public double calculateTrainerAssessmentScore(Long behaviorInClass,Long courseInterestLevel,Long cameraOpeningGrade,Long instructorGrade,Long dailyHomeworkGrade){
+        double additionOfBehaviorInClass = behaviorInClass * BEHAVIOR_IN_CLASS_COEFFICIENT;
+        double additionOfCourseInterestLevel = courseInterestLevel * COURSE_INTEREST_LEVEL_COEFFICIENT;
+        double additionOfCameraOpeningGrade = cameraOpeningGrade * CAMERA_OPENING_RATE_COEFFICIENT;
+        double additionOfInstructorGrade = instructorGrade * INSTRUCTOR_GRADE_RATE_COEFFICIENT;
+        double additionOfDailyHomeworkGrade = dailyHomeworkGrade * DAILY_HOMEWORK_RATE_COEFFICIENT;
+
+        double totalTrainerAssessmentScore = additionOfBehaviorInClass + additionOfCourseInterestLevel + additionOfCameraOpeningGrade + additionOfInstructorGrade + additionOfDailyHomeworkGrade;
+        return totalTrainerAssessmentScore;
+    }
     public TrainerAssessmentSaveResponseDto saveTrainerAssessment(TrainerAssessmentSaveRequestDto dto){
         System.out.println(dto);
         System.out.println(1);
@@ -114,7 +124,7 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
     }
     public Integer getTrainerAssessmentNote(String studentId){
         return (int) Math.floor(iTrainerAssesmentRepository.findAllByStudentId(studentId).stream()
-                .mapToLong(x->x.getScore()).average().orElse(0));
+                .mapToLong(x-> (long) x.getScore()).average().orElse(0));
     }
     public DeleteAssessmentResponseDto deleteTrainerAssessment(String id){
         Optional<TrainerAssessment> trainerAssessment=iTrainerAssesmentRepository.findById(id);

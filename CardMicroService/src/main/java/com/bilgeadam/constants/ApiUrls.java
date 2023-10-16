@@ -29,5 +29,11 @@ public class ApiUrls {
     public static final String CARDPARAMETER = VERSION + "/card-parameter";
     public static final String AVERAGE = "/average-exam/{studentId}";
 
+    public static final double BEHAVIOR_IN_CLASS_COEFFICIENT = 0.20;
+    public static final double COURSE_INTEREST_LEVEL_COEFFICIENT = 0.20;
+    public static final double CAMERA_OPENING_RATE_COEFFICIENT = 0.10;
+    public static final double INSTRUCTOR_GRADE_RATE_COEFFICIENT = 0.35;
+    public static final double DAILY_HOMEWORK_RATE_COEFFICIENT = 0.15;
+
 
 }
