@@ -1,8 +1,11 @@
 package com.bilgeadam.controller;
 
+import com.bilgeadam.dto.request.AverageProjectBehaviorRequestDto;
 import com.bilgeadam.dto.request.CreatProjecrBehaviorScoreRequestDto;
 import com.bilgeadam.dto.request.UpdateExamRequestDto;
 import com.bilgeadam.dto.request.UpdateProjectBehaviorRequestDto;
+import com.bilgeadam.dto.response.AverageExamResponseDto;
+import com.bilgeadam.dto.response.AverageProjectBehaviorResponseDto;
 import com.bilgeadam.dto.response.CreateProjectBehaviorScoreResponseDto;
 import com.bilgeadam.dto.response.MessageResponse;
 import com.bilgeadam.repository.entity.ProjectBehavior;
@@ -41,5 +44,12 @@ public class ProjectBehaviorController {
     @CrossOrigin("*")
     public ResponseEntity<Boolean> deleteProjectBehavior(@PathVariable String projectBehaviorId){
         return ResponseEntity.ok(projectBehaviorService.deleteProjectBehavior(projectBehaviorId));
+    }
+    @Operation(summary = "Proje davranış puanları için ortalama hesaplama işlemi",
+            description = "Belirtilen proje davranış kimliği kullanılarak projelerdeki davranış için ortalama hesaplar.")
+    @GetMapping(AVERAGE)
+    @CrossOrigin("*")
+    public ResponseEntity<AverageProjectBehaviorResponseDto> getAverageProjectBehavior(@PathVariable AverageProjectBehaviorRequestDto dto){
+        return ResponseEntity.ok(projectBehaviorService.averageProjectBehavior(dto));
     }
 }

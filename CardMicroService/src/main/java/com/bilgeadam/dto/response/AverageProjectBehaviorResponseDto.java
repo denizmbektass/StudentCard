@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class AvarageProjectBehaviorResponseDto {
+public class AverageProjectBehaviorResponseDto {
 
-    String studentId;
+    String projectBehaviortId;
     double totalScore;
 
 }

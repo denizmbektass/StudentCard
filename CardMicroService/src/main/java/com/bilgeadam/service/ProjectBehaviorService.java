@@ -1,19 +1,18 @@
 package com.bilgeadam.service;
 
+import com.bilgeadam.dto.request.AverageProjectBehaviorRequestDto;
 import com.bilgeadam.dto.request.CreatProjecrBehaviorScoreRequestDto;
 import com.bilgeadam.dto.request.UpdateProjectBehaviorRequestDto;
-import com.bilgeadam.dto.response.AvarageProjectBehaviorResponseDto;
+import com.bilgeadam.dto.response.AverageProjectBehaviorResponseDto;
 import com.bilgeadam.dto.response.CreateProjectBehaviorScoreResponseDto;
 import com.bilgeadam.dto.response.MessageResponse;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.mapper.IProjectBehaviorMapper;
-import com.bilgeadam.mapper.IProjectMapper;
 import com.bilgeadam.repository.IProjectBehaviorRepository;
 import com.bilgeadam.repository.entity.ProjectBehavior;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
-import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -73,5 +72,14 @@ public class ProjectBehaviorService extends ServiceManager<ProjectBehavior, Stri
         return true;
     }
 
+    public AverageProjectBehaviorResponseDto averageProjectBehavior(AverageProjectBehaviorRequestDto dto) {
+        List<ProjectBehavior> projectBehaviors = iProjectBehaviorRepository.findAllByProjectBehaviorId(dto.getProjectBehaviorId());
+        if (projectBehaviors.isEmpty())
+            return new AverageProjectBehaviorResponseDto(dto.getProjectBehaviorId(),0.0);
 
+        double totalScore= (dto.getRapportScore()*0.25) + (dto.getInsterestScore()*0.25) +
+        (dto.getPresentationScore()*0.25) + (dto.getRetroScore()*0.25);
+
+        return new AverageProjectBehaviorResponseDto(dto.getProjectBehaviorId(), totalScore);
+    }
 }
