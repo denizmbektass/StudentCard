@@ -1,6 +1,7 @@
 package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.response.CardResponseDto;
+import com.bilgeadam.dto.response.TranscriptResponseDto;
 import com.bilgeadam.repository.entity.Card;
 import com.bilgeadam.service.CardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,4 +35,10 @@ public class CardController {
     public ResponseEntity<Map<String,Integer>> getCardParameterForStudent(@PathVariable String token) {
         return ResponseEntity.ok(cardService.getCardParameterForStudent(token));
     }
+    @CrossOrigin("*")
+    @GetMapping("/get-transcript/{token}")
+    public ResponseEntity<TranscriptResponseDto> getTranscriptByStudent(@PathVariable String token) {
+        return ResponseEntity.ok(cardService.getTranscriptByStudent(token));
+    }
+
 }

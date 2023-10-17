@@ -17,4 +17,5 @@ public class TranscriptInfo {
     private String assistantTrainer;
     private Date startDate;
     private Date endDate;
+    private String group;
 }
