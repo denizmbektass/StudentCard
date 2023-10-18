@@ -3,6 +3,10 @@ package com.bilgeadam.service;
 import com.bilgeadam.dto.request.CreatProjecrBehaviorScoreRequestDto;
 import com.bilgeadam.dto.request.UpdateProjectBehaviorRequestDto;
 import com.bilgeadam.dto.response.AvarageProjectBehaviorResponseDto;
+import com.bilgeadam.dto.request.AverageProjectBehaviorRequestDto;
+import com.bilgeadam.dto.request.CreatProjecrBehaviorScoreRequestDto;
+import com.bilgeadam.dto.request.UpdateProjectBehaviorRequestDto;
+import com.bilgeadam.dto.response.AverageProjectBehaviorResponseDto;
 import com.bilgeadam.dto.response.CreateProjectBehaviorScoreResponseDto;
 import com.bilgeadam.dto.response.MessageResponse;
 import com.bilgeadam.exceptions.CardServiceException;
@@ -73,5 +77,14 @@ public class ProjectBehaviorService extends ServiceManager<ProjectBehavior, Stri
         return true;
     }
 
+    public AverageProjectBehaviorResponseDto averageProjectBehavior(AverageProjectBehaviorRequestDto dto) {
+        List<ProjectBehavior> projectBehaviors = iProjectBehaviorRepository.findAllByProjectBehaviorId(dto.getProjectBehaviorId());
+        if (projectBehaviors.isEmpty())
+            return new AverageProjectBehaviorResponseDto(dto.getProjectBehaviorId(),0.0);
 
+        double totalScore= (dto.getRapportScore()*0.25) + (dto.getInsterestScore()*0.25) +
+        (dto.getPresentationScore()*0.25) + (dto.getRetroScore()*0.25);
+
+        return new AverageProjectBehaviorResponseDto(dto.getProjectBehaviorId(), totalScore);
+    }
 }

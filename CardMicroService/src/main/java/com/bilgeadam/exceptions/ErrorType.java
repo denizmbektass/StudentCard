@@ -59,7 +59,7 @@ public enum ErrorType {
     GRADUATION_NUMBER_RANGE(9022,"Girilen notlar '0' ile '100' arasında olmak zorundadır.",HttpStatus.BAD_REQUEST),
     BEHAVIOR_NUMBER_RANGE(9023,"Davranış puanı '0' ile '100' arasında olmak zorundadır", HttpStatus.BAD_REQUEST),
     BEHAVIOR_POINT_EMPTY(9024,"Davranış puanı boş bırakılamaz", HttpStatus.BAD_REQUEST),
-    BEHAVIOR_NOT_FOUND(9025, "Proje bulunamadı", HttpStatus.BAD_REQUEST)
+    BEHAVIOR_NOT_FOUND(9025, "Proje bulunamadı", HttpStatus.BAD_REQUEST),
 
     ;
 
