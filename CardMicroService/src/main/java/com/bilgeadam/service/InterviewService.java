@@ -6,6 +6,7 @@ import com.bilgeadam.dto.request.TokenRequestDto;
 import com.bilgeadam.dto.request.UpdateInterviewRequestDto;
 import com.bilgeadam.dto.response.CreateInterviewResponseDto;
 import com.bilgeadam.dto.response.DeleteInterviewResponseDto;
+import com.bilgeadam.dto.response.InterviewForTranscriptResponseDto;
 import com.bilgeadam.dto.response.UpdateInterviewResponseDto;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
@@ -18,6 +19,7 @@ import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -90,5 +92,16 @@ public class InterviewService extends ServiceManager<Interview, String> {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());
         return findAll().stream().filter(x->x.getEStatus()==EStatus.ACTIVE && x.getStudentId().equals(studentId.get()))
                 .collect(Collectors.toList());
+    }
+    public List<InterviewForTranscriptResponseDto> findAllInterviewsDtos(String token) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
+        List<Interview> interviews = findAll().stream().filter(x->x.getEStatus()==EStatus.ACTIVE && x.getStudentId().equals(studentId.get()))
+                .collect(Collectors.toList());
+        List<InterviewForTranscriptResponseDto> interviewForTranscriptResponseDtos = new ArrayList<>();
+        interviews.forEach(x->{
+            InterviewForTranscriptResponseDto dto = IInterviewMapper.INSTANCE.toInterviewForTranscriptResponseDto(x);
+            interviewForTranscriptResponseDtos.add(dto);
+        });
+        return interviewForTranscriptResponseDtos;
     }
 }
