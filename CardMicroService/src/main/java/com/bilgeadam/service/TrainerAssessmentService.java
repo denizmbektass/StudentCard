@@ -60,11 +60,11 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
     public TrainerAssessmentSaveResponseDto saveTrainerAssessment(TrainerAssessmentSaveRequestDto dto){
         System.out.println(dto);
         System.out.println(1);
-        if (dto.getScore()<0 || dto.getScore()>10)
+        if (dto.getTotalTrainerAssessmentScore()<0 || dto.getTotalTrainerAssessmentScore()>10)
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
         if(dto.getDescription().isEmpty())
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_EMPTY);
-        if(dto.getScore()== 0.0)
+        if(dto.getTotalTrainerAssessmentScore()== 0.0)
             throw new CardServiceException(ErrorType.POINT_EMPTY);
         System.out.println(2);
         Optional<String> studentId= jwtTokenManager.getIdFromToken(dto.getStudentToken());

@@ -17,7 +17,6 @@ public class TrainerAssessmentSaveRequestDto {
     private double cameraOpeningGrade;
     private double instructorGrade;
     private double dailyHomeworkGrade;
-    private double totalTrainerAssessmentScore;
     private String description;
     private String studentToken;
     private String token;
