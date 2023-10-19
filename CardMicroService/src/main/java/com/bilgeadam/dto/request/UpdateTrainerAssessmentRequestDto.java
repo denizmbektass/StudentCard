@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateTrainerAssessmentRequestDto {
     private String assessmentId;
-    private Long score;
+    private double totalTrainerAssessmentScore;
     private String description;
 }

@@ -2,9 +2,11 @@ package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.TokenRequestDto;
 import com.bilgeadam.dto.request.TrainerAssessmentSaveRequestDto;
+import com.bilgeadam.dto.request.TrainerAssessmentScoreCalculateRequestDto;
 import com.bilgeadam.dto.request.UpdateTrainerAssessmentRequestDto;
 import com.bilgeadam.dto.response.DeleteAssessmentResponseDto;
 import com.bilgeadam.dto.response.TrainerAssessmentSaveResponseDto;
+import com.bilgeadam.dto.response.TrainerAssessmentScoreCalculateResponseDto;
 import com.bilgeadam.dto.response.UpdateTrainerAssessmentResponseDto;
 import com.bilgeadam.repository.entity.TrainerAssessment;
 import com.bilgeadam.service.TrainerAssessmentService;
@@ -24,6 +26,14 @@ public class TrainerAssessmentController {
 
     private final TrainerAssessmentService trainerAssessmentService;
 
+    @Operation(summary = "Eğitmen değerlendirme puanını hesaplama işlemi",
+            description = "Belirtilen eğitmen değerlendirme puanı hesaplama isteği DTO'su kullanılarak bir eğitmen değerlendirme puanını hesaplar.")
+    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
+    @PostMapping(TRAINER_ASSESSMENT)
+    @CrossOrigin("*")
+    public ResponseEntity<TrainerAssessmentScoreCalculateResponseDto> calculateTotalTrainerAssessmentScore(@RequestBody TrainerAssessmentScoreCalculateRequestDto dto){
+        return ResponseEntity.ok(trainerAssessmentService.calculateTrainerAssessmentScore(dto));
+    }
     @Operation(summary = "Eğitmen değerlendirme kaydetme işlemi",
             description = "Belirtilen eğitmen değerlendirme kaydetme isteği DTO'su kullanılarak bir eğitmen değerlendirmesini kaydeder.")
     //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")

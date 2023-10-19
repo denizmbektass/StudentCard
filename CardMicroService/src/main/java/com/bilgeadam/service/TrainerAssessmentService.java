@@ -3,11 +3,13 @@ package com.bilgeadam.service;
 import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.DeleteAssessmentResponseDto;
 import com.bilgeadam.dto.response.TrainerAssessmentSaveResponseDto;
+import com.bilgeadam.dto.response.TrainerAssessmentScoreCalculateResponseDto;
 import com.bilgeadam.dto.response.UpdateTrainerAssessmentResponseDto;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.manager.IUserManager;
-import com.bilgeadam.mapper.ITrainerAssesmentMapper;
+import com.bilgeadam.mapper.ITrainerAssessmentMapper;
+import com.bilgeadam.mapper.ITrainerAssessmentMapper;
 import com.bilgeadam.rabbitmq.model.ReminderMailModel;
 import com.bilgeadam.rabbitmq.producer.ReminderMailProducer;
 import com.bilgeadam.repository.ITrainerAssessmentRepository;
@@ -23,6 +25,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.bilgeadam.constants.ApiUrls.*;
+import static com.bilgeadam.repository.entity.TrainerAssessment.*;
 
 @Service
 public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,String> {
@@ -30,7 +33,6 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
     private final ITrainerAssessmentRepository iTrainerAssesmentRepository;
     private final JwtTokenManager jwtTokenManager;
     private final ReminderMailProducer reminderMailProducer;
-
     private final IUserManager userManager;
 
     public TrainerAssessmentService(ITrainerAssessmentRepository iTrainerAssessmentRepository, JwtTokenManager jwtTokenManager, ReminderMailProducer reminderMailProducer, IUserManager userManager){
@@ -41,15 +43,19 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
         this.userManager = userManager;
     }
 
-    public double calculateTrainerAssessmentScore(Long behaviorInClass,Long courseInterestLevel,Long cameraOpeningGrade,Long instructorGrade,Long dailyHomeworkGrade){
-        double additionOfBehaviorInClass = behaviorInClass * BEHAVIOR_IN_CLASS_COEFFICIENT;
-        double additionOfCourseInterestLevel = courseInterestLevel * COURSE_INTEREST_LEVEL_COEFFICIENT;
-        double additionOfCameraOpeningGrade = cameraOpeningGrade * CAMERA_OPENING_RATE_COEFFICIENT;
-        double additionOfInstructorGrade = instructorGrade * INSTRUCTOR_GRADE_RATE_COEFFICIENT;
-        double additionOfDailyHomeworkGrade = dailyHomeworkGrade * DAILY_HOMEWORK_RATE_COEFFICIENT;
+    public TrainerAssessmentScoreCalculateResponseDto calculateTrainerAssessmentScore(TrainerAssessmentScoreCalculateRequestDto dto){
 
+        double additionOfBehaviorInClass = BEHAVIOR_IN_CLASS_COEFFICIENT * dto.getBehaviorInClass();
+        double additionOfCourseInterestLevel = COURSE_INTEREST_LEVEL_COEFFICIENT * dto.getCourseInterestLevel();
+        double additionOfCameraOpeningGrade = CAMERA_OPENING_RATE_COEFFICIENT * dto.getCameraOpeningGrade();
+        double additionOfInstructorGrade = INSTRUCTOR_GRADE_RATE_COEFFICIENT * dto.getInstructorGrade();
+        double additionOfDailyHomeworkGrade = DAILY_HOMEWORK_RATE_COEFFICIENT * dto.getDailyHomeworkGrade();
         double totalTrainerAssessmentScore = additionOfBehaviorInClass + additionOfCourseInterestLevel + additionOfCameraOpeningGrade + additionOfInstructorGrade + additionOfDailyHomeworkGrade;
-        return totalTrainerAssessmentScore;
+        TrainerAssessmentScoreCalculateResponseDto trainerAssessmentScoreCalculateResponseDto = TrainerAssessmentScoreCalculateResponseDto.builder()
+                                                                                                .totalTrainerAssessmentScore(totalTrainerAssessmentScore)
+                                                                                                .assessmentName(dto.getAssessmentName())
+                                                                                                .build();
+        return trainerAssessmentScoreCalculateResponseDto;
     }
     public TrainerAssessmentSaveResponseDto saveTrainerAssessment(TrainerAssessmentSaveRequestDto dto){
         System.out.println(dto);
@@ -58,13 +64,13 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
         if(dto.getDescription().isEmpty())
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_EMPTY);
-        if(dto.getScore()==null)
+        if(dto.getScore()== 0.0)
             throw new CardServiceException(ErrorType.POINT_EMPTY);
         System.out.println(2);
-        Optional<String> studentId= jwtTokenManager.getIdFromToken(dto.getStudenToken());
+        Optional<String> studentId= jwtTokenManager.getIdFromToken(dto.getStudentToken());
         System.out.println(studentId);
         System.out.println(4);
-        TrainerAssessment trainerAssessment= ITrainerAssesmentMapper.INSTANCE.toTrainerAssesment(dto);
+        TrainerAssessment trainerAssessment= ITrainerAssessmentMapper.INSTANCE.toTrainerAssessment(dto);
         trainerAssessment.setStudentId(studentId.get());
         List<TrainerAssessment> trainerAssessmentList = iTrainerAssesmentRepository.findAllByStudentId(studentId.get());
         int mastergorussayisi = 1;
@@ -104,7 +110,7 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
             }
         }
         save(trainerAssessment);
-        return ITrainerAssesmentMapper.INSTANCE.toSaveTrainerAssesment(trainerAssessment);
+        return ITrainerAssessmentMapper.INSTANCE.toSaveTrainerAssessment(trainerAssessment);
     }
 
     public UpdateTrainerAssessmentResponseDto updateTrainerAssessment(UpdateTrainerAssessmentRequestDto dto){
@@ -113,18 +119,18 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
         if(dto.getDescription().isEmpty())
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_EMPTY);
-        if(dto.getScore()==null)
+        if(dto.getTotalTrainerAssessmentScore() == 0.0)
             throw new CardServiceException(ErrorType.POINT_EMPTY);
         TrainerAssessment trainerAssessmentUpdate = trainerAssessment.get();
-        trainerAssessmentUpdate.setScore(dto.getScore());
+        trainerAssessmentUpdate.setTotalTrainerAssessmentScore(dto.getTotalTrainerAssessmentScore());
         trainerAssessmentUpdate.setDescription(dto.getDescription());
         update(trainerAssessmentUpdate);
 
-        return ITrainerAssesmentMapper.INSTANCE.toUpdateTrainerAssessment(trainerAssessment.get());
+        return ITrainerAssessmentMapper.INSTANCE.toUpdateTrainerAssessment(trainerAssessment.get());
     }
     public Integer getTrainerAssessmentNote(String studentId){
         return (int) Math.floor(iTrainerAssesmentRepository.findAllByStudentId(studentId).stream()
-                .mapToLong(x-> (long) x.getScore()).average().orElse(0));
+                .mapToLong(x-> (long) x.getTotalTrainerAssessmentScore()).average().orElse(0));
     }
     public DeleteAssessmentResponseDto deleteTrainerAssessment(String id){
         Optional<TrainerAssessment> trainerAssessment=iTrainerAssesmentRepository.findById(id);
@@ -132,7 +138,7 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
         trainerAssessment.get().setEStatus(EStatus.DELETED);
         update(trainerAssessment.get());
-        return ITrainerAssesmentMapper.INSTANCE.toDeleteTrainerAssesment(trainerAssessment.get());
+        return ITrainerAssessmentMapper.INSTANCE.toDeleteTrainerAssessment(trainerAssessment.get());
     }
 
     public List<TrainerAssessment> findAllTrainerAssessment(TokenRequestDto dto) {
@@ -153,7 +159,8 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
                     .filter(x -> x.getEStatus().equals(EStatus.ACTIVE))
                     .collect(Collectors.toList());
             if(sure == null)
-                throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
+               // throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
+                continue; // TODO: Tekrar bakılması gerekiyor !!!
             if (sure >= 1 && sure < 50) {
                 List<TrainerAssessment> masterAssessmentList = gorusListesi.stream().filter(x ->
                                 x.getAssessmentName().equals("1. Master Görüş"))

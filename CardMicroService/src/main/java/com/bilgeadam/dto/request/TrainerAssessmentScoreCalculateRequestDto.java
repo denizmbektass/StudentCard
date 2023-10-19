@@ -1,16 +1,15 @@
-package com.bilgeadam.dto.response;
+package com.bilgeadam.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainerAssessmentSaveResponseDto {
+@Getter
+public class TrainerAssessmentScoreCalculateRequestDto {
 
+    private String trainerAssessmentId;
     private String assessmentName;
     private double behaviorInClass;
     private double courseInterestLevel;
@@ -19,4 +18,5 @@ public class TrainerAssessmentSaveResponseDto {
     private double dailyHomeworkGrade;
     private double totalTrainerAssessmentScore;
     private String description;
+
 }

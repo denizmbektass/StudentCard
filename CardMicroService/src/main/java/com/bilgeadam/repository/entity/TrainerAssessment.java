@@ -15,17 +15,27 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @Document
 public class TrainerAssessment extends BaseEntity{
+
+    public static double BEHAVIOR_IN_CLASS_COEFFICIENT = 0.20;
+    public static double COURSE_INTEREST_LEVEL_COEFFICIENT = 0.20;
+    public static double CAMERA_OPENING_RATE_COEFFICIENT = 0.10;
+    public static double INSTRUCTOR_GRADE_RATE_COEFFICIENT = 0.35;
+    public static double DAILY_HOMEWORK_RATE_COEFFICIENT = 0.15;
+
+
     @Id
     private String trainerAssessmentId;
+
     private String assessmentName;
     private double behaviorInClass;
     private double courseInterestLevel;
     private double cameraOpeningGrade;
     private double instructorGrade;
     private double dailyHomeworkGrade;
-    private double score;
+    private double totalTrainerAssessmentScore;
     private String description;
     private String studentId;
+
     @Builder.Default
     private EStatus eStatus=EStatus.ACTIVE;
 }

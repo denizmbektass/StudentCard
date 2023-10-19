@@ -2,6 +2,7 @@ package com.bilgeadam.mapper;
 
 import com.bilgeadam.dto.request.TrainerAssessmentSaveRequestDto;
 import com.bilgeadam.dto.response.DeleteAssessmentResponseDto;
+import com.bilgeadam.dto.response.TrainerAssessmentForTranscriptResponseDto;
 import com.bilgeadam.dto.response.TrainerAssessmentSaveResponseDto;
 import com.bilgeadam.dto.response.UpdateTrainerAssessmentResponseDto;
 import com.bilgeadam.repository.entity.TrainerAssessment;
@@ -10,14 +11,16 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
-public interface ITrainerAssesmentMapper {
+public interface ITrainerAssessmentMapper {
 
-    ITrainerAssesmentMapper INSTANCE = Mappers.getMapper(ITrainerAssesmentMapper.class);
+    ITrainerAssessmentMapper INSTANCE = Mappers.getMapper(ITrainerAssessmentMapper.class);
 
-    TrainerAssessment toTrainerAssesment(final TrainerAssessmentSaveRequestDto dto);
-    DeleteAssessmentResponseDto toDeleteTrainerAssesment(final TrainerAssessment trainerAssessment);
+    TrainerAssessment toTrainerAssessment(final TrainerAssessmentSaveRequestDto dto);
+    DeleteAssessmentResponseDto toDeleteTrainerAssessment(final TrainerAssessment trainerAssessment);
 
-    TrainerAssessmentSaveResponseDto toSaveTrainerAssesment(final TrainerAssessment trainerAssessment);
+    TrainerAssessmentSaveResponseDto toSaveTrainerAssessment(final TrainerAssessment trainerAssessment);
 
     UpdateTrainerAssessmentResponseDto toUpdateTrainerAssessment(final TrainerAssessment trainerAssessment);
+
+    TrainerAssessmentForTranscriptResponseDto toTrainerAssessmentForTranscriptResponseDto(final TrainerAssessment trainerAssessment);
 }

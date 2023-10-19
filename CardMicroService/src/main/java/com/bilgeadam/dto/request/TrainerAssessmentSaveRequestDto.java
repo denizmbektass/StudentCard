@@ -11,8 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TrainerAssessmentSaveRequestDto {
 
-    private Long score;
+    private String assessmentName;
+    private double behaviorInClass;
+    private double courseInterestLevel;
+    private double cameraOpeningGrade;
+    private double instructorGrade;
+    private double dailyHomeworkGrade;
+    private double totalTrainerAssessmentScore;
     private String description;
-    private String studenToken;
+    private String studentToken;
     private String token;
 }
