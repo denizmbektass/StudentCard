@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ProjectBehavior extends BaseEntity {
 
     @Id
-    private String projectBehoviorId;
+    private String projectBehaviorId;
 
     //private String projectId;
     private String studentId;
