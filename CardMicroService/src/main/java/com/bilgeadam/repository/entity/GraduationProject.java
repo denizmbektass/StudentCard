@@ -27,4 +27,10 @@ public class GraduationProject extends BaseEntity{
     private String studentId;
     @Builder.Default
     private EStatus eStatus=EStatus.ACTIVE;
+    private int meetingAttendancePercentage ;
+    private int teamworkCompatibilityPercentage ;
+    private int numberOfCompletedTasksPercentage ;
+    private int interestLevelPercentage ;
+    private int presentationPercentage ;
+    private int retroScorePercentage ;
 }

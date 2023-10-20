@@ -10,4 +10,5 @@ import org.mapstruct.factory.Mappers;
 public interface IGraduationProjectMapper {
     IGraduationProjectMapper INSTANCE = Mappers.getMapper(IGraduationProjectMapper.class);
     GraduationProject toGraduationProject(final CreateGraduationProjectRequestDto dto);
+
 }
