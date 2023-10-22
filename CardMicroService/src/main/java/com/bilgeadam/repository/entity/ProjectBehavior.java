@@ -1,6 +1,8 @@
 package com.bilgeadam.repository.entity;
 
+import com.bilgeadam.repository.enums.EStatus;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -16,13 +18,19 @@ public class ProjectBehavior extends BaseEntity {
 
     @Id
     private String projectBehaviorId;
-
-    //private String projectId;
+    private String projectId;
     private String studentId;
     private Long rapportScore;
-    private Long insterestScore;
+    private Long interestScore;
     private Long presentationScore;
     private Long retroScore;
-    private Long totalScore;
+    private Double averageScore;
+    @Builder.Default
+    private EStatus eStatus=EStatus.ACTIVE;
+    private Long rapportScorePercentage ;
+    private Long interestScorePercentage ;
+    private Long presentationScorePercentage ;
+    private Long retroScorePercentage ;
+
 
 }

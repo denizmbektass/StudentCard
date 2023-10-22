@@ -1,8 +1,9 @@
 package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.AverageProjectBehaviorRequestDto;
-import com.bilgeadam.dto.request.CreatProjecrBehaviorScoreRequestDto;
-import com.bilgeadam.dto.request.UpdateExamRequestDto;
+
+import com.bilgeadam.dto.request.CreatProjectBehaviorScoreRequestDto;
+
 import com.bilgeadam.dto.request.UpdateProjectBehaviorRequestDto;
 import com.bilgeadam.dto.response.AverageExamResponseDto;
 import com.bilgeadam.dto.response.AverageProjectBehaviorResponseDto;
@@ -27,7 +28,7 @@ public class ProjectBehaviorController {
             description = "Belirtilen öğrenci kimliği kullanılarak sınavlar için ortalama hesaplar.")
     @PostMapping(CREATE)
     @CrossOrigin("*")
-    public ResponseEntity<CreateProjectBehaviorScoreResponseDto> createProjectBehaviorScore(@RequestBody CreatProjecrBehaviorScoreRequestDto dto){
+    public ResponseEntity<CreateProjectBehaviorScoreResponseDto> createProjectBehaviorScore(@RequestBody CreatProjectBehaviorScoreRequestDto dto){
         return ResponseEntity.ok(projectBehaviorService.createProjectBehaviorScore(dto));
     }
 
@@ -35,7 +36,7 @@ public class ProjectBehaviorController {
             description = "Belirtilen öğrenci kimliği kullanılarak sınavlar için ortalama hesaplar.")
     @PutMapping(UPDATE)
     @CrossOrigin("*")
-    public ResponseEntity<MessageResponse> updateExam(@RequestBody UpdateProjectBehaviorRequestDto dto){
+    public ResponseEntity<MessageResponse> updateProjectBehavior(@RequestBody UpdateProjectBehaviorRequestDto dto){
         return  ResponseEntity.ok(projectBehaviorService.updateProjectBehavior(dto));
     }
     @Operation(summary = "Davranış puanı silme işlemi",
@@ -45,11 +46,5 @@ public class ProjectBehaviorController {
     public ResponseEntity<Boolean> deleteProjectBehavior(@PathVariable String projectBehaviorId){
         return ResponseEntity.ok(projectBehaviorService.deleteProjectBehavior(projectBehaviorId));
     }
-    @Operation(summary = "Proje davranış puanları için ortalama hesaplama işlemi",
-            description = "Belirtilen proje davranış kimliği kullanılarak projelerdeki davranış için ortalama hesaplar.")
-    @GetMapping(AVERAGE)
-    @CrossOrigin("*")
-    public ResponseEntity<AverageProjectBehaviorResponseDto> getAverageProjectBehavior(@PathVariable AverageProjectBehaviorRequestDto dto){
-        return ResponseEntity.ok(projectBehaviorService.averageProjectBehavior(dto));
-    }
+
 }

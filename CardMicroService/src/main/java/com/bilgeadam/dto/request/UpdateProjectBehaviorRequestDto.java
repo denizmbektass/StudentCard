@@ -13,10 +13,16 @@ import lombok.NoArgsConstructor;
 public class UpdateProjectBehaviorRequestDto {
 
 
+    private String studentToken;
     private String projectBehaviorId;
     private Long rapportScore;
-    private Long insterestScore;
+    private Long interestScore;
     private Long presentationScore;
     private Long retroScore;
+    private Long rapportScorePercentage ;
+    private Long interestScorePercentage ;
+    private Long presentationScorePercentage ;
+    private Long retroScorePercentage ;
+
 
 }
