@@ -60,7 +60,6 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
     public TrainerAssessmentSaveResponseDto saveTrainerAssessment(TrainerAssessmentSaveRequestDto dto){
         System.out.println(dto);
         System.out.println(1);
-        if (dto.getScore() < 0 || dto.getScore() > 10)
         if (dto.getBehaviorInClass()<0.0 || dto.getBehaviorInClass()>100.0)
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
         if(dto.getCourseInterestLevel()<0.0 || dto.getCourseInterestLevel()>100.0)
@@ -73,15 +72,11 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
         if (dto.getDescription().isEmpty())
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_EMPTY);
-        if (dto.getScore() == null)
-            throw new CardServiceException(ErrorType.POINT_EMPTY);
-        System.out.println(2);
+
         Optional<String> studentId= jwtTokenManager.getIdFromToken(dto.getStudentToken());
-        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudenToken());
         System.out.println(studentId);
         System.out.println(4);
         TrainerAssessment trainerAssessment= ITrainerAssessmentMapper.INSTANCE.toTrainerAssessment(dto);
-        TrainerAssessment trainerAssessment = ITrainerAssesmentMapper.INSTANCE.toTrainerAssesment(dto);
         trainerAssessment.setStudentId(studentId.get());
         trainerAssessment.setTotalTrainerAssessmentScore(calculateTrainerAssessmentScore(dto));
         List<TrainerAssessment> trainerAssessmentList = iTrainerAssesmentRepository.findAllByStudentId(studentId.get());
@@ -131,7 +126,6 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
         if (dto.getDescription().isEmpty())
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_EMPTY);
         if(dto.getTotalTrainerAssessmentScore() == 0.0)
-        if (dto.getScore() == null)
             throw new CardServiceException(ErrorType.POINT_EMPTY);
         TrainerAssessment trainerAssessmentUpdate = trainerAssessment.get();
         trainerAssessmentUpdate.setTotalTrainerAssessmentScore(dto.getTotalTrainerAssessmentScore());
@@ -144,7 +138,7 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
     public Integer getTrainerAssessmentNote(String studentId) {
         return (int) Math.floor(iTrainerAssesmentRepository.findAllByStudentId(studentId).stream()
                 .mapToLong(x-> (long) x.getTotalTrainerAssessmentScore()).average().orElse(0));
-                .mapToLong(x -> x.getScore()).average().orElse(0));
+
     }
 
     public DeleteAssessmentResponseDto deleteTrainerAssessment(String id) {
@@ -278,7 +272,7 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
                 .collect(Collectors.toList());
         List<TrainerAssessmentForTranscriptResponseDto> trainerAssessmentForTranscriptResponseDtoList = new ArrayList<>();
         trainerAssessmentList.forEach(x -> {
-                    TrainerAssessmentForTranscriptResponseDto dto = ITrainerAssesmentMapper.INSTANCE.toTrainerAssesmentForTranscriptResponseDto(x);
+                    TrainerAssessmentForTranscriptResponseDto dto = ITrainerAssessmentMapper.INSTANCE.toTrainerAssessmentForTranscriptResponseDto(x);
                     trainerAssessmentForTranscriptResponseDtoList.add(dto);
                 }
         );

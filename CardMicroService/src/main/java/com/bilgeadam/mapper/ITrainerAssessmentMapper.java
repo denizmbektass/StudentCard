@@ -13,7 +13,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface ITrainerAssessmentMapper {
 
-    ITrainerAssessmentMapper INSTANCE = Mappers.getMapper(ITrainerAssessmentMapper.class);
+    public static ITrainerAssessmentMapper INSTANCE = Mappers.getMapper(ITrainerAssessmentMapper.class);
 
     TrainerAssessment toTrainerAssessment(final TrainerAssessmentSaveRequestDto dto);
     DeleteAssessmentResponseDto toDeleteTrainerAssessment(final TrainerAssessment trainerAssessment);
@@ -24,5 +24,4 @@ public interface ITrainerAssessmentMapper {
 
     TrainerAssessmentForTranscriptResponseDto toTrainerAssessmentForTranscriptResponseDto(final TrainerAssessment trainerAssessment);
 
-    TrainerAssessmentForTranscriptResponseDto toTrainerAssesmentForTranscriptResponseDto(final TrainerAssessment trainerAssessment);
 }
