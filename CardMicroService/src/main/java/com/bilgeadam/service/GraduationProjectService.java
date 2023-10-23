@@ -29,14 +29,29 @@ public class GraduationProjectService extends ServiceManager<GraduationProject,S
 
 
     public MessageResponse createGradutainProject( CreateGraduationProjectRequestDto dto) {
-        if((dto.getInterestLevel()>100||dto.getInterestLevel()<0) && (dto.getPresentation()>100||dto.getPresentation()<0)&&
-                (dto.getMeetingAttendance()>100 ||dto.getMeetingAttendance()<0) && (dto.getRetroScore()>100 ||dto.getRetroScore()<0)&&
-                (dto.getTeamworkCompatibility()>100 ||dto.getTeamworkCompatibility()<0) &&
-                (dto.getNumberOfCompletedTasksPercentage()>100 ||dto.getNumberOfCompletedTasksPercentage()<0))
-            throw new CardServiceException(ErrorType.GRADUATION_NUMBER_RANGE);
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
         if(studentId.isEmpty())
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        if(studentId.isEmpty())
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        if (dto.getMeetingAttendance() > 100 || dto.getMeetingAttendance() < 0) {
+            throw new CardServiceException(ErrorType.GRADUATION_NUMBER_RANGE);
+        }
+        if (dto.getRetroScore() > 100 || dto.getRetroScore() < 0) {
+            throw new CardServiceException(ErrorType.GRADUATION_NUMBER_RANGE);
+        }
+        if (dto.getTeamworkCompatibility() > 100 || dto.getTeamworkCompatibility() < 0) {
+            throw new CardServiceException(ErrorType.GRADUATION_NUMBER_RANGE);
+        }
+        if (dto.getNumberOfCompletedTasksPercentage() > 100 || dto.getNumberOfCompletedTasksPercentage() < 0) {
+            throw new CardServiceException(ErrorType.GRADUATION_NUMBER_RANGE);
+        }
+        if (dto.getInterestLevel() > 100 || dto.getInterestLevel() < 0) {
+            throw new CardServiceException(ErrorType.GRADUATION_NUMBER_RANGE);
+        }
+        if (dto.getPresentation() > 100 || dto.getPresentation() < 0) {
+            throw new CardServiceException(ErrorType.GRADUATION_NUMBER_RANGE);
+        }
         if((dto.getInterestLevelPercentage()+ dto.getMeetingAttendancePercentage()+
                 dto.getNumberOfCompletedTasksPercentage()+ dto.getPresentationPercentage()+
                 dto.getTeamworkCompatibilityPercentage()+dto.getRetroScorePercentage()) != 100)
@@ -51,7 +66,7 @@ public class GraduationProjectService extends ServiceManager<GraduationProject,S
         graduationProject.setAverageScore(averageScore);
         graduationProject.setStudentId(studentId.get());
         save(graduationProject);
-        return new MessageResponse("Bitirme Projesi başarı ile oluşturuldu.");
+        return new MessageResponse("Bitirme Projesi başarı ile kaydedildi.");
     }
 
     public GraduationProject findGraduationProject(String token) {
@@ -62,14 +77,27 @@ public class GraduationProjectService extends ServiceManager<GraduationProject,S
     }
 
     public MessageResponse updateProject(UpdateGraduationProjectRequestDto dto) {
-        if((dto.getInterestLevel()>100||dto.getInterestLevel()<0) && (dto.getPresentation()>100||dto.getPresentation()<0)&&
-                (dto.getMeetingAttendance()>100 ||dto.getMeetingAttendance()<0) && (dto.getRetroScore()>100 ||dto.getRetroScore()<0)&&
-                (dto.getTeamworkCompatibility()>100 ||dto.getTeamworkCompatibility()<0) &&
-                (dto.getNumberOfCompletedTasksPercentage()>100 ||dto.getNumberOfCompletedTasksPercentage()<0))
-            throw new CardServiceException(ErrorType.GRADUATION_NUMBER_RANGE);
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
         if(studentId.isEmpty())
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        if (dto.getMeetingAttendance() > 100 || dto.getMeetingAttendance() < 0) {
+            throw new CardServiceException(ErrorType.GRADUATION_NUMBER_RANGE);
+        }
+        if (dto.getRetroScore() > 100 || dto.getRetroScore() < 0) {
+            throw new CardServiceException(ErrorType.GRADUATION_NUMBER_RANGE);
+        }
+        if (dto.getTeamworkCompatibility() > 100 || dto.getTeamworkCompatibility() < 0) {
+            throw new CardServiceException(ErrorType.GRADUATION_NUMBER_RANGE);
+        }
+        if (dto.getNumberOfCompletedTasksPercentage() > 100 || dto.getNumberOfCompletedTasksPercentage() < 0) {
+            throw new CardServiceException(ErrorType.GRADUATION_NUMBER_RANGE);
+        }
+        if (dto.getInterestLevel() > 100 || dto.getInterestLevel() < 0) {
+            throw new CardServiceException(ErrorType.GRADUATION_NUMBER_RANGE);
+        }
+        if (dto.getPresentation() > 100 || dto.getPresentation() < 0) {
+            throw new CardServiceException(ErrorType.GRADUATION_NUMBER_RANGE);
+        }
         if((dto.getInterestLevelPercentage()+ dto.getMeetingAttendancePercentage()+
                 dto.getNumberOfCompletedTasksPercentage()+ dto.getPresentationPercentage()+
                 dto.getTeamworkCompatibilityPercentage()+dto.getRetroScorePercentage()) != 100)
