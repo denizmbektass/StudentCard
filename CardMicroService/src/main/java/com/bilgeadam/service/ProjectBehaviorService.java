@@ -1,26 +1,20 @@
 package com.bilgeadam.service;
 
-import com.bilgeadam.dto.request.CreatProjecrBehaviorScoreRequestDto;
+
+import com.bilgeadam.dto.request.CreatProjectBehaviorScoreRequestDto;
 import com.bilgeadam.dto.request.UpdateProjectBehaviorRequestDto;
-import com.bilgeadam.dto.response.AvarageProjectBehaviorResponseDto;
-import com.bilgeadam.dto.request.AverageProjectBehaviorRequestDto;
-import com.bilgeadam.dto.request.CreatProjecrBehaviorScoreRequestDto;
-import com.bilgeadam.dto.request.UpdateProjectBehaviorRequestDto;
-import com.bilgeadam.dto.response.AverageProjectBehaviorResponseDto;
+
 import com.bilgeadam.dto.response.CreateProjectBehaviorScoreResponseDto;
 import com.bilgeadam.dto.response.MessageResponse;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.mapper.IProjectBehaviorMapper;
-import com.bilgeadam.mapper.IProjectMapper;
 import com.bilgeadam.repository.IProjectBehaviorRepository;
 import com.bilgeadam.repository.entity.ProjectBehavior;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
-import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,7 +29,7 @@ public class ProjectBehaviorService extends ServiceManager<ProjectBehavior, Stri
 
     }
 
-    public CreateProjectBehaviorScoreResponseDto createProjectBehaviorScore(CreatProjecrBehaviorScoreRequestDto dto){
+    public CreateProjectBehaviorScoreResponseDto createProjectBehaviorScore(CreatProjectBehaviorScoreRequestDto dto){
         Optional<String> studentId=jwtTokenManager.getIdFromToken(dto.getToken());
         if (studentId.isEmpty()){
             throw new CardServiceException(ErrorType.STUDENT_NOT_FOUND);
@@ -44,31 +38,48 @@ public class ProjectBehaviorService extends ServiceManager<ProjectBehavior, Stri
             throw new CardServiceException(ErrorType.BEHAVIOR_POINT_EMPTY);
         if(dto.getPresentationScore()==null)
             throw new CardServiceException(ErrorType.BEHAVIOR_POINT_EMPTY);
-        if (dto.getInsterestScore()==null)
+        if (dto.getInterestScore()==null)
             throw new CardServiceException(ErrorType.BEHAVIOR_POINT_EMPTY);
         if (dto.getRetroScore()==null)
             throw new CardServiceException(ErrorType.BEHAVIOR_POINT_EMPTY);
         if((dto.getRapportScore()>100 || dto.getRapportScore()<0) && (dto.getPresentationScore()>100 || dto.getPresentationScore()<0) &&
-                (dto.getInsterestScore()>100 || dto.getInsterestScore()<0) && (dto.getRetroScore()>100 || dto.getRetroScore()<0))
+                (dto.getInterestScore()>100 || dto.getInterestScore()<0) && (dto.getRetroScore()>100 || dto.getRetroScore()<0))
             throw new CardServiceException(ErrorType.BEHAVIOR_NUMBER_RANGE);
+        if ((dto.getRapportScorePercentage()+dto.getPresentationScorePercentage()+dto.getInterestScorePercentage()+dto.getRetroScorePercentage() !=100))
+            throw new CardServiceException(ErrorType.TOTAL_PERCENTAGE);
+        double averageScore=((dto.getRapportScore()*dto.getRapportScorePercentage())+(dto.getPresentationScore()*dto.getPresentationScorePercentage())+
+                (dto.getInterestScore()*dto.getInterestScorePercentage())+ (dto.getRetroScore()*dto.getRetroScorePercentage()))/100;
         ProjectBehavior projectBehavior= IProjectBehaviorMapper.INSTANCE.toProjectBehavior(dto);
+        projectBehavior.setAverageScore(averageScore);
         projectBehavior.setStudentId(studentId.get());
         save(projectBehavior);
         return IProjectBehaviorMapper.INSTANCE.createProjectBehaviorScoreResponseDto(projectBehavior);
 
     }
     public MessageResponse updateProjectBehavior(UpdateProjectBehaviorRequestDto dto){
-        Optional<ProjectBehavior> projectBehavior=findById(dto.getProjectBehaviorId());
-        if(projectBehavior.isEmpty())
-            throw new CardServiceException(ErrorType.PROJECT_NOT_FOUND);
-        ProjectBehavior update= projectBehavior.get();
-        update.setRapportScore(dto.getRapportScore());
-        update.setPresentationScore(dto.getPresentationScore());
-        update.setInsterestScore(dto.getInsterestScore());
-        update.setRetroScore(dto.getRetroScore());
-        update(update);
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
+        if(studentId.isEmpty())
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        if((dto.getRapportScore()>100 || dto.getRapportScore()<0) && (dto.getPresentationScore()>100 || dto.getPresentationScore()<0) &&
+                (dto.getInterestScore()>100 || dto.getInterestScore()<0) && (dto.getRetroScore()>100 || dto.getRetroScore()<0))
+            throw new CardServiceException(ErrorType.BEHAVIOR_NUMBER_RANGE);
+        if ((dto.getRapportScorePercentage()+dto.getPresentationScorePercentage()+dto.getInterestScorePercentage()+dto.getRetroScorePercentage() !=100))
+            throw new CardServiceException(ErrorType.TOTAL_PERCENTAGE);
+        double averageScore=((dto.getRapportScore()*dto.getRapportScorePercentage())+(dto.getPresentationScore()*dto.getPresentationScorePercentage())+
+                (dto.getInterestScore()*dto.getInterestScorePercentage())+ (dto.getRetroScore()*dto.getRetroScorePercentage()))/100;
+        ProjectBehavior projectBehavior= iProjectBehaviorRepository.findByStudentId(studentId.get());
+        projectBehavior.setRapportScore(dto.getRapportScore());
+        projectBehavior.setPresentationScore(dto.getPresentationScore());
+        projectBehavior.setInterestScore(dto.getInterestScore());
+        projectBehavior.setRetroScore(dto.getRetroScore());
+        projectBehavior.setRapportScorePercentage(dto.getRapportScorePercentage());
+        projectBehavior.setPresentationScorePercentage(dto.getPresentationScorePercentage());
+        projectBehavior.setInterestScorePercentage(dto.getInterestScorePercentage());
+        projectBehavior.setRetroScorePercentage(dto.getRetroScorePercentage());
+        update(projectBehavior);
         return new MessageResponse("Puanlar başarı ile güncellendi");
     }
+
     public Boolean deleteProjectBehavior(String projectBehaviorId){
         Optional<ProjectBehavior> projectBehavior=findById(projectBehaviorId);
         if(projectBehavior.isEmpty())
@@ -77,14 +88,5 @@ public class ProjectBehaviorService extends ServiceManager<ProjectBehavior, Stri
         return true;
     }
 
-    public AverageProjectBehaviorResponseDto averageProjectBehavior(AverageProjectBehaviorRequestDto dto) {
-        List<ProjectBehavior> projectBehaviors = iProjectBehaviorRepository.findAllByProjectBehaviorId(dto.getProjectBehaviorId());
-        if (projectBehaviors.isEmpty())
-            return new AverageProjectBehaviorResponseDto(dto.getProjectBehaviorId(),0.0);
 
-        double totalScore= (dto.getRapportScore()*0.25) + (dto.getInsterestScore()*0.25) +
-        (dto.getPresentationScore()*0.25) + (dto.getRetroScore()*0.25);
-
-        return new AverageProjectBehaviorResponseDto(dto.getProjectBehaviorId(), totalScore);
-    }
 }

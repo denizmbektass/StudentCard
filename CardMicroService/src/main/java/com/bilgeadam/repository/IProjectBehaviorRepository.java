@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface IProjectBehaviorRepository extends MongoRepository<ProjectBehavior, String> {
 
-    List<ProjectBehavior> findAllByStudentId (String studenyId);
+    ProjectBehavior findByStudentId (String studentId);
     List<ProjectBehavior> findAllByProjectBehaviorId (String projectBehavorId);
 }

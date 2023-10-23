@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AverageProjectBehaviorResponseDto {
 
-    String projectBehaviortId;
-    double totalScore;
+    String projectBehaviorId;
+    double averageScore;
 
 }
