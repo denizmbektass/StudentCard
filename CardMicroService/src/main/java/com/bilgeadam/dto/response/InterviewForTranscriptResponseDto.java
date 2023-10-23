@@ -11,9 +11,9 @@ import org.springframework.data.annotation.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TrainerAssessmentForTranscriptResponseDto {
-    private String assessmentName;
-    private double totalTrainerAssessmentScore;
+public class InterviewForTranscriptResponseDto {
+    private String name;
     private Long score;
     private String description;
+    private String interviewType;
 }

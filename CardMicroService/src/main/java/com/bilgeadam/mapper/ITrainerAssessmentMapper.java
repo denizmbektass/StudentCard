@@ -23,4 +23,6 @@ public interface ITrainerAssessmentMapper {
     UpdateTrainerAssessmentResponseDto toUpdateTrainerAssessment(final TrainerAssessment trainerAssessment);
 
     TrainerAssessmentForTranscriptResponseDto toTrainerAssessmentForTranscriptResponseDto(final TrainerAssessment trainerAssessment);
+
+    TrainerAssessmentForTranscriptResponseDto toTrainerAssesmentForTranscriptResponseDto(final TrainerAssessment trainerAssessment);
 }

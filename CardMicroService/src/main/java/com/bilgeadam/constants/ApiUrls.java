@@ -30,6 +30,8 @@ public class ApiUrls {
     public static final String AVERAGE = "/average-exam/{studentId}";
     public static final String ASSIGNMENT_AVERAGE = "/assignment-average/{studentId}";
     public static final String GRADUATIONPROJECT = VERSION + "/graduation-project";
-
+    public static final String GRADUATION_PROJECT = VERSION + "/graduation-project";
+    public static final String FIND_GRADUATION_PROJECT ="/find-graduation-project";
     public static final String PROJECTBEHAVIOR= VERSION+"/projectbehavior";
+
 }

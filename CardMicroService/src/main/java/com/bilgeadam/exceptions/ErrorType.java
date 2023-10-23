@@ -56,7 +56,11 @@ public enum ErrorType {
     PROJECT_POINT_EMPTY(9019,"Proje notu boş bırakılamaz.", HttpStatus.BAD_REQUEST),
     PROJECT_TYPE_EMPTY(9020, "Proje tipi boş bırakılamaz.", HttpStatus.BAD_REQUEST),
     DESCRIPTION_EMPTY(9021, "Açıklama boş bırakılamaz.", HttpStatus.BAD_REQUEST),
-    GRADUATION_NUMBER_RANGE(9022,"Girilen notlar '0' ile '100' arasında olmak zorundadır.",HttpStatus.BAD_REQUEST)
+    GRADUATION_NUMBER_RANGE(9022,"Girilen notlar '0' ile '100' arasında olmak zorundadır.",HttpStatus.BAD_REQUEST),
+    BEHAVIOR_NUMBER_RANGE(9023,"Davranış puanı '0' ile '100' arasında olmak zorundadır", HttpStatus.BAD_REQUEST),
+    BEHAVIOR_POINT_EMPTY(9024,"Davranış puanı boş bırakılamaz", HttpStatus.BAD_REQUEST),
+    BEHAVIOR_NOT_FOUND(9025, "Proje bulunamadı", HttpStatus.BAD_REQUEST),
+    TOTAL_PERCENTAGE(9026,"Girilen puanlama yüzdelerinin toplamı tam 100'e eşit olmalıdır",HttpStatus.BAD_REQUEST);
 
 
     ;

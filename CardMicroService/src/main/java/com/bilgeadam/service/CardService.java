@@ -2,8 +2,7 @@ package com.bilgeadam.service;
 
 
 import com.bilgeadam.dto.request.TranscriptInfo;
-import com.bilgeadam.dto.response.CardResponseDto;
-import com.bilgeadam.dto.response.ShowUserAbsenceInformationResponseDto;
+import com.bilgeadam.dto.response.*;
 import com.bilgeadam.exceptions.AssignmentException;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
@@ -51,6 +50,7 @@ public class CardService extends ServiceManager<Card,String> {
     }
 
     public CardResponseDto getCardByStudent(String token) {
+        getTranscriptByStudent(token);
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
         if(studentId.isEmpty())
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
@@ -90,11 +90,31 @@ public class CardService extends ServiceManager<Card,String> {
 
     public Map<String,Integer> getCardParameterForStudent(String token) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
-        if(studentId.isEmpty())
+        if(studentId.isEmpty()) {
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        }
         List<String> groupNameForStudent = userManager.findGroupNameForStudent(studentId.get()).getBody();
         CardParameter cardParameter = cardParameterService.getCardParameterByGroupName(groupNameForStudent);
         Map<String, Integer> parameters = cardParameter.getParameters();
         return parameters;
+    }
+    public TranscriptResponseDto getTranscriptByStudent(String token) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
+        if(studentId.isEmpty())
+            throw new AssignmentException(ErrorType.INVALID_TOKEN);
+        List<String> groupNames = jwtTokenManager.getGroupNameFromToken(token);
+        if(groupNames.isEmpty())
+            throw new AssignmentException(ErrorType.INVALID_TOKEN);
+        List<AssignmentResponseDto> assignmentResponseDtos= assignmentService.findAllAssignments(token);
+        List<ExamResponseDto> examResponseDtos = examService.findAllExams(token);
+        List<TrainerAssessmentForTranscriptResponseDto> trainerAssessmentForTranscriptResponseDto = trainerAssessmentService.findAllTrainerAssessmentForTranscriptResponseDto(token);
+        List<InternshipResponseDto> internshipResponseDtos = intershipService.findAllInternshipWithUser(token);
+        List<InterviewForTranscriptResponseDto> interviewForTranscriptResponseDto = interviewService.findAllInterviewsDtos(token);
+        ShowUserAbsenceInformationResponseDto absenceDto = absenceService.showUserAbsenceInformation(token);
+        Double absencePerform = (absenceDto.getGroup1Percentage()+ absenceDto.getGroup2Percentage())/2;
+        List<StudentProjectListResponseDto> project = projectService.showStudentProjectList(token);
+        TranscriptInfo transcriptInfo = userManager.getTranscriptInfoByUser(token).getBody();
+        TranscriptResponseDto transcriptResponseDto = TranscriptResponseDto.builder().absence(absencePerform).transcriptInfo(transcriptInfo).assignment(assignmentResponseDtos).exam(examResponseDtos).intership(internshipResponseDtos).interview(interviewForTranscriptResponseDto).project(project).trainerAssessment(trainerAssessmentForTranscriptResponseDto).build();
+        return transcriptResponseDto;
     }
 }

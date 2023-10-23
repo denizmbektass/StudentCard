@@ -169,13 +169,18 @@ public class UserService extends ServiceManager<User, String> {
         if (optionalUser.isEmpty()) throw new UserServiceException(ErrorType.USER_NOT_EXIST);
         User user = optionalUser.get();
         List<User> users = findAll();
-        String masterTrainer = users.stream().filter(x-> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
-                && x.getRoleList().contains(ERole.MASTER_TRAINER)).map(u -> u.getName() +" " +u.getSurname()
-        ).toString();
-        String assistantTrainer = users.stream().filter(x-> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
-                && x.getRoleList().contains(ERole.ASSISTANT_TRAINER)).map(User::getName).toString();
+        String masterTrainer = users.stream()
+                .filter(x -> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
+                        && x.getRoleList().contains(ERole.MASTER_TRAINER))
+                .map(u -> u.getName() +" " +u.getSurname())
+                .collect(Collectors.joining(", "));
+        String assistantTrainer = users.stream()
+                .filter(x -> x.getGroupNameList().stream().anyMatch(user.getGroupNameList()::contains)
+                        && x.getRoleList().contains(ERole.ASSISTANT_TRAINER))
+                .map(User::getName)
+                .collect(Collectors.joining(", "));
         return TranscriptInfo.builder().profilePicture(user.getProfilePicture()).startDate(new Date(user.getCreateDate()))
-                .endDate(new Date(user.getUpdateDate())).masterTrainer(masterTrainer).assistantTrainer(assistantTrainer).build();
+                .endDate(new Date(user.getUpdateDate())).masterTrainer(masterTrainer).assistantTrainer(assistantTrainer).group(user.getGroupNameList().get(0)).build();
     }
 
     public List<GroupStudentResponseDto> getAllStudentsWithoutInternship(GroupStudentRequestDto dto){

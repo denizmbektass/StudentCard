@@ -5,13 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.NotNull;
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateGraduationProjectRequestDto {
+public class UpdateGraduationProjectRequestDto {
     private int meetingAttendance;
     private int teamworkCompatibility;
     private int numberOfCompletedTasks;
