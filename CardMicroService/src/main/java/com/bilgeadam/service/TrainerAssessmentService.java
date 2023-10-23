@@ -54,15 +54,15 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment,S
     public TrainerAssessmentSaveResponseDto saveTrainerAssessment(TrainerAssessmentSaveRequestDto dto){
         System.out.println(dto);
         System.out.println(1);
-        if (dto.getBehaviorInClass()<0 || dto.getBehaviorInClass()>100)
+        if (dto.getBehaviorInClass()<0.0 || dto.getBehaviorInClass()>100.0)
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
-        if(dto.getCourseInterestLevel()<0 || dto.getCourseInterestLevel()>100)
+        if(dto.getCourseInterestLevel()<0.0 || dto.getCourseInterestLevel()>100.0)
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
-        if(dto.getCameraOpeningGrade()<0 || dto.getCameraOpeningGrade()>100)
+        if(dto.getCameraOpeningGrade()<0.0 || dto.getCameraOpeningGrade()>100.0)
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
-        if(dto.getInstructorGrade()<0 || dto.getInstructorGrade()>100)
+        if(dto.getInstructorGrade()<0.0 || dto.getInstructorGrade()>100.0)
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
-        if(dto.getDailyHomeworkGrade()<0 && dto.getDailyHomeworkGrade()>100)
+        if(dto.getDailyHomeworkGrade()<0.0 || dto.getDailyHomeworkGrade()>100.0)
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
         if(dto.getDescription().isEmpty())
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_EMPTY);
