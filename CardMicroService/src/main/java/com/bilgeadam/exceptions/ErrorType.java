@@ -49,7 +49,7 @@ public enum ErrorType {
     GROUP_ALREADY_EXIST(9014, "Grup zaten kayıtlı.", HttpStatus.BAD_REQUEST),
 
     TRAINER_ASSESSMENT_EMPTY(9015,"Eğitmen görüşü boş bırakılamaz.", HttpStatus.BAD_REQUEST),
-    TRAINER_ASSESSMENT_POINT_RANGE(8003, "Eğitmen görüş puanı '1' ile '10' arasında olmalıdır.",HttpStatus.BAD_REQUEST),
+    TRAINER_ASSESSMENT_POINT_RANGE(8003, "Eğitmen görüş puanı '0' ile '100' arasında olmalıdır.",HttpStatus.BAD_REQUEST),
     POINT_EMPTY(9016,"Puan boş bırakılamaz.",HttpStatus.BAD_REQUEST),
     INTERVIEW_TYPE_EMPTY(9017, "Mülakat türü boş bırakılamaz.",HttpStatus.BAD_REQUEST),
     INTERVIEW_NAME_EMPTY(9018,"Mülakat adı boş bırakılamaz.",HttpStatus.BAD_REQUEST),

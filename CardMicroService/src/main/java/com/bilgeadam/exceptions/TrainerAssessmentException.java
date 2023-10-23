@@ -15,4 +15,5 @@ public class TrainerAssessmentException extends RuntimeException{
         super(message);
         this.errorType=errorType;
     }
+
 }
