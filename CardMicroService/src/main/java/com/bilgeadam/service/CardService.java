@@ -146,9 +146,8 @@ public class CardService extends ServiceManager<Card, String> {
         double projectSuccessScore = 0;
         double absencePerformSuccessScore = 0;
         double graduationProjectSuccessScore = 0;
-        System.out.println("1");
+        double totalSuccessScore = 0;
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
-        System.out.println(studentId.get());
         if (studentId.isEmpty()) {
             throw new CardServiceException(ErrorType.STUDENT_NOT_FOUND);
         }
@@ -176,7 +175,7 @@ public class CardService extends ServiceManager<Card, String> {
                     .map(ExamResponseDto::getScore)
                     .collect(Collectors.toList());
 
-            avgExamScore = assignmentScoreList.stream()
+            avgExamScore = examScoreList.stream()
                     .mapToLong(Long::longValue)
                     .average()
                     .orElse(0.0);
@@ -237,6 +236,8 @@ public class CardService extends ServiceManager<Card, String> {
         absencePerformSuccessScore = avgAbsencePerformScore * absenceWeight;
         graduationProjectSuccessScore = avgGraduationProjectScore * graduationProjectWeight;
 
+
+        totalSuccessScore = assignmentSuccessScore + examSuccessScore+trainerAssessmentSuccessScore+projectSuccessScore+absencePerformSuccessScore+graduationProjectSuccessScore;
         return EducationScoreDetailsDto.builder()
                 .averageAssignmentScore(avgAssignmentScore)
                 .averageExamScore(avgExamScore)
@@ -250,6 +251,7 @@ public class CardService extends ServiceManager<Card, String> {
                 .projectSuccessScore(projectSuccessScore)
                 .absencePerformSuccessScore(absencePerformSuccessScore)
                 .graduationProjectSuccessScore(graduationProjectSuccessScore)
+                .totalSuccessScore(totalSuccessScore)
                 .build();
     }
 }
