@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class TrainerAssessmentSaveResponseDto {
 
     private String assessmentName;
-    private double totalTrainerAssessmentScore;
+    private String studentToken;
+    private String studentId;
     private String description;
+    private double totalTrainerAssessmentScore;
 }

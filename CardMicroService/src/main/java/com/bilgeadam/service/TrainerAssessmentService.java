@@ -45,21 +45,8 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
         this.reminderMailProducer = reminderMailProducer;
         this.userManager = userManager;
     }
-
     public double calculateTrainerAssessmentScore(TrainerAssessmentSaveRequestDto dto){
-
-        double additionOfBehaviorInClass = BEHAVIOR_IN_CLASS_COEFFICIENT * dto.getBehaviorInClass();
-        double additionOfCourseInterestLevel = COURSE_INTEREST_LEVEL_COEFFICIENT * dto.getCourseInterestLevel();
-        double additionOfCameraOpeningGrade = CAMERA_OPENING_RATE_COEFFICIENT * dto.getCameraOpeningGrade();
-        double additionOfInstructorGrade = INSTRUCTOR_GRADE_RATE_COEFFICIENT * dto.getInstructorGrade();
-        double additionOfDailyHomeworkGrade = DAILY_HOMEWORK_RATE_COEFFICIENT * dto.getDailyHomeworkGrade();
-        double totalTrainerAssessmentScore = additionOfBehaviorInClass + additionOfCourseInterestLevel + additionOfCameraOpeningGrade + additionOfInstructorGrade + additionOfDailyHomeworkGrade;
-        return totalTrainerAssessmentScore;
-    }
-
-    public TrainerAssessmentSaveResponseDto saveTrainerAssessment(TrainerAssessmentSaveRequestDto dto){
         System.out.println(dto);
-        System.out.println(1);
         if (dto.getBehaviorInClass()<0.0 || dto.getBehaviorInClass()>100.0)
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
         if(dto.getCourseInterestLevel()<0.0 || dto.getCourseInterestLevel()>100.0)
@@ -70,55 +57,88 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
         if(dto.getDailyHomeworkGrade()<0.0 || dto.getDailyHomeworkGrade()>100.0)
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
+
+        double additionOfBehaviorInClass = BEHAVIOR_IN_CLASS_COEFFICIENT * dto.getBehaviorInClass();
+        double additionOfCourseInterestLevel = COURSE_INTEREST_LEVEL_COEFFICIENT * dto.getCourseInterestLevel();
+        double additionOfCameraOpeningGrade = CAMERA_OPENING_RATE_COEFFICIENT * dto.getCameraOpeningGrade();
+        double additionOfInstructorGrade = INSTRUCTOR_GRADE_RATE_COEFFICIENT * dto.getInstructorGrade();
+        double additionOfDailyHomeworkGrade = DAILY_HOMEWORK_RATE_COEFFICIENT * dto.getDailyHomeworkGrade();
+        double totalTrainerAssessmentScore = additionOfBehaviorInClass + additionOfCourseInterestLevel + additionOfCameraOpeningGrade + additionOfInstructorGrade + additionOfDailyHomeworkGrade;
+        return totalTrainerAssessmentScore;
+    }
+    public TrainerAssessmentSaveResponseDto saveTrainerAssessment(TrainerAssessmentSaveRequestDto dto){
+        double score = calculateTrainerAssessmentScore(dto);
+       /* if (dto.getBehaviorInClass()<0.0 || dto.getBehaviorInClass()>100.0)
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
+        if(dto.getCourseInterestLevel()<0.0 || dto.getCourseInterestLevel()>100.0)
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
+        if(dto.getCameraOpeningGrade()<0.0 || dto.getCameraOpeningGrade()>100.0)
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
+        if(dto.getInstructorGrade()<0.0 || dto.getInstructorGrade()>100.0)
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
+        if(dto.getDailyHomeworkGrade()<0.0 || dto.getDailyHomeworkGrade()>100.0)
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
+        */
         if (dto.getDescription().isEmpty())
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_EMPTY);
-
-        Optional<String> studentId= jwtTokenManager.getIdFromToken(dto.getStudentToken());
-        System.out.println(studentId);
-        System.out.println(4);
-        TrainerAssessment trainerAssessment= ITrainerAssessmentMapper.INSTANCE.toTrainerAssessment(dto);
-        trainerAssessment.setStudentId(studentId.get());
-        trainerAssessment.setTotalTrainerAssessmentScore(calculateTrainerAssessmentScore(dto));
-        List<TrainerAssessment> trainerAssessmentList = iTrainerAssesmentRepository.findAllByStudentId(studentId.get());
+        String studentId= String.valueOf(jwtTokenManager.getIdFromToken(dto.getStudentToken()));
+        Optional <String> studentId1 = Optional.ofNullable(studentId);
+        if (studentId1.isPresent()) {
+            String str = studentId1.get();
+            System.out.println("Student ID: " + str);
+        }
+        else {
+            throw new CardServiceException(ErrorType.STUDENT_ID_NOT_FOUND);
+        }
+        TrainerAssessment trainerAssessment = ITrainerAssessmentMapper.INSTANCE.toTrainerAssessment(dto);
+        trainerAssessment.setStudentId(studentId1.get());
+        trainerAssessment.setTotalTrainerAssessmentScore(score);
+        List<TrainerAssessment> trainerAssessmentList = iTrainerAssesmentRepository.findAllByStudentId(studentId1.get());
         int mastergorussayisi = 1;
         int trainergorussayisi = 1;
         int admingorussayisi = 1;
+        // asda
         if (!trainerAssessmentList.isEmpty()) {
             for (TrainerAssessment t : trainerAssessmentList) {
-                if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.MASTER_TRAINER.name())) {
+                if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getStudentToken()).getRole().equals(ERole.MASTER_TRAINER.name())) {
                     mastergorussayisi++;
                 }
-                if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.ASSISTANT_TRAINER.name())) {
+                if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getStudentToken()).getRole().equals(ERole.ASSISTANT_TRAINER.name())) {
                     trainergorussayisi++;
                 }
-                if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.ADMIN.name())) {
+                if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getStudentToken()).getRole().equals(ERole.ADMIN.name())) {
                     admingorussayisi++;
                 }
             }
-            if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.MASTER_TRAINER.name())) {
+            if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getStudentToken()).getRole().equals(ERole.MASTER_TRAINER.name())) {
                 trainerAssessment.setAssessmentName(mastergorussayisi + ". Master Görüş");
             }
-            if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.ASSISTANT_TRAINER.name())) {
+            if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getStudentToken()).getRole().equals(ERole.ASSISTANT_TRAINER.name())) {
                 trainerAssessment.setAssessmentName(trainergorussayisi + ". Trainer Görüş");
             }
-            if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.ADMIN.name())) {
+            if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getStudentToken()).getRole().equals(ERole.ADMIN.name())) {
                 trainerAssessment.setAssessmentName(admingorussayisi + ". Admin Görüş");
             }
-        } else {
-            if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.MASTER_TRAINER.name())) {
+        }
+        else {
+
+            GetIdRoleStatusEmailFromTokenResponseDto tokenDto = jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getStudentToken());
+
+            if (tokenDto.getRole().equals(ERole.MASTER_TRAINER.name())) {
                 trainerAssessment.setAssessmentName("1. Master Görüş");
             }
-            if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.ASSISTANT_TRAINER.name())) {
+            if (tokenDto.getRole().equals(ERole.ASSISTANT_TRAINER.name())) {
                 trainerAssessment.setAssessmentName("1. Trainer Görüş");
             }
-            if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getToken()).getRole().equals(ERole.ADMIN.name())) {
+            if (tokenDto.getRole().equals(ERole.ADMIN.name())) {
                 trainerAssessment.setAssessmentName("1. Admin Görüş");
             }
         }
         save(trainerAssessment);
+        System.out.println("Eğitmen Puanı: " + trainerAssessment.getTotalTrainerAssessmentScore());
+        System.out.println("Eğitmen Puanı başarıyla kaydedildi..");
         return ITrainerAssessmentMapper.INSTANCE.toSaveTrainerAssessment(trainerAssessment);
     }
-
     public UpdateTrainerAssessmentResponseDto updateTrainerAssessment(UpdateTrainerAssessmentRequestDto dto) {
         Optional<TrainerAssessment> trainerAssessment = iTrainerAssesmentRepository.findById(dto.getAssessmentId());
         if (trainerAssessment.isEmpty())
@@ -131,16 +151,12 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
         trainerAssessmentUpdate.setTotalTrainerAssessmentScore(dto.getTotalTrainerAssessmentScore());
         trainerAssessmentUpdate.setDescription(dto.getDescription());
         update(trainerAssessmentUpdate);
-
         return ITrainerAssessmentMapper.INSTANCE.toUpdateTrainerAssessment(trainerAssessment.get());
     }
-
     public Integer getTrainerAssessmentNote(String studentId) {
         return (int) Math.floor(iTrainerAssesmentRepository.findAllByStudentId(studentId).stream()
                 .mapToLong(x-> (long) x.getTotalTrainerAssessmentScore()).average().orElse(0));
-
     }
-
     public DeleteAssessmentResponseDto deleteTrainerAssessment(String id) {
         Optional<TrainerAssessment> trainerAssessment = iTrainerAssesmentRepository.findById(id);
         if (trainerAssessment.isEmpty())
@@ -149,13 +165,11 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
         update(trainerAssessment.get());
         return ITrainerAssessmentMapper.INSTANCE.toDeleteTrainerAssessment(trainerAssessment.get());
     }
-
     public List<TrainerAssessment> findAllTrainerAssessment(TokenRequestDto dto) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());
         return findAll().stream().filter(x -> x.getEStatus() == EStatus.ACTIVE && x.getStudentId().equals(studentId.get()))
                 .collect(Collectors.toList());
     }
-
     @Scheduled(fixedRate = 86400000)
     //cron = "0 58 23 15 * ?"
     //fixedRate = 300000

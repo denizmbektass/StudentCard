@@ -19,5 +19,4 @@ public class TrainerAssessmentSaveRequestDto {
     private double dailyHomeworkGrade;
     private String description;
     private String studentToken;
-    private String token;
 }
