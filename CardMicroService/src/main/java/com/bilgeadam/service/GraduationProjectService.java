@@ -32,8 +32,6 @@ public class GraduationProjectService extends ServiceManager<GraduationProject,S
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
         if(studentId.isEmpty())
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
-        if(studentId.isEmpty())
-            throw new CardServiceException(ErrorType.INVALID_TOKEN);
         if (dto.getMeetingAttendance() > 100 || dto.getMeetingAttendance() < 0) {
             throw new CardServiceException(ErrorType.GRADUATION_NUMBER_RANGE);
         }
@@ -124,6 +122,14 @@ public class GraduationProjectService extends ServiceManager<GraduationProject,S
         graduationProject.setRetroScorePercentage(dto.getRetroScorePercentage());
         update(graduationProject);
         return new MessageResponse("Bitirme Projesi başarı ile güncellendi.");
+    }
+
+    public MessageResponse deleteProject(String token) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
+        if(studentId.isEmpty())
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        iGraduationProject.deleteByStudentId(studentId.get());
+        return new MessageResponse("Bitirme Projesi başarı ile silindi.");
     }
 }
 
