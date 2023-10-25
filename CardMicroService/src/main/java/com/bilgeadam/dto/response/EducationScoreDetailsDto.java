@@ -22,4 +22,5 @@ public class EducationScoreDetailsDto {
     double projectSuccessScore;
     double absencePerformSuccessScore;
     double graduationProjectSuccessScore;
+    double totalSuccessScore;
 }
