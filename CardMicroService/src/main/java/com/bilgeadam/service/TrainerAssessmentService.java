@@ -81,6 +81,7 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
         */
         if (dto.getDescription().isEmpty())
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_EMPTY);
+
         String studentId= String.valueOf(jwtTokenManager.getIdFromToken(dto.getStudentToken()));
         Optional <String> studentId1 = Optional.ofNullable(studentId);
         if (studentId1.isPresent()) {
