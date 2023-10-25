@@ -33,12 +33,19 @@ public class GraduationProjectController {
         return  ResponseEntity.ok(graduationProjectService.findGraduationProject(token));
     }
 
-    @Operation(summary = "Öğrencinin Bitirme Güncelleme işlemi",
+    @Operation(summary = "Öğrencinin Bitirme Projesi Güncelleme işlemi",
             description = "Belirtilen token kullanılarak Bitirme projesini günceller.")
     @PutMapping(UPDATE)
     @CrossOrigin("*")
     public ResponseEntity<MessageResponse> updateProject(@RequestBody @Valid UpdateGraduationProjectRequestDto dto){
         return  ResponseEntity.ok(graduationProjectService.updateProject(dto));
+    }
+    @Operation(summary = "Öğrencinin Bitirme Projesi silme işlemi",
+            description = "Belirtilen token kullanılarak Bitirme projesini silinir.")
+    @DeleteMapping (DELETE+"/{token}")
+    @CrossOrigin("*")
+    public ResponseEntity<MessageResponse> deleteProject(@PathVariable String token){
+        return  ResponseEntity.ok(graduationProjectService.deleteProject(token));
     }
 
 }
