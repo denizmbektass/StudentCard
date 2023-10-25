@@ -85,7 +85,7 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
         Optional <String> studentId1 = Optional.ofNullable(studentId);
         if (studentId1.isPresent()) {
             String str = studentId1.get();
-            System.out.println("Student ID: " + str);
+            System.out.println("Öğrenci ID: " + str);
         }
         else {
             throw new CardServiceException(ErrorType.STUDENT_ID_NOT_FOUND);
@@ -97,40 +97,40 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
         int mastergorussayisi = 1;
         int trainergorussayisi = 1;
         int admingorussayisi = 1;
-        // asda
+        GetIdRoleStatusEmailFromTokenResponseDto tokenDto1 = jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getStudentToken());
         if (!trainerAssessmentList.isEmpty()) {
             for (TrainerAssessment t : trainerAssessmentList) {
-                if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getStudentToken()).getRole().equals(ERole.MASTER_TRAINER.name())) {
+                if (tokenDto1.getRole().equals(ERole.MASTER_TRAINER.name())) {
                     mastergorussayisi++;
                 }
-                if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getStudentToken()).getRole().equals(ERole.ASSISTANT_TRAINER.name())) {
+                if (tokenDto1.getRole().equals(ERole.ASSISTANT_TRAINER.name())) {
                     trainergorussayisi++;
                 }
-                if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getStudentToken()).getRole().equals(ERole.ADMIN.name())) {
+                if (tokenDto1.getRole().equals(ERole.ADMIN.name())) {
                     admingorussayisi++;
                 }
             }
-            if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getStudentToken()).getRole().equals(ERole.MASTER_TRAINER.name())) {
+            if (tokenDto1.getRole().equals(ERole.MASTER_TRAINER.name())) {
                 trainerAssessment.setAssessmentName(mastergorussayisi + ". Master Görüş");
             }
-            if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getStudentToken()).getRole().equals(ERole.ASSISTANT_TRAINER.name())) {
+            if (tokenDto1.getRole().equals(ERole.ASSISTANT_TRAINER.name())) {
                 trainerAssessment.setAssessmentName(trainergorussayisi + ". Trainer Görüş");
             }
-            if (jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getStudentToken()).getRole().equals(ERole.ADMIN.name())) {
+            if (tokenDto1.getRole().equals(ERole.ADMIN.name())) {
                 trainerAssessment.setAssessmentName(admingorussayisi + ". Admin Görüş");
             }
         }
         else {
 
-            GetIdRoleStatusEmailFromTokenResponseDto tokenDto = jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getStudentToken());
+            GetIdRoleStatusEmailFromTokenResponseDto tokenDto2 = jwtTokenManager.getIdRoleStatusEmailFromToken(dto.getStudentToken());
 
-            if (tokenDto.getRole().equals(ERole.MASTER_TRAINER.name())) {
+            if (tokenDto2.getRole().equals(ERole.MASTER_TRAINER.name())) {
                 trainerAssessment.setAssessmentName("1. Master Görüş");
             }
-            if (tokenDto.getRole().equals(ERole.ASSISTANT_TRAINER.name())) {
+            if (tokenDto2.getRole().equals(ERole.ASSISTANT_TRAINER.name())) {
                 trainerAssessment.setAssessmentName("1. Trainer Görüş");
             }
-            if (tokenDto.getRole().equals(ERole.ADMIN.name())) {
+            if (tokenDto2.getRole().equals(ERole.ADMIN.name())) {
                 trainerAssessment.setAssessmentName("1. Admin Görüş");
             }
         }
