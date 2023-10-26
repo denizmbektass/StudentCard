@@ -64,7 +64,8 @@ public enum ErrorType {
     BEHAVIOR_NUMBER_RANGE(9023,"Davranış puanı '0' ile '100' arasında olmak zorundadır", HttpStatus.BAD_REQUEST),
     BEHAVIOR_POINT_EMPTY(9024,"Davranış puanı boş bırakılamaz", HttpStatus.BAD_REQUEST),
     BEHAVIOR_NOT_FOUND(9025, "Proje bulunamadı", HttpStatus.BAD_REQUEST),
-    TOTAL_PERCENTAGE(9026,"Girilen puanlama yüzdelerinin toplamı tam 100'e eşit olmalıdır",HttpStatus.BAD_REQUEST);
+    TOTAL_PERCENTAGE(9026,"Girilen puanlama yüzdelerinin toplamı tam 100'e eşit olmalıdır",HttpStatus.BAD_REQUEST),
+    ALGORITHM_NOT_FOUND(9027, "Algoritma puanı bulunamadı", HttpStatus.BAD_REQUEST);
 
     private int code;
     private String message;
