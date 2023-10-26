@@ -1,10 +1,8 @@
 package com.bilgeadam.mapper;
 
 import com.bilgeadam.dto.request.CreateInterviewRequestDto;
-import com.bilgeadam.dto.response.CreateInterviewResponseDto;
-import com.bilgeadam.dto.response.DeleteInterviewResponseDto;
-import com.bilgeadam.dto.response.InterviewForTranscriptResponseDto;
-import com.bilgeadam.dto.response.UpdateInterviewResponseDto;
+import com.bilgeadam.dto.request.SaveInterviewRequestDto;
+import com.bilgeadam.dto.response.*;
 import com.bilgeadam.repository.entity.Interview;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -20,4 +18,8 @@ public interface IInterviewMapper {
     DeleteInterviewResponseDto toDeleteInterviewResponseDto(final Interview interview);
 
     InterviewForTranscriptResponseDto toInterviewForTranscriptResponseDto(final Interview interview);
+
+    Interview fromSaveInterviewRequestDtoToInterview(final SaveInterviewRequestDto dto);
+
+    GetCandidateInterviewResponseDto fromInterviewToGetCandidateInterviewResponseDto(final Interview candidateInterview);
 }
