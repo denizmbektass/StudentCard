@@ -1,13 +1,8 @@
 package com.bilgeadam.service;
 
-import com.bilgeadam.dto.request.CreateInterviewRequestDto;
+import com.bilgeadam.dto.request.*;
 
-import com.bilgeadam.dto.request.TokenRequestDto;
-import com.bilgeadam.dto.request.UpdateInterviewRequestDto;
-import com.bilgeadam.dto.response.CreateInterviewResponseDto;
-import com.bilgeadam.dto.response.DeleteInterviewResponseDto;
-import com.bilgeadam.dto.response.InterviewForTranscriptResponseDto;
-import com.bilgeadam.dto.response.UpdateInterviewResponseDto;
+import com.bilgeadam.dto.response.*;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.InterviewServiceException;
@@ -104,4 +99,98 @@ public class InterviewService extends ServiceManager<Interview, String> {
         });
         return interviewForTranscriptResponseDtos;
     }
+
+    public boolean saveCandidateInterview(SaveInterviewRequestDto dto) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
+        if(studentId.isPresent()){
+            Interview newInterview = IInterviewMapper.INSTANCE.fromSaveInterviewRequestDtoToInterview(dto);
+            newInterview.setStudentId(studentId.get());
+            save(newInterview);
+            return true;
+        }
+        else {
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        }
+
+    }
+
+    public GetCandidateInterviewResponseDto getCandidateInterview(String studentId) {
+        GetCandidateInterviewResponseDto responseDto;
+        if(!studentId.equals("")){
+            if(interviewRepository.findAllByStudentId(studentId).size()>0){
+                Interview candidateInterview = interviewRepository.findAllByStudentId(studentId).get(0);
+                responseDto = IInterviewMapper.INSTANCE.fromInterviewToGetCandidateInterviewResponseDto(candidateInterview);
+            } else {
+                throw new CardServiceException(ErrorType.CANDIDATE_INTERVIEW_NOT_FOUND);
+            }
+        } else {
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        }
+        return responseDto;
+    }
+
+    public Boolean updateCandidateInterview(UpdateCandidateInterviewRequestDto dto) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
+        if(studentId.isPresent()){
+            Interview candidateInterview = interviewRepository.findAllByStudentId(studentId.get()).get(0);
+
+            candidateInterview.setCommunicationSkillsPoint(dto.getCommunicationSkillsPoint());
+            candidateInterview.setWorkExperiencePoint(dto.getWorkExperiencePoint());
+            candidateInterview.setUniversityPoint(dto.getUniversityPoint());
+            candidateInterview.setUniversityProgramPoint(dto.getUniversityProgramPoint());
+            candidateInterview.setAgePoint(dto.getAgePoint());
+            candidateInterview.setPersonalityEvaluationPoint(dto.getPersonalityEvaluationPoint());
+            candidateInterview.setEnglishLevelPoint(dto.getEnglishLevelPoint());
+            candidateInterview.setGraduationPeriodPoint(dto.getGraduationPeriodPoint());
+            candidateInterview.setMilitaryServicePoint(dto.getMilitaryServicePoint());
+            candidateInterview.setMotivationPoint(dto.getMotivationPoint());
+            candidateInterview.setResidencyPoint(dto.getResidencyPoint());
+            candidateInterview.setSoftwareEducationPoint(dto.getSoftwareEducationPoint());
+            update(candidateInterview);
+            return true;
+        } else {
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        }
+    }
+
+    public Integer getCandidateInterviewNumber(String studentId) {
+        Integer candidateInterviewCount = Integer.MAX_VALUE;
+        List<Interview> candidateInterviewList;
+        if(!studentId.equals("")){
+            candidateInterviewList = interviewRepository.findAllByStudentId(studentId);
+            if(candidateInterviewList.size() == 0){
+                return 0;
+            }
+            if (candidateInterviewList.size() > 0){
+                return 1;
+            }
+        } else {
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        }
+        return candidateInterviewCount;
+    }
+
+    public Double getCandidateInterviewAveragePoint(String studentId) {
+        Double candidateInterviewAveragePoint = 0.0;
+        Interview candidateInterview = interviewRepository.findAllByStudentId(studentId).get(0);
+        if(!studentId.equals("")){
+            candidateInterviewAveragePoint = ((double) candidateInterview.getCommunicationSkillsPoint() / 12) +
+                    ((double)candidateInterview.getWorkExperiencePoint() / 12) +
+                    ((double)candidateInterview.getUniversityPoint() / 12) +
+                    ((double)candidateInterview.getUniversityProgramPoint() / 12) +
+                    ((double)candidateInterview.getAgePoint() / 12) +
+                    ((double)candidateInterview.getPersonalityEvaluationPoint() / 12) +
+                    ((double)candidateInterview.getEnglishLevelPoint() / 12) +
+                    ((double)candidateInterview.getGraduationPeriodPoint() / 12) +
+                    ((double)candidateInterview.getMilitaryServicePoint()/ 12) +
+                    ((double)candidateInterview.getMotivationPoint() / 12) +
+                    ((double)candidateInterview.getResidencyPoint() / 12) +
+                    ((double)candidateInterview.getSoftwareEducationPoint() / 12);
+
+        } else {
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        }
+        return candidateInterviewAveragePoint;
+    }
+
 }
