@@ -173,14 +173,24 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
         Optional<TrainerAssessment> trainerAssessment = iTrainerAssesmentRepository.findById(dto.getAssessmentId());
         if (trainerAssessment.isEmpty())
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
+
+        TrainerAssessment updated = trainerAssessment.get();
+        updated.setAssessmentName(dto.getAssessmentName());
+        updated.setBehaviorInClass(dto.getBehaviorInClass());
+        updated.setCourseInterestLevel(dto.getCourseInterestLevel());
+        updated.setCameraOpeningGrade(dto.getCameraOpeningGrade());
+        updated.setInstructorGrade(dto.getInstructorGrade());
+        updated.setDailyHomeworkGrade(dto.getDailyHomeworkGrade());
+
         if (dto.getDescription().isEmpty())
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_EMPTY);
+        updated.setDescription(dto.getDescription());
+
         if(dto.getTotalTrainerAssessmentScore() == 0.0)
             throw new CardServiceException(ErrorType.POINT_EMPTY);
-        TrainerAssessment trainerAssessmentUpdate = trainerAssessment.get();
-        trainerAssessmentUpdate.setTotalTrainerAssessmentScore(dto.getTotalTrainerAssessmentScore());
-        trainerAssessmentUpdate.setDescription(dto.getDescription());
-        update(trainerAssessmentUpdate);
+        updated.setTotalTrainerAssessmentScore(dto.getTotalTrainerAssessmentScore());
+
+        update(updated);
         return ITrainerAssessmentMapper.INSTANCE.toUpdateTrainerAssessment(trainerAssessment.get());
     }
     public Integer getTrainerAssessmentNote(String studentId) {
@@ -191,6 +201,7 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
         Optional<TrainerAssessment> trainerAssessment = iTrainerAssesmentRepository.findById(id);
         if (trainerAssessment.isEmpty())
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
+        deleteById(id);
         trainerAssessment.get().setEStatus(EStatus.DELETED);
         update(trainerAssessment.get());
         return ITrainerAssessmentMapper.INSTANCE.toDeleteTrainerAssessment(trainerAssessment.get());
