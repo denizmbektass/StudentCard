@@ -15,12 +15,20 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @Document
 public class TrainerAssessment extends BaseEntity{
+
     @Id
     private String trainerAssessmentId;
+
     private String assessmentName;
-    private Long score;
+    private double behaviorInClass;
+    private double courseInterestLevel;
+    private double cameraOpeningGrade;
+    private double instructorGrade;
+    private double dailyHomeworkGrade;
+    private double totalTrainerAssessmentScore;
     private String description;
     private String studentId;
+
     @Builder.Default
     private EStatus eStatus=EStatus.ACTIVE;
 }

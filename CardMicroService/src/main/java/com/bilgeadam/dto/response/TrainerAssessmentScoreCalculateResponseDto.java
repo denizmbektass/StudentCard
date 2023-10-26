@@ -9,11 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainerAssessmentSaveResponseDto {
+public class TrainerAssessmentScoreCalculateResponseDto {
 
     private String assessmentName;
-    private String studentToken;
-    private String studentId;
-    private String description;
     private double totalTrainerAssessmentScore;
+    private String description;
 }

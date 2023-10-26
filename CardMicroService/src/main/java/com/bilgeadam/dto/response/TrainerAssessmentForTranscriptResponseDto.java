@@ -13,6 +13,7 @@ import org.springframework.data.annotation.Id;
 @Builder
 public class TrainerAssessmentForTranscriptResponseDto {
     private String assessmentName;
+    private double totalTrainerAssessmentScore;
     private Long score;
     private String description;
 }
