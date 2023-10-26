@@ -1,6 +1,7 @@
 package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.response.CardResponseDto;
+import com.bilgeadam.dto.response.EducationScoreDetailsDto;
 import com.bilgeadam.dto.response.TranscriptResponseDto;
 import com.bilgeadam.repository.entity.Card;
 import com.bilgeadam.service.CardService;
@@ -23,7 +24,7 @@ public class CardController {
             description = "Belirtilen token kullanılarak öğrenciye ait kartı alır.")
     @CrossOrigin("*")
     @GetMapping("/get-card/{token}")
-    public ResponseEntity<CardResponseDto> getCardByStudent(@PathVariable String token){
+    public ResponseEntity<CardResponseDto> getCardByStudent(@PathVariable String token) {
         return ResponseEntity.ok(cardService.getCardByStudent(token));
     }
 
@@ -32,13 +33,22 @@ public class CardController {
             description = "Belirtilen token kullanılarak öğrenci için kart parametrelerini alır.")
     @CrossOrigin("*")
     @GetMapping("/get-card-parameter-for-student/{token}")
-    public ResponseEntity<Map<String,Integer>> getCardParameterForStudent(@PathVariable String token) {
+    public ResponseEntity<Map<String, Integer>> getCardParameterForStudent(@PathVariable String token) {
         return ResponseEntity.ok(cardService.getCardParameterForStudent(token));
     }
+
     @CrossOrigin("*")
     @GetMapping("/get-transcript/{token}")
     public ResponseEntity<TranscriptResponseDto> getTranscriptByStudent(@PathVariable String token) {
         return ResponseEntity.ok(cardService.getTranscriptByStudent(token));
+    }
+
+    @Operation(summary = "Eğitim kartı için parametrelerini alma işlemi",
+            description = "Belirtilen token kullanılarak eğitim için kart bilgilerini almak.")
+    @GetMapping("/get-education-score-details/{token}")
+    @CrossOrigin("*")
+    public ResponseEntity<EducationScoreDetailsDto> getEducationDetails(@PathVariable String token) {
+        return ResponseEntity.ok(cardService.getEducationDetails(token));
     }
 
 }
