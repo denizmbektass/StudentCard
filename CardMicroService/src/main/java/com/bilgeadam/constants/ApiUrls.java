@@ -32,5 +32,6 @@ public class ApiUrls {
     public static final String GRADUATION_PROJECT = VERSION + "/graduation-project";
     public static final String FIND_GRADUATION_PROJECT ="/find-graduation-project";
     public static final String PROJECTBEHAVIOR= VERSION+"/projectbehavior";
+    public static final String CHANGE_TRAINER_ASSESSMENT_COEFFICIENTS = VERSION+"/change-trainer-assessment-coefficients";
 
 }

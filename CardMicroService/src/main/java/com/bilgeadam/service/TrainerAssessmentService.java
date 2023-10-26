@@ -13,14 +13,17 @@ import com.bilgeadam.mapper.ITrainerAssessmentMapper;
 import com.bilgeadam.mapper.ITrainerAssessmentMapper;
 import com.bilgeadam.rabbitmq.model.ReminderMailModel;
 import com.bilgeadam.rabbitmq.producer.ReminderMailProducer;
+import com.bilgeadam.repository.ITrainerAssessmentCoefficientsRepository;
 import com.bilgeadam.repository.ITrainerAssessmentRepository;
 import com.bilgeadam.repository.entity.TrainerAssessment;
+import com.bilgeadam.repository.entity.TrainerAssessmentCoefficients;
 import com.bilgeadam.repository.enums.ERole;
 import com.bilgeadam.repository.enums.EStatus;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,21 +32,56 @@ import java.util.stream.Collectors;
 
 import static com.bilgeadam.constants.ApiUrls.*;
 import static com.bilgeadam.repository.entity.TrainerAssessment.*;
+import static com.bilgeadam.repository.entity.TrainerAssessmentCoefficients.*;
 
 @Service
 public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, String> {
 
     private final ITrainerAssessmentRepository iTrainerAssesmentRepository;
+    private final ITrainerAssessmentCoefficientsRepository iTrainerAssessmentCoefficientsRepository;
     private final JwtTokenManager jwtTokenManager;
     private final ReminderMailProducer reminderMailProducer;
     private final IUserManager userManager;
 
-    public TrainerAssessmentService(ITrainerAssessmentRepository iTrainerAssessmentRepository, JwtTokenManager jwtTokenManager, ReminderMailProducer reminderMailProducer, IUserManager userManager) {
+    public TrainerAssessmentService(ITrainerAssessmentRepository iTrainerAssessmentRepository, JwtTokenManager jwtTokenManager, ReminderMailProducer reminderMailProducer, IUserManager userManager,ITrainerAssessmentCoefficientsRepository iTrainerAssessmentCoefficientsRepository) {
         super(iTrainerAssessmentRepository);
         this.iTrainerAssesmentRepository = iTrainerAssessmentRepository;
+        this.iTrainerAssessmentCoefficientsRepository = iTrainerAssessmentCoefficientsRepository;
         this.jwtTokenManager = jwtTokenManager;
         this.reminderMailProducer = reminderMailProducer;
         this.userManager = userManager;
+    }
+    public TrainerAssessment changeTrainerAssessmentCoefficients(@RequestBody ChangeTrainerAssessmentCoefficientsRequestDto dto){
+        System.out.println(dto);
+        if (dto.getBehaviorInClassCoefficient()<0.0 || dto.getBehaviorInClassCoefficient()>1.0)
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_COEFFICIENTS_POINT_RANGE);
+        if(dto.getCourseInterestLevelCoefficient()<0.0 || dto.getCourseInterestLevelCoefficient()>1.0)
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_COEFFICIENTS_POINT_RANGE);
+        if(dto.getCameraOpeningGradeCoefficient()<0.0 || dto.getCameraOpeningGradeCoefficient()>1.0)
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_COEFFICIENTS_POINT_RANGE);
+        if(dto.getInstructorGradeCoefficient()<0.0 || dto.getInstructorGradeCoefficient()>1.0)
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_COEFFICIENTS_POINT_RANGE);
+        if(dto.getDailyHomeworkGradeCoefficient()<0.0 || dto.getDailyHomeworkGradeCoefficient()>1.0)
+            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_COEFFICIENTS_POINT_RANGE);
+
+        TrainerAssessmentCoefficients trainerAssessmentCoefficients = ITrainerAssessmentMapper.INSTANCE.toTrainerAssessmentCoefficients(dto);
+        BEHAVIOR_IN_CLASS_COEFFICIENT = dto.getBehaviorInClassCoefficient();
+        COURSE_INTEREST_LEVEL_COEFFICIENT = dto.getCourseInterestLevelCoefficient();
+        CAMERA_OPENING_RATE_COEFFICIENT = dto.getCameraOpeningGradeCoefficient();
+        INSTRUCTOR_GRADE_RATE_COEFFICIENT = dto.getInstructorGradeCoefficient();
+        DAILY_HOMEWORK_RATE_COEFFICIENT = dto.getDailyHomeworkGradeCoefficient();
+        double totalTrainerAssessmentCoefficients = BEHAVIOR_IN_CLASS_COEFFICIENT + COURSE_INTEREST_LEVEL_COEFFICIENT +
+                                                    CAMERA_OPENING_RATE_COEFFICIENT + INSTRUCTOR_GRADE_RATE_COEFFICIENT +
+                                                    DAILY_HOMEWORK_RATE_COEFFICIENT;
+        if(totalTrainerAssessmentCoefficients <0.0 || totalTrainerAssessmentCoefficients >1.0){
+            throw new CardServiceException(ErrorType.TOTAL_TRAINER_ASSESSMENT_COEFFICIENTS_POINT_RANGE);
+        }
+
+        TrainerAssessment trainerAssessment = ITrainerAssessmentMapper.INSTANCE.toSaveTrainerAssessmentCoefficients(trainerAssessmentCoefficients);
+        save(trainerAssessment);
+        System.out.println("Eğitmen Puanı Katsayıları başarıyla değiştirildi..");
+        System.out.println("Güncel Eğitmen Puanı Katsayıları: " + trainerAssessment);
+        return ITrainerAssessmentMapper.INSTANCE.toSaveTrainerAssessmentCoefficients(trainerAssessmentCoefficients);
     }
     public double calculateTrainerAssessmentScore(TrainerAssessmentSaveRequestDto dto){
         System.out.println(dto);
@@ -68,21 +106,12 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
     }
     public TrainerAssessmentSaveResponseDto saveTrainerAssessment(TrainerAssessmentSaveRequestDto dto){
         double score = calculateTrainerAssessmentScore(dto);
-       /* if (dto.getBehaviorInClass()<0.0 || dto.getBehaviorInClass()>100.0)
-            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
-        if(dto.getCourseInterestLevel()<0.0 || dto.getCourseInterestLevel()>100.0)
-            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
-        if(dto.getCameraOpeningGrade()<0.0 || dto.getCameraOpeningGrade()>100.0)
-            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
-        if(dto.getInstructorGrade()<0.0 || dto.getInstructorGrade()>100.0)
-            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
-        if(dto.getDailyHomeworkGrade()<0.0 || dto.getDailyHomeworkGrade()>100.0)
-            throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_POINT_RANGE);
-        */
+        if(score<0 || score>100)
+            throw new CardServiceException(ErrorType.TOTAL_TRAINER_ASSESSMENT_POINT_RANGE);
         if (dto.getDescription().isEmpty())
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_EMPTY);
 
-        String studentId= String.valueOf(jwtTokenManager.getIdFromToken(dto.getStudentToken()));
+        String studentId = String.valueOf(jwtTokenManager.getIdFromToken(dto.getStudentToken()));
         Optional <String> studentId1 = Optional.ofNullable(studentId);
         if (studentId1.isPresent()) {
             String str = studentId1.get();

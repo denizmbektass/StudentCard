@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateTrainerAssessmentRequestDto {
+
     private String assessmentId;
     private double totalTrainerAssessmentScore;
     private String description;

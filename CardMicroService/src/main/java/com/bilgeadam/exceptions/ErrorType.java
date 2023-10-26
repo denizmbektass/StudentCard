@@ -49,7 +49,10 @@ public enum ErrorType {
     GROUP_ALREADY_EXIST(9014, "Grup zaten kayıtlı.", HttpStatus.BAD_REQUEST),
 
     TRAINER_ASSESSMENT_EMPTY(9015,"Eğitmen görüşü boş bırakılamaz.", HttpStatus.BAD_REQUEST),
-    TRAINER_ASSESSMENT_POINT_RANGE(8003, "Eğitmen görüş puanı '0' ile '100' arasında olmalıdır.",HttpStatus.BAD_REQUEST),
+    TRAINER_ASSESSMENT_POINT_RANGE(9016, "Eğitmen görüş puanı '0' ile '100' arasında olmalıdır.",HttpStatus.BAD_REQUEST),
+    TRAINER_ASSESSMENT_COEFFICIENTS_POINT_RANGE(9016, "Eğitmen görüş puan katsayıları '0' ile '1' arasında olmalıdır.",HttpStatus.BAD_REQUEST),
+    TOTAL_TRAINER_ASSESSMENT_COEFFICIENTS_POINT_RANGE(9016, "Eğitmen görüş puan katsayıları toplamı '0' ile '1' arasında olmalıdır.",HttpStatus.BAD_REQUEST),
+    TOTAL_TRAINER_ASSESSMENT_POINT_RANGE(9016, "Eğitmen görüş puanları toplamı '0' ile '100' arasında olmalıdır.",HttpStatus.BAD_REQUEST),
     POINT_EMPTY(9016,"Puan boş bırakılamaz.",HttpStatus.BAD_REQUEST),
     INTERVIEW_TYPE_EMPTY(9017, "Mülakat türü boş bırakılamaz.",HttpStatus.BAD_REQUEST),
     INTERVIEW_NAME_EMPTY(9018,"Mülakat adı boş bırakılamaz.",HttpStatus.BAD_REQUEST),
@@ -61,10 +64,6 @@ public enum ErrorType {
     BEHAVIOR_POINT_EMPTY(9024,"Davranış puanı boş bırakılamaz", HttpStatus.BAD_REQUEST),
     BEHAVIOR_NOT_FOUND(9025, "Proje bulunamadı", HttpStatus.BAD_REQUEST),
     TOTAL_PERCENTAGE(9026,"Girilen puanlama yüzdelerinin toplamı tam 100'e eşit olmalıdır",HttpStatus.BAD_REQUEST);
-
-
-    ;
-
 
     private int code;
     private String message;

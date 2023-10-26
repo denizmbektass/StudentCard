@@ -1,5 +1,6 @@
 package com.bilgeadam.controller;
 
+import com.bilgeadam.dto.request.ChangeTrainerAssessmentCoefficientsRequestDto;
 import com.bilgeadam.dto.request.TokenRequestDto;
 import com.bilgeadam.dto.request.TrainerAssessmentSaveRequestDto;
 import com.bilgeadam.dto.request.UpdateTrainerAssessmentRequestDto;
@@ -24,6 +25,14 @@ public class TrainerAssessmentController {
 
     private final TrainerAssessmentService trainerAssessmentService;
 
+    @Operation(summary = "Eğitmen değerlendirme puan katsayılarının değiştirilme ve kaydedilme işlemi",
+            description = "Belirtilen eğitmen değerlendirme puan katsayılarının değiştirilme isteği DTO'su kullanılarak bir eğitmen değerlendirmesini kaydeder.")
+    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
+    @PostMapping(CHANGE_TRAINER_ASSESSMENT_COEFFICIENTS)
+    @CrossOrigin("*")
+    public ResponseEntity<TrainerAssessment> changeTrainerAssessmentCoefficients(@RequestBody ChangeTrainerAssessmentCoefficientsRequestDto dto){
+        return ResponseEntity.ok(trainerAssessmentService.changeTrainerAssessmentCoefficients(dto));
+    }
     @Operation(summary = "Eğitmen değerlendirme kaydetme işlemi",
             description = "Belirtilen eğitmen değerlendirme kaydetme isteği DTO'su kullanılarak bir eğitmen değerlendirmesini kaydeder.")
     //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
