@@ -220,7 +220,7 @@ public class CardService extends ServiceManager<Card, String> {
         }
 
         //Bitirme projesi için ortalama bilgisi
-        GraduationProject graduationProjects = graduationProjectService.findGraduationProject(token);
+        GetGraduationProjectResponseDto graduationProjects = graduationProjectService.findGraduationProject(token);
         if (graduationProjects == null) {
             // Buraya Exceptions sınıfı eklenip yazılacak
             System.out.println("Bitirme projesi bulunmadı.");

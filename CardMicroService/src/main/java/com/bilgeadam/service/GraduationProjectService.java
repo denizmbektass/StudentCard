@@ -2,6 +2,7 @@ package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.CreateGraduationProjectRequestDto;
 import com.bilgeadam.dto.request.UpdateGraduationProjectRequestDto;
+import com.bilgeadam.dto.response.GetGraduationProjectResponseDto;
 import com.bilgeadam.dto.response.MessageResponse;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
@@ -67,11 +68,13 @@ public class GraduationProjectService extends ServiceManager<GraduationProject,S
         return new MessageResponse("Bitirme Projesi başarı ile kaydedildi.");
     }
 
-    public GraduationProject findGraduationProject(String token) {
+    public GetGraduationProjectResponseDto findGraduationProject(String token) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
         if(studentId.isEmpty())
         { throw new CardServiceException(ErrorType.INVALID_TOKEN);}
-        return iGraduationProject.findByStudentId(studentId.get());
+        GraduationProject project=iGraduationProject.findByStudentId(studentId.get());
+        GetGraduationProjectResponseDto getGraduationProjectResponseDto = iGraduationProjectMapper.toGraduationProject(project);
+        return getGraduationProjectResponseDto;
     }
 
     public MessageResponse updateProject(UpdateGraduationProjectRequestDto dto) {

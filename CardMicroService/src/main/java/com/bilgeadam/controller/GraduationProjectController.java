@@ -2,6 +2,7 @@ package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.CreateGraduationProjectRequestDto;
 import com.bilgeadam.dto.request.UpdateGraduationProjectRequestDto;
+import com.bilgeadam.dto.response.GetGraduationProjectResponseDto;
 import com.bilgeadam.dto.response.MessageResponse;
 import com.bilgeadam.repository.entity.GraduationProject;
 import com.bilgeadam.service.GraduationProjectService;
@@ -29,7 +30,7 @@ public class GraduationProjectController {
             description = "Belirtilen token kullanılarak Bitirme projesini getirir.")
     @GetMapping(FIND_GRADUATION_PROJECT+"/{token}")
     @CrossOrigin("*")
-    public ResponseEntity<GraduationProject> findGraduationProject(@PathVariable String token){
+    public ResponseEntity<GetGraduationProjectResponseDto> findGraduationProject(@PathVariable String token){
         return  ResponseEntity.ok(graduationProjectService.findGraduationProject(token));
     }
 
