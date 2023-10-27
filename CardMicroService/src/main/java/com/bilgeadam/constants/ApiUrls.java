@@ -32,6 +32,13 @@ public class ApiUrls {
     public static final String GRADUATION_PROJECT = VERSION + "/graduation-project";
     public static final String FIND_GRADUATION_PROJECT ="/find-graduation-project";
     public static final String PROJECTBEHAVIOR= VERSION+"/projectbehavior";
+    public static final String ALGORITHM= VERSION+"/algorithm";
+    public static final String FIND_ALGORITHM= VERSION+"/find-algorithm";
     public static final String CHANGE_TRAINER_ASSESSMENT_COEFFICIENTS = VERSION+"/change-trainer-assessment-coefficients";
 
+    public static final String SAVE_CANDIDATE_INTERVIEW = "/save-candidate-interview";
+    public static final String GET_CANDIDATE_INTERVIEW = "/get-candidate-interview";
+    public static final String UPDATE_CANDIDATE_INTERVIEW = "/update-candidate-interview";
+    public static final String GET_CANDIDATE_INTERVIEW_NUMBER = "/get-candidate-interview-number";
+    public static final String GET_CANDIDATE_INTERVIEW_AVERAGE_POINT = "/get-candidate-interview-average-point";
 }

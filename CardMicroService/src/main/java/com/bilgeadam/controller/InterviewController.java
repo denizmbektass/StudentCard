@@ -1,11 +1,10 @@
 package com.bilgeadam.controller;
 
-import com.bilgeadam.dto.request.CreateInterviewRequestDto;
+import com.bilgeadam.dto.request.*;
 
-import com.bilgeadam.dto.request.TokenRequestDto;
-import com.bilgeadam.dto.request.UpdateInterviewRequestDto;
 import com.bilgeadam.dto.response.CreateInterviewResponseDto;
 import com.bilgeadam.dto.response.DeleteInterviewResponseDto;
+import com.bilgeadam.dto.response.GetCandidateInterviewResponseDto;
 import com.bilgeadam.dto.response.UpdateInterviewResponseDto;
 import com.bilgeadam.repository.entity.Interview;
 import com.bilgeadam.service.InterviewService;
@@ -59,4 +58,45 @@ public class InterviewController {
     public ResponseEntity<DeleteInterviewResponseDto> deleteInterview(@RequestParam String id){
         return ResponseEntity.ok(interviewService.deleteInterview(id));
     }
+
+    @Operation(summary = "Aday mülakatı kaydetme işlemi", description = "Öğrenci seçme menüsündeki Aday Mülakatı" +
+            " başlığından yapılan aday mülakatı kaydetme işlemidir.")
+    @PostMapping(SAVE_CANDIDATE_INTERVIEW)
+    @CrossOrigin("*")
+    public ResponseEntity<Boolean> saveCandidateInterview(@RequestBody SaveInterviewRequestDto dto){
+        return ResponseEntity.ok(interviewService.saveCandidateInterview(dto));
+    }
+
+    @Operation(summary = "Aday mülakatı sayfasında mevcut puanları getirir", description = "Öğrenci seçme menüsünde " +
+            "Aday Mülakatı başlığında öğrencinin daha önceden kaydedilen aday mülakatı puan değerleri varsa getirir")
+    @GetMapping(GET_CANDIDATE_INTERVIEW+"/{studentId}")
+    @CrossOrigin("*")
+    public ResponseEntity<GetCandidateInterviewResponseDto> getCandidateInterview(@PathVariable String studentId){
+        return ResponseEntity.ok(interviewService.getCandidateInterview(studentId));
+    }
+
+    @Operation(summary = "Aday mülakatı sayfasında aday mülakatını günceller", description = "Öğrenci seçme" +
+            " menüsünde Aday Mülakatı başlığında öğrencinin daha önce girilmiş mülakatı varsa üstüne kaydeder")
+    @PutMapping(UPDATE_CANDIDATE_INTERVIEW)
+    @CrossOrigin("*")
+    public ResponseEntity<Boolean> updateCandidateInterview(@RequestBody UpdateCandidateInterviewRequestDto dto){
+        return ResponseEntity.ok(interviewService.updateCandidateInterview(dto));
+    }
+
+    @Operation(summary = "Aday mülakatı sayfasında aday mülakatı sayısını döner", description = "Öğrenci seçme " +
+            "menüsünde Aday Mülakatı başlığında öğrencinin DB'de kayıtlı aday mülakatı sayısını döner (0 ya da 1)")
+    @GetMapping(GET_CANDIDATE_INTERVIEW_NUMBER+"/{studentId}")
+    @CrossOrigin("*")
+    public ResponseEntity<Integer> getCandidateInterviewNumber(@PathVariable String studentId){
+        return ResponseEntity.ok(interviewService.getCandidateInterviewNumber(studentId));
+    }
+
+    @Operation(summary = "Aday mülakatı sayfasında ortalama puanı döner", description = "Öğrenci seçme menüsünde " +
+            "Aday Mülakatı başlığında öğrencinin ortalama aday mülakatı puan bilgisini döner")
+    @GetMapping(GET_CANDIDATE_INTERVIEW_AVERAGE_POINT+"/{studentId}")
+    @CrossOrigin("*")
+    public ResponseEntity<Double> getCandidateInterviewAveragePoint(@PathVariable String studentId){
+        return ResponseEntity.ok(interviewService.getCandidateInterviewAveragePoint(studentId));
+    }
+
 }

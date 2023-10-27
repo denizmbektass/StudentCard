@@ -20,6 +20,7 @@ public enum ErrorType {
     BAD_REQUEST(4100,"Parametre hatası.",HttpStatus.BAD_REQUEST),
 
     INTERVIEW_NOT_FOUND(6100,"Böyle bir mülakat bulunamadı.",HttpStatus.NOT_FOUND),
+    CANDIDATE_INTERVIEW_NOT_FOUND(6100, "Aday mülakatı kaydı bulunamadı.", HttpStatus.NOT_FOUND),
     ASSIGNMENT_NOT_FOUND(6100,"Böyle bir ödev bulunamadı.",HttpStatus.NOT_FOUND),
     PROJECT_NOT_FOUND(6100,"Böyle bir proje bulunamadı.",HttpStatus.NOT_FOUND),
     INTERNSHIP_NOT_FOUND(6100,"Böyle bir staj bulunamadı.",HttpStatus.NOT_FOUND),
@@ -63,7 +64,8 @@ public enum ErrorType {
     BEHAVIOR_NUMBER_RANGE(9023,"Davranış puanı '0' ile '100' arasında olmak zorundadır", HttpStatus.BAD_REQUEST),
     BEHAVIOR_POINT_EMPTY(9024,"Davranış puanı boş bırakılamaz", HttpStatus.BAD_REQUEST),
     BEHAVIOR_NOT_FOUND(9025, "Proje bulunamadı", HttpStatus.BAD_REQUEST),
-    TOTAL_PERCENTAGE(9026,"Girilen puanlama yüzdelerinin toplamı tam 100'e eşit olmalıdır",HttpStatus.BAD_REQUEST);
+    TOTAL_PERCENTAGE(9026,"Girilen puanlama yüzdelerinin toplamı tam 100'e eşit olmalıdır",HttpStatus.BAD_REQUEST),
+    ALGORITHM_NOT_FOUND(9027, "Algoritma puanı bulunamadı", HttpStatus.BAD_REQUEST);
 
     private int code;
     private String message;
