@@ -18,6 +18,7 @@ public class ApiUrls {
     public static final String CREATE ="/create";
     public static final String FIND_ALL ="/find-all";
     public static final String CREATE_INTERVIEW ="/create-interview";
+    public static final String WRITTENEXAM = VERSION+"/written-exam";
 
     public static final String FIND_ALL_INTERVIEW ="/find-all-interview" ;
     public static final String UPDATE_INTERVIEW ="/update-interview" ;
@@ -28,12 +29,15 @@ public class ApiUrls {
     public static final String ABSENCE = "/absence";
     public static final String CARDPARAMETER = VERSION + "/card-parameter";
     public static final String AVERAGE = "/average-exam/{studentId}";
-    public static final String ASSIGNMENT_AVERAGE = "/get-assignment-average";
+    public static final String ASSIGNMENT_AVERAGE = "/assignment-average/{studentId}";
     public static final String GRADUATION_PROJECT = VERSION + "/graduation-project";
     public static final String FIND_GRADUATION_PROJECT ="/find-graduation-project";
     public static final String PROJECTBEHAVIOR= VERSION+"/projectbehavior";
     public static final String ALGORITHM= VERSION+"/algorithm";
     public static final String FIND_ALGORITHM= VERSION+"/find-algorithm";
+    public static final String WRITTENEXAMSCORE = "/written-exam-score/{correctAnswers}";
+    public static final String SAVEWRITTENEXAM = "/save-written-exam";
+    public static final String GETWRITTENEXAM = "/get-written-exam/{studentId}";
     public static final String CHANGE_TRAINER_ASSESSMENT_COEFFICIENTS = VERSION+"/change-trainer-assessment-coefficients";
 
     public static final String SAVE_CANDIDATE_INTERVIEW = "/save-candidate-interview";
