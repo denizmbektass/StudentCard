@@ -14,6 +14,7 @@ public class ApiUrls {
     public static final String EXAM = VERSION+"/exam";
     public static final String ROLLCALL = VERSION+"/rollcall";
     public static final String INTERVIEW = VERSION+"/interview";
+    public static final String GAME_INTERVIEW = VERSION+"/game-interview";
     public static final String PROJECT=VERSION+"/project";
     public static final String CREATE ="/create";
     public static final String FIND_ALL ="/find-all";
@@ -51,6 +52,9 @@ public class ApiUrls {
     public static final String UPDATE_GAME_INTERVIEW = "/update-game-interview";
     public static final String GET_GAME_INTERVIEW_NUMBER = "/get-game-interview-number";
     public static final String GET_GAME_INTERVIEW_AVERAGE_POINT = "/get-game-interview-average-point";
+    public static final String DELETE_GAME_INTERVIEW = "/get-game-interview-average-point";
+    public static final String CREATE_GAME_INTERVIEW = "/get-game-interview-average-point";
+
 
 
 

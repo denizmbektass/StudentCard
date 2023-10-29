@@ -34,10 +34,7 @@ public class Interview extends BaseEntity{
     private short motivationPoint;
     private short residencyPoint;
     private short softwareEducationPoint;
-    private Long directionCorrect;
-    private Long completionTime;
-    private Long levelReached;
-    private Long supportTaken;
+
     @Builder.Default()
     private EStatus eStatus = EStatus.ACTIVE;
     //private int trainerId,hrId;
