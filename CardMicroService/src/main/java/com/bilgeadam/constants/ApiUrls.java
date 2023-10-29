@@ -41,4 +41,15 @@ public class ApiUrls {
     public static final String UPDATE_CANDIDATE_INTERVIEW = "/update-candidate-interview";
     public static final String GET_CANDIDATE_INTERVIEW_NUMBER = "/get-candidate-interview-number";
     public static final String GET_CANDIDATE_INTERVIEW_AVERAGE_POINT = "/get-candidate-interview-average-point";
+
+    public static final String SAVE_GAME_INTERVIEW = "/save-game-interview";
+    public static final String GET_GAME_INTERVIEW = "/get-game-interview";
+    public static final String UPDATE_GAME_INTERVIEW = "/update-game-interview";
+    public static final String GET_GAME_INTERVIEW_NUMBER = "/get-game-interview-number";
+    public static final String GET_GAME_INTERVIEW_AVERAGE_POINT = "/get-game-interview-average-point";
+
+
+
+
+
 }
