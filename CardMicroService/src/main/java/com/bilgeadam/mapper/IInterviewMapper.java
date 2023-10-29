@@ -23,7 +23,6 @@ public interface IInterviewMapper {
 
     GetCandidateInterviewResponseDto fromInterviewToGetCandidateInterviewResponseDto(final Interview candidateInterview);
 
-    GetGameInterviewResponseDto fromInterviewToGetGameInterviewResponseDto(final Interview gameInterview);
 
 
 }

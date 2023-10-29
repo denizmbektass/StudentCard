@@ -33,13 +33,13 @@ public class InterviewService extends ServiceManager<Interview, String> {
 
     public CreateInterviewResponseDto createInterview(CreateInterviewRequestDto dto) {
         //if check ile böyle bir student var mı eklenebilir user micro service oluşturulduktan sonra.
-        if(dto.getInterviewType().isBlank())
-            throw  new CardServiceException(ErrorType.INTERVIEW_TYPE_EMPTY);
-        if (dto.getScore()<0 || dto.getScore()>100)
+        if (dto.getInterviewType().isBlank())
+            throw new CardServiceException(ErrorType.INTERVIEW_TYPE_EMPTY);
+        if (dto.getScore() < 0 || dto.getScore() > 100)
             throw new CardServiceException(ErrorType.INTERVIEW_SCORE_NUMBER_RANGE);
-        if(dto.getDescription().isBlank())
+        if (dto.getDescription().isBlank())
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_EMPTY);
-        if(dto.getScore()==null)
+        if (dto.getScore() == null)
             throw new InterviewServiceException(ErrorType.POINT_EMPTY);
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());
         Interview interview = IInterviewMapper.INSTANCE.toInterview(dto);
@@ -53,14 +53,14 @@ public class InterviewService extends ServiceManager<Interview, String> {
         if (interview.isEmpty()) {
             throw new CardServiceException(ErrorType.INTERVIEW_NOT_FOUND);
         }
-        if(dto.getDescription().isBlank())
+        if (dto.getDescription().isBlank())
             throw new CardServiceException(ErrorType.TRAINER_ASSESSMENT_EMPTY);
-        if(dto.getScore()==null)
+        if (dto.getScore() == null)
             throw new CardServiceException(ErrorType.POINT_EMPTY);
-        if(dto.getInterviewType().isBlank())
-            throw  new CardServiceException(ErrorType.INTERVIEW_TYPE_EMPTY);
-        if(dto.getName().isBlank())
-            throw  new CardServiceException(ErrorType.INTERVIEW_NAME_EMPTY);
+        if (dto.getInterviewType().isBlank())
+            throw new CardServiceException(ErrorType.INTERVIEW_TYPE_EMPTY);
+        if (dto.getName().isBlank())
+            throw new CardServiceException(ErrorType.INTERVIEW_NAME_EMPTY);
         Interview toUpdateInterview = interview.get();
         toUpdateInterview.setDescription(dto.getDescription());
         toUpdateInterview.setName(dto.getName());
@@ -79,21 +79,24 @@ public class InterviewService extends ServiceManager<Interview, String> {
         update(interview.get());
         return IInterviewMapper.INSTANCE.toDeleteInterviewResponseDto(interview.get());
     }
-    public Integer getInterviewNote(String studentId){
+
+    public Integer getInterviewNote(String studentId) {
         return (int) Math.floor(interviewRepository.findAllByStudentId(studentId).stream()
-                .mapToLong(x->x.getScore()).average().orElse(0));
+                .mapToLong(x -> x.getScore()).average().orElse(0));
     }
+
     public List<Interview> findAllInterviews(TokenRequestDto dto) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());
-        return findAll().stream().filter(x->x.getEStatus()==EStatus.ACTIVE && x.getStudentId().equals(studentId.get()))
+        return findAll().stream().filter(x -> x.getEStatus() == EStatus.ACTIVE && x.getStudentId().equals(studentId.get()))
                 .collect(Collectors.toList());
     }
+
     public List<InterviewForTranscriptResponseDto> findAllInterviewsDtos(String token) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
-        List<Interview> interviews = findAll().stream().filter(x->x.getEStatus()==EStatus.ACTIVE && x.getStudentId().equals(studentId.get()))
+        List<Interview> interviews = findAll().stream().filter(x -> x.getEStatus() == EStatus.ACTIVE && x.getStudentId().equals(studentId.get()))
                 .collect(Collectors.toList());
         List<InterviewForTranscriptResponseDto> interviewForTranscriptResponseDtos = new ArrayList<>();
-        interviews.forEach(x->{
+        interviews.forEach(x -> {
             InterviewForTranscriptResponseDto dto = IInterviewMapper.INSTANCE.toInterviewForTranscriptResponseDto(x);
             interviewForTranscriptResponseDtos.add(dto);
         });
@@ -102,13 +105,12 @@ public class InterviewService extends ServiceManager<Interview, String> {
 
     public boolean saveCandidateInterview(SaveInterviewRequestDto dto) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
-        if(studentId.isPresent()){
+        if (studentId.isPresent()) {
             Interview newInterview = IInterviewMapper.INSTANCE.fromSaveInterviewRequestDtoToInterview(dto);
             newInterview.setStudentId(studentId.get());
             save(newInterview);
             return true;
-        }
-        else {
+        } else {
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
         }
 
@@ -116,8 +118,8 @@ public class InterviewService extends ServiceManager<Interview, String> {
 
     public GetCandidateInterviewResponseDto getCandidateInterview(String studentId) {
         GetCandidateInterviewResponseDto responseDto;
-        if(!studentId.equals("")){
-            if(interviewRepository.findAllByStudentId(studentId).size()>0){
+        if (!studentId.equals("")) {
+            if (interviewRepository.findAllByStudentId(studentId).size() > 0) {
                 Interview candidateInterview = interviewRepository.findAllByStudentId(studentId).get(0);
                 responseDto = IInterviewMapper.INSTANCE.fromInterviewToGetCandidateInterviewResponseDto(candidateInterview);
             } else {
@@ -131,7 +133,7 @@ public class InterviewService extends ServiceManager<Interview, String> {
 
     public Boolean updateCandidateInterview(UpdateCandidateInterviewRequestDto dto) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
-        if(studentId.isPresent()){
+        if (studentId.isPresent()) {
             Interview candidateInterview = interviewRepository.findAllByStudentId(studentId.get()).get(0);
 
             candidateInterview.setCommunicationSkillsPoint(dto.getCommunicationSkillsPoint());
@@ -156,12 +158,12 @@ public class InterviewService extends ServiceManager<Interview, String> {
     public Integer getCandidateInterviewNumber(String studentId) {
         Integer candidateInterviewCount = Integer.MAX_VALUE;
         List<Interview> candidateInterviewList;
-        if(!studentId.equals("")){
+        if (!studentId.equals("")) {
             candidateInterviewList = interviewRepository.findAllByStudentId(studentId);
-            if(candidateInterviewList.size() == 0){
+            if (candidateInterviewList.size() == 0) {
                 return 0;
             }
-            if (candidateInterviewList.size() > 0){
+            if (candidateInterviewList.size() > 0) {
                 return 1;
             }
         } else {
@@ -173,101 +175,23 @@ public class InterviewService extends ServiceManager<Interview, String> {
     public Double getCandidateInterviewAveragePoint(String studentId) {
         Double candidateInterviewAveragePoint = 0.0;
         Interview candidateInterview = interviewRepository.findAllByStudentId(studentId).get(0);
-        if(!studentId.equals("")){
+        if (!studentId.equals("")) {
             candidateInterviewAveragePoint = ((double) candidateInterview.getCommunicationSkillsPoint() / 12) +
-                    ((double)candidateInterview.getWorkExperiencePoint() / 12) +
-                    ((double)candidateInterview.getUniversityPoint() / 12) +
-                    ((double)candidateInterview.getUniversityProgramPoint() / 12) +
-                    ((double)candidateInterview.getAgePoint() / 12) +
-                    ((double)candidateInterview.getPersonalityEvaluationPoint() / 12) +
-                    ((double)candidateInterview.getEnglishLevelPoint() / 12) +
-                    ((double)candidateInterview.getGraduationPeriodPoint() / 12) +
-                    ((double)candidateInterview.getMilitaryServicePoint()/ 12) +
-                    ((double)candidateInterview.getMotivationPoint() / 12) +
-                    ((double)candidateInterview.getResidencyPoint() / 12) +
-                    ((double)candidateInterview.getSoftwareEducationPoint() / 12);
+                    ((double) candidateInterview.getWorkExperiencePoint() / 12) +
+                    ((double) candidateInterview.getUniversityPoint() / 12) +
+                    ((double) candidateInterview.getUniversityProgramPoint() / 12) +
+                    ((double) candidateInterview.getAgePoint() / 12) +
+                    ((double) candidateInterview.getPersonalityEvaluationPoint() / 12) +
+                    ((double) candidateInterview.getEnglishLevelPoint() / 12) +
+                    ((double) candidateInterview.getGraduationPeriodPoint() / 12) +
+                    ((double) candidateInterview.getMilitaryServicePoint() / 12) +
+                    ((double) candidateInterview.getMotivationPoint() / 12) +
+                    ((double) candidateInterview.getResidencyPoint() / 12) +
+                    ((double) candidateInterview.getSoftwareEducationPoint() / 12);
 
         } else {
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
         }
         return candidateInterviewAveragePoint;
-    }
-    public boolean saveGameInterview(SaveInterviewRequestDto dto) {
-        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
-        if(studentId.isPresent()){
-            Interview gameInterview = IInterviewMapper.INSTANCE.fromSaveInterviewRequestDtoToInterview(dto);
-            gameInterview.setStudentId(studentId.get());
-            save(gameInterview);
-            return true;
-        }
-        else {
-            throw new CardServiceException(ErrorType.INVALID_TOKEN);
-        }
-
-    }
-
-    public GetGameInterviewResponseDto getGameInterview(String studentId) {
-        GetGameInterviewResponseDto responseDto;
-        if(!studentId.equals("")){
-            if(interviewRepository.findAllByStudentId(studentId).size()>0){
-                Interview gameInterview = interviewRepository.findAllByStudentId(studentId).get(0);
-                responseDto = IInterviewMapper.INSTANCE.fromInterviewToGetGameInterviewResponseDto(gameInterview);
-            } else {
-                throw new CardServiceException(ErrorType.GAME_INTERVIEW_NOT_FOUND);
-            }
-        } else {
-            throw new CardServiceException(ErrorType.INVALID_TOKEN);
-        }
-        return responseDto;
-    }
-
-
-    public Boolean updateGameInterview(UpdateGameInterviewRequestDto dto) {
-        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
-        if(studentId.isPresent()){
-            Interview gameInterview = interviewRepository.findAllByStudentId(studentId.get()).get(0);
-
-            gameInterview.setDirectionCorrect(dto.getDirectionCorrect());
-            gameInterview.setCompletionTime(dto.getCompletionTime());
-            gameInterview.setLevelReached(dto.getLevelReached());
-            gameInterview.setSupportTaken(dto.getSupportTaken());
-            update(gameInterview);
-            return true;
-        } else {
-            throw new CardServiceException(ErrorType.INVALID_TOKEN);
-        }
-    }
-
-    public Integer getGameInterviewNumber(String studentId) {
-        if (studentId == null || studentId.isEmpty()) {
-            throw new CardServiceException(ErrorType.INVALID_TOKEN);
-        }
-
-        List<Interview> gameInterviewList = interviewRepository.findAllByStudentId(studentId);
-
-        if (gameInterviewList.isEmpty()) {
-            return 0;
-        } else {
-            return 1;
-        }
-    }
-
-    public Double getGameInterviewAveragePoint(String studentId) {
-
-        if (studentId == null || studentId.isEmpty()) {
-            throw new CardServiceException(ErrorType.INVALID_TOKEN);
-        }
-        List<Interview> gameInterviewList = interviewRepository.findAllByStudentId(studentId);
-        if (gameInterviewList.isEmpty()) {
-            return 0.0;
-        }
-        double totalAveragePoint = 0.0;
-        for (Interview interview : gameInterviewList) {
-            totalAveragePoint += ((double) interview.getDirectionCorrect() +
-                    (double) interview.getCompletionTime() +
-                    (double) interview.getLevelReached() +
-                    (double) interview.getSupportTaken()) / 4.0;
-        }
-        return totalAveragePoint / gameInterviewList.size();
     }
 }

@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SaveGameInterviewRequestDto {
+public class CreateGameInterviewRequestDto {
+
     private String studentToken;
     private Long directionCorrect;
     private Long completionTime;
     private Long levelReached;
     private Long supportTaken;
-
 
 }

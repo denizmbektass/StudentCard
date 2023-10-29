@@ -75,7 +75,7 @@ public class AssignmentController {
     }
     @Operation(summary = "Ödevlerin not ortalamasını bulma işlemi",
             description = "studentId ile tüm notlara erişilir ve ortalaması alınır. ")
-    @GetMapping(ASSIGNMENT_AVERAGE + "/{studentId}")
+    @GetMapping(ASSIGNMENT_AVERAGE )
     @CrossOrigin("*")
     public ResponseEntity<Double> getAssignmentAverage(@PathVariable String studentId){
         return ResponseEntity.ok(assignmentService.getAssignmentAverage(studentId));
