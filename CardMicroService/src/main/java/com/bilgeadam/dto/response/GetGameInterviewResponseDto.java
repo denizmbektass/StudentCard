@@ -16,4 +16,6 @@ public class GetGameInterviewResponseDto {
     private Long completionTime;
     private Long levelReached;
     private Long supportTaken;
+    private String comment;
+    private Double gameInterviewAveragePoint;
 }

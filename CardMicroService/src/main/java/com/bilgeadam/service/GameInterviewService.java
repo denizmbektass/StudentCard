@@ -40,6 +40,8 @@ public GameInterviewService(IGameInterviewRepository gameInterviewRepository,Jwt
         if(studentId.isPresent()){
             GameInterview gameInterview = IGameInterviewMapper.INSTANCE.fromSaveGameInterviewRequestDtoToGameInterview(dto);
             gameInterview.setStudentId(studentId.get());
+            double gameInterviewAvaragePoint = (dto.getDirectionCorrect()*0.25) + (dto.getCompletionTime()*0.25)+ (dto.getLevelReached()*0.25)+(dto.getSupportTaken()*0.25);
+            gameInterview.setGameInterviewAveragePoint(gameInterviewAvaragePoint);
             save(gameInterview);
             return true;
         }
@@ -74,6 +76,10 @@ public GameInterviewService(IGameInterviewRepository gameInterviewRepository,Jwt
             gameInterview.setCompletionTime(dto.getCompletionTime());
             gameInterview.setLevelReached(dto.getLevelReached());
             gameInterview.setSupportTaken(dto.getSupportTaken());
+            gameInterview.setComment(dto.getComment());
+            double gameInterviewAvaragePoint = (dto.getDirectionCorrect()*0.25) + (dto.getCompletionTime()*0.25)+ (dto.getLevelReached()*0.25)+(dto.getSupportTaken()*0.25);
+            gameInterview.setGameInterviewAveragePoint(gameInterviewAvaragePoint);
+            gameInterview.setGameInterviewAveragePoint(gameInterviewAvaragePoint);
             update(gameInterview);
             return true;
         } else {
@@ -93,8 +99,9 @@ public GameInterviewService(IGameInterviewRepository gameInterviewRepository,Jwt
 
         if (studentId.isPresent()) {
             GameInterview gameInterview = iGameInterviewMapper.fromCreateGameInterviewRequestDtoToGameInterview(dto);
-
             gameInterview.setStudentId(studentId.get());
+            double gameInterviewAvaragePoint = (dto.getDirectionCorrect()*0.25) + (dto.getCompletionTime()*0.25)+ (dto.getLevelReached()*0.25)+(dto.getSupportTaken()*0.25);
+            gameInterview.setGameInterviewAveragePoint(gameInterviewAvaragePoint);
             save(gameInterview);
 
             return true;
@@ -128,14 +135,9 @@ public GameInterviewService(IGameInterviewRepository gameInterviewRepository,Jwt
         if (gameInterviewList.isEmpty()) {
             return 0.0;
         }
-        double totalAveragePoint = 0.0;
-        for (GameInterview Gameinterview : gameInterviewList) {
-            totalAveragePoint += ((double) Gameinterview.getDirectionCorrect() +
-                    (double) Gameinterview.getCompletionTime() +
-                    (double) Gameinterview.getLevelReached() +
-                    (double) Gameinterview.getSupportTaken()) / 4.0;
-        }
-        return totalAveragePoint / gameInterviewList.size();
+        double totalAveragePoint = gameInterviewList.get(0).getGameInterviewAveragePoint();
+
+        return totalAveragePoint ;
     }
 }
 

@@ -17,8 +17,6 @@ public class UpdateGameInterviewRequestDto {
     private Long completionTime;
     private Long levelReached;
     private Long supportTaken;
-
-
-
+    private String comment;
 
 }
