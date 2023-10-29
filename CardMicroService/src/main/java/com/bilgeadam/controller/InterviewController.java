@@ -2,16 +2,12 @@ package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.*;
 
-import com.bilgeadam.dto.response.CreateInterviewResponseDto;
-import com.bilgeadam.dto.response.DeleteInterviewResponseDto;
-import com.bilgeadam.dto.response.GetCandidateInterviewResponseDto;
-import com.bilgeadam.dto.response.UpdateInterviewResponseDto;
+import com.bilgeadam.dto.response.*;
 import com.bilgeadam.repository.entity.Interview;
 import com.bilgeadam.service.InterviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -98,5 +94,52 @@ public class InterviewController {
     public ResponseEntity<Double> getCandidateInterviewAveragePoint(@PathVariable String studentId){
         return ResponseEntity.ok(interviewService.getCandidateInterviewAveragePoint(studentId));
     }
+
+    @Operation(summary = "Oyun mülakatı kaydetme işlemi",
+            description = "Öğrencinin oyun mülakat verilerini kaydetmek için kullanılır. İlgili verileri içeren SaveInterviewRequestDto nesnesi, " +
+                    "HTTP POST isteği ile gönderilir. Başarılı olursa true, aksi takdirde hata döner.")
+    @PostMapping(SAVE_GAME_INTERVIEW)
+    @CrossOrigin("*")
+    public ResponseEntity<Boolean> saveGameInterview(@RequestBody SaveInterviewRequestDto dto){
+        return ResponseEntity.ok(interviewService.saveGameInterview(dto));
+    }
+
+    @Operation(summary = "Oyun mülakatı puanlarını getirir",
+            description = "Öğrencinin oyun mülakat verilerini almak için kullanılır. İlgili öğrencinin kimliği," +
+            " URL'de yer alan 'studentId' parametresi ile belirtilir.")
+    @GetMapping(GET_GAME_INTERVIEW+"/{studentId}")
+    @CrossOrigin("*")
+    public ResponseEntity<GetGameInterviewResponseDto> getGameInterview(@PathVariable String studentId){
+        return ResponseEntity.ok(interviewService.getGameInterview(studentId));
+    }
+
+    @Operation(summary = "Oyun mülakatını günceller",
+            description = "Öğrencinin oyun mülakat verilerini güncellemek için kullanılır. İlgili verileri içeren UpdateGameInterviewRequestDto nesnesi, " +
+                    "HTTP PUT isteği ile gönderilir. Başarılı olursa true, aksi takdirde hata döner.")
+    @PutMapping(UPDATE_GAME_INTERVIEW)
+    @CrossOrigin("*")
+    public ResponseEntity<Boolean> updateGameInterview(@RequestBody UpdateGameInterviewRequestDto dto){
+        return ResponseEntity.ok(interviewService.updateGameInterview(dto));
+    }
+
+    @Operation(summary = "Oyun mülakatı sayısını getirir.",
+            description = "Öğrencinin oyun mülakat sayısını almak için kullanılır. " +
+            "Öğrencinin kimliği, URL'de yer alan 'studentId' parametresi ile belirtilir.")
+    @GetMapping(GET_GAME_INTERVIEW_NUMBER+"/{studentId}")
+    @CrossOrigin("*")
+    public ResponseEntity<Integer> getGameInterviewNumber(@PathVariable String studentId){
+        return ResponseEntity.ok(interviewService.getGameInterviewNumber(studentId));
+    }
+
+    @Operation(summary = "Oyun mülakatı ortalama puanını getirir.",
+            description = "Öğrencinin oyun mülakatlarının ortalama puanını almak için kullanılır." +
+                    " Öğrencinin kimliği, URL'de yer alan 'studentId' parametresi ile belirtilir.")
+    @GetMapping(GET_GAME_INTERVIEW_AVERAGE_POINT+"/{studentId}")
+    @CrossOrigin("*")
+    public ResponseEntity<Double> getGameInterviewAveragePoint(@PathVariable String studentId){
+        return ResponseEntity.ok(interviewService.getGameInterviewAveragePoint(studentId));
+    }
+
+
 
 }

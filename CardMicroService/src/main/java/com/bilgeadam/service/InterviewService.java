@@ -192,5 +192,82 @@ public class InterviewService extends ServiceManager<Interview, String> {
         }
         return candidateInterviewAveragePoint;
     }
+    public boolean saveGameInterview(SaveInterviewRequestDto dto) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
+        if(studentId.isPresent()){
+            Interview gameInterview = IInterviewMapper.INSTANCE.fromSaveInterviewRequestDtoToInterview(dto);
+            gameInterview.setStudentId(studentId.get());
+            save(gameInterview);
+            return true;
+        }
+        else {
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        }
 
+    }
+
+    public GetGameInterviewResponseDto getGameInterview(String studentId) {
+        GetGameInterviewResponseDto responseDto;
+        if(!studentId.equals("")){
+            if(interviewRepository.findAllByStudentId(studentId).size()>0){
+                Interview gameInterview = interviewRepository.findAllByStudentId(studentId).get(0);
+                responseDto = IInterviewMapper.INSTANCE.fromInterviewToGetGameInterviewResponseDto(gameInterview);
+            } else {
+                throw new CardServiceException(ErrorType.GAME_INTERVIEW_NOT_FOUND);
+            }
+        } else {
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        }
+        return responseDto;
+    }
+
+
+    public Boolean updateGameInterview(UpdateGameInterviewRequestDto dto) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
+        if(studentId.isPresent()){
+            Interview gameInterview = interviewRepository.findAllByStudentId(studentId.get()).get(0);
+
+            gameInterview.setDirectionCorrect(dto.getDirectionCorrect());
+            gameInterview.setCompletionTime(dto.getCompletionTime());
+            gameInterview.setLevelReached(dto.getLevelReached());
+            gameInterview.setSupportTaken(dto.getSupportTaken());
+            update(gameInterview);
+            return true;
+        } else {
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        }
+    }
+
+    public Integer getGameInterviewNumber(String studentId) {
+        if (studentId == null || studentId.isEmpty()) {
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        }
+
+        List<Interview> gameInterviewList = interviewRepository.findAllByStudentId(studentId);
+
+        if (gameInterviewList.isEmpty()) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    public Double getGameInterviewAveragePoint(String studentId) {
+
+        if (studentId == null || studentId.isEmpty()) {
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        }
+        List<Interview> gameInterviewList = interviewRepository.findAllByStudentId(studentId);
+        if (gameInterviewList.isEmpty()) {
+            return 0.0;
+        }
+        double totalAveragePoint = 0.0;
+        for (Interview interview : gameInterviewList) {
+            totalAveragePoint += ((double) interview.getDirectionCorrect() +
+                    (double) interview.getCompletionTime() +
+                    (double) interview.getLevelReached() +
+                    (double) interview.getSupportTaken()) / 4.0;
+        }
+        return totalAveragePoint / gameInterviewList.size();
+    }
 }
