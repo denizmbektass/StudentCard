@@ -17,11 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Interview extends BaseEntity{
     @Id
     private String interviewId;
-    private String name;
-    private Long score;
-    private String description;
     private String studentId;
-    private String interviewType;
     private short communicationSkillsPoint;
     private short workExperiencePoint;
     private short universityPoint;
@@ -34,7 +30,6 @@ public class Interview extends BaseEntity{
     private short motivationPoint;
     private short residencyPoint;
     private short softwareEducationPoint;
-
     @Builder.Default()
     private EStatus eStatus = EStatus.ACTIVE;
     //private int trainerId,hrId;

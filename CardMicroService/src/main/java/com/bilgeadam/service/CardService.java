@@ -71,18 +71,19 @@ public class CardService extends ServiceManager<Card, String> {
         Integer assignmentNote = assignmentService.getAssignmentNote(studentId.get());
         Integer examNote = examService.getExamNote(studentId.get());
         Integer internshipNote = intershipService.getInternshipNote(studentId.get());
-        Integer interviewNote = interviewService.getInterviewNote(studentId.get());
+//        Integer interviewNote = interviewService.getInterviewNote(studentId.get());
         Integer projectNote = projectService.getProjectNote(studentId.get());
         Integer assessmentNote = trainerAssessmentService.getTrainerAssessmentNote(studentId.get());
         Map<String, Integer> newNotes = new HashMap<>();
         newNotes.put("Assignment", assignmentNote);
         newNotes.put("Exam", examNote);
         newNotes.put("Internship", internshipNote);
-        newNotes.put("Interview", interviewNote);
+//        newNotes.put("Interview", interviewNote);
         newNotes.put("Project", projectNote);
         newNotes.put("TrainerAssessment", assessmentNote);
         Integer totalNote = ((assignmentNote * parameters.get("Assignment")) + (examNote * parameters.get("Exam"))
-                + (internshipNote * parameters.get("Internship")) + (interviewNote * parameters.get("Interview"))
+                + (internshipNote * parameters.get("Internship"))
+//                + (interviewNote * parameters.get("Interview"))
                 + (projectNote * parameters.get("Project")) + (assessmentNote * parameters.get("TrainerAssessment"))) / 100;
         TranscriptInfo transcriptInfo = userManager.getTranscriptInfoByUser(token).getBody();
         ShowUserAbsenceInformationResponseDto dto = absenceService.showUserAbsenceInformation(token);

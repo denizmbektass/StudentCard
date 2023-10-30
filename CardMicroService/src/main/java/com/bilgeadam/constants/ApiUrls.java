@@ -18,12 +18,7 @@ public class ApiUrls {
     public static final String PROJECT=VERSION+"/project";
     public static final String CREATE ="/create";
     public static final String FIND_ALL ="/find-all";
-    public static final String CREATE_INTERVIEW ="/create-interview";
     public static final String WRITTENEXAM = VERSION+"/written-exam";
-
-    public static final String FIND_ALL_INTERVIEW ="/find-all-interview" ;
-    public static final String UPDATE_INTERVIEW ="/update-interview" ;
-    public static final String DELETE_INTERVIEW = "/delete-interview";
     public static final String CREATE_PROJECT_SCORE ="/create-project-score";
     public static final String INTERNSHIP = VERSION + "/internship";
     public static final String ADD_SCORE_AND_COMMENT = "/add-score-and-comment";

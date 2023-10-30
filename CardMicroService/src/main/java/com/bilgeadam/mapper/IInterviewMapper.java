@@ -12,17 +12,10 @@ import org.mapstruct.factory.Mappers;
 public interface IInterviewMapper {
     IInterviewMapper INSTANCE = Mappers.getMapper(IInterviewMapper.class);
 
-    Interview toInterview(final CreateInterviewRequestDto dto);
-    CreateInterviewResponseDto toCreateInterviewResponseDto(final Interview interview);
-    UpdateInterviewResponseDto toUpdateInterviewResponseDto(final Interview interview);
-    DeleteInterviewResponseDto toDeleteInterviewResponseDto(final Interview interview);
-
     InterviewForTranscriptResponseDto toInterviewForTranscriptResponseDto(final Interview interview);
 
     Interview fromSaveInterviewRequestDtoToInterview(final SaveInterviewRequestDto dto);
 
     GetCandidateInterviewResponseDto fromInterviewToGetCandidateInterviewResponseDto(final Interview candidateInterview);
-
-
 
 }
