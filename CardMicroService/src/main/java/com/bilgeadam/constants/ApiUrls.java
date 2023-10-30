@@ -28,7 +28,9 @@ public class ApiUrls {
     public static final String ASSIGNMENT_AVERAGE = "/get-assignment-average";
     public static final String GRADUATION_PROJECT = VERSION + "/graduation-project";
     public static final String FIND_GRADUATION_PROJECT ="/find-graduation-project";
-    public static final String PROJECTBEHAVIOR= VERSION+"/projectbehavior";
+    public static final String PROJECT_BEHAVIOR= VERSION+"/project-behavior";
+    public static final String FIND_PROJECT_BEHAVIOR= "/find-project-behavior";
+
     public static final String ALGORITHM= VERSION+"/algorithm";
     public static final String FIND_ALGORITHM= VERSION+"/find-algorithm";
     public static final String TRAINER_ASSESSMENT_COEFFICIENTS = VERSION+"/trainer-assessment-coefficients";

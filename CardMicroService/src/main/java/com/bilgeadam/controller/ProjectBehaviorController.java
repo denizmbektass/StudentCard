@@ -1,25 +1,21 @@
 package com.bilgeadam.controller;
 
-import com.bilgeadam.dto.request.AverageProjectBehaviorRequestDto;
-
 import com.bilgeadam.dto.request.CreatProjectBehaviorScoreRequestDto;
 
 import com.bilgeadam.dto.request.UpdateProjectBehaviorRequestDto;
-import com.bilgeadam.dto.response.AverageExamResponseDto;
-import com.bilgeadam.dto.response.AverageProjectBehaviorResponseDto;
-import com.bilgeadam.dto.response.CreateProjectBehaviorScoreResponseDto;
-import com.bilgeadam.dto.response.MessageResponse;
-import com.bilgeadam.repository.entity.ProjectBehavior;
+import com.bilgeadam.dto.response.*;
 import com.bilgeadam.service.ProjectBehaviorService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static com.bilgeadam.constants.ApiUrls.*;
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(PROJECTBEHAVIOR)
+@RequestMapping(PROJECT_BEHAVIOR)
 public class ProjectBehaviorController {
 
     private final ProjectBehaviorService projectBehaviorService;
@@ -28,7 +24,7 @@ public class ProjectBehaviorController {
             description = "Belirtilen öğrenci kimliği kullanılarak sınavlar için ortalama hesaplar.")
     @PostMapping(CREATE)
     @CrossOrigin("*")
-    public ResponseEntity<CreateProjectBehaviorScoreResponseDto> createProjectBehaviorScore(@RequestBody CreatProjectBehaviorScoreRequestDto dto){
+    public ResponseEntity<CreateProjectBehaviorScoreResponseDto> createProjectBehaviorScore(@RequestBody @Valid CreatProjectBehaviorScoreRequestDto dto){
         return ResponseEntity.ok(projectBehaviorService.createProjectBehaviorScore(dto));
     }
 
@@ -36,15 +32,22 @@ public class ProjectBehaviorController {
             description = "Belirtilen öğrenci kimliği kullanılarak sınavlar için ortalama hesaplar.")
     @PutMapping(UPDATE)
     @CrossOrigin("*")
-    public ResponseEntity<MessageResponse> updateProjectBehavior(@RequestBody UpdateProjectBehaviorRequestDto dto){
+    public ResponseEntity<MessageResponse> updateProjectBehavior(@RequestBody @Valid UpdateProjectBehaviorRequestDto dto){
         return  ResponseEntity.ok(projectBehaviorService.updateProjectBehavior(dto));
     }
     @Operation(summary = "Davranış puanı silme işlemi",
             description = "Belirtilen davranış puanlama kimliği kullanılarak bir davranış puanlarını siler.")
-    @DeleteMapping(DELETE+"/{projectBehaviorId}")
+    @DeleteMapping(DELETE+"/{token}")
     @CrossOrigin("*")
-    public ResponseEntity<Boolean> deleteProjectBehavior(@PathVariable String projectBehaviorId){
-        return ResponseEntity.ok(projectBehaviorService.deleteProjectBehavior(projectBehaviorId));
+    public ResponseEntity<Boolean> deleteProjectBehavior(@PathVariable String token){
+        return ResponseEntity.ok(projectBehaviorService.deleteProjectBehavior(token));
     }
 
+    @Operation(summary = "Davranış puanlarını  alma işlemi",
+            description = "Belirtilen token kullanılarak proje davranış puanlarını getirir.")
+    @GetMapping(FIND_PROJECT_BEHAVIOR+"/{token}")
+    @CrossOrigin("*")
+    public ResponseEntity<GetProjectBehaviorResponseDto> findProjectBehavior(@PathVariable String token){
+        return  ResponseEntity.ok(projectBehaviorService.findProjectBehavior(token));
+    }
 }

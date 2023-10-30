@@ -5,6 +5,7 @@ import com.bilgeadam.dto.request.CreatProjectBehaviorScoreRequestDto;
 import com.bilgeadam.dto.request.UpdateProjectBehaviorRequestDto;
 
 import com.bilgeadam.dto.response.CreateProjectBehaviorScoreResponseDto;
+import com.bilgeadam.dto.response.GetProjectBehaviorResponseDto;
 import com.bilgeadam.dto.response.MessageResponse;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
@@ -22,15 +23,17 @@ public class ProjectBehaviorService extends ServiceManager<ProjectBehavior, Stri
 
     private final IProjectBehaviorRepository iProjectBehaviorRepository;
     private final JwtTokenManager jwtTokenManager;
-    public ProjectBehaviorService(IProjectBehaviorRepository iProjectBehaviorRepository, JwtTokenManager jwtTokenManager) {
+    private final IProjectBehaviorMapper projectBehaviorMapper;
+    public ProjectBehaviorService(IProjectBehaviorRepository iProjectBehaviorRepository, JwtTokenManager jwtTokenManager, IProjectBehaviorMapper projectBehaviorMapper) {
         super(iProjectBehaviorRepository);
         this.iProjectBehaviorRepository=iProjectBehaviorRepository;
         this.jwtTokenManager=jwtTokenManager;
+        this.projectBehaviorMapper=projectBehaviorMapper;
 
     }
 
     public CreateProjectBehaviorScoreResponseDto createProjectBehaviorScore(CreatProjectBehaviorScoreRequestDto dto){
-        Optional<String> studentId=jwtTokenManager.getIdFromToken(dto.getToken());
+        Optional<String> studentId=jwtTokenManager.getIdFromToken(dto.getStudentToken());
         if (studentId.isEmpty()){
             throw new CardServiceException(ErrorType.STUDENT_NOT_FOUND);
         }
@@ -76,17 +79,26 @@ public class ProjectBehaviorService extends ServiceManager<ProjectBehavior, Stri
         projectBehavior.setPresentationScorePercentage(dto.getPresentationScorePercentage());
         projectBehavior.setInterestScorePercentage(dto.getInterestScorePercentage());
         projectBehavior.setRetroScorePercentage(dto.getRetroScorePercentage());
+        projectBehavior.setAverageScore(averageScore);
         update(projectBehavior);
         return new MessageResponse("Puanlar başarı ile güncellendi");
     }
 
-    public Boolean deleteProjectBehavior(String projectBehaviorId){
-        Optional<ProjectBehavior> projectBehavior=findById(projectBehaviorId);
-        if(projectBehavior.isEmpty())
-            throw new CardServiceException(ErrorType.BEHAVIOR_NOT_FOUND);
-        deleteById(projectBehaviorId);
+    public Boolean deleteProjectBehavior(String token){
+        Optional<String> studentId= jwtTokenManager.getIdFromToken(token);
+        if(studentId.isEmpty())
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        iProjectBehaviorRepository.deleteByStudentId(studentId.get());
         return true;
     }
 
+    public GetProjectBehaviorResponseDto findProjectBehavior (String token) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
+        if(studentId.isEmpty())
+        { throw new CardServiceException(ErrorType.INVALID_TOKEN);}
+        ProjectBehavior project=iProjectBehaviorRepository.findByStudentId(studentId.get());
+        GetProjectBehaviorResponseDto  getProjectBehaviorResponseDto= projectBehaviorMapper.toProjectBehavior(project);
+        return getProjectBehaviorResponseDto;
+    }
 
 }

@@ -1,26 +1,23 @@
-package com.bilgeadam.dto.request;
+package com.bilgeadam.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class CreatProjectBehaviorScoreRequestDto {
+public class GetProjectBehaviorResponseDto {
 
-    @NotNull
-    private String studentToken;
     private Long rapportScore;
     private Long interestScore;
     private Long presentationScore;
     private Long retroScore;
+    private Double averageScore;
     private Long rapportScorePercentage ;
     private Long interestScorePercentage ;
     private Long presentationScorePercentage ;
-    private Long retroScorePercentage ;
+    private Long retroScorePercentage;
 }

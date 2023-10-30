@@ -3,6 +3,7 @@ package com.bilgeadam.mapper;
 
 import com.bilgeadam.dto.request.CreatProjectBehaviorScoreRequestDto;
 import com.bilgeadam.dto.response.CreateProjectBehaviorScoreResponseDto;
+import com.bilgeadam.dto.response.GetProjectBehaviorResponseDto;
 import com.bilgeadam.repository.entity.ProjectBehavior;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -15,4 +16,5 @@ public interface IProjectBehaviorMapper {
 
     ProjectBehavior toProjectBehavior(final CreatProjectBehaviorScoreRequestDto dto);
     CreateProjectBehaviorScoreResponseDto createProjectBehaviorScoreResponseDto (final ProjectBehavior projectBehavior);
+    GetProjectBehaviorResponseDto toProjectBehavior(final ProjectBehavior projectBehavior);
 }
