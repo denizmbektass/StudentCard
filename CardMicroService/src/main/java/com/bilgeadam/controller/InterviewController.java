@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 import static com.bilgeadam.constants.ApiUrls.*;
@@ -59,7 +61,7 @@ public class InterviewController {
             " başlığından yapılan aday mülakatı kaydetme işlemidir.")
     @PostMapping(SAVE_CANDIDATE_INTERVIEW)
     @CrossOrigin("*")
-    public ResponseEntity<Boolean> saveCandidateInterview(@RequestBody SaveInterviewRequestDto dto){
+    public ResponseEntity<Boolean> saveCandidateInterview(@Valid @RequestBody SaveInterviewRequestDto dto){
         return ResponseEntity.ok(interviewService.saveCandidateInterview(dto));
     }
 
@@ -67,7 +69,7 @@ public class InterviewController {
             "Aday Mülakatı başlığında öğrencinin daha önceden kaydedilen aday mülakatı puan değerleri varsa getirir")
     @GetMapping(GET_CANDIDATE_INTERVIEW+"/{studentId}")
     @CrossOrigin("*")
-    public ResponseEntity<GetCandidateInterviewResponseDto> getCandidateInterview(@PathVariable String studentId){
+    public ResponseEntity<GetCandidateInterviewResponseDto> getCandidateInterview(@PathVariable @NotEmpty String studentId){
         return ResponseEntity.ok(interviewService.getCandidateInterview(studentId));
     }
 
@@ -75,7 +77,7 @@ public class InterviewController {
             " menüsünde Aday Mülakatı başlığında öğrencinin daha önce girilmiş mülakatı varsa üstüne kaydeder")
     @PutMapping(UPDATE_CANDIDATE_INTERVIEW)
     @CrossOrigin("*")
-    public ResponseEntity<Boolean> updateCandidateInterview(@RequestBody UpdateCandidateInterviewRequestDto dto){
+    public ResponseEntity<Boolean> updateCandidateInterview(@Valid @RequestBody UpdateCandidateInterviewRequestDto dto){
         return ResponseEntity.ok(interviewService.updateCandidateInterview(dto));
     }
 
@@ -83,7 +85,7 @@ public class InterviewController {
             "menüsünde Aday Mülakatı başlığında öğrencinin DB'de kayıtlı aday mülakatı sayısını döner (0 ya da 1)")
     @GetMapping(GET_CANDIDATE_INTERVIEW_NUMBER+"/{studentId}")
     @CrossOrigin("*")
-    public ResponseEntity<Integer> getCandidateInterviewNumber(@PathVariable String studentId){
+    public ResponseEntity<Integer> getCandidateInterviewNumber(@PathVariable @NotEmpty String studentId){
         return ResponseEntity.ok(interviewService.getCandidateInterviewNumber(studentId));
     }
 
@@ -91,7 +93,7 @@ public class InterviewController {
             "Aday Mülakatı başlığında öğrencinin ortalama aday mülakatı puan bilgisini döner")
     @GetMapping(GET_CANDIDATE_INTERVIEW_AVERAGE_POINT+"/{studentId}")
     @CrossOrigin("*")
-    public ResponseEntity<Double> getCandidateInterviewAveragePoint(@PathVariable String studentId){
+    public ResponseEntity<Double> getCandidateInterviewAveragePoint(@PathVariable @NotEmpty String studentId){
         return ResponseEntity.ok(interviewService.getCandidateInterviewAveragePoint(studentId));
     }
 
