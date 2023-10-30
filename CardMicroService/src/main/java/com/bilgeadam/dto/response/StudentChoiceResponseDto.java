@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentChoiceResponseDto {
-    double writtenExamSuccessScore;
-    double algorithmSuccessScore;
-    double candidateInterviewSuccessScore;
-    double gameInterviewSuccessScore;
-    double writtenExamScore;
-    double candidateInterviewScore;
-    double algorithmScore;
-    double gameInterviewScore;
-    double totalSuccessScore;
+    Double writtenExamSuccessScore;
+    Double algorithmSuccessScore;
+    Double candidateInterviewSuccessScore;
+    Double gameInterviewSuccessScore;
+    Double writtenExamScore;
+    Double candidateInterviewScore;
+    Double algorithmScore;
+    Double gameInterviewScore;
+    Double totalSuccessScore;
 }

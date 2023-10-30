@@ -133,7 +133,7 @@ public GameInterviewService(IGameInterviewRepository gameInterviewRepository,Jwt
         }
         List<GameInterview> gameInterviewList = gameInterviewRepository.findAllByStudentId(studentId);
         if (gameInterviewList.isEmpty()) {
-            return 0.0;
+            return null;
         }
         double totalAveragePoint = gameInterviewList.get(0).getGameInterviewAveragePoint();
 
