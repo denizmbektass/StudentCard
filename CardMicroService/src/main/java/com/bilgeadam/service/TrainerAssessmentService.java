@@ -293,7 +293,7 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
                 .collect(Collectors.toList());
         List<TrainerAssessmentForTranscriptResponseDto> trainerAssessmentForTranscriptResponseDtoList = new ArrayList<>();
         trainerAssessmentList.forEach(x -> {
-                    TrainerAssessmentForTranscriptResponseDto dto = ITrainerAssessmentMapper.INSTANCE.toTrainerAssessmentForTranscriptResponseDto(x);
+                    TrainerAssessmentForTranscriptResponseDto dto = TrainerAssessmentForTranscriptResponseDto.builder().totalTrainerAssessmentScore(x.getTotalTrainerAssessmentScore()).score(x.getTotalTrainerAssessmentScore()).assessmentName(x.getAssessmentName()).build();
                     trainerAssessmentForTranscriptResponseDtoList.add(dto);
                 }
         );
