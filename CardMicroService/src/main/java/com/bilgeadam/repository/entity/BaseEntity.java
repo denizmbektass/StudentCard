@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BaseEntity { // implements Seriazable koymadık!
+
     Long createDate;
     Long updateDate;
 }

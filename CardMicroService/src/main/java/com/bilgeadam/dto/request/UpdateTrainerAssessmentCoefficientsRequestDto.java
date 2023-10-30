@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChangeTrainerAssessmentCoefficientsRequestDto {
+public class UpdateTrainerAssessmentCoefficientsRequestDto {
 
     private double behaviorInClassCoefficient;
     private double courseInterestLevelCoefficient;

@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class TrainerAssessmentScoreCalculateRequestDto {
+public class CalculateTrainerAssessmentScoreRequestDto {
 
     private String trainerAssessmentId;
     private String assessmentName;
@@ -17,5 +17,4 @@ public class TrainerAssessmentScoreCalculateRequestDto {
     private double instructorGrade;
     private double dailyHomeworkGrade;
     private String description;
-
 }

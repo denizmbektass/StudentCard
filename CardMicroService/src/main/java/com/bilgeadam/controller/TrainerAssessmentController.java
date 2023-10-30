@@ -1,10 +1,9 @@
 package com.bilgeadam.controller;
 
-import com.bilgeadam.dto.request.ChangeTrainerAssessmentCoefficientsRequestDto;
 import com.bilgeadam.dto.request.TokenRequestDto;
-import com.bilgeadam.dto.request.TrainerAssessmentSaveRequestDto;
+import com.bilgeadam.dto.request.SaveTrainerAssessmentRequestDto;
 import com.bilgeadam.dto.request.UpdateTrainerAssessmentRequestDto;
-import com.bilgeadam.dto.response.DeleteAssessmentResponseDto;
+import com.bilgeadam.dto.response.DeleteTrainerAssessmentResponseDto;
 import com.bilgeadam.dto.response.TrainerAssessmentSaveResponseDto;
 import com.bilgeadam.dto.response.UpdateTrainerAssessmentResponseDto;
 import com.bilgeadam.repository.entity.TrainerAssessment;
@@ -25,20 +24,12 @@ public class TrainerAssessmentController {
 
     private final TrainerAssessmentService trainerAssessmentService;
 
-    @Operation(summary = "Eğitmen değerlendirme puan katsayılarının değiştirilme ve kaydedilme işlemi",
-            description = "Belirtilen eğitmen değerlendirme puan katsayılarının değiştirilme isteği DTO'su kullanılarak bir eğitmen değerlendirmesini kaydeder.")
-    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
-    @PostMapping(CHANGE_TRAINER_ASSESSMENT_COEFFICIENTS)
-    @CrossOrigin("*")
-    public ResponseEntity<TrainerAssessment> changeTrainerAssessmentCoefficients(@RequestBody ChangeTrainerAssessmentCoefficientsRequestDto dto){
-        return ResponseEntity.ok(trainerAssessmentService.changeTrainerAssessmentCoefficients(dto));
-    }
     @Operation(summary = "Eğitmen değerlendirme kaydetme işlemi",
             description = "Belirtilen eğitmen değerlendirme kaydetme isteği DTO'su kullanılarak bir eğitmen değerlendirmesini kaydeder.")
     //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @PostMapping(SAVE)
     @CrossOrigin("*")
-    public ResponseEntity<TrainerAssessmentSaveResponseDto> saveTrainerAssessment(@RequestBody TrainerAssessmentSaveRequestDto dto){
+    public ResponseEntity<TrainerAssessmentSaveResponseDto> saveTrainerAssessment(@RequestBody SaveTrainerAssessmentRequestDto dto){
         return ResponseEntity.ok(trainerAssessmentService.saveTrainerAssessment(dto));
     }
     @Operation(summary = "Eğitmen değerlendirme güncelleme işlemi",
@@ -55,7 +46,7 @@ public class TrainerAssessmentController {
     //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @DeleteMapping(DELETE)
     @CrossOrigin("*")
-    public ResponseEntity<DeleteAssessmentResponseDto> deleteTrainerAssessment(@RequestParam String id){
+    public ResponseEntity<DeleteTrainerAssessmentResponseDto> deleteTrainerAssessment(@RequestParam String id){
         return ResponseEntity.ok(trainerAssessmentService.deleteTrainerAssessment(id));
     }
 
@@ -66,11 +57,4 @@ public class TrainerAssessmentController {
     public ResponseEntity<List<TrainerAssessment>> findAllTrainerAssessmentActive(@RequestBody TokenRequestDto dto){
         return ResponseEntity.ok(trainerAssessmentService.findAllTrainerAssessment(dto));
     }
-
-
-//    @GetMapping(FIND_ALL)
-//    @CrossOrigin("*")
-//    public ResponseEntity<List<TrainerAssessment>> findAllTrainerAssessment(){
-//        return ResponseEntity.ok(trainerAssessmentService.findAll());
-//    }
 }
