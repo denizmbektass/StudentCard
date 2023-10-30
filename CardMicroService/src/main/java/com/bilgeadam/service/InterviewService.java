@@ -173,21 +173,22 @@ public class InterviewService extends ServiceManager<Interview, String> {
     }
 
     public Double getCandidateInterviewAveragePoint(String studentId) {
-        Double candidateInterviewAveragePoint = 0.0;
+        int totalQuestionCount = 12;
+        Double candidateInterviewAveragePoint;
         Interview candidateInterview = interviewRepository.findAllByStudentId(studentId).get(0);
         if (!studentId.equals("")) {
-            candidateInterviewAveragePoint = ((double) candidateInterview.getCommunicationSkillsPoint() / 12) +
-                    ((double) candidateInterview.getWorkExperiencePoint() / 12) +
-                    ((double) candidateInterview.getUniversityPoint() / 12) +
-                    ((double) candidateInterview.getUniversityProgramPoint() / 12) +
-                    ((double) candidateInterview.getAgePoint() / 12) +
-                    ((double) candidateInterview.getPersonalityEvaluationPoint() / 12) +
-                    ((double) candidateInterview.getEnglishLevelPoint() / 12) +
-                    ((double) candidateInterview.getGraduationPeriodPoint() / 12) +
-                    ((double) candidateInterview.getMilitaryServicePoint() / 12) +
-                    ((double) candidateInterview.getMotivationPoint() / 12) +
-                    ((double) candidateInterview.getResidencyPoint() / 12) +
-                    ((double) candidateInterview.getSoftwareEducationPoint() / 12);
+            candidateInterviewAveragePoint = ((double) candidateInterview.getCommunicationSkillsPoint() / totalQuestionCount) +
+                    ((double) candidateInterview.getWorkExperiencePoint() / totalQuestionCount) +
+                    ((double) candidateInterview.getUniversityPoint() / totalQuestionCount) +
+                    ((double) candidateInterview.getUniversityProgramPoint() / totalQuestionCount) +
+                    ((double) candidateInterview.getAgePoint() / totalQuestionCount) +
+                    ((double) candidateInterview.getPersonalityEvaluationPoint() / totalQuestionCount) +
+                    ((double) candidateInterview.getEnglishLevelPoint() / totalQuestionCount) +
+                    ((double) candidateInterview.getGraduationPeriodPoint() / totalQuestionCount) +
+                    ((double) candidateInterview.getMilitaryServicePoint() / totalQuestionCount) +
+                    ((double) candidateInterview.getMotivationPoint() / totalQuestionCount) +
+                    ((double) candidateInterview.getResidencyPoint() / totalQuestionCount) +
+                    ((double) candidateInterview.getSoftwareEducationPoint() / totalQuestionCount);
 
         } else {
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
