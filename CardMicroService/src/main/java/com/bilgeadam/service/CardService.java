@@ -228,13 +228,16 @@ public class CardService extends ServiceManager<Card, String> {
             projectSuccessScore = avgProjectScore * projectWeight;
             totalSuccessScore += projectSuccessScore;
         }
+        try{
+            //Yoklama için ortalama bilgisi
+            ShowUserAbsenceInformationResponseDto absenceDto = absenceService.showUserAbsenceInformation(token);
+            if (absenceDto != null) {
+                avgAbsencePerformScore = (absenceDto.getGroup1Percentage() + absenceDto.getGroup2Percentage()) / 2;
+                absencePerformSuccessScore = avgAbsencePerformScore * absenceWeight;
+                totalSuccessScore += absencePerformSuccessScore;
+            }
+        }catch (Exception e){
 
-        //Yoklama için ortalama bilgisi
-        ShowUserAbsenceInformationResponseDto absenceDto = absenceService.showUserAbsenceInformation(token);
-        if (absenceDto != null) {
-            avgAbsencePerformScore = (absenceDto.getGroup1Percentage() + absenceDto.getGroup2Percentage()) / 2;
-            absencePerformSuccessScore = avgAbsencePerformScore * absenceWeight;
-            totalSuccessScore += absencePerformSuccessScore;
         }
 
         //Bitirme projesi için ortalama bilgisi
@@ -305,12 +308,15 @@ public class CardService extends ServiceManager<Card, String> {
         } catch (Exception e) {
 
         }
+        try{
+            Double candidateInterviewAveragePoint = interviewService.getCandidateInterviewAveragePoint(studentId.get());
+            if (candidateInterviewAveragePoint != null) {
+                candidateInterviewScore = candidateInterviewAveragePoint;
+                candidateInterviewSuccessScore = candidateInterviewScore * candidateInterviewWeight;
+                totalSuccessScore += candidateInterviewSuccessScore;
+            }
+        }catch (Exception e){
 
-        Double candidateInterviewAveragePoint = interviewService.getCandidateInterviewAveragePoint(studentId.get());
-        if (candidateInterviewAveragePoint != null) {
-            candidateInterviewScore = candidateInterviewAveragePoint;
-            candidateInterviewSuccessScore = candidateInterviewScore * candidateInterviewWeight;
-            totalSuccessScore += candidateInterviewSuccessScore;
         }
 
         Double gameInterviewAveragePoint = gameInterviewService.getGameInterviewAveragePoint(studentId.get());
