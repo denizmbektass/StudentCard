@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainerAssessmentSaveRequestDto {
+public class SaveTrainerAssessmentRequestDto {
 
     private String assessmentName;
     private double behaviorInClass;

@@ -19,15 +19,16 @@ public class TrainerAssessment extends BaseEntity{
     @Id
     private String trainerAssessmentId;
 
+    private String trainerAssessmentIdCoefficientsId;
+    private String studentId;
     private String assessmentName;
+    private String description;
     private double behaviorInClass;
     private double courseInterestLevel;
     private double cameraOpeningGrade;
     private double instructorGrade;
     private double dailyHomeworkGrade;
     private double totalTrainerAssessmentScore;
-    private String description;
-    private String studentId;
 
     @Builder.Default
     private EStatus eStatus=EStatus.ACTIVE;

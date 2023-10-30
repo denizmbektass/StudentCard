@@ -51,8 +51,9 @@ public enum ErrorType {
 
     TRAINER_ASSESSMENT_EMPTY(9015,"Eğitmen görüşü boş bırakılamaz.", HttpStatus.BAD_REQUEST),
     TRAINER_ASSESSMENT_POINT_RANGE(9016, "Eğitmen görüş puanı '0' ile '100' arasında olmalıdır.",HttpStatus.BAD_REQUEST),
+    TRAINER_ASSESSMENT_COEFFICIENTS_EMPTY(9016,"Eğitmen görüşü katsayıları boş bırakılamaz.", HttpStatus.BAD_REQUEST),
     TRAINER_ASSESSMENT_COEFFICIENTS_POINT_RANGE(9016, "Eğitmen görüş puan katsayıları '0' ile '1' arasında olmalıdır.",HttpStatus.BAD_REQUEST),
-    TOTAL_TRAINER_ASSESSMENT_COEFFICIENTS_POINT_RANGE(9016, "Eğitmen görüş puan katsayıları toplamı '0' ile '1' arasında olmalıdır.",HttpStatus.BAD_REQUEST),
+    TOTAL_TRAINER_ASSESSMENT_COEFFICIENTS_POINT_RANGE(9016, "Eğitmen görüş puan katsayıları toplamı '1' olmalıdır.",HttpStatus.BAD_REQUEST),
     TOTAL_TRAINER_ASSESSMENT_POINT_RANGE(9016, "Eğitmen görüş puanları toplamı '0' ile '100' arasında olmalıdır.",HttpStatus.BAD_REQUEST),
     POINT_EMPTY(9016,"Puan boş bırakılamaz.",HttpStatus.BAD_REQUEST),
     INTERVIEW_TYPE_EMPTY(9017, "Mülakat türü boş bırakılamaz.",HttpStatus.BAD_REQUEST),

@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeleteAssessmentResponseDto {
+public class DeleteTrainerAssessmentResponseDto {
     private String name;
 }

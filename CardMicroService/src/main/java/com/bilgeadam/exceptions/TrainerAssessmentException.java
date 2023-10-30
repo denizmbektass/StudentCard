@@ -11,9 +11,4 @@ public class TrainerAssessmentException extends RuntimeException{
         super(errorType.getMessage());
         this.errorType = errorType;
     }
-    public TrainerAssessmentException(ErrorType errorType,String message){
-        super(message);
-        this.errorType=errorType;
-    }
-
 }

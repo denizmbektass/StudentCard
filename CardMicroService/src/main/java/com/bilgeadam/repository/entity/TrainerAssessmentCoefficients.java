@@ -16,7 +16,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class TrainerAssessmentCoefficients extends BaseEntity {
 
-    //@Builder.Default
     public static double BEHAVIOR_IN_CLASS_COEFFICIENT = 0.20;
     public static double COURSE_INTEREST_LEVEL_COEFFICIENT = 0.20;
     public static double CAMERA_OPENING_RATE_COEFFICIENT = 0.10;
@@ -26,10 +25,12 @@ public class TrainerAssessmentCoefficients extends BaseEntity {
     @Id
     private String trainerAssessmentCoefficientsId;
 
-    private String groupId;
+    private double behaviorInClassCoefficient;
+    private double courseInterestLevelCoefficient;
+    private double cameraOpeningGradeCoefficient;
+    private double instructorGradeCoefficient;
+    private double dailyHomeworkGradeCoefficient;
 
     @Builder.Default
     private EStatus eStatus=EStatus.ACTIVE;
-
-
 }
