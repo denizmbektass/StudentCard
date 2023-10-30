@@ -131,7 +131,7 @@ public class CardService extends ServiceManager<Card, String> {
     public EducationScoreDetailsDto getEducationDetails(String token) {
         List<Long> assignmentScoreList;
         List<Long> examScoreList;
-        List<Long> trainerAssessmentScoreList;
+        List<Double> trainerAssessmentScoreList;
         List<Long> projectScoreList;
 
         // İleride ağırlık oranları değiştiği zaman burayı değiştir!!!
@@ -141,19 +141,19 @@ public class CardService extends ServiceManager<Card, String> {
         double projectWeight = 0.15;
         double trainerAssessmentWeight = 0.25;
         double graduationProjectWeight = 0.25;
-        double avgAssignmentScore = 0;
-        double avgExamScore = 0;
-        double avgTrainerAssessmentScore = 0;
-        double avgProjectScore = 0;
-        double avgAbsencePerformScore = 0;
-        double avgGraduationProjectScore = 0;
-        double assignmentSuccessScore = 0;
-        double examSuccessScore = 0;
-        double trainerAssessmentSuccessScore = 0;
-        double projectSuccessScore = 0;
-        double absencePerformSuccessScore = 0;
-        double graduationProjectSuccessScore = 0;
-        double totalSuccessScore = 0;
+        Double avgAssignmentScore = null;
+        Double avgExamScore = null;
+        Double avgTrainerAssessmentScore = null;
+        Double avgProjectScore = null;
+        Double avgAbsencePerformScore = null;
+        Double avgGraduationProjectScore = null;
+        Double assignmentSuccessScore = null;
+        Double examSuccessScore = null;
+        Double trainerAssessmentSuccessScore = null;
+        Double projectSuccessScore = null;
+        Double absencePerformSuccessScore = null;
+        Double graduationProjectSuccessScore = null;
+        Double totalSuccessScore = 0.0;
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
         if (studentId.isEmpty()) {
             throw new CardServiceException(ErrorType.STUDENT_NOT_FOUND);
@@ -161,90 +161,89 @@ public class CardService extends ServiceManager<Card, String> {
         //Ödevler İçin Ortalama Bilgisi
         List<AssignmentResponseDto> assignmentResponseDtos = assignmentService.findAllAssignments(token);
         if (assignmentResponseDtos.isEmpty()) {
-            throw new AssignmentException(ErrorType.ASSIGNMENT_NOT_FOUND);
+            //   throw new AssignmentException(ErrorType.ASSIGNMENT_NOT_FOUND);
         } else {
             assignmentScoreList = assignmentResponseDtos.stream()
                     .map(AssignmentResponseDto::getScore)
                     .collect(Collectors.toList());
-
+            // Ortalama
             avgAssignmentScore = assignmentScoreList.stream()
                     .mapToLong(Long::longValue)
                     .average()
                     .orElse(0.0);
+            // Başarı Puanı
+            assignmentSuccessScore = avgAssignmentScore * assignmentWeight;
+            totalSuccessScore += assignmentSuccessScore;
         }
 
         //Sınavlar için ortalama bilgisi
         List<ExamResponseDto> examResponseDtos = examService.findAllExams(token);
-        if (examResponseDtos.isEmpty()) {
-            throw new ExamException(ErrorType.EXAM_NOT_FOUND);
-        } else {
+        if (!examResponseDtos.isEmpty()) {
             examScoreList = examResponseDtos.stream()
                     .map(ExamResponseDto::getScore)
                     .collect(Collectors.toList());
-
+            // Ortalama
             avgExamScore = examScoreList.stream()
                     .mapToLong(Long::longValue)
                     .average()
                     .orElse(0.0);
+            // Başarı Puanı
+            if (avgExamScore != null) {
+                examSuccessScore = avgExamScore * examWeight;
+                totalSuccessScore += examSuccessScore;
+            }
+
         }
 
         //Eğitmen Görüşü için ortalam bilgisi
         List<TrainerAssessmentForTranscriptResponseDto> trainerAssessmentForTranscriptResponseDto = trainerAssessmentService.findAllTrainerAssessmentForTranscriptResponseDto(token);
-        if (trainerAssessmentForTranscriptResponseDto.isEmpty()) {
-            throw new TrainerAssessmentException(ErrorType.TRAINER_ASSESSMENT_NOT_FOUND);
-        } else {
+        if (!trainerAssessmentForTranscriptResponseDto.isEmpty()) {
             trainerAssessmentScoreList = trainerAssessmentForTranscriptResponseDto.stream()
-                    .map(TrainerAssessmentForTranscriptResponseDto::getScore)
+                    .map(TrainerAssessmentForTranscriptResponseDto::getTotalTrainerAssessmentScore)
                     .collect(Collectors.toList());
-
+            // Ortalama
             avgTrainerAssessmentScore = trainerAssessmentScoreList.stream()
-                    .mapToLong(Long::longValue)
+                    .mapToDouble(Double::doubleValue)
                     .average()
                     .orElse(0.0);
+            // Başarı Puanı
+            trainerAssessmentSuccessScore = avgTrainerAssessmentScore * trainerAssessmentWeight;
+            totalSuccessScore += trainerAssessmentSuccessScore;
+
         }
 
         //Proje için ortalam bilgisi
         List<StudentProjectListResponseDto> project = projectService.showStudentProjectList(token);
-        if (project.isEmpty()) {
-            throw new ProjectException(ErrorType.PROJECT_NOT_FOUND);
-        } else {
+        if (!project.isEmpty()) {
             projectScoreList = project.stream()
                     .map(StudentProjectListResponseDto::getProjectScore)
                     .collect(Collectors.toList());
-
+            // Ortalama
             avgProjectScore = projectScoreList.stream()
                     .mapToLong(Long::longValue)
                     .average()
                     .orElse(0.0);
+            // Başarı Puanı
+            projectSuccessScore = avgProjectScore * projectWeight;
+            totalSuccessScore += projectSuccessScore;
         }
 
         //Yoklama için ortalama bilgisi
         ShowUserAbsenceInformationResponseDto absenceDto = absenceService.showUserAbsenceInformation(token);
-        if (absenceDto == null) {
-            throw new AbsenceException(ErrorType.ABSENCE_NOT_FOUND);
-        } else {
+        if (absenceDto != null) {
             avgAbsencePerformScore = (absenceDto.getGroup1Percentage() + absenceDto.getGroup2Percentage()) / 2;
+            absencePerformSuccessScore = avgAbsencePerformScore * absenceWeight;
+            totalSuccessScore += absencePerformSuccessScore;
         }
 
         //Bitirme projesi için ortalama bilgisi
         GetGraduationProjectResponseDto graduationProjects = graduationProjectService.findGraduationProject(token);
-        if (graduationProjects == null) {
-            // Buraya Exceptions sınıfı eklenip yazılacak
-            System.out.println("Bitirme projesi bulunmadı.");
-        } else {
+        if (graduationProjects != null) {
             avgGraduationProjectScore = graduationProjects.getAverageScore();
+            graduationProjectSuccessScore = avgGraduationProjectScore * graduationProjectWeight;
+            totalSuccessScore += graduationProjectSuccessScore;
         }
 
-        //Başarı puanlarını Hesaplama
-        assignmentSuccessScore = avgAssignmentScore * assignmentWeight;
-        examSuccessScore = avgExamScore * examWeight;
-        trainerAssessmentSuccessScore = avgTrainerAssessmentScore * trainerAssessmentWeight;
-        projectSuccessScore = avgProjectScore * projectWeight;
-        absencePerformSuccessScore = avgAbsencePerformScore * absenceWeight;
-        graduationProjectSuccessScore = avgGraduationProjectScore * graduationProjectWeight;
-
-
-        totalSuccessScore = assignmentSuccessScore + examSuccessScore+trainerAssessmentSuccessScore+projectSuccessScore+absencePerformSuccessScore+graduationProjectSuccessScore;
         return EducationScoreDetailsDto.builder()
                 .averageAssignmentScore(avgAssignmentScore)
                 .averageExamScore(avgExamScore)
@@ -273,32 +272,32 @@ public class CardService extends ServiceManager<Card, String> {
         double writtenExamScore = 0;
         double algorithmScore = 0;
 
-       WrittenExam writtenExam = writtenExamService.getWrittenExamByStudentId(studentId.get());
-       if(writtenExam == null) {
-           throw new AssignmentException(ErrorType.WRITTENEXAM_NOT_FOUND);
-       }else{
-           writtenExamScore = writtenExam.getScore();
-       }
+        WrittenExam writtenExam = writtenExamService.getWrittenExamByStudentId(studentId.get());
+        if (writtenExam == null) {
+            throw new AssignmentException(ErrorType.WRITTENEXAM_NOT_FOUND);
+        } else {
+            writtenExamScore = writtenExam.getScore();
+        }
         AlgorithmResponseDto algorithm = algorithmService.getAlgorithm(token);
-       if (algorithm == null){
-           throw new AssignmentException(ErrorType.ALGORITHM_NOT_FOUND);
-       }else{
+        if (algorithm == null) {
+            throw new AssignmentException(ErrorType.ALGORITHM_NOT_FOUND);
+        } else {
             algorithmScore = algorithm.getFinalScore();
-       }
+        }
         Double candidateInterviewScore = interviewService.getCandidateInterviewAveragePoint(studentId.get());
-       if (candidateInterviewScore == null)
-           throw new AssignmentException(ErrorType.CANDIDATE_INTERVIEW_NOT_FOUND);
-       Double gameInterviewScore = gameInterviewService.getGameInterviewAveragePoint(studentId.get());
-       if(gameInterviewScore == null)
-           throw new AssignmentException(ErrorType.GAME_INTERVIEW_NOT_FOUND);
+        if (candidateInterviewScore == null)
+            throw new AssignmentException(ErrorType.CANDIDATE_INTERVIEW_NOT_FOUND);
+        Double gameInterviewScore = gameInterviewService.getGameInterviewAveragePoint(studentId.get());
+        if (gameInterviewScore == null)
+            throw new AssignmentException(ErrorType.GAME_INTERVIEW_NOT_FOUND);
 
 
         double writtenExamSuccessScore = writtenExamScore * writtenExamWeight;
         double algorithmSuccessScore = algorithmScore * algorithmWeight;
         double candidateInterviewSuccessScore = candidateInterviewScore * candidateInterviewWeight;
-        double gameInterviewSuccessScore= gameInterviewScore * gameInterviewWeight;
+        double gameInterviewSuccessScore = gameInterviewScore * gameInterviewWeight;
 
-        double totalSuccessScore = writtenExamSuccessScore + algorithmSuccessScore + candidateInterviewSuccessScore + gameInterviewSuccessScore ;
+        double totalSuccessScore = writtenExamSuccessScore + algorithmSuccessScore + candidateInterviewSuccessScore + gameInterviewSuccessScore;
 
         return StudentChoiceResponseDto.builder()
                 .gameInterviewSuccessScore(gameInterviewSuccessScore)
