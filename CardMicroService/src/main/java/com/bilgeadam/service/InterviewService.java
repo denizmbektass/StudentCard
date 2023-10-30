@@ -155,7 +155,7 @@ public class InterviewService extends ServiceManager<Interview, String> {
         }
     }
 
-    public Integer getCandidateInterviewNumber(String studentId) {
+    public Integer getCandidateInterviewCount(String studentId) {
         Integer candidateInterviewCount = Integer.MAX_VALUE;
         List<Interview> candidateInterviewList;
         if (!studentId.equals("")) {

@@ -83,10 +83,10 @@ public class InterviewController {
 
     @Operation(summary = "Aday mülakatı sayfasında aday mülakatı sayısını döner", description = "Öğrenci seçme " +
             "menüsünde Aday Mülakatı başlığında öğrencinin DB'de kayıtlı aday mülakatı sayısını döner (0 ya da 1)")
-    @GetMapping(GET_CANDIDATE_INTERVIEW_NUMBER+"/{studentId}")
+    @GetMapping(GET_CANDIDATE_INTERVIEW_COUNT+"/{studentId}")
     @CrossOrigin("*")
-    public ResponseEntity<Integer> getCandidateInterviewNumber(@PathVariable @NotEmpty String studentId){
-        return ResponseEntity.ok(interviewService.getCandidateInterviewNumber(studentId));
+    public ResponseEntity<Integer> getCandidateInterviewCount(@PathVariable @NotEmpty String studentId){
+        return ResponseEntity.ok(interviewService.getCandidateInterviewCount(studentId));
     }
 
     @Operation(summary = "Aday mülakatı sayfasında ortalama puanı döner", description = "Öğrenci seçme menüsünde " +
