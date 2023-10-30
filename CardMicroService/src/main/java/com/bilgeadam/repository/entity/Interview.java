@@ -34,6 +34,7 @@ public class Interview extends BaseEntity{
     private short motivationPoint;
     private short residencyPoint;
     private short softwareEducationPoint;
+
     @Builder.Default()
     private EStatus eStatus = EStatus.ACTIVE;
     //private int trainerId,hrId;

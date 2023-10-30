@@ -14,10 +14,12 @@ public class ApiUrls {
     public static final String EXAM = VERSION+"/exam";
     public static final String ROLLCALL = VERSION+"/rollcall";
     public static final String INTERVIEW = VERSION+"/interview";
+    public static final String GAME_INTERVIEW = VERSION+"/game-interview";
     public static final String PROJECT=VERSION+"/project";
     public static final String CREATE ="/create";
     public static final String FIND_ALL ="/find-all";
     public static final String CREATE_INTERVIEW ="/create-interview";
+    public static final String WRITTENEXAM = VERSION+"/written-exam";
 
     public static final String FIND_ALL_INTERVIEW ="/find-all-interview" ;
     public static final String UPDATE_INTERVIEW ="/update-interview" ;
@@ -35,9 +37,24 @@ public class ApiUrls {
     public static final String ALGORITHM= VERSION+"/algorithm";
     public static final String FIND_ALGORITHM= VERSION+"/find-algorithm";
     public static final String TRAINER_ASSESSMENT_COEFFICIENTS = VERSION+"/trainer-assessment-coefficients";
+    public static final String WRITTENEXAMSCORE = "/written-exam-score/{correctAnswers}";
+    public static final String SAVEWRITTENEXAM = "/save-written-exam";
+    public static final String GETWRITTENEXAM = "/get-written-exam/{studentId}";
+    public static final String CHANGE_TRAINER_ASSESSMENT_COEFFICIENTS = VERSION+"/change-trainer-assessment-coefficients";
+
     public static final String SAVE_CANDIDATE_INTERVIEW = "/save-candidate-interview";
     public static final String GET_CANDIDATE_INTERVIEW = "/get-candidate-interview";
     public static final String UPDATE_CANDIDATE_INTERVIEW = "/update-candidate-interview";
-    public static final String GET_CANDIDATE_INTERVIEW_NUMBER = "/get-candidate-interview-number";
+    public static final String GET_CANDIDATE_INTERVIEW_COUNT = "/get-candidate-interview-count";
     public static final String GET_CANDIDATE_INTERVIEW_AVERAGE_POINT = "/get-candidate-interview-average-point";
+
+    public static final String GET_GAME_INTERVIEW = "/get-all";
+    public static final String GET_GAME_INTERVIEW_NUMBER = "/get-number";
+    public static final String GET_GAME_INTERVIEW_AVERAGE_POINT = "/get-average-point";
+
+
+
+
+
+
 }

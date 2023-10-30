@@ -22,4 +22,7 @@ public interface IInterviewMapper {
     Interview fromSaveInterviewRequestDtoToInterview(final SaveInterviewRequestDto dto);
 
     GetCandidateInterviewResponseDto fromInterviewToGetCandidateInterviewResponseDto(final Interview candidateInterview);
+
+
+
 }
