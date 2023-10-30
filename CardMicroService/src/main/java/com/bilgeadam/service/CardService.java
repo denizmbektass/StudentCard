@@ -266,39 +266,59 @@ public class CardService extends ServiceManager<Card, String> {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
         if (studentId.isEmpty())
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
+
         double writtenExamWeight = 0.25;
         double algorithmWeight = 0.25;
         double candidateInterviewWeight = 0.25;
         double gameInterviewWeight = 0.25;
-        double writtenExamScore = 0;
-        double algorithmScore = 0;
 
-        WrittenExam writtenExam = writtenExamService.getWrittenExamByStudentId(studentId.get());
-        if (writtenExam == null) {
-            throw new AssignmentException(ErrorType.WRITTENEXAM_NOT_FOUND);
-        } else {
-            writtenExamScore = writtenExam.getScore();
+
+        Double writtenExamScore = null;
+        Double algorithmScore = null;
+        Double candidateInterviewScore = null;
+        Double gameInterviewScore = null;
+        Double writtenExamSuccessScore = null;
+        Double algorithmSuccessScore =null;
+        Double candidateInterviewSuccessScore =null;
+        Double gameInterviewSuccessScore =null;
+        Double totalSuccessScore= 0.0;
+
+
+        try {
+            WrittenExam writtenExam = writtenExamService.getWrittenExamByStudentId(studentId.get());
+            if (writtenExam != null) {
+                writtenExamScore = writtenExam.getScore();
+                writtenExamSuccessScore = writtenExamScore * writtenExamWeight;
+                totalSuccessScore += writtenExamSuccessScore;
+            }
+        } catch (Exception e) {
+
         }
-        AlgorithmResponseDto algorithm = algorithmService.getAlgorithm(token);
-        if (algorithm == null) {
-            throw new AssignmentException(ErrorType.ALGORITHM_NOT_FOUND);
-        } else {
-            algorithmScore = algorithm.getFinalScore();
+
+        try {
+            AlgorithmResponseDto algorithm = algorithmService.getAlgorithm(token);
+            if (algorithm != null) {
+                algorithmScore = algorithm.getFinalScore();
+                algorithmSuccessScore = algorithmScore * algorithmWeight;
+                totalSuccessScore += algorithmSuccessScore;
+            }
+        } catch (Exception e) {
+
         }
-        Double candidateInterviewScore = interviewService.getCandidateInterviewAveragePoint(studentId.get());
-        if (candidateInterviewScore == null)
-            throw new AssignmentException(ErrorType.CANDIDATE_INTERVIEW_NOT_FOUND);
-        Double gameInterviewScore = gameInterviewService.getGameInterviewAveragePoint(studentId.get());
-        if (gameInterviewScore == null)
-            throw new AssignmentException(ErrorType.GAME_INTERVIEW_NOT_FOUND);
 
+        Double candidateInterviewAveragePoint = interviewService.getCandidateInterviewAveragePoint(studentId.get());
+        if (candidateInterviewAveragePoint != null) {
+            candidateInterviewScore = candidateInterviewAveragePoint;
+            candidateInterviewSuccessScore = candidateInterviewScore * candidateInterviewWeight;
+            totalSuccessScore += candidateInterviewSuccessScore;
+        }
 
-        double writtenExamSuccessScore = writtenExamScore * writtenExamWeight;
-        double algorithmSuccessScore = algorithmScore * algorithmWeight;
-        double candidateInterviewSuccessScore = candidateInterviewScore * candidateInterviewWeight;
-        double gameInterviewSuccessScore = gameInterviewScore * gameInterviewWeight;
-
-        double totalSuccessScore = writtenExamSuccessScore + algorithmSuccessScore + candidateInterviewSuccessScore + gameInterviewSuccessScore;
+        Double gameInterviewAveragePoint = gameInterviewService.getGameInterviewAveragePoint(studentId.get());
+        if (gameInterviewAveragePoint != null) {
+            gameInterviewScore = gameInterviewAveragePoint;
+            gameInterviewSuccessScore = gameInterviewScore * gameInterviewWeight;
+            totalSuccessScore += gameInterviewSuccessScore;
+        }
 
         return StudentChoiceResponseDto.builder()
                 .gameInterviewSuccessScore(gameInterviewSuccessScore)
@@ -311,6 +331,6 @@ public class CardService extends ServiceManager<Card, String> {
                 .candidateInterviewScore(candidateInterviewScore)
                 .totalSuccessScore(totalSuccessScore)
                 .build();
-
     }
+
 }
