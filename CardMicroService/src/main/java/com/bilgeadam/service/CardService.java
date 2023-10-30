@@ -12,6 +12,7 @@ import com.bilgeadam.repository.entity.GraduationProject;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
+import com.bilgeadam.repository.entity.WrittenExam;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,12 +31,15 @@ public class CardService extends ServiceManager<Card, String> {
     private final TrainerAssessmentService trainerAssessmentService;
     private final IUserManager userManager;
     private final GraduationProjectService graduationProjectService;
+    private final WrittenExamService writtenExamService;
+    private final AlgorithmService algorithmService;
+    private final GameInterviewService gameInterviewService;
 
     public CardService(ICardRepository iCardRepository, JwtTokenManager jwtTokenManager,
                        CardParameterService cardParameterService, AssignmentService assignmentService,
                        ExamService examService, InternshipSuccessRateService intershipService,
                        InterviewService interviewService, AbsenceService absenceService, ProjectService projectService,
-                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService) {
+                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, GameInterviewService gameInterviewService) {
         super(iCardRepository);
         this.iCardRepository = iCardRepository;
         this.jwtTokenManager = jwtTokenManager;
@@ -49,6 +53,9 @@ public class CardService extends ServiceManager<Card, String> {
         this.trainerAssessmentService = trainerAssessmentService;
         this.userManager = userManager;
         this.graduationProjectService = graduationProjectService;
+        this.writtenExamService = writtenExamService;
+        this.algorithmService = algorithmService;
+        this.gameInterviewService = gameInterviewService;
     }
 
     public CardResponseDto getCardByStudent(String token) {
@@ -253,5 +260,57 @@ public class CardService extends ServiceManager<Card, String> {
                 .graduationProjectSuccessScore(graduationProjectSuccessScore)
                 .totalSuccessScore(totalSuccessScore)
                 .build();
+    }
+
+    public StudentChoiceResponseDto getStudentChoiceDetails(String token) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
+        if (studentId.isEmpty())
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        double writtenExamWeight = 0.25;
+        double algorithmWeight = 0.25;
+        double candidateInterviewWeight = 0.25;
+        double gameInterviewWeight = 0.25;
+        double writtenExamScore = 0;
+        double algorithmScore = 0;
+
+       WrittenExam writtenExam = writtenExamService.getWrittenExamByStudentId(studentId.get());
+       if(writtenExam == null) {
+           throw new AssignmentException(ErrorType.WRITTENEXAM_NOT_FOUND);
+       }else{
+           writtenExamScore = writtenExam.getScore();
+       }
+        AlgorithmResponseDto algorithm = algorithmService.getAlgorithm(token);
+       if (algorithm == null){
+           throw new AssignmentException(ErrorType.ALGORITHM_NOT_FOUND);
+       }else{
+            algorithmScore = algorithm.getFinalScore();
+       }
+        Double candidateInterviewScore = interviewService.getCandidateInterviewAveragePoint(studentId.get());
+       if (candidateInterviewScore == null)
+           throw new AssignmentException(ErrorType.CANDIDATE_INTERVIEW_NOT_FOUND);
+       Double gameInterviewScore = gameInterviewService.getGameInterviewAveragePoint(studentId.get());
+       if(gameInterviewScore == null)
+           throw new AssignmentException(ErrorType.GAME_INTERVIEW_NOT_FOUND);
+
+
+        double writtenExamSuccessScore = writtenExamScore * writtenExamWeight;
+        double algorithmSuccessScore = algorithmScore * algorithmWeight;
+        double candidateInterviewSuccessScore = candidateInterviewScore * candidateInterviewWeight;
+        double gameInterviewSuccessScore= gameInterviewScore * gameInterviewWeight;
+
+        double totalSuccessScore = writtenExamSuccessScore + algorithmSuccessScore + candidateInterviewSuccessScore + gameInterviewSuccessScore ;
+
+        return StudentChoiceResponseDto.builder()
+                .gameInterviewSuccessScore(gameInterviewSuccessScore)
+                .writtenExamSuccessScore(writtenExamSuccessScore)
+                .algorithmSuccessScore(algorithmSuccessScore)
+                .candidateInterviewSuccessScore(candidateInterviewSuccessScore)
+                .algorithmScore(algorithmScore)
+                .writtenExamScore(writtenExamScore)
+                .gameInterviewScore(gameInterviewScore)
+                .candidateInterviewScore(candidateInterviewScore)
+                .totalSuccessScore(totalSuccessScore)
+                .build();
+
     }
 }

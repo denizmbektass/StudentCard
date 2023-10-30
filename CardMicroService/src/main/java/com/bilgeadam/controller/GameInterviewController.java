@@ -22,7 +22,7 @@ public class GameInterviewController {
     @Operation(summary = "Oyun mülakatı kaydetme işlemi",
             description = "Öğrencinin oyun mülakat verilerini kaydetmek için kullanılır. İlgili verileri içeren SaveInterviewRequestDto nesnesi, " +
                     "HTTP POST isteği ile gönderilir. Başarılı olursa true, aksi takdirde hata döner.")
-    @PostMapping(SAVE_GAME_INTERVIEW)
+    @PostMapping(SAVE)
     @CrossOrigin("*")
     public ResponseEntity<Boolean> saveGameInterview(@RequestBody SaveGameInterviewRequestDto dto) {
         return ResponseEntity.ok(gameInterviewService.saveGameInterview(dto));
@@ -40,7 +40,7 @@ public class GameInterviewController {
     @Operation(summary = "Oyun mülakatını günceller",
             description = "Öğrencinin oyun mülakat verilerini güncellemek için kullanılır. İlgili verileri içeren UpdateGameInterviewRequestDto nesnesi, " +
                     "HTTP PUT isteği ile gönderilir. Başarılı olursa true, aksi takdirde hata döner.")
-    @PutMapping(UPDATE_GAME_INTERVIEW)
+    @PutMapping(UPDATE)
     @CrossOrigin("*")
     public ResponseEntity<Boolean> updateGameInterview(@RequestBody UpdateGameInterviewRequestDto dto) {
         return ResponseEntity.ok(gameInterviewService.updateGameInterview(dto));
@@ -67,7 +67,7 @@ public class GameInterviewController {
     @Operation(summary = "Oyun mülakatını siler",
             description = "Öğrencinin oyun mülakat verilerini silmek için kullanılır. İlgili oyun mülakat ID'si, " +
                     "HTTP DELETE isteği ile gönderilir. Başarılı olursa true, aksi takdirde hata döner.")
-    @DeleteMapping(DELETE_GAME_INTERVIEW)
+    @DeleteMapping(DELETE)
     public ResponseEntity<Boolean> deleteGameInterview(@PathVariable String gameInterviewId) {
         boolean result = gameInterviewService.deleteGameInterview(gameInterviewId);
         return ResponseEntity.ok(result);
@@ -76,7 +76,7 @@ public class GameInterviewController {
     @Operation(summary = "Oyun mülakatı oluşturur",
             description = "Öğrencinin oyun mülakat verilerini oluşturmak için kullanılır. İlgili verileri içeren CreateGameInterviewRequestDto nesnesi, " +
                     "HTTP POST isteği ile gönderilir. Başarılı olursa true, aksi takdirde hata döner.")
-    @PostMapping(CREATE_GAME_INTERVIEW)
+    @PostMapping(CREATE)
     public ResponseEntity<Boolean> createGameInterview(@RequestBody CreateGameInterviewRequestDto dto) {
         boolean result = gameInterviewService.createGameInterview(dto);
         return ResponseEntity.ok(result);

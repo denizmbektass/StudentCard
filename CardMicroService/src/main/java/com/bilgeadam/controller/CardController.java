@@ -2,8 +2,8 @@ package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.response.CardResponseDto;
 import com.bilgeadam.dto.response.EducationScoreDetailsDto;
+import com.bilgeadam.dto.response.StudentChoiceResponseDto;
 import com.bilgeadam.dto.response.TranscriptResponseDto;
-import com.bilgeadam.repository.entity.Card;
 import com.bilgeadam.service.CardService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +49,14 @@ public class CardController {
     @CrossOrigin("*")
     public ResponseEntity<EducationScoreDetailsDto> getEducationDetails(@PathVariable String token) {
         return ResponseEntity.ok(cardService.getEducationDetails(token));
+    }
+
+    @Operation(summary = "Ögrenci Seçme kartı için parametrelerini alma işlemi",
+            description = "Belirtilen token kullanılarak öğrenci için kart bilgilerini almak.")
+    @GetMapping("/get-student-choice-score-details/{token}")
+    @CrossOrigin("*")
+    public ResponseEntity<StudentChoiceResponseDto> getStudentChoiceDetails(@PathVariable String token) {
+        return ResponseEntity.ok(cardService.getStudentChoiceDetails(token));
     }
 
 }

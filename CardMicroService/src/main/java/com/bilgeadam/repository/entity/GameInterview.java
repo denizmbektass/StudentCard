@@ -16,12 +16,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class GameInterview extends BaseEntity {
     @Id
-    private String studentId;
     private String gameInterviewId;
+    private String studentId;
     private Long directionCorrect;
     private Long completionTime;
     private Long levelReached;
     private Long supportTaken;
+    private String comment;
+    private Double gameInterviewAveragePoint;
     @Builder.Default()
     private EStatus eStatus = EStatus.ACTIVE;
 
