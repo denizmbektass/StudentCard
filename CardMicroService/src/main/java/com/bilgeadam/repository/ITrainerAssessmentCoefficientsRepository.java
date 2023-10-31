@@ -11,4 +11,8 @@ import java.util.List;
 public interface ITrainerAssessmentCoefficientsRepository extends MongoRepository<TrainerAssessmentCoefficients,String> {
     @Override
     List<TrainerAssessmentCoefficients> findAll();
+
+    TrainerAssessmentCoefficients findByStudentId(String id);
+
+    void deleteByStudentId(String id);
 }

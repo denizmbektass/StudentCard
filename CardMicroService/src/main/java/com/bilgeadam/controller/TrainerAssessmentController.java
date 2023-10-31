@@ -24,23 +24,6 @@ public class TrainerAssessmentController {
 
     private final TrainerAssessmentService trainerAssessmentService;
 
-    @Operation(summary = "Eğitmen değerlendirme kaydetme işlemi",
-            description = "Belirtilen eğitmen değerlendirme kaydetme isteği DTO'su kullanılarak bir eğitmen değerlendirmesini kaydeder.")
-    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
-    @PostMapping(SAVE)
-    @CrossOrigin("*")
-    public ResponseEntity<TrainerAssessmentSaveResponseDto> saveTrainerAssessment(@RequestBody SaveTrainerAssessmentRequestDto dto){
-        return ResponseEntity.ok(trainerAssessmentService.saveTrainerAssessment(dto));
-    }
-    @Operation(summary = "Eğitmen değerlendirme güncelleme işlemi",
-            description = "Belirtilen eğitmen değerlendirme güncelleme isteği DTO'su kullanılarak bir eğitmen değerlendirmesini günceller.")
-    //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
-    @PostMapping(UPDATE)
-    @CrossOrigin("*")
-    public ResponseEntity<UpdateTrainerAssessmentResponseDto> updateTrainerAssessment(@RequestBody UpdateTrainerAssessmentRequestDto dto){
-        return ResponseEntity.ok(trainerAssessmentService.updateTrainerAssessment(dto));
-    }
-
     @Operation(summary = "Eğitmen değerlendirme silme işlemi",
             description = "Belirtilen eğitmen değerlendirme kimliği kullanılarak bir eğitmen değerlendirmesini siler.")
     //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")

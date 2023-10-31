@@ -1,19 +1,16 @@
-package com.bilgeadam.dto.request;
+package com.bilgeadam.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-
-@Builder
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class SaveTrainerAssessmentRequestDto {
-    @NotNull
-    private String studentToken;
+@NoArgsConstructor
+@Builder
+public class GetTrainerAssessmentCoefficientsResponseDto {
+
     private double behaviorInClassCoefficient;
     private double courseInterestLevelCoefficient;
     private double cameraOpeningGradeCoefficient;
@@ -24,4 +21,5 @@ public class SaveTrainerAssessmentRequestDto {
     private double cameraOpeningGradeCoefficientPercentage ;
     private double instructorGradeCoefficientPercentage ;
     private double dailyHomeworkGradeCoefficientPercentage ;
+    private double averageScore;
 }
