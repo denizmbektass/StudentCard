@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface IInterviewRepository extends MongoRepository<Interview,String> {
     List<Interview> findAllByStudentId(String studentId);
+
+    Interview findByStudentId(String studentId);
 }

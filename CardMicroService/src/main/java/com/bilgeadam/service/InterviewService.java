@@ -110,10 +110,13 @@ public class InterviewService extends ServiceManager<Interview, String> {
     }
 
     public Double getCandidateInterviewAveragePoint(String studentId) {
+        if (studentId == null || studentId.isEmpty()) {
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        }
         int totalQuestionCount = 12;
-        double candidateInterviewAveragePoint;
-        Interview candidateInterview = interviewRepository.findAllByStudentId(studentId).get(0);
-        if (!studentId.equals("")) {
+        Double candidateInterviewAveragePoint;
+        Interview candidateInterview = interviewRepository.findByStudentId(studentId);
+        if (candidateInterview != null) {
             candidateInterviewAveragePoint = ((double) candidateInterview.getCommunicationSkillsPoint() / totalQuestionCount) +
                     ((double) candidateInterview.getWorkExperiencePoint() / totalQuestionCount) +
                     ((double) candidateInterview.getUniversityPoint() / totalQuestionCount) +
@@ -127,7 +130,7 @@ public class InterviewService extends ServiceManager<Interview, String> {
                     ((double) candidateInterview.getResidencyPoint() / totalQuestionCount) +
                     ((double) candidateInterview.getSoftwareEducationPoint() / totalQuestionCount);
         } else {
-            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+            throw new CardServiceException(ErrorType.BAD_REQUEST);
         }
         return candidateInterviewAveragePoint;
     }
