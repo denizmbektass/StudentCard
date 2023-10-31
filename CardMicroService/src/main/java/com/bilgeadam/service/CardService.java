@@ -8,7 +8,6 @@ import com.bilgeadam.manager.IUserManager;
 import com.bilgeadam.repository.ICardRepository;
 import com.bilgeadam.repository.entity.Card;
 import com.bilgeadam.repository.entity.CardParameter;
-import com.bilgeadam.repository.entity.GraduationProject;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
@@ -34,12 +33,14 @@ public class CardService extends ServiceManager<Card, String> {
     private final WrittenExamService writtenExamService;
     private final AlgorithmService algorithmService;
     private final GameInterviewService gameInterviewService;
+    private final TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService;
+    private final ProjectBehaviorService projectBehaviorService;
 
     public CardService(ICardRepository iCardRepository, JwtTokenManager jwtTokenManager,
                        CardParameterService cardParameterService, AssignmentService assignmentService,
                        ExamService examService, InternshipSuccessRateService intershipService,
                        InterviewService interviewService, AbsenceService absenceService, ProjectService projectService,
-                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, GameInterviewService gameInterviewService) {
+                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, GameInterviewService gameInterviewService, TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService, ProjectBehaviorService projectBehaviorService) {
         super(iCardRepository);
         this.iCardRepository = iCardRepository;
         this.jwtTokenManager = jwtTokenManager;
@@ -56,6 +57,8 @@ public class CardService extends ServiceManager<Card, String> {
         this.writtenExamService = writtenExamService;
         this.algorithmService = algorithmService;
         this.gameInterviewService = gameInterviewService;
+        this.trainerAssessmentCoefficientsService = trainerAssessmentCoefficientsService;
+        this.projectBehaviorService = projectBehaviorService;
     }
 
     public CardResponseDto getCardByStudent(String token) {
@@ -197,33 +200,19 @@ public class CardService extends ServiceManager<Card, String> {
         }
 
         //Eğitmen Görüşü için ortalam bilgisi
-        List<TrainerAssessmentForTranscriptResponseDto> trainerAssessmentForTranscriptResponseDto = trainerAssessmentService.findAllTrainerAssessmentForTranscriptResponseDto(token);
-        if (!trainerAssessmentForTranscriptResponseDto.isEmpty()) {
-            trainerAssessmentScoreList = trainerAssessmentForTranscriptResponseDto.stream()
-                    .map(TrainerAssessmentForTranscriptResponseDto::getTotalTrainerAssessmentScore)
-                    .collect(Collectors.toList());
-            // Ortalama
-            avgTrainerAssessmentScore = trainerAssessmentScoreList.stream()
-                    .mapToDouble(Double::doubleValue)
-                    .average()
-                    .orElse(0.0);
-            // Başarı Puanı
+        GetTrainerAssessmentCoefficientsResponseDto getTrainerAssessmentCoefficientsResponseDto = trainerAssessmentCoefficientsService.getTrainerAssessmentCoefficientsResponseDto(token);
+        if (getTrainerAssessmentCoefficientsResponseDto != null) {
+            avgTrainerAssessmentScore = getTrainerAssessmentCoefficientsResponseDto.getAverageScore();
             trainerAssessmentSuccessScore = avgTrainerAssessmentScore * trainerAssessmentWeight;
             totalSuccessScore += trainerAssessmentSuccessScore;
-
         }
 
         //Proje için ortalam bilgisi
-        List<StudentProjectListResponseDto> project = projectService.showStudentProjectList(token);
-        if (!project.isEmpty()) {
-            projectScoreList = project.stream()
-                    .map(StudentProjectListResponseDto::getProjectScore)
-                    .collect(Collectors.toList());
+
+        GetProjectBehaviorResponseDto getProjectBehaviorResponseDto = projectBehaviorService.findProjectBehavior(token);
+        if (getProjectBehaviorResponseDto != null) {
             // Ortalama
-            avgProjectScore = projectScoreList.stream()
-                    .mapToLong(Long::longValue)
-                    .average()
-                    .orElse(0.0);
+            avgProjectScore = getProjectBehaviorResponseDto.getAverageScore();
             // Başarı Puanı
             projectSuccessScore = avgProjectScore * projectWeight;
             totalSuccessScore += projectSuccessScore;
