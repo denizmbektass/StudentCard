@@ -10,5 +10,5 @@ import java.util.List;
 public interface IProjectBehaviorRepository extends MongoRepository<ProjectBehavior, String> {
 
     ProjectBehavior findByStudentId (String studentId);
-    List<ProjectBehavior> findAllByProjectBehaviorId (String projectBehavorId);
+    void deleteByStudentId(String id);
 }

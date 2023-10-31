@@ -18,7 +18,6 @@ public class ProjectBehavior extends BaseEntity {
 
     @Id
     private String projectBehaviorId;
-    private String projectId;
     private String studentId;
     private Long rapportScore;
     private Long interestScore;
