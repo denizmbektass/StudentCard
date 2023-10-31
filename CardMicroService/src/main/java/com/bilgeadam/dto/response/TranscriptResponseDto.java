@@ -22,5 +22,7 @@ public class TranscriptResponseDto {
     Double absence;
     List<StudentProjectListResponseDto> project;
     TranscriptInfo transcriptInfo;
+    StudentChoiceResponseDto studentChoice;
+    Long StudentAvarageScore;
 
 }

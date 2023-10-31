@@ -14,6 +14,6 @@ import org.springframework.data.annotation.Id;
 public class TrainerAssessmentForTranscriptResponseDto {
     private String assessmentName;
     private double totalTrainerAssessmentScore;
-    private Long score;
+    private double score;
     private String description;
 }
