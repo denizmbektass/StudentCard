@@ -27,6 +27,7 @@ public enum ErrorType {
     EXAM_NOT_FOUND(6100,"Böyle bir sınav bulunamadı.",HttpStatus.NOT_FOUND),
     ROLLCALL_NOT_FOUND(6100,"Böyle bir grup bulunamadı.",HttpStatus.BAD_REQUEST),
     CARD_PARAMETER_NOT_FOUND(6100,"Böyle bir parametre bulunamadı.",HttpStatus.BAD_REQUEST),
+    APPLICATION_PROCESS_NOT_FOUND(6100, "Böyle bir kayıt bulanamadı.", HttpStatus.BAD_REQUEST),
 
     TRAINER_ASSESSMENT_NOT_FOUND(6001,"Eğitmen değerlendirmesi bulunamadı, lütfen tekrar deneyin.",HttpStatus.BAD_REQUEST),
     USER_NOT_EXIST(500,"Kullanıcı mevcut.",HttpStatus.BAD_REQUEST),
@@ -44,10 +45,12 @@ public enum ErrorType {
     HW_NUMBER_RANGE(9005, "Ödev notu, '0' ile '100' arasında olmak zorundadır..",HttpStatus.BAD_REQUEST),
     EXAM_NUMBER_RANGE(9010,"Sınav notu, '0' ile '100' arasında olmak zorundadır.",HttpStatus.BAD_REQUEST),
     INTERVIEW_SCORE_NUMBER_RANGE(9010,"Mülakat puanı, '0' ile '100' arasında olmak zorundadır.",HttpStatus.BAD_REQUEST),
+    APPLICATION_PROCESS_SCORE_NUMBER_RANGE(9010, "Başvuru süreci puanı, '0' ile '100' arasında olmak zorundadır.", HttpStatus.BAD_REQUEST),
     GROUP_NOT_FOUND(9011,"Grup bulunamadı.",HttpStatus.BAD_REQUEST),
     STUDENT_NOT_FOUND(9012,"Öğrenci bulunamadı.",HttpStatus.BAD_REQUEST),
     STUDENT_ID_NOT_FOUND(9013, "Bu id'ye sahip öğrenci bulunamadı.",HttpStatus.BAD_REQUEST),
     GROUP_ALREADY_EXIST(9014, "Grup zaten kayıtlı.", HttpStatus.BAD_REQUEST),
+    STUDENT_APPLICATION_PROCESS_ALREADY_EXIST(9014, "Öğrenciye ait başvuru süreci zaten kayıtlı.", HttpStatus.BAD_REQUEST),
 
     TRAINER_ASSESSMENT_EMPTY(9015,"Eğitmen görüşü boş bırakılamaz.", HttpStatus.BAD_REQUEST),
     TRAINER_ASSESSMENT_POINT_RANGE(9016, "Eğitmen görüş puanı '0' ile '100' arasında olmalıdır.",HttpStatus.BAD_REQUEST),
@@ -73,5 +76,5 @@ public enum ErrorType {
 
     private int code;
     private String message;
-     HttpStatus httpStatus;
+    HttpStatus httpStatus;
 }
