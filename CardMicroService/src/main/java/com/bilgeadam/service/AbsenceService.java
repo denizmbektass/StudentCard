@@ -36,7 +36,7 @@ public class AbsenceService extends ServiceManager<Absence,String> {
         });
         List<Absence> absenceList = absenceRepository.findByUserId(userId);
         if(absenceList.isEmpty())
-            throw new CardServiceException(ErrorType.ABSENCE_NOT_FOUND);
+            return null;
         int sumOfAbsenceHoursGroup1 = 0;
         int sumOfAbsenceHoursGroup2 = 0;
         int sumOfTotalCourseHoursGroup1 = 0;
