@@ -52,5 +52,13 @@ public class ApiUrls {
     public static final String EMPLOYMENT_INTERVIEW =CARD+"/employment-interview";
     public static final String GET_EMPLOYMENT_INTERVIEW = "/get";
 
+    public static final String CAREER_EDUCATION = VERSION + "/career-education";
+    public static final String GET_CAREER_EDUCATION_COUNT = "/get-career-education-count";
+    public static final String SAVE_CAREER_EDUCATION = "/save-career-education";
+    public static final String UPDATE_CAREER_EDUCATION = "/update-career-education";
+    public static final String GET_CAREER_EDUCATION = "/get-career-education";
+    public static final String GET_CAREER_EDUCATION_AVERAGE_POINT = "/get-career-education-average-point";
+
+
 
 }
