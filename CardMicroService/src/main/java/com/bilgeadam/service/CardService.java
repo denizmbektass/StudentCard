@@ -222,6 +222,7 @@ public class CardService extends ServiceManager<Card, String> {
                 .totalSuccessScore(totalSuccessScore)
                 .build();
     }
+
     // Ödevler Ortalama
     public Double getAssignmentAverage(String token) {
         List<AssignmentResponseDto> assignmentResponseDtos = assignmentService.findAllAssignments(token);
@@ -238,6 +239,7 @@ public class CardService extends ServiceManager<Card, String> {
                     .orElse(0.0);
         }
     }
+
     // Eğitmen Görüşü Ortalama
     public Double getTrainerAssesmentAverage(String token) {
         GetTrainerAssessmentCoefficientsResponseDto getTrainerAssessmentCoefficientsResponseDto = trainerAssessmentCoefficientsService.getTrainerAssessmentCoefficientsResponseDto(token);
@@ -247,6 +249,7 @@ public class CardService extends ServiceManager<Card, String> {
             return null;
         }
     }
+
     // Sınav Ortalama
     public Double getExamAverage(String token) {
         List<ExamResponseDto> examResponseDtos = examService.findAllExams(token);
@@ -263,6 +266,7 @@ public class CardService extends ServiceManager<Card, String> {
             return null;
         }
     }
+
     // Proje Ortalama
     public Double getProjectBehaviorAverage(String token) {
         GetProjectBehaviorResponseDto getProjectBehaviorResponseDto = projectBehaviorService.findProjectBehavior(token);
@@ -274,6 +278,7 @@ public class CardService extends ServiceManager<Card, String> {
             return null;
         }
     }
+
     // Yoklama Ortalama
     public Double getAbsencePerformAverage(String token) {
         ShowUserAbsenceInformationResponseDto absenceDto = absenceService.showUserAbsenceInformation(token);
@@ -282,6 +287,7 @@ public class CardService extends ServiceManager<Card, String> {
         }
         return null;
     }
+
     // Bitirme Projesi Ortalama
     public Double getGraduationProjectAverage(String token) {
         GetGraduationProjectResponseDto graduationProjects = graduationProjectService.findGraduationProject(token);
@@ -315,36 +321,27 @@ public class CardService extends ServiceManager<Card, String> {
         Double totalSuccessScore = 0.0;
 
 
-        try {
-            WrittenExam writtenExam = writtenExamService.getWrittenExamByStudentId(studentId.get());
-            if (writtenExam != null) {
-                writtenExamScore = writtenExam.getScore();
-                writtenExamSuccessScore = writtenExamScore * writtenExamWeight;
-                totalSuccessScore += writtenExamSuccessScore;
-            }
-        } catch (Exception e) {
-
+        WrittenExam writtenExam = writtenExamService.getWrittenExamByStudentId(studentId.get());
+        if (writtenExam != null) {
+            writtenExamScore = writtenExam.getScore();
+            writtenExamSuccessScore = writtenExamScore * writtenExamWeight;
+            totalSuccessScore += writtenExamSuccessScore;
         }
 
-        try {
-            AlgorithmResponseDto algorithm = algorithmService.getAlgorithm(token);
-            if (algorithm != null) {
-                algorithmScore = algorithm.getFinalScore();
-                algorithmSuccessScore = algorithmScore * algorithmWeight;
-                totalSuccessScore += algorithmSuccessScore;
-            }
-        } catch (Exception e) {
 
+        AlgorithmResponseDto algorithm = algorithmService.getAlgorithm(token);
+        if (algorithm != null) {
+            algorithmScore = algorithm.getFinalScore();
+            algorithmSuccessScore = algorithmScore * algorithmWeight;
+            totalSuccessScore += algorithmSuccessScore;
         }
-        try {
-            Double candidateInterviewAveragePoint = interviewService.getCandidateInterviewAveragePoint(studentId.get());
-            if (candidateInterviewAveragePoint != null) {
-                candidateInterviewScore = candidateInterviewAveragePoint;
-                candidateInterviewSuccessScore = candidateInterviewScore * candidateInterviewWeight;
-                totalSuccessScore += candidateInterviewSuccessScore;
-            }
-        } catch (Exception e) {
 
+
+        Double candidateInterviewAveragePoint = interviewService.getCandidateInterviewAveragePoint(studentId.get());
+        if (candidateInterviewAveragePoint != null) {
+            candidateInterviewScore = candidateInterviewAveragePoint;
+            candidateInterviewSuccessScore = candidateInterviewScore * candidateInterviewWeight;
+            totalSuccessScore += candidateInterviewSuccessScore;
         }
 
         Double gameInterviewAveragePoint = gameInterviewService.getGameInterviewAveragePoint(studentId.get());

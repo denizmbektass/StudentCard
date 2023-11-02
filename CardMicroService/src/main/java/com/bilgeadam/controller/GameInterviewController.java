@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static com.bilgeadam.constants.ApiUrls.*;
 
 @RestController
@@ -24,7 +26,7 @@ public class GameInterviewController {
                     "HTTP POST isteği ile gönderilir. Başarılı olursa true, aksi takdirde hata döner.")
     @PostMapping(SAVE)
     @CrossOrigin("*")
-    public ResponseEntity<Boolean> saveGameInterview(@RequestBody SaveGameInterviewRequestDto dto) {
+    public ResponseEntity<Boolean> saveGameInterview(@RequestBody @Valid SaveGameInterviewRequestDto dto) {
         return ResponseEntity.ok(gameInterviewService.saveGameInterview(dto));
     }
 
@@ -42,7 +44,7 @@ public class GameInterviewController {
                     "HTTP PUT isteği ile gönderilir. Başarılı olursa true, aksi takdirde hata döner.")
     @PutMapping(UPDATE)
     @CrossOrigin("*")
-    public ResponseEntity<Boolean> updateGameInterview(@RequestBody UpdateGameInterviewRequestDto dto) {
+    public ResponseEntity<Boolean> updateGameInterview(@RequestBody @Valid UpdateGameInterviewRequestDto dto) {
         return ResponseEntity.ok(gameInterviewService.updateGameInterview(dto));
     }
 

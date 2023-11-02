@@ -10,29 +10,20 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class SaveGameInterviewRequestDto {
+public class CreateEmploymentInterviewRequestDto {
     @NotNull
     private String studentToken;
     @Min(0)
     @Max(100)
     @NotNull
-    private Long directionCorrect;
+    private Double hrInterviewScore;
     @Min(0)
     @Max(100)
     @NotNull
-    private Long completionTime;
-    @Min(0)
-    @Max(100)
-    @NotNull
-    private Long levelReached;
-    @Min(0)
-    @Max(100)
-    @NotNull
-    private Long supportTaken;
-    private String comment;
-
-
+    private Double technicalInterviewScore;
+    private String hrInterviewComment;
+    private String technicalInterviewComment;
 }
