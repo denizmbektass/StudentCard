@@ -130,7 +130,7 @@ public class InterviewService extends ServiceManager<Interview, String> {
                     ((double) candidateInterview.getResidencyPoint() / totalQuestionCount) +
                     ((double) candidateInterview.getSoftwareEducationPoint() / totalQuestionCount);
         } else {
-            throw new CardServiceException(ErrorType.BAD_REQUEST);
+           return null;
         }
         return candidateInterviewAveragePoint;
     }
