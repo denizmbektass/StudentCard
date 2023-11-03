@@ -14,7 +14,7 @@ public class ApiUrls {
     public static final String EXAM = VERSION+"/exam";
     public static final String ROLLCALL = VERSION+"/rollcall";
     public static final String INTERVIEW = VERSION+"/interview";
-    public static final String GAME_INTERVIEW = VERSION+"/game-interview";
+    public static final String GAME_INTERVIEW = CARD+"/game-interview";
     public static final String PROJECT=VERSION+"/project";
     public static final String APPLICATION_PROCESS = VERSION + "/application-process";
     public static final String CREATE ="/create";
@@ -27,14 +27,14 @@ public class ApiUrls {
     public static final String CARDPARAMETER = VERSION + "/card-parameter";
     public static final String AVERAGE = "/average-exam/{studentId}";
     public static final String ASSIGNMENT_AVERAGE = "/get-assignment-average";
-    public static final String GRADUATION_PROJECT = VERSION + "/graduation-project";
+    public static final String GRADUATION_PROJECT = CARD + "/graduation-project";
     public static final String FIND_GRADUATION_PROJECT ="/find-graduation-project";
     public static final String PROJECT_BEHAVIOR= VERSION+"/project-behavior";
     public static final String FIND_PROJECT_BEHAVIOR= "/find-project-behavior";
 
     public static final String ALGORITHM= VERSION+"/algorithm";
     public static final String FIND_ALGORITHM= VERSION+"/find-algorithm";
-    public static final String TRAINER_ASSESSMENT_COEFFICIENTS = VERSION+"/trainer-assessment-coefficients";
+    public static final String TRAINER_ASSESSMENT_COEFFICIENTS = CARD+"/trainer-assessment-coefficients";
     public static final String WRITTENEXAMSCORE = "/written-exam-score/{correctAnswers}";
     public static final String SAVEWRITTENEXAM = "/save-written-exam";
     public static final String GETWRITTENEXAM = "/get-written-exam/{studentId}";
@@ -49,6 +49,8 @@ public class ApiUrls {
     public static final String GET_GAME_INTERVIEW_AVERAGE_POINT = "/get-average-point";
 
     public static final String APPLICATION_PROCESS_TOTAL_SCORE = "/total-score";
+    public static final String EMPLOYMENT_INTERVIEW =CARD+"/employment-interview";
+    public static final String GET_EMPLOYMENT_INTERVIEW = "/get";
 
     public static final String CAREER_EDUCATION = VERSION + "/career-education";
     public static final String GET_CAREER_EDUCATION_COUNT = "/get-career-education-count";
