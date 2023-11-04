@@ -2,6 +2,7 @@ package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.CreateApplicationProcessRequestDto;
 import com.bilgeadam.dto.request.UpdateApplicationProcessRequestDto;
+import com.bilgeadam.dto.response.GetApplicationProcessResponseDto;
 import com.bilgeadam.service.ApplicationProcessService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,12 @@ public class ApplicationProcessController {
     public ResponseEntity<Boolean> save(@RequestBody CreateApplicationProcessRequestDto dto) {
         return ResponseEntity.ok(applicationProcessService.save(dto));
     }
-
+    @Operation(summary = "Başvuru süreci bulma işlemi", description = "Mevcut başvuru sürecinı bulma işlemi.")
+    @GetMapping(FIND_BY_ID+ "/{studentId}")
+    @CrossOrigin("*")
+    public ResponseEntity<GetApplicationProcessResponseDto> findApplicationProcessById(@PathVariable String studentId){
+        return ResponseEntity.ok(applicationProcessService.findApplicationProcessById(studentId));
+    }
     @Operation(summary = "Başvuru süreci güncelleme işlemi", description = "Dto'dan alınan yeni verilerle, eski verilerin güncellenmesi işlemi yapılır.")
     @PutMapping(UPDATE)
     @CrossOrigin("*")

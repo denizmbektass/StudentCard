@@ -2,6 +2,7 @@ package com.bilgeadam.mapper;
 
 import com.bilgeadam.dto.request.CreateApplicationProcessRequestDto;
 import com.bilgeadam.dto.request.UpdateApplicationProcessRequestDto;
+import com.bilgeadam.dto.response.GetApplicationProcessResponseDto;
 import com.bilgeadam.repository.entity.ApplicationProcess;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
@@ -14,4 +15,6 @@ public interface IApplicationProcessMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     ApplicationProcess fromUpdateApplicationProcessRequestDtoToApplicationProcess(final UpdateApplicationProcessRequestDto dto, @MappingTarget ApplicationProcess applicationProcess);
+
+    GetApplicationProcessResponseDto fromApplicationProcessToGetApplicationProcessResponseDto(final ApplicationProcess applicationProcess);
 }
