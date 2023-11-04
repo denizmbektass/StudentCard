@@ -9,6 +9,7 @@ public class ApiUrls {
     public static final String SAVE = "/save";
     public static final String UPDATE = "/update";
     public static final String DELETE = "/delete";
+    public static final String FIND_BY_ID = "/find-by-id";
     public static final String FIND_ALL_ACTIVE_TRAINER_ASSESSMENT ="/find-all-active";
     public static final String ASSIGNMENT = VERSION+"/assignment";
     public static final String EXAM = VERSION+"/exam";

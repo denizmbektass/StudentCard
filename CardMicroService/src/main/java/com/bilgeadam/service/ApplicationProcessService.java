@@ -2,6 +2,7 @@ package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.CreateApplicationProcessRequestDto;
 import com.bilgeadam.dto.request.UpdateApplicationProcessRequestDto;
+import com.bilgeadam.dto.response.GetApplicationProcessResponseDto;
 import com.bilgeadam.exceptions.ApplicationProcessException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.mapper.IApplicationProcessMapper;
@@ -56,7 +57,15 @@ public class ApplicationProcessService extends ServiceManager<ApplicationProcess
         calculateApplicationProcessRate(applicationProcess.getStudentId());
         return true;
     }
-
+    public GetApplicationProcessResponseDto findApplicationProcessById(String studentId){
+        Optional<ApplicationProcess> optionalApplicationProcess = applicationProcessRepository.findOptionalByStudentId(studentId);
+        if (optionalApplicationProcess.isPresent()) {
+            GetApplicationProcessResponseDto applicationProcessResponseDto = applicationProcessMapper.fromApplicationProcessToGetApplicationProcessResponseDto(optionalApplicationProcess.get());
+            return applicationProcessResponseDto;
+        } else {
+            throw new ApplicationProcessException(ErrorType.APPLICATION_PROCESS_NOT_FOUND);
+        }
+    }
     public Boolean update(UpdateApplicationProcessRequestDto dto) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
         if (studentId.isEmpty()) {
