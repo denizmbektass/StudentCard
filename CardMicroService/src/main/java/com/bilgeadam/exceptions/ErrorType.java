@@ -28,7 +28,7 @@ public enum ErrorType {
     EXAM_NOT_FOUND(6100,"Böyle bir sınav bulunamadı.",HttpStatus.NOT_FOUND),
     ROLLCALL_NOT_FOUND(6100,"Böyle bir grup bulunamadı.",HttpStatus.BAD_REQUEST),
     CARD_PARAMETER_NOT_FOUND(6100,"Böyle bir parametre bulunamadı.",HttpStatus.BAD_REQUEST),
-    APPLICATION_PROCESS_NOT_FOUND(6100, "Böyle bir kayıt bulanamadı.", HttpStatus.BAD_REQUEST),
+    APPLICATION_PROCESS_NOT_FOUND(6100, "Böyle bir kayıt bulanamadı.", HttpStatus.NOT_FOUND),
 
     TRAINER_ASSESSMENT_NOT_FOUND(6001,"Eğitmen değerlendirmesi bulunamadı, lütfen tekrar deneyin.",HttpStatus.BAD_REQUEST),
     USER_NOT_EXIST(500,"Kullanıcı mevcut.",HttpStatus.BAD_REQUEST),

@@ -29,7 +29,12 @@ public class GlobalExceptionHandler {
         HttpStatus httpStatus=errorType.httpStatus;
         return new ResponseEntity<>(createError(errorType,ex),httpStatus);
     }
-
+    @ExceptionHandler(ApplicationProcessException.class)
+    public ResponseEntity<ErrorMessage> handleManagerException(ApplicationProcessException ex){
+        ErrorType errorType=ex.getErrorType();
+        HttpStatus httpStatus=errorType.httpStatus;
+        return new ResponseEntity<>(createError(errorType,ex),httpStatus);
+    }
     private ErrorMessage createError(ErrorType errorType, Exception ex) {
         System.out.println("Hata olustu: "+ex.getMessage());
         return ErrorMessage.builder()
