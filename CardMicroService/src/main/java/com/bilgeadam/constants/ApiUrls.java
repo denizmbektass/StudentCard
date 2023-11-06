@@ -32,6 +32,7 @@ public class ApiUrls {
     public static final String FIND_GRADUATION_PROJECT ="/find-graduation-project";
     public static final String PROJECT_BEHAVIOR= VERSION+"/project-behavior";
     public static final String FIND_PROJECT_BEHAVIOR= "/find-project-behavior";
+    public static final String DOCUMENTSUBMIT = VERSION+"/document-submit";
 
     public static final String ALGORITHM= VERSION+"/algorithm";
     public static final String FIND_ALGORITHM= VERSION+"/find-algorithm";
@@ -59,6 +60,7 @@ public class ApiUrls {
     public static final String UPDATE_CAREER_EDUCATION = "/update-career-education";
     public static final String GET_CAREER_EDUCATION = "/get-career-education";
     public static final String GET_CAREER_EDUCATION_AVERAGE_POINT = "/get-career-education-average-point";
+
 
 
 
