@@ -74,6 +74,8 @@ public enum ErrorType {
     GAME_INTERVIEW_NOT_FOUND(9028, "Oyun mülakatı puanı bulunamadı", HttpStatus.BAD_REQUEST),
     WRITTENEXAM_NUMBER_RANGE(9027,"Doğru sayısı '0' ile '35' arasında olmak zorundadır", HttpStatus.BAD_REQUEST),
     WRITTENEXAM_NOT_FOUND(9028,"Yazılı sınav puanı bulunamadı.", HttpStatus.BAD_REQUEST),
+    DOCUMENTSUBMIT_NUMBER_OUT_RANGE(9029,"Girilen değer 0 ile 100 arasında olmalıdır", HttpStatus.BAD_REQUEST),
+    DOCUMENTSUBMIT_NOT_FOUND(9029,"Evrak teslim puanı bulunamadı", HttpStatus.BAD_REQUEST),
     EMPLOYMENT_INTERVIEW_NUMBER_RANGE(9029,"Mülakat notları  '0' ile '100' arasında olmak zorundadır.",HttpStatus.BAD_REQUEST),
     EMPLOYMENT_INTERVIEW_NOT_FOUND(9030,"Mülakatlar bulunamadı" , HttpStatus.BAD_REQUEST);
 
