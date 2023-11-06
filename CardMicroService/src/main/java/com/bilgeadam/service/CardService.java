@@ -6,12 +6,10 @@ import com.bilgeadam.dto.response.*;
 import com.bilgeadam.exceptions.*;
 import com.bilgeadam.manager.IUserManager;
 import com.bilgeadam.repository.ICardRepository;
-import com.bilgeadam.repository.entity.Card;
-import com.bilgeadam.repository.entity.CardParameter;
+import com.bilgeadam.repository.entity.*;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
-import com.bilgeadam.repository.entity.WrittenExam;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,12 +33,16 @@ public class CardService extends ServiceManager<Card, String> {
     private final GameInterviewService gameInterviewService;
     private final TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService;
     private final ProjectBehaviorService projectBehaviorService;
+    private final EmploymentInterviewService employmentInterviewService;
+    private final CareerEducationService careerEducationService;
+    private final ApplicationProcessService applicationProcessService;
+    private final DocumentSubmitService documentSubmitService;
 
     public CardService(ICardRepository iCardRepository, JwtTokenManager jwtTokenManager,
                        CardParameterService cardParameterService, AssignmentService assignmentService,
                        ExamService examService, InternshipSuccessRateService intershipService,
                        InterviewService interviewService, AbsenceService absenceService, ProjectService projectService,
-                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, GameInterviewService gameInterviewService, TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService, ProjectBehaviorService projectBehaviorService) {
+                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, GameInterviewService gameInterviewService, TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService, ProjectBehaviorService projectBehaviorService, EmploymentInterviewService employmentInterviewService, CareerEducationService careerEducationService, ApplicationProcessService applicationProcessService, DocumentSubmitService documentSubmitService) {
         super(iCardRepository);
         this.iCardRepository = iCardRepository;
         this.jwtTokenManager = jwtTokenManager;
@@ -59,6 +61,10 @@ public class CardService extends ServiceManager<Card, String> {
         this.gameInterviewService = gameInterviewService;
         this.trainerAssessmentCoefficientsService = trainerAssessmentCoefficientsService;
         this.projectBehaviorService = projectBehaviorService;
+        this.employmentInterviewService = employmentInterviewService;
+        this.careerEducationService = careerEducationService;
+        this.applicationProcessService = applicationProcessService;
+        this.documentSubmitService = documentSubmitService;
     }
 
     public CardResponseDto getCardByStudent(String token) {
@@ -363,5 +369,89 @@ public class CardService extends ServiceManager<Card, String> {
                 .totalSuccessScore(totalSuccessScore)
                 .build();
     }
+
+    public EmploymentScoreDetailsDto getEmploymentDetails(String token) {
+        Double careerEducationSuccessScore = null;
+        Double documentSumbitSuccessScore = null;
+        Double applicationProcessSuccessScore = null;
+        Double employmentInterviewSuccessScore = null;
+        Double totalSuccessScore = 0.0;
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
+        if (studentId.isEmpty()) {
+            throw new CardServiceException(ErrorType.STUDENT_NOT_FOUND);
+        }
+
+        // Kariyer Eğitimi
+        careerEducationSuccessScore = getCareerEducationSuccessScore(token);
+        if (careerEducationSuccessScore != null) {
+            totalSuccessScore += careerEducationSuccessScore;
+        }
+
+        // Evrak Teslim
+        documentSumbitSuccessScore = getDocumentSubmitSuccessScore(studentId.get());
+        if (documentSumbitSuccessScore != null) {
+            totalSuccessScore += documentSumbitSuccessScore;
+        }
+
+        // Başvuru Süreci
+        applicationProcessSuccessScore = getApplicationProcessSuccessScore(studentId.get());
+        if (applicationProcessSuccessScore != null) {
+            totalSuccessScore += applicationProcessSuccessScore;
+        }
+
+        // Mülakat
+        employmentInterviewSuccessScore = getEmploymentInterviewSuccessScore(token);
+        if (employmentInterviewSuccessScore != null) {
+            totalSuccessScore += employmentInterviewSuccessScore;
+        }
+
+        return EmploymentScoreDetailsDto.builder()
+                .documentSumbitSuccessScore(documentSumbitSuccessScore)
+                .careerEducationSuccessScore(careerEducationSuccessScore)
+                .employmentInterviewSuccessScore(employmentInterviewSuccessScore)
+                .applicationProcessSuccessScore(applicationProcessSuccessScore)
+                .totalSuccessScore(totalSuccessScore)
+                .build();
+    }
+
+    public Double getDocumentSubmitSuccessScore(String studentId) {
+        DocumentSubmit documentSubmit = documentSubmitService.getDocumentSubmitByStudentId(studentId);
+        if (documentSubmit == null) {
+            return null;
+        } else {
+            return documentSubmit.getDocumentSubmitAverageScore();
+        }
+    }
+
+    public Double getCareerEducationSuccessScore(String token) {
+        Double careerEducation = careerEducationService.getCareerEducationAveragePoint(token);
+        if (careerEducation == null) {
+            return null;
+        } else {
+            Double careerEducationWeight = 0.35;
+            Double careerEducationSuccessScore = careerEducation * careerEducationWeight;
+            return careerEducationSuccessScore;
+        }
+    }
+
+    public Double getApplicationProcessSuccessScore(String studentId) {
+        Double applicationProcess = applicationProcessService.calculateApplicationProcessRate(studentId);
+        if (applicationProcess == null) {
+            return null;
+        } else {
+            return applicationProcess;
+        }
+    }
+
+    public Double getEmploymentInterviewSuccessScore(String token) {
+        Double employmentInterviewWeight = 0.35;
+        Double employmentInterview = employmentInterviewService.getEmploymentInterviewAvg(token);
+        if (employmentInterview == null) {
+            return null;
+        } else {
+            return employmentInterviewWeight * employmentInterview;
+        }
+    }
+
 
 }
