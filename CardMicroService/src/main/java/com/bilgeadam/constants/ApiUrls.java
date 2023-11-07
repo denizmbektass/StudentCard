@@ -61,6 +61,12 @@ public class ApiUrls {
     public static final String GET_CAREER_EDUCATION = "/get-career-education";
     public static final String GET_CAREER_EDUCATION_AVERAGE_POINT = "/get-career-education-average-point";
 
+    public static final String TEAMWORK = VERSION + "/teamwork";
+    public static final String GET_TEAMWORK_COUNT = "/get-teamwork-count";
+    public static final String SAVE_TEAMWORK = "/save-teamwork";
+    public static final String UPDATE_TEAMWORK = "/update-teamwork";
+    public static final String GET_TEAMWORK = "/get-teamwork";
+    public static final String GET_TEAMWORK_SUCCESS_POINT = "/get-teamwork-success-point";
 
 
 
