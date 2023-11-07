@@ -67,7 +67,9 @@ public class ApiUrls {
     public static final String UPDATE_TEAMWORK = "/update-teamwork";
     public static final String GET_TEAMWORK = "/get-teamwork";
     public static final String GET_TEAMWORK_SUCCESS_POINT = "/get-teamwork-success-point";
-
-
+    public static final String TEAM_LEAD_ASSESSMENT = CARD + "/team-lead-assessment";
+    public static final String SAVE_TEAM_LEAD_ASSESSMENT = "/save-team-lead-assessment";
+    public static final String UPDATE_TEAM_LEAD_ASSESSMENT = "/update-team-lead-assessment";
+    public static final String GET_TEAM_LEAD_ASSESSMENT_DETAILS = "/get-team-lead-assessment-details";
 
 }
