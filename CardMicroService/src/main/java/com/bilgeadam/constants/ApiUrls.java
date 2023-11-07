@@ -20,7 +20,7 @@ public class ApiUrls {
     public static final String APPLICATION_PROCESS = CARD + "/application-process";
     public static final String CREATE ="/create";
     public static final String FIND_ALL ="/find-all";
-    public static final String WRITTENEXAM = VERSION+"/written-exam";
+    public static final String WRITTEN_EXAM = VERSION+"/written-exam";
     public static final String CREATE_PROJECT_SCORE ="/create-project-score";
     public static final String INTERNSHIP = VERSION + "/internship";
     public static final String ADD_SCORE_AND_COMMENT = "/add-score-and-comment";
@@ -33,13 +33,14 @@ public class ApiUrls {
     public static final String PROJECT_BEHAVIOR= VERSION+"/project-behavior";
     public static final String FIND_PROJECT_BEHAVIOR= "/find-project-behavior";
     public static final String DOCUMENTSUBMIT = VERSION+"/document-submit";
+    public static final String ATTENDANCE = VERSION + "/attendance";
 
     public static final String ALGORITHM= VERSION+"/algorithm";
     public static final String FIND_ALGORITHM= VERSION+"/find-algorithm";
     public static final String TRAINER_ASSESSMENT_COEFFICIENTS = CARD+"/trainer-assessment-coefficients";
-    public static final String WRITTENEXAMSCORE = "/written-exam-score/{correctAnswers}";
-    public static final String SAVEWRITTENEXAM = "/save-written-exam";
-    public static final String GETWRITTENEXAM = "/get-written-exam/{studentId}";
+    public static final String WRITTEN_EXAM_SCORE = "/written-exam-score/{correctAnswers}";
+    public static final String SAVE_WRITTEN_EXAM = "/save-written-exam";
+    public static final String GET_WRITTEN_EXAM = "/get-written-exam/{studentId}";
     public static final String SAVE_CANDIDATE_INTERVIEW = "/save-candidate-interview";
     public static final String GET_CANDIDATE_INTERVIEW = "/get-candidate-interview";
     public static final String UPDATE_CANDIDATE_INTERVIEW = "/update-candidate-interview";
@@ -60,6 +61,7 @@ public class ApiUrls {
     public static final String UPDATE_CAREER_EDUCATION = "/update-career-education";
     public static final String GET_CAREER_EDUCATION = "/get-career-education";
     public static final String GET_CAREER_EDUCATION_AVERAGE_POINT = "/get-career-education-average-point";
+    public static final String GET_ATTENDANCE_SCORE = "/get-attendance-score/{token}";
 
 
 

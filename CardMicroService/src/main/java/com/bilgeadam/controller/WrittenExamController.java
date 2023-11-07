@@ -15,14 +15,14 @@ import javax.validation.Valid;
 import static com.bilgeadam.constants.ApiUrls.*;
 
 @RestController
-@RequestMapping(WRITTENEXAM)
+@RequestMapping(WRITTEN_EXAM)
 @RequiredArgsConstructor
 public class WrittenExamController {
     private final WrittenExamService writtenExamService;
 
     @Operation(summary = "Ogrenci secme yazılı sınavı icin puan hesaplama islemi",
             description = "Verilen doğru cevap sayısını kullanarak yazılı sınav puanını hesaplar.")
-    @GetMapping(WRITTENEXAMSCORE)
+    @GetMapping(WRITTEN_EXAM_SCORE)
     @CrossOrigin("*")
     public ResponseEntity<Double> calculateWrittenExamScore(@PathVariable int correctAnswers){
         return ResponseEntity.ok(writtenExamService.calculateWrittenExamScore(correctAnswers));
@@ -30,7 +30,7 @@ public class WrittenExamController {
 
     @Operation(summary = "Ogrenci secme yazılı sınav puanını kaydetme islemi",
             description = "Yazılı sınav puanını kaydeder.")
-    @PostMapping(SAVEWRITTENEXAM)
+    @PostMapping(SAVE_WRITTEN_EXAM)
     @CrossOrigin("*")
     public ResponseEntity<WrittenExam> saveWrittenExam(@RequestBody @Valid SaveWrittenExamRequestDto dto){
         return ResponseEntity.ok(writtenExamService.saveWrittenExam(dto));
@@ -38,7 +38,7 @@ public class WrittenExamController {
 
     @Operation(summary = "Yazılı sınav puanını görüntüleme işlemi",
             description = "Yazılı sınav puanını studentId üzerinden çekip görüntüler.")
-    @GetMapping(GETWRITTENEXAM)
+    @GetMapping(GET_WRITTEN_EXAM)
     @CrossOrigin("*")
     public ResponseEntity<WrittenExam> getWrittenExamByStudentId(@PathVariable String studentId){
         return ResponseEntity.ok(writtenExamService.getWrittenExamByStudentId(studentId));
