@@ -92,7 +92,7 @@ public class TeamworkService extends ServiceManager<Teamwork, String> {
         if (studentId == null || studentId.isEmpty()) {
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
         }
-        double teamworkSuccessPoint = 0;
+        double teamworkSuccessPoint = 0.0;
         if (teamworkRepository.findByStudentId(studentId) != null) {
             Teamwork teamwork = teamworkRepository.findByStudentId(studentId);
             boolean isCommunicationWithinTeamPoint0 = (teamwork.getCommunicationWithinTeamPoint() == 0);
@@ -114,6 +114,8 @@ public class TeamworkService extends ServiceManager<Teamwork, String> {
             } else {
                 return null;
             }
+        }else{
+            return null;
         }
         return teamworkSuccessPoint;
     }

@@ -37,12 +37,15 @@ public class CardService extends ServiceManager<Card, String> {
     private final CareerEducationService careerEducationService;
     private final ApplicationProcessService applicationProcessService;
     private final DocumentSubmitService documentSubmitService;
+    private final TeamLeadAssessmentService teamLeadAssessmentService;
+    private final TeamworkService teamworkService;
+    private final AttendanceService attendanceService;
 
     public CardService(ICardRepository iCardRepository, JwtTokenManager jwtTokenManager,
                        CardParameterService cardParameterService, AssignmentService assignmentService,
                        ExamService examService, InternshipSuccessRateService intershipService,
                        InterviewService interviewService, AbsenceService absenceService, ProjectService projectService,
-                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, GameInterviewService gameInterviewService, TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService, ProjectBehaviorService projectBehaviorService, EmploymentInterviewService employmentInterviewService, CareerEducationService careerEducationService, ApplicationProcessService applicationProcessService, DocumentSubmitService documentSubmitService) {
+                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, GameInterviewService gameInterviewService, TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService, ProjectBehaviorService projectBehaviorService, EmploymentInterviewService employmentInterviewService, CareerEducationService careerEducationService, ApplicationProcessService applicationProcessService, DocumentSubmitService documentSubmitService, TeamLeadAssessmentService teamLeadAssessmentService, TeamworkService teamworkService, AttendanceService attendanceService) {
         super(iCardRepository);
         this.iCardRepository = iCardRepository;
         this.jwtTokenManager = jwtTokenManager;
@@ -65,6 +68,9 @@ public class CardService extends ServiceManager<Card, String> {
         this.careerEducationService = careerEducationService;
         this.applicationProcessService = applicationProcessService;
         this.documentSubmitService = documentSubmitService;
+        this.teamLeadAssessmentService = teamLeadAssessmentService;
+        this.teamworkService = teamworkService;
+        this.attendanceService = attendanceService;
     }
 
     public CardResponseDto getCardByStudent(String token) {
@@ -450,6 +456,68 @@ public class CardService extends ServiceManager<Card, String> {
             return null;
         } else {
             return employmentInterviewWeight * employmentInterview;
+        }
+    }
+
+    public InternshipSuccessResponseDto getInternshipSuccess(String token){
+        Double teamLeadAssessmentSuccessScore = null;
+        Double teamWorkSuccessScore = null;
+        Double contributionSuccessScore = null;
+        Double attendanceSuccessScore = null;
+        Double personalMotivationSuccessScore = null ;
+        Double tasksSuccessScore = null ;
+        Double teamLeadAssessmentScore = null;
+        Double teamWorkScore = null;
+        Double contributionScore = null;
+        Double attendanceScore = null;
+        Double personalMotivationScore = null ;
+        Double tasksScore = null ;
+        Double totalSuccessScore = 0.0;
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
+        if (studentId.isEmpty()) {
+            throw new CardServiceException(ErrorType.STUDENT_NOT_FOUND);
+        }
+        //Takım Lideri Görüşü
+        GetTeamLeadAssessmentDetailsResponseDto getTeamLeadAssessmentDetailsResponseDto = teamLeadAssessmentService.getTeamLeadsAssessmentDetails(studentId.get());
+        if(getTeamLeadAssessmentDetailsResponseDto != null) {
+            teamLeadAssessmentSuccessScore = getTeamLeadAssessmentDetailsResponseDto.getSuccessScore();
+            teamLeadAssessmentScore = getTeamLeadAssessmentDetailsResponseDto.getScore();
+            totalSuccessScore += teamLeadAssessmentSuccessScore;
+
+        }
+
+        // Takım Çalışması
+        teamWorkScore = teamworkService.getTeamworkSuccessPoint(studentId.get());
+        if (teamWorkScore != null) {
+            teamWorkSuccessScore = teamWorkScore * 0.20;
+            totalSuccessScore += teamWorkSuccessScore;
+        }
+
+        // Katılım
+        attendanceScore = getAttendanceScore(token);
+        if (attendanceScore != null) {
+            attendanceSuccessScore = attendanceScore * 0.1;
+            totalSuccessScore += attendanceSuccessScore;
+        }
+
+        return InternshipSuccessResponseDto.builder()
+                .teamLeadAssessmentScore(teamLeadAssessmentScore)
+                .teamLeadAssessmentSuccessScore(teamLeadAssessmentSuccessScore)
+                .teamWorkScore(teamWorkScore)
+                .teamWorkSuccessScore(teamWorkSuccessScore)
+                .attendanceScore(attendanceScore)
+                .attendanceSuccessScore(attendanceSuccessScore)
+                .totalSuccessScore(totalSuccessScore)
+                .build();
+    }
+
+    private Double getAttendanceScore(String token) {
+        GetAttendanceResponseDto getAttendanceResponseDto = attendanceService.getAttendanceInfo(token);
+        if (getAttendanceResponseDto == null){
+            return null;
+        }
+        else{
+            return getAttendanceResponseDto.getAttendanceAverage();
         }
     }
 
