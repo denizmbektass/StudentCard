@@ -23,7 +23,11 @@ public class GameInterview extends BaseEntity {
     private Long levelReached;
     private Long supportTaken;
     private String comment;
+    private String questionComment1;
+    private String questionComment2;
+    private Boolean questionComment3;
     private Double gameInterviewAveragePoint;
+
     @Builder.Default()
     private EStatus eStatus = EStatus.ACTIVE;
 
