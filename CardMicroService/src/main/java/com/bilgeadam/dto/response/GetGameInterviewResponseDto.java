@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,4 +22,7 @@ public class GetGameInterviewResponseDto {
     private Long supportTaken;
     private String comment;
     private Double gameInterviewAveragePoint;
+    private String questionComment1;
+    private String questionComment2;
+    private Boolean questionComment3;
 }

@@ -76,6 +76,9 @@ public GameInterviewService(IGameInterviewRepository gameInterviewRepository,Jwt
             gameInterview.setCompletionTime(dto.getCompletionTime());
             gameInterview.setLevelReached(dto.getLevelReached());
             gameInterview.setSupportTaken(dto.getSupportTaken());
+            gameInterview.setQuestionComment1(dto.getQuestionComment1());
+            gameInterview.setQuestionComment2(dto.getQuestionComment2());
+            gameInterview.setQuestionComment3(dto.getQuestionComment3());
             gameInterview.setComment(dto.getComment());
             double gameInterviewAvaragePoint = (dto.getDirectionCorrect()*0.25) + (dto.getCompletionTime()*0.25)+ (dto.getLevelReached()*0.25)+(dto.getSupportTaken()*0.25);
             gameInterview.setGameInterviewAveragePoint(gameInterviewAvaragePoint);
@@ -86,6 +89,7 @@ public GameInterviewService(IGameInterviewRepository gameInterviewRepository,Jwt
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
         }
     }
+
     public Boolean deleteGameInterview(String gameInterviewId) {
         Optional<GameInterview> algorithm = findById(gameInterviewId);
         if (algorithm.isEmpty())

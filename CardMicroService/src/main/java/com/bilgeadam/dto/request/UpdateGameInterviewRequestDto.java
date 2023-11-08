@@ -34,6 +34,16 @@ public class UpdateGameInterviewRequestDto {
     @Max(100)
     @NotNull
     private Long supportTaken;
+    @Min(0)
+    @Max(200)
+    @NotNull
+    private String questionComment1;
+    @Min(0)
+    @Max(200)
+    @NotNull
+    private String questionComment2;
+    @NotNull
+    private Boolean questionComment3;
     private String comment;
 
 }
