@@ -12,10 +12,10 @@ public class StudentChoiceResponseDto {
     Double writtenExamSuccessScore;
     Double algorithmSuccessScore;
     Double candidateInterviewSuccessScore;
-    Double gameInterviewSuccessScore;
+    Double technicalInterviewSuccessScore;
     Double writtenExamScore;
     Double candidateInterviewScore;
     Double algorithmScore;
-    Double gameInterviewScore;
+    Double technicalInterviewScore;
     Double totalSuccessScore;
 }

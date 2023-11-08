@@ -30,7 +30,7 @@ public class CardService extends ServiceManager<Card, String> {
     private final GraduationProjectService graduationProjectService;
     private final WrittenExamService writtenExamService;
     private final AlgorithmService algorithmService;
-    private final GameInterviewService gameInterviewService;
+    private final TechnicalInterviewService technicalInterviewService;
     private final TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService;
     private final ProjectBehaviorService projectBehaviorService;
     private final EmploymentInterviewService employmentInterviewService;
@@ -45,7 +45,7 @@ public class CardService extends ServiceManager<Card, String> {
                        CardParameterService cardParameterService, AssignmentService assignmentService,
                        ExamService examService, InternshipSuccessRateService intershipService,
                        InterviewService interviewService, AbsenceService absenceService, ProjectService projectService,
-                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, GameInterviewService gameInterviewService, TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService, ProjectBehaviorService projectBehaviorService, EmploymentInterviewService employmentInterviewService, CareerEducationService careerEducationService, ApplicationProcessService applicationProcessService, DocumentSubmitService documentSubmitService, TeamLeadAssessmentService teamLeadAssessmentService, TeamworkService teamworkService, AttendanceService attendanceService) {
+                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, TechnicalInterviewService technicalInterviewService, TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService, ProjectBehaviorService projectBehaviorService, EmploymentInterviewService employmentInterviewService, CareerEducationService careerEducationService, ApplicationProcessService applicationProcessService, DocumentSubmitService documentSubmitService, TeamLeadAssessmentService teamLeadAssessmentService, TeamworkService teamworkService, AttendanceService attendanceService) {
         super(iCardRepository);
         this.iCardRepository = iCardRepository;
         this.jwtTokenManager = jwtTokenManager;
@@ -61,7 +61,7 @@ public class CardService extends ServiceManager<Card, String> {
         this.graduationProjectService = graduationProjectService;
         this.writtenExamService = writtenExamService;
         this.algorithmService = algorithmService;
-        this.gameInterviewService = gameInterviewService;
+        this.technicalInterviewService = technicalInterviewService;
         this.trainerAssessmentCoefficientsService = trainerAssessmentCoefficientsService;
         this.projectBehaviorService = projectBehaviorService;
         this.employmentInterviewService = employmentInterviewService;
@@ -319,17 +319,17 @@ public class CardService extends ServiceManager<Card, String> {
         double writtenExamWeight = 0.25;
         double algorithmWeight = 0.25;
         double candidateInterviewWeight = 0.25;
-        double gameInterviewWeight = 0.25;
+        double technicalInterviewWeight = 0.25;
 
 
         Double writtenExamScore = null;
         Double algorithmScore = null;
         Double candidateInterviewScore = null;
-        Double gameInterviewScore = null;
+        Double technicalInterviewScore = null;
         Double writtenExamSuccessScore = null;
         Double algorithmSuccessScore = null;
         Double candidateInterviewSuccessScore = null;
-        Double gameInterviewSuccessScore = null;
+        Double technicalInterviewSuccessScore = null;
         Double totalSuccessScore = 0.0;
 
 
@@ -356,21 +356,21 @@ public class CardService extends ServiceManager<Card, String> {
             totalSuccessScore += candidateInterviewSuccessScore;
         }
 
-        Double gameInterviewAveragePoint = gameInterviewService.getGameInterviewAveragePoint(studentId.get());
-        if (gameInterviewAveragePoint != null) {
-            gameInterviewScore = gameInterviewAveragePoint;
-            gameInterviewSuccessScore = gameInterviewScore * gameInterviewWeight;
-            totalSuccessScore += gameInterviewSuccessScore;
+        Double technicalInterviewAveragePoint = technicalInterviewService.getTechnicalInterviewAveragePoint(studentId.get());
+        if (technicalInterviewAveragePoint != null) {
+            technicalInterviewScore = technicalInterviewAveragePoint;
+            technicalInterviewSuccessScore = technicalInterviewScore * technicalInterviewWeight;
+            totalSuccessScore += technicalInterviewSuccessScore;
         }
 
         return StudentChoiceResponseDto.builder()
-                .gameInterviewSuccessScore(gameInterviewSuccessScore)
+                .technicalInterviewSuccessScore(technicalInterviewSuccessScore)
                 .writtenExamSuccessScore(writtenExamSuccessScore)
                 .algorithmSuccessScore(algorithmSuccessScore)
                 .candidateInterviewSuccessScore(candidateInterviewSuccessScore)
                 .algorithmScore(algorithmScore)
                 .writtenExamScore(writtenExamScore)
-                .gameInterviewScore(gameInterviewScore)
+                .technicalInterviewScore(technicalInterviewScore)
                 .candidateInterviewScore(candidateInterviewScore)
                 .totalSuccessScore(totalSuccessScore)
                 .build();
