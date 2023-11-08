@@ -38,7 +38,7 @@ public class ProjectBehaviorService extends ServiceManager<ProjectBehavior, Stri
             throw new CardServiceException(ErrorType.STUDENT_NOT_FOUND);
         }
         if(dto.getRapportScore()==null)
-            throw new CardServiceException(ErrorType.BEHAVIOR_POINT_EMPTY);
+            throw new CardServiceException(ErrorType.PERSONAL_MOTIVATION_POINT_EMPTY);
         if(dto.getPresentationScore()==null)
             throw new CardServiceException(ErrorType.BEHAVIOR_POINT_EMPTY);
         if (dto.getInterestScore()==null)
@@ -65,7 +65,7 @@ public class ProjectBehaviorService extends ServiceManager<ProjectBehavior, Stri
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
         if((dto.getRapportScore()>100 || dto.getRapportScore()<0) && (dto.getPresentationScore()>100 || dto.getPresentationScore()<0) &&
                 (dto.getInterestScore()>100 || dto.getInterestScore()<0) && (dto.getRetroScore()>100 || dto.getRetroScore()<0))
-            throw new CardServiceException(ErrorType.BEHAVIOR_NUMBER_RANGE);
+            throw new CardServiceException(ErrorType.PERSONAL_MOTIVATION_NUMBER_RANGE);
         if ((dto.getRapportScorePercentage()+dto.getPresentationScorePercentage()+dto.getInterestScorePercentage()+dto.getRetroScorePercentage() !=100))
             throw new CardServiceException(ErrorType.TOTAL_PERCENTAGE);
         double averageScore=((dto.getRapportScore()*dto.getRapportScorePercentage())+(dto.getPresentationScore()*dto.getPresentationScorePercentage())+

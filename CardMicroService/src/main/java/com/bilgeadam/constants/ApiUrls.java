@@ -60,7 +60,8 @@ public class ApiUrls {
     public static final String UPDATE_CAREER_EDUCATION = "/update-career-education";
     public static final String GET_CAREER_EDUCATION = "/get-career-education";
     public static final String GET_CAREER_EDUCATION_AVERAGE_POINT = "/get-career-education-average-point";
-
+    public static final String PERSONAL_MOTIVATION= VERSION+"/personal-motivation";
+    public static final String FIND_PERSONAL_MOTIVATION="/find-personal-motivation";
 
 
 
