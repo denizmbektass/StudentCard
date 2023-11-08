@@ -1,5 +1,6 @@
 package com.bilgeadam.controller;
 
+import com.bilgeadam.dto.request.InternshipSuccessRateRequestDto;
 import com.bilgeadam.dto.response.*;
 import com.bilgeadam.service.CardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -61,6 +62,13 @@ public class CardController {
     @CrossOrigin("*")
     public ResponseEntity<EmploymentScoreDetailsDto> getEmploymentDetailsDetails(@PathVariable String token) {
         return ResponseEntity.ok(cardService.getEmploymentDetails(token));
+    }
+    @Operation(summary = "Staj Başarı kartı için parametrelerini alma işlemi",
+            description = "Belirtilen token kullanılarak Staj Başarı  için kart bilgilerini almak.")
+    @GetMapping("/get-internship-success-score-details/{token}")
+    @CrossOrigin("*")
+    public ResponseEntity<InternshipSuccessResponseDto> getInternshipSuccessDetails(@PathVariable String token) {
+        return ResponseEntity.ok(cardService.getInternshipSuccess(token));
     }
 
 }
