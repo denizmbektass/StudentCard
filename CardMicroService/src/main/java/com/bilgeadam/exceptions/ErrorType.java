@@ -79,7 +79,8 @@ public enum ErrorType {
     EMPLOYMENT_INTERVIEW_NUMBER_RANGE(9029,"Mülakat notları  '0' ile '100' arasında olmak zorundadır.",HttpStatus.BAD_REQUEST),
     EMPLOYMENT_INTERVIEW_NOT_FOUND(9030,"Mülakatlar bulunamadı" , HttpStatus.BAD_REQUEST),
     TEAMWORK_NOT_FOUND(9031, "Ekip çalışması bulunamadı." , HttpStatus.BAD_REQUEST),
-    ATTENDANCE_NUMBER_RANGE(9031,"Girilen not 0 ile 100 arasında olmalıdıır.",HttpStatus.BAD_REQUEST);
+    ATTENDANCE_NUMBER_RANGE(9031,"Girilen not 0 ile 100 arasında olmalıdıır.",HttpStatus.BAD_REQUEST),
+    CONTRIBUTION_NOT_FOUND(9031,"Katkı değerlendirmesi bulunamadı.", HttpStatus.BAD_REQUEST);
 
     private int code;
     private String message;

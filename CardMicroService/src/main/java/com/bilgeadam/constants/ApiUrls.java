@@ -73,5 +73,10 @@ public class ApiUrls {
     public static final String SAVE_TEAM_LEAD_ASSESSMENT = "/save-team-lead-assessment";
     public static final String UPDATE_TEAM_LEAD_ASSESSMENT = "/update-team-lead-assessment";
     public static final String GET_TEAM_LEAD_ASSESSMENT_DETAILS = "/get-team-lead-assessment-details";
+    public static final String CONTRIBUTION = VERSION + "/contribution";
+    public static final String SAVE_CONTRIBUTION = "/save-contribution";
+    public static final String UPDATE_CONTRIBUTION = "/update-contribution";
+    public static final String GET_CONTRIBUTION = "/get-contribution";
+    public static final String GET_TOTAL_SCORE_CONTRIBUTION = "/get-total-score-contribution";
 
 }
