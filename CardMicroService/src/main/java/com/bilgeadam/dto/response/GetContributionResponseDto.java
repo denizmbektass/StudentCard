@@ -34,9 +34,4 @@ public class GetContributionResponseDto {
     @Max(100)
     @NotNull
     private double intraTeamTrainingNote;
-
-    @Min(0)
-    @Max(100)
-    @NotNull
-    private double totalScoreContribution;
 }
