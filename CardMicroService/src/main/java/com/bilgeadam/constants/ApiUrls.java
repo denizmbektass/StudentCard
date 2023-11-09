@@ -73,5 +73,11 @@ public class ApiUrls {
     public static final String SAVE_TEAM_LEAD_ASSESSMENT = "/save-team-lead-assessment";
     public static final String UPDATE_TEAM_LEAD_ASSESSMENT = "/update-team-lead-assessment";
     public static final String GET_TEAM_LEAD_ASSESSMENT_DETAILS = "/get-team-lead-assessment-details";
+    public static final String INTERNSHIP_TASKS =CARD+ "/internship-tasks";
+    public static final String SAVE_INTERNSHIP_TASK ="/save-internship-task";
+    public static final String GET_INTERNSHIP_TASK_COUNT ="/get-internship-task-count";
+    public static final String UPDATE_INTERNSHIP ="/update-internship";
+    public static final String GET_INTERNSHIP ="/get-internship";
+    public static final String GET_INTERNSHIP_SUCCESS_POINT ="/get-internship-success-point";
 
 }

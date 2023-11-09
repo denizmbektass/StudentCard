@@ -37,6 +37,7 @@ public class CardController {
     @CrossOrigin("*")
     @GetMapping("/get-transcript/{token}")
     public ResponseEntity<TranscriptResponseDto> getTranscriptByStudent(@PathVariable String token) {
+        System.out.println("token burada    "+token);
         return ResponseEntity.ok(cardService.getTranscriptByStudent(token));
     }
 
