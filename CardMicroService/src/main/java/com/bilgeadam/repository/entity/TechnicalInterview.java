@@ -14,9 +14,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document
-public class GameInterview extends BaseEntity {
+public class TechnicalInterview extends BaseEntity {
     @Id
-    private String gameInterviewId;
+    private String technicalInterviewId;
     private String studentId;
     private Long directionCorrect;
     private Long completionTime;
@@ -26,7 +26,7 @@ public class GameInterview extends BaseEntity {
     private String questionComment1;
     private String questionComment2;
     private Boolean questionComment3;
-    private Double gameInterviewAveragePoint;
+    private Double technicalInterviewAveragePoint;
 
     @Builder.Default()
     private EStatus eStatus = EStatus.ACTIVE;

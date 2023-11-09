@@ -15,7 +15,7 @@ public class ApiUrls {
     public static final String EXAM = VERSION+"/exam";
     public static final String ROLLCALL = VERSION+"/rollcall";
     public static final String INTERVIEW = VERSION+"/interview";
-    public static final String GAME_INTERVIEW = CARD+"/game-interview";
+    public static final String TECHNICAL_INTERVIEW = CARD+"/technical-interview";
     public static final String PROJECT=VERSION+"/project";
     public static final String APPLICATION_PROCESS = CARD + "/application-process";
     public static final String CREATE ="/create";
@@ -47,9 +47,9 @@ public class ApiUrls {
     public static final String GET_CANDIDATE_INTERVIEW_COUNT = "/get-candidate-interview-count";
     public static final String GET_CANDIDATE_INTERVIEW_AVERAGE_POINT = "/get-candidate-interview-average-point";
 
-    public static final String GET_GAME_INTERVIEW = "/get-all";
-    public static final String GET_GAME_INTERVIEW_NUMBER = "/get-number";
-    public static final String GET_GAME_INTERVIEW_AVERAGE_POINT = "/get-average-point";
+    public static final String GET_TECHNICAL_INTERVIEW = "/get-technical-interview";
+    public static final String GET_TECHNICAL_INTERVIEW_NUMBER = "/get-technical-interview-number";
+    public static final String GET_TECHNICAL_INTERVIEW_AVERAGE_POINT = "/get-technical-interview-average-point";
 
     public static final String APPLICATION_PROCESS_TOTAL_SCORE = "/total-score";
     public static final String EMPLOYMENT_INTERVIEW =CARD+"/employment-interview";

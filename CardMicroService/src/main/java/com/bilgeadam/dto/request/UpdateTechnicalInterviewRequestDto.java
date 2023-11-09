@@ -1,4 +1,4 @@
-package com.bilgeadam.dto.response;
+package com.bilgeadam.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,15 +14,36 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Builder
 
-public class GetGameInterviewResponseDto {
+public class UpdateTechnicalInterviewRequestDto {
 
+    @NotNull
+    private String studentToken;
+    @Min(0)
+    @Max(100)
+    @NotNull
     private Long directionCorrect;
+    @Min(0)
+    @Max(100)
+    @NotNull
     private Long completionTime;
+    @Min(0)
+    @Max(100)
+    @NotNull
     private Long levelReached;
+    @Min(0)
+    @Max(100)
+    @NotNull
     private Long supportTaken;
-    private String comment;
-    private Double gameInterviewAveragePoint;
+    @Min(0)
+    @Max(200)
+    @NotNull
     private String questionComment1;
+    @Min(0)
+    @Max(200)
+    @NotNull
     private String questionComment2;
+    @NotNull
     private Boolean questionComment3;
+    private String comment;
+
 }

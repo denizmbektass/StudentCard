@@ -13,9 +13,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
-public class UpdateGameInterviewRequestDto {
-
+public class SaveTechnicalInterviewRequestDto {
     @NotNull
     private String studentToken;
     @Min(0)
@@ -44,6 +42,11 @@ public class UpdateGameInterviewRequestDto {
     private String questionComment2;
     @NotNull
     private Boolean questionComment3;
+
     private String comment;
+
+
+
+
 
 }
