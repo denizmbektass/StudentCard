@@ -456,12 +456,11 @@ public class CardService extends ServiceManager<Card, String> {
     }
 
     public Double getEmploymentInterviewSuccessScore(String token) {
-        Double employmentInterviewWeight = 0.35;
         Double employmentInterview = employmentInterviewService.getEmploymentInterviewAvg(token);
         if (employmentInterview == null) {
             return null;
         } else {
-            return employmentInterviewWeight * employmentInterview;
+            return employmentInterview;
         }
     }
 
