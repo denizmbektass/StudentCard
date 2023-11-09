@@ -111,6 +111,8 @@ public class CareerEducationService extends ServiceManager<CareerEducation, Stri
             } else {
                 return null;
             }
+        }else{
+            return null;
         }
         return careerEducationAveragePoint;
     }

@@ -429,8 +429,8 @@ public class CardService extends ServiceManager<Card, String> {
         }
     }
 
-    public Double getCareerEducationSuccessScore(String token) {
-        Double careerEducation = careerEducationService.getCareerEducationAveragePoint(token);
+    public Double getCareerEducationSuccessScore(String studentId) {
+        Double careerEducation = careerEducationService.getCareerEducationAveragePoint(studentId);
         if (careerEducation == null) {
             return null;
         } else {
