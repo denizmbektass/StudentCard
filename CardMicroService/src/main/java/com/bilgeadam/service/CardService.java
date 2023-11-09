@@ -394,7 +394,7 @@ public class CardService extends ServiceManager<Card, String> {
         }
 
         // Kariyer Eğitimi
-        careerEducationSuccessScore = getCareerEducationSuccessScore(token);
+        careerEducationSuccessScore = getCareerEducationSuccessScore(studentId.get());
         if (careerEducationSuccessScore != null) {
             totalSuccessScore += careerEducationSuccessScore;
         }
