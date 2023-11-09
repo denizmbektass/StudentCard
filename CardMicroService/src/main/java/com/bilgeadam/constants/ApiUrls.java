@@ -80,5 +80,11 @@ public class ApiUrls {
     public static final String UPDATE_CONTRIBUTION = "/update-contribution";
     public static final String GET_CONTRIBUTION = "/get-contribution";
     public static final String GET_TOTAL_SCORE_CONTRIBUTION = "/get-total-score-contribution";
+    public static final String INTERNSHIP_TASKS =CARD+ "/internship-tasks";
+    public static final String SAVE_INTERNSHIP_TASK ="/save-internship-task";
+    public static final String GET_INTERNSHIP_TASK_COUNT ="/get-internship-task-count";
+    public static final String UPDATE_INTERNSHIP ="/update-internship";
+    public static final String GET_INTERNSHIP ="/get-internship";
+    public static final String GET_INTERNSHIP_SUCCESS_POINT ="/get-internship-success-point";
 
 }
