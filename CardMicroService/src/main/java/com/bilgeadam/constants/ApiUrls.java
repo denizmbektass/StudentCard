@@ -62,6 +62,8 @@ public class ApiUrls {
     public static final String GET_CAREER_EDUCATION = "/get-career-education";
     public static final String GET_CAREER_EDUCATION_AVERAGE_POINT = "/get-career-education-average-point";
     public static final String GET_ATTENDANCE_SCORE = "/get-attendance-score/{token}";
+    public static final String PERSONAL_MOTIVATION= VERSION+"/personal-motivation";
+    public static final String FIND_PERSONAL_MOTIVATION="/find-personal-motivation";
 
     public static final String TEAMWORK = VERSION + "/teamwork";
     public static final String GET_TEAMWORK_COUNT = "/get-teamwork-count";
