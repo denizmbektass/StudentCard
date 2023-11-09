@@ -10,10 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class GetEmploymentInterviewResponseDto {
-    private double hrInterviewScore;
-    private double hrInterviewFinalScore;
+    private Double hrInterviewScore;
+    private Double hrInterviewFinalScore;
     private String hrInterviewComment;
-    private double technicalInterviewScore;
-    private double technicalInterviewFinalScore;
+    private Double technicalInterviewScore;
+    private Double technicalInterviewFinalScore;
+    private Double totalScore;
     private String technicalInterviewComment;
 }

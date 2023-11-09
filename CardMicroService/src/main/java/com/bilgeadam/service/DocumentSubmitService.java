@@ -73,4 +73,14 @@ public MessageResponse updateDocumentSubmitScore(UpdateDocumentSubmitRequestDto 
     update(updateSubmit);
     return new MessageResponse("Evrak teslim puanı başarıyla güncellendi");
 }
+
+    public Double getDocumentSubmitAveragePoint(String studentId){
+        Optional<DocumentSubmit> documentSubmit=documentSubmitRepository.findByStudentId(studentId);
+        if (documentSubmit.isPresent()){
+            return documentSubmit.get().getDocumentSubmitAverageScore();
+        }
+        else {
+            return null;
+        }
+    }
 }

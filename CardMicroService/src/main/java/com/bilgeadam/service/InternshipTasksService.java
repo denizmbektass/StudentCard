@@ -109,6 +109,8 @@ public class InternshipTasksService extends ServiceManager<InternshipTasks, Stri
             } else {
                 return null;
             }
+        }else{
+            return null;
         }
         return InternshipTaskSuccessPoint;
     }
