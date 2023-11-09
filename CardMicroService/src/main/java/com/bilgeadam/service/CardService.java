@@ -427,11 +427,11 @@ public class CardService extends ServiceManager<Card, String> {
     }
 
     public Double getDocumentSubmitSuccessScore(String studentId) {
-        DocumentSubmit documentSubmit = documentSubmitService.getDocumentSubmitByStudentId(studentId);
-        if (documentSubmit == null) {
+        Double documentSubmitAverage = documentSubmitService.getDocumentSubmitAveragePoint(studentId);
+        if (documentSubmitAverage == null) {
             return null;
         } else {
-            return documentSubmit.getDocumentSubmitAverageScore();
+            return documentSubmitAverage;
         }
     }
 
