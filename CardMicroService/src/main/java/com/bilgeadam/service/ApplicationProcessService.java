@@ -105,7 +105,7 @@ public class ApplicationProcessService extends ServiceManager<ApplicationProcess
         }
     }
 
-    public double calculateApplicationProcessRate(String studentId) {
+    public Double calculateApplicationProcessRate(String studentId) {
         double weight = 0.05;
         Optional<ApplicationProcess> optionalApplicationProcess = applicationProcessRepository.findOptionalByStudentId(studentId);
         if (optionalApplicationProcess.isPresent()) {
@@ -114,7 +114,7 @@ public class ApplicationProcessService extends ServiceManager<ApplicationProcess
             save(optionalApplicationProcess.get());
             return score;
         } else {
-            throw new ApplicationProcessException(ErrorType.APPLICATION_PROCESS_NOT_FOUND);
+            return null;
         }
     }
 }

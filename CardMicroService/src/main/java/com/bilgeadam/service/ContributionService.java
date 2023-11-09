@@ -68,7 +68,7 @@ public class ContributionService extends ServiceManager<Contribution, String> {
         }
         return giveContributionResponseDto;
     }
-    public double calculateAndGetTotalScoreContribution(String studentId) {
+    public Double calculateAndGetTotalScoreContribution(String studentId) {
         if (studentId == null || studentId.isEmpty()) {
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
         }
@@ -92,11 +92,11 @@ public class ContributionService extends ServiceManager<Contribution, String> {
                 }
             }
             else {
-                return 0;
+                return null;
             }
         }
         else {
-            return 0;
+            return null;
         }
         return totalScoreContribution;
     }

@@ -69,7 +69,7 @@ public class AlgorithmService extends ServiceManager<Algorithm,String> {
         String studentId = studentIdOptional.get();
         Optional<Algorithm> algorithmOptional = algorithmRepository.findByStudentId(studentId);
         if (algorithmOptional.isEmpty()) {
-            throw new CardServiceException(ErrorType.ALGORITHM_NOT_FOUND);
+            return null;
         }
         Algorithm algorithm = algorithmOptional.get();
         AlgorithmResponseDto algorithmResponseDto= AlgorithmResponseDto.builder()
