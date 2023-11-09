@@ -12,10 +12,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @SuperBuilder
 @Document
-public class Contribution {
+public class Contribution extends BaseEntity {
 
     @Id
     private String contributionId;
+
+    private String studentId;
     private double incorrectCodeOrDisplayMessageNote;
     private double documentationForBacklogNote;
     private double researchNote;
