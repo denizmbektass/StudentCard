@@ -33,15 +33,23 @@ public class EmploymentInterviewService extends ServiceManager<EmploymentIntervi
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
         if (studentId.isEmpty())
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
-        if (dto.getHrInterviewScore() > 100 || dto.getHrInterviewScore() < 0)
-            throw new CardServiceException(ErrorType.EMPLOYMENT_INTERVIEW_NUMBER_RANGE);
-        if (dto.getTechnicalInterviewScore() > 100 || dto.getTechnicalInterviewScore() < 0)
-            throw new CardServiceException(ErrorType.EMPLOYMENT_INTERVIEW_NUMBER_RANGE);
         EmploymentInterview employmentInterview = interviewMapper.toEmploymentInterview(dto);
+        Double hrInterviewFinalScore =null;
+        Double technicalInterviewFinalScore = null;
         double hrInterviewWeight = 0.15;
         double technicalInterviewWeight = 0.20;
-        double hrInterviewFinalScore = dto.getHrInterviewScore() * hrInterviewWeight;
-        double technicalInterviewFinalScore = dto.getTechnicalInterviewScore() * technicalInterviewWeight;
+        Double totalScore = 0.0;
+
+        if (dto.getHrInterviewScore() != null) {
+            hrInterviewFinalScore = dto.getHrInterviewScore() * hrInterviewWeight;
+            totalScore += hrInterviewFinalScore;
+        }
+        if(dto.getTechnicalInterviewScore() != null) {
+            technicalInterviewFinalScore = dto.getTechnicalInterviewScore() * technicalInterviewWeight;
+            totalScore += technicalInterviewFinalScore;
+        }
+
+        employmentInterview.setTotalScore(totalScore);
         employmentInterview.setHrInterviewFinalScore(hrInterviewFinalScore);
         employmentInterview.setTechnicalInterviewFinalScore(technicalInterviewFinalScore);
         employmentInterview.setStudentId(studentId.get());
@@ -54,15 +62,23 @@ public class EmploymentInterviewService extends ServiceManager<EmploymentIntervi
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
         if (studentId.isEmpty())
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
-        if (dto.getHrInterviewScore() > 100 || dto.getHrInterviewScore() < 0)
-            throw new CardServiceException(ErrorType.EMPLOYMENT_INTERVIEW_NUMBER_RANGE);
-        if (dto.getTechnicalInterviewScore() > 100 || dto.getTechnicalInterviewScore() < 0)
-            throw new CardServiceException(ErrorType.EMPLOYMENT_INTERVIEW_NUMBER_RANGE);
+        Double hrInterviewFinalScore =null;
+        Double technicalInterviewFinalScore = null;
         double hrInterviewWeight = 0.15;
         double technicalInterviewWeight = 0.20;
-        double hrInterviewFinalScore = dto.getHrInterviewScore() * hrInterviewWeight;
-        double technicalInterviewFinalScore = dto.getTechnicalInterviewScore() * technicalInterviewWeight;
+        Double totalScore = 0.0;
+
+        if (dto.getHrInterviewScore() != null) {
+            hrInterviewFinalScore = dto.getHrInterviewScore() * hrInterviewWeight;
+            totalScore += hrInterviewFinalScore;
+        }
+        if(dto.getTechnicalInterviewScore() != null) {
+            technicalInterviewFinalScore = dto.getTechnicalInterviewScore() * technicalInterviewWeight;
+            totalScore += technicalInterviewFinalScore;
+        }
+
         EmploymentInterview interview = iEmploymentInterviewRepository.findByStudentId(studentId.get());
+        interview.setTotalScore(totalScore);
         interview.setHrInterviewComment(dto.getHrInterviewComment());
         interview.setTechnicalInterviewComment(dto.getTechnicalInterviewComment());
         interview.setHrInterviewScore(dto.getHrInterviewScore());
@@ -96,8 +112,7 @@ public class EmploymentInterviewService extends ServiceManager<EmploymentIntervi
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
         EmploymentInterview employmentInterview = iEmploymentInterviewRepository.findByStudentId(studentId.get());
         if(employmentInterview != null){
-            double avarage = employmentInterview.getTechnicalInterviewFinalScore()+employmentInterview.getHrInterviewFinalScore();
-            return avarage;
+            return employmentInterview.getTotalScore();
         }
         return null;
     }

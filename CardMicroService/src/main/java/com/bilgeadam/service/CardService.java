@@ -40,12 +40,15 @@ public class CardService extends ServiceManager<Card, String> {
     private final TeamLeadAssessmentService teamLeadAssessmentService;
     private final TeamworkService teamworkService;
     private final AttendanceService attendanceService;
+    private final ContributionService contributionService;
+    private final InternshipTasksService internshipTasksService;
+    private final PersonalMotivationService personalMotivationService;
 
     public CardService(ICardRepository iCardRepository, JwtTokenManager jwtTokenManager,
                        CardParameterService cardParameterService, AssignmentService assignmentService,
                        ExamService examService, InternshipSuccessRateService intershipService,
                        InterviewService interviewService, AbsenceService absenceService, ProjectService projectService,
-                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, TechnicalInterviewService technicalInterviewService, TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService, ProjectBehaviorService projectBehaviorService, EmploymentInterviewService employmentInterviewService, CareerEducationService careerEducationService, ApplicationProcessService applicationProcessService, DocumentSubmitService documentSubmitService, TeamLeadAssessmentService teamLeadAssessmentService, TeamworkService teamworkService, AttendanceService attendanceService) {
+                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, TechnicalInterviewService technicalInterviewService, TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService, ProjectBehaviorService projectBehaviorService, EmploymentInterviewService employmentInterviewService, CareerEducationService careerEducationService, ApplicationProcessService applicationProcessService, DocumentSubmitService documentSubmitService, TeamLeadAssessmentService teamLeadAssessmentService, TeamworkService teamworkService, AttendanceService attendanceService, ContributionService contributionService, InternshipTasksService internshipTasksService, PersonalMotivationService personalMotivationService) {
         super(iCardRepository);
         this.iCardRepository = iCardRepository;
         this.jwtTokenManager = jwtTokenManager;
@@ -71,6 +74,9 @@ public class CardService extends ServiceManager<Card, String> {
         this.teamLeadAssessmentService = teamLeadAssessmentService;
         this.teamworkService = teamworkService;
         this.attendanceService = attendanceService;
+        this.contributionService = contributionService;
+        this.internshipTasksService = internshipTasksService;
+        this.personalMotivationService = personalMotivationService;
     }
 
     public CardResponseDto getCardByStudent(String token) {
@@ -500,6 +506,27 @@ public class CardService extends ServiceManager<Card, String> {
             totalSuccessScore += attendanceSuccessScore;
         }
 
+        //Katki
+        contributionScore = contributionService.calculateAndGetTotalScoreContribution(studentId.get());
+        if(contributionScore != null){
+            contributionSuccessScore = contributionScore * 0.1;
+            totalSuccessScore += contributionSuccessScore;
+        }
+
+        //Gorevler
+        tasksScore = internshipTasksService.getInternShipTaskSuccessPoint(studentId.get());
+        if(tasksScore != null){
+            tasksSuccessScore = tasksScore * 0.20 ;
+            totalSuccessScore += tasksSuccessScore;
+        }
+
+        //Kisisel Motivasyonn
+        personalMotivationScore = getPersonalMotivation(token);
+        if(personalMotivationScore != null){
+            personalMotivationSuccessScore = personalMotivationScore * 0.15 ;
+            totalSuccessScore += personalMotivationSuccessScore;
+        }
+
         return InternshipSuccessResponseDto.builder()
                 .teamLeadAssessmentScore(teamLeadAssessmentScore)
                 .teamLeadAssessmentSuccessScore(teamLeadAssessmentSuccessScore)
@@ -507,8 +534,24 @@ public class CardService extends ServiceManager<Card, String> {
                 .teamWorkSuccessScore(teamWorkSuccessScore)
                 .attendanceScore(attendanceScore)
                 .attendanceSuccessScore(attendanceSuccessScore)
+                .contributionScore(contributionScore)
+                .contributionSuccessScore(contributionSuccessScore)
+                .tasksScore(tasksScore)
+                .tasksSuccessScore(tasksSuccessScore)
+                .personalMotivationScore(personalMotivationScore)
+                .personalMotivationSuccessScore(personalMotivationSuccessScore)
                 .totalSuccessScore(totalSuccessScore)
                 .build();
+    }
+
+    private Double getPersonalMotivation(String token) {
+        GetPersonalMotivationResponseDto motivationResponseDto = personalMotivationService.findPersonalMotivation(token);
+        if(motivationResponseDto == null){
+            return null;
+        }else{
+            return motivationResponseDto.getAverage();
+        }
+
     }
 
     private Double getAttendanceScore(String token) {

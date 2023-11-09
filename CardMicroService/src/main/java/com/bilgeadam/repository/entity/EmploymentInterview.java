@@ -17,11 +17,12 @@ public class EmploymentInterview extends BaseEntity{
     @Id
     private String employmentInterviewId;
     private String studentId;
-    private double hrInterviewScore;
-    private double hrInterviewFinalScore;
+    private Double hrInterviewScore;
+    private Double hrInterviewFinalScore;
     private String hrInterviewComment;
-    private double technicalInterviewScore;
-    private double technicalInterviewFinalScore;
+    private Double technicalInterviewScore;
+    private Double technicalInterviewFinalScore;
+    private Double totalScore;
     private String technicalInterviewComment;
     @Builder.Default()
     private EStatus eStatus = EStatus.ACTIVE;

@@ -18,11 +18,9 @@ public class UpdateEmploymentInterviewRequestDto {
     private String studentToken;
     @Min(0)
     @Max(100)
-    @NotNull
     private Double hrInterviewScore;
     @Min(0)
     @Max(100)
-    @NotNull
     private Double technicalInterviewScore;
     private String hrInterviewComment;
     private String technicalInterviewComment;
