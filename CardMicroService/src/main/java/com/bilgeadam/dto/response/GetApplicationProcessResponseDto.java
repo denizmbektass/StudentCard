@@ -11,6 +11,6 @@ public class GetApplicationProcessResponseDto {
     private int informationSharingScore;
     private int referralParticipationScore;
     private int companyFitScore;
-    private int completeApplicationScore;
+    private int careerTeamAssessment;
     private double totalScore;
 }

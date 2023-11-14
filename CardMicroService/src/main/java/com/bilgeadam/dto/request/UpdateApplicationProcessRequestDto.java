@@ -18,5 +18,5 @@ public class UpdateApplicationProcessRequestDto {
     private int informationSharingScore;
     private int referralParticipationScore;
     private int companyFitScore;
-    private int completeApplicationScore;
+    private int careerTeamAssessment;
 }
