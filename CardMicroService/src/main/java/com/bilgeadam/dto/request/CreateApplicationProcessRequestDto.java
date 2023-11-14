@@ -24,5 +24,5 @@ public class CreateApplicationProcessRequestDto {
     @NotNull(message = "Bu alan boş bırakılamaz, lütfen 0-100 aralığında bir değer giriniz")
     private int companyFitScore;
     @NotNull(message = "Bu alan boş bırakılamaz, lütfen 0-100 aralığında bir değer giriniz")
-    private int completeApplicationScore;
+    private int careerTeamAssessment;
 }

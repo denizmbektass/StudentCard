@@ -48,7 +48,7 @@ public class ApplicationProcessService extends ServiceManager<ApplicationProcess
         if (dto.getCompanyFitScore() > 100 || dto.getCompanyFitScore() < 0) {
             throw new ApplicationProcessException(ErrorType.APPLICATION_PROCESS_SCORE_NUMBER_RANGE);
         }
-        if (dto.getCompleteApplicationScore() > 100 || dto.getCompleteApplicationScore() < 0) {
+        if (dto.getCareerTeamAssessment() > 100 || dto.getCareerTeamAssessment() < 0) {
             throw new ApplicationProcessException(ErrorType.APPLICATION_PROCESS_SCORE_NUMBER_RANGE);
         }
         ApplicationProcess applicationProcess = applicationProcessMapper.fromCreateApplicationProcessRequestDtoToApplicationProcess(dto);
@@ -83,7 +83,7 @@ public class ApplicationProcessService extends ServiceManager<ApplicationProcess
         if (dto.getCompanyFitScore() > 100 || dto.getCompanyFitScore() < 0) {
             throw new ApplicationProcessException(ErrorType.APPLICATION_PROCESS_SCORE_NUMBER_RANGE);
         }
-        if (dto.getCompleteApplicationScore() > 100 || dto.getCompleteApplicationScore() < 0) {
+        if (dto.getCareerTeamAssessment() > 100 || dto.getCareerTeamAssessment() < 0) {
             throw new ApplicationProcessException(ErrorType.APPLICATION_PROCESS_SCORE_NUMBER_RANGE);
         }
         Optional<ApplicationProcess> optionalApplicationProcess = applicationProcessRepository.findOptionalByStudentId(studentId.get());
@@ -109,7 +109,7 @@ public class ApplicationProcessService extends ServiceManager<ApplicationProcess
         double weight = 0.05;
         Optional<ApplicationProcess> optionalApplicationProcess = applicationProcessRepository.findOptionalByStudentId(studentId);
         if (optionalApplicationProcess.isPresent()) {
-            double score = (optionalApplicationProcess.get().getJobApplicationScore() + optionalApplicationProcess.get().getInformationSharingScore() + optionalApplicationProcess.get().getReferralParticipationScore() + optionalApplicationProcess.get().getCompanyFitScore() + optionalApplicationProcess.get().getCompleteApplicationScore()) * weight;
+            double score = (optionalApplicationProcess.get().getJobApplicationScore() + optionalApplicationProcess.get().getInformationSharingScore() + optionalApplicationProcess.get().getReferralParticipationScore() + optionalApplicationProcess.get().getCompanyFitScore() + optionalApplicationProcess.get().getCareerTeamAssessment()) * weight;
             optionalApplicationProcess.get().setTotalScore(score);
             save(optionalApplicationProcess.get());
             return score;
