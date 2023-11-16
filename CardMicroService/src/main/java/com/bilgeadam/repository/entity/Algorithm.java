@@ -19,4 +19,5 @@ public class Algorithm extends BaseEntity{
     private Double firstScore;
     private Double secondScore;
     private Double finalScore;
+    private boolean isExempt;
 }
