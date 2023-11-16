@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/internship-group")
+@RequestMapping("/api/v1/card/internship-group")
 public class InternshipGroupController {
     private final InternshipGroupService internshipGroupService;
 
