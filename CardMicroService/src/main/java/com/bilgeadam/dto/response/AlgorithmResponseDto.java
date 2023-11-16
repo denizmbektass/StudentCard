@@ -13,4 +13,5 @@ public class AlgorithmResponseDto {
     private Double firstScore;
     private Double secondScore;
     private Double finalScore;
+    private boolean isExempt;
 }

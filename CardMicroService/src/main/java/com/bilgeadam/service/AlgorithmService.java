@@ -34,6 +34,7 @@ public class AlgorithmService extends ServiceManager<Algorithm,String> {
         Algorithm algorithm = algorithmMapper.toAlgorithm(dto);
         algorithm.setStudentId(studentId.get());
         algorithm.setFinalScore(totalScore);
+        algorithm.setExempt(dto.isExempt());
         save(algorithm);
         return true;
     }
@@ -48,6 +49,7 @@ public class AlgorithmService extends ServiceManager<Algorithm,String> {
         Algorithm updateAlgorithm = algorithm.get();
         updateAlgorithm.setFirstScore(dto.getFirstScore());
         updateAlgorithm.setSecondScore(dto.getSecondScore());
+        updateAlgorithm.setExempt(dto.isExempt());
         double totalScore= (dto.getFirstScore()+dto.getSecondScore());
         updateAlgorithm.setFinalScore(totalScore);
         update(updateAlgorithm);
@@ -75,7 +77,8 @@ public class AlgorithmService extends ServiceManager<Algorithm,String> {
         AlgorithmResponseDto algorithmResponseDto= AlgorithmResponseDto.builder()
                 .firstScore(algorithm.getFirstScore())
                 .secondScore(algorithm.getSecondScore())
-                .finalScore(algorithm.getFinalScore()).build();
+                .finalScore(algorithm.getFinalScore())
+                .isExempt(algorithm.isExempt()).build();
         return algorithmResponseDto;
     }
 }

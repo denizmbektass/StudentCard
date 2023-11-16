@@ -13,4 +13,5 @@ public class UpdateAlgorithmRequestDto {
     private String studentToken;
     private Double firstScore;
     private Double secondScore;
+    private boolean isExempt;
 }
