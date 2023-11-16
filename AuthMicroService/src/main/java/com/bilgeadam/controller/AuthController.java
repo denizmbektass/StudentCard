@@ -91,7 +91,7 @@ public class AuthController {
             description = "Kullanıcının şifre değiştirme işlemi için gerekli kimlik doğrulama bilgilerini getirir.")
     @Hidden
     @CrossOrigin("*")
-    @GetMapping("get-auth-info-for-user-change-password/{userId}")
+    @GetMapping("/get-auth-info-for-user-change-password/{userId}")
     public ResponseEntity<GetAuthInfoForChangePassword> getAuthInfoForChangePassword(@PathVariable String userId){
         return ResponseEntity.ok(authService.getAuthInfoForChangePassword(userId));
     }
@@ -99,8 +99,8 @@ public class AuthController {
 
     @Operation(summary = "Kullanıcının şifresini değiştirme işlemi",
             description = "Kullanıcının mevcut şifresini değiştirmek için kullanılır.")
-    @PostMapping("change-password-from-user")
-   public ResponseEntity<Boolean> changePasswordFromUser(@RequestBody ChangePasswordResponseDto dto){
+    @PostMapping("/change-password-from-user")
+    public ResponseEntity<Boolean> changePasswordFromUser(@RequestBody ChangePasswordResponseDto dto){
         return ResponseEntity.ok(authService.changePasswordForAuth(dto));
     }
 
@@ -108,7 +108,7 @@ public class AuthController {
 
     @Operation(summary = "Token'dan kullanıcının rollerini getirme işlemi",
             description = "Verilen token'dan kullanıcının rollerini getirir.")
-    @GetMapping("get-role-from-token/{token}")
+    @GetMapping("/get-role-from-token/{token}")
     @CrossOrigin("*")
     public ResponseEntity<List<ERole>> getRoleFromToken(@PathVariable String token){
         return ResponseEntity.ok(authService.getRoleFromToken(token));
@@ -118,7 +118,7 @@ public class AuthController {
 
     @Operation(summary = "Öğrenci ve eğitmen kaydı işlemi",
             description = "Öğrenci ve eğitmenin kaydını yapmak için kullanılır.")
-    @PostMapping("register-student-and-trainer")
+    @PostMapping("/register-student-and-trainer")
     @CrossOrigin("*")
     public ResponseEntity<MessageResponseDto>registerStudentAndTrainer( @RequestBody @Valid RegisterStudentAndTrainerRequestDto dto){
         return ResponseEntity.ok(authService.registerStudentAndTrainer(dto));

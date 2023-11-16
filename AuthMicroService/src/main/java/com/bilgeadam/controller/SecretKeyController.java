@@ -13,7 +13,7 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/secret-key")
+@RequestMapping("/api/v1/auth/secret-key")
 public class SecretKeyController {
     private final SecretKeyService secretKeyService;
 

@@ -64,7 +64,7 @@ public class UserController {
     @Operation(summary = "E-posta hatırlatıcı için eğitmenleri getirme işlemi",
             description = "E-posta hatırlatıcı için eğitmenlerin listesini getirir.")
     @CrossOrigin("*")
-    @GetMapping("mail-reminder-get-trainers")
+    @GetMapping("/mail-reminder-get-trainers")
     public  ResponseEntity<List<TrainersMailReminderDto>> getTrainers(){
         return ResponseEntity.ok(userService.getTrainers());
     }
@@ -73,7 +73,7 @@ public class UserController {
     @Operation(summary = "E-posta hatırlatıcı için yöneticileri getirme işlemi",
             description = "E-posta hatırlatıcı için yöneticilerin listesini getirir.")
     @CrossOrigin("*")
-    @GetMapping("mail-reminder-get-masters")
+    @GetMapping("/mail-reminder-get-masters")
     public  ResponseEntity<List<MastersMailReminderDto>> getMasters(){
         return ResponseEntity.ok(userService.getMasters());
     }
@@ -82,7 +82,7 @@ public class UserController {
     @Operation(summary = "E-posta hatırlatıcı için öğrencileri getirme işlemi",
             description = "E-posta hatırlatıcı için öğrencilerin listesini getirir.")
     @CrossOrigin("*")
-    @GetMapping("mail-reminder-get-students")
+    @GetMapping("/mail-reminder-get-students")
     public  ResponseEntity<List<StudentsMailReminderDto>> getStudents(){
         return ResponseEntity.ok(userService.getStudents());
     }
@@ -91,7 +91,7 @@ public class UserController {
             description = "Belirli kriterlere göre kullanıcıları aramak için kullanılır.")
     //@PreAuthorize("hasAuthority('MANAGER')")
     @CrossOrigin("*")
-    @PostMapping("search-user")
+    @PostMapping("/search-user")
     public  ResponseEntity<List<User>> searchUser(@RequestBody SearchUserRequestDto dto){
         return  ResponseEntity.ok(userService.searchUser(dto));
     }
@@ -101,7 +101,7 @@ public class UserController {
             description = "Belirli kullanıcı verileri kullanılarak bir token oluşturur.")
     //@PreAuthorize("hasAuthority('MANAGER')")
     @CrossOrigin("*")
-    @PostMapping("search-create-token")
+    @PostMapping("/search-create-token")
     public  ResponseEntity<String> createToken( @RequestBody SelectUserCreateTokenDto dto){
         return  ResponseEntity.ok(userService.createToken(dto));
     }
@@ -110,7 +110,7 @@ public class UserController {
             description = "Belirli bir token'dan kullanıcı kimliğini çıkarmak için kullanılır.")
     //@PreAuthorize("hasAuthority('MANAGER')")
     @CrossOrigin("*")
-    @PostMapping("get-id-from-token/{token}")
+    @PostMapping("/get-id-from-token/{token}")
     public  ResponseEntity<String> getIdFromToken(@PathVariable String token){
         return  ResponseEntity.ok(userService.getIdFromToken(token));
     }
@@ -119,7 +119,7 @@ public class UserController {
             description = "Belirli bir token kullanarak öğrencinin profil bilgilerini bulmak için kullanılır.")
     //@PreAuthorize("hasAuthority('MANAGER')")
     @CrossOrigin("*")
-    @GetMapping ("find-student-profile/{token}")
+    @GetMapping ("/find-student-profile/{token}")
     public  ResponseEntity<FindStudentProfileResponseDto> findStudentProfile(@PathVariable String token){
         return  ResponseEntity.ok(userService.findStudentProfile(token));
     }
@@ -128,7 +128,7 @@ public class UserController {
             description = "Bir kullanıcı listesini kaydetmek için kullanılır.")
     //@PreAuthorize("hasAuthority('ADMIN')")
     @CrossOrigin("*")
-    @PutMapping("save-user-list")
+    @PutMapping("/save-user-list")
     public  ResponseEntity<Boolean> saveUserList(@RequestBody List<UserRequestDto> dtoList){
         return  ResponseEntity.ok(userService.saveUserList(dtoList));
     }
@@ -137,7 +137,7 @@ public class UserController {
             description = "Belirli bir kullanıcı kimliği ile kullanıcının ad ve soyadını almak için kullanılır.")
     //@PreAuthorize("hasAuthority('MANAGER')")
     @CrossOrigin("*")
-    @GetMapping("get-name-and-surname-with-id/{userId}")
+    @GetMapping("/get-name-and-surname-with-id/{userId}")
     public ResponseEntity<String> getNameAndSurnameWithId(@PathVariable String userId){
         return ResponseEntity.ok(userService.getNameAndSurnameWithId(userId));
     }
@@ -145,7 +145,7 @@ public class UserController {
     @Operation(summary = "Grup adına göre kullanıcıları bulma işlemi",
             description = "Belirli bir grup adına göre kullanıcıları bulmak için kullanılır.")
     @CrossOrigin("*")
-    @GetMapping("find-by-group-name-list/{groupName}")
+    @GetMapping("/find-by-group-name-list/{groupName}")
     public ResponseEntity<List<FindByGroupNameResponseDto>> findByGroupNameList(@PathVariable String groupName) {
         return  ResponseEntity.ok(userService.findByGroupNameList(groupName));
     }
@@ -154,7 +154,7 @@ public class UserController {
     @Operation(summary = "Kullanıcının transkript bilgilerini alma işlemi",
             description = "Belirtilen bir kullanıcı kimliği ile ilişkilendirilmiş transkript bilgilerini almak için kullanılır.")
     @CrossOrigin("*")
-    @GetMapping("get-transcript-info/{token}")
+    @GetMapping("/get-transcript-info/{token}")
     public ResponseEntity<TranscriptInfo> getTranscriptInfoByUser(@PathVariable String token){
         return ResponseEntity.ok(userService.getTranscriptInfoByUser(token));
     }
@@ -163,7 +163,7 @@ public class UserController {
     @Operation(summary = "Staj yapmayan tüm öğrencileri alma işlemi",
             description = "Staj yapmayan öğrencilerin bilgilerini almak için kullanılır.")
     @CrossOrigin("*")
-    @PostMapping("get-all-students-without-internship")
+    @PostMapping("/get-all-students-without-internship")
     public ResponseEntity<List<GroupStudentResponseDto>> getAllStudentsWithoutInternship(@RequestBody GroupStudentRequestDto dto){
         return ResponseEntity.ok(userService.getAllStudentsWithoutInternship(dto));
     }
@@ -172,7 +172,7 @@ public class UserController {
     @Operation(summary = "Kullanıcının staj durumunu aktif yapma işlemi",
             description = "Belirli bir kullanıcının staj durumunu aktif yapmak için kullanılır.")
     @CrossOrigin("*")
-    @PutMapping("update-user-internship-status-to-active/{userId}")
+    @PutMapping("/update-user-internship-status-to-active/{userId}")
     public ResponseEntity<Boolean> updateUserInternShipStatusToActive(@PathVariable String userId){
         return ResponseEntity.ok(userService.updateUserInternShipStatus(userId));
     }
@@ -181,7 +181,7 @@ public class UserController {
     @Operation(summary = "Kullanıcının staj durumunu silinmiş olarak güncelleme işlemi",
             description = "Belirli bir kullanıcının staj durumunu silinmiş olarak güncellemek için kullanılır.")
     @CrossOrigin("*")
-    @PutMapping("update-user-internship-status-to-deleted/{userId}")
+    @PutMapping("/update-user-internship-status-to-deleted/{userId}")
     public ResponseEntity<Boolean> updateUserInternShipStatusToDeleted(@PathVariable String userId){
         return ResponseEntity.ok(userService.updateUserInternShipStatusToDeleted(userId));
     }
@@ -189,7 +189,7 @@ public class UserController {
     @Operation(summary = "Kullanıcı için yönetici kaydı oluşturma işlemi",
             description = "Belirli bir kullanıcı için yönetici kaydı oluşturulması için kullanılır.")
     @Hidden
-    @PostMapping("save-manager-for-user-service")
+    @PostMapping("/save-manager-for-user-service")
     @CrossOrigin("*")
      public ResponseEntity<String> registerManagerForUser(@RequestBody RegisterRequestDto dto){
         return ResponseEntity.ok(userService.registerManagerForUser(dto));
@@ -198,7 +198,7 @@ public class UserController {
 
     @Operation(summary = "Token'dan kullanıcının ad ve soyadını getirme işlemi",
             description = "Verilen token'dan kullanıcının ad ve soyadını getirmek için kullanılır.")
-    @GetMapping("get-user-name-and-surname-from-token-for-login/{token}")
+    @GetMapping("/get-user-name-and-surname-from-token-for-login/{token}")
     @CrossOrigin("*")
     public ResponseEntity<GetNameAndSurnameByIdResponseDto> getUserNameAndSurnameFromToken(@PathVariable String token){
         return ResponseEntity.ok(userService.getUserNameAndSurnameFromToken(token));
@@ -207,7 +207,7 @@ public class UserController {
     @Operation(summary = "Kullanıcının şifresini değiştirme işlemi",
             description = "Kullanıcının şifresini değiştirmek için kullanılır. " +
                     "Kullanıcının oturum açma token'ı ve yeni şifre bilgileri parametre olarak alınır.")
-    @PostMapping("change-password-from-user/{token}")
+    @PostMapping("/change-password-from-user/{token}")
     @CrossOrigin("*")
     public ResponseEntity<Boolean> changePassword(@RequestBody ChangePasswordRequestDto dto,@PathVariable String token){
         return ResponseEntity.ok(userService.changePassword(dto,token));
@@ -217,14 +217,14 @@ public class UserController {
     @Operation(summary = "Öğrenci için grup adlarını bulma işlemi",
             description = "Belirtilen öğrenci kimliği ile ilişkilendirilmiş grup adlarını döndürür.")
     @Hidden
-    @GetMapping("get-group-name-for-student/{userId}")
+    @GetMapping("/get-group-name-for-student/{userId}")
     public ResponseEntity<List<String>> findGroupNameForStudent(@PathVariable String userId){
         return ResponseEntity.ok(userService.findGroupNameForStudent(userId));
     }
 
     @Operation(summary = "Kullanıcının profil bilgilerini getirme işlemi",
             description = "Belirtilen token ile ilişkilendirilmiş kullanıcının profil bilgilerini döndürür.")
-    @GetMapping("get-user-profile-for-profile-page/{token}")
+    @GetMapping("/get-user-profile-for-profile-page/{token}")
     @CrossOrigin("*")
     public ResponseEntity<FindStudentProfileResponseDto> getUserProfile(@PathVariable String token){
         return ResponseEntity.ok(userService.getUserProfile(token));
@@ -233,7 +233,7 @@ public class UserController {
 
     @Operation(summary = "Kullanıcının profil fotoğrafını kaydetme işlemi",
             description = "Belirtilen DTO içindeki bilgilere göre kullanıcının profil fotoğrafını kaydeder.")
-    @PostMapping("save-profile-image")
+    @PostMapping("/save-profile-image")
     @CrossOrigin("*")
     public ResponseEntity<Boolean> saveProfileImage(@RequestBody SaveProfileImageRequestDto dto){
         return ResponseEntity.ok(userService.saveProfileImage(dto));
@@ -241,7 +241,7 @@ public class UserController {
 
     @Operation(summary = "Kullanıcının profil fotoğrafını alma işlemi",
             description = "Belirtilen token ile ilişkili kullanıcının profil fotoğrafını getirir.")
-    @GetMapping("get-user-profile-image/{token}")
+    @GetMapping("/get-user-profile-image/{token}")
     @CrossOrigin("*")
     public ResponseEntity<String> getUserProfileImage(@PathVariable String token){
         return ResponseEntity.ok(userService.getProfileImage(token));

@@ -20,7 +20,6 @@ public class User extends BaseEntity {
     private String userId;
     private String name;
     private String surname;
-    private Long identityNumber;
     private String phoneNumber;
     private String address;
     private LocalDate birthDate;

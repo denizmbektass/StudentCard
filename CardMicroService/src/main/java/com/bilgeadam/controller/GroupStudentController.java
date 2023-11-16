@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/group-student")
+@RequestMapping("/api/v1/card/group-student")
 public class GroupStudentController {
     private final GroupStudentService groupStudentService;
 
