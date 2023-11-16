@@ -18,7 +18,7 @@ public class GetTechnicalInterviewResponseDto {
     private Long supportTaken;
     private String comment;
     private Double technicalInterviewAveragePoint;
-    private String questionComment1;
-    private String questionComment2;
-    private Boolean questionComment3;
+    private String completionTimeComment;
+    private String levelReachedComment;
+    private Boolean supportTakenChoice;
 }
