@@ -71,9 +71,9 @@ public TechnicalInterviewService(ITechnicalInterviewRepository technicalIntervie
             technicalInterview.setCompletionTime(dto.getCompletionTime());
             technicalInterview.setLevelReached(dto.getLevelReached());
             technicalInterview.setSupportTaken(dto.getSupportTaken());
-            technicalInterview.setQuestionComment1(dto.getQuestionComment1());
-            technicalInterview.setQuestionComment2(dto.getQuestionComment2());
-            technicalInterview.setQuestionComment3(dto.getQuestionComment3());
+            technicalInterview.setCompletionTimeComment(dto.getCompletionTimeComment());
+            technicalInterview.setLevelReachedComment(dto.getLevelReachedComment());
+            technicalInterview.setSupportTakenChoice(dto.getSupportTakenChoice());
             technicalInterview.setComment(dto.getComment());
             double technicalInterviewAvaragePoint = (dto.getDirectionCorrect()*0.25) + (dto.getCompletionTime()*0.25)+ (dto.getLevelReached()*0.25)+(dto.getSupportTaken()*0.25);
             technicalInterview.setTechnicalInterviewAveragePoint(technicalInterviewAvaragePoint);

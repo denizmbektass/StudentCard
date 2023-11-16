@@ -17,8 +17,8 @@ public class CreateTechnicalInterviewRequestDto {
     private Long levelReached;
     private Long supportTaken;
     private String comment;
-    private String questionComment1;
-    private String questionComment2;
-    private Boolean questionComment3;
+    private String completionTimeComment;
+    private String levelReachedComment;
+    private Boolean supportTakenChoice;
 
 }
