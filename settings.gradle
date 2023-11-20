@@ -3,4 +3,5 @@ include 'AuthMicroService'
 include 'UserMicroService'
 include 'CardMicroService'
 include 'MailService'
+include 'ApiGatewayService'
 
