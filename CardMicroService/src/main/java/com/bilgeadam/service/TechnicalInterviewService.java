@@ -35,6 +35,7 @@ public TechnicalInterviewService(ITechnicalInterviewRepository technicalIntervie
         if(studentId.isPresent()){
             TechnicalInterview technicalInterview = ITechnicalInterviewMapper.INSTANCE.fromSaveTechnicalInterviewRequestDtoToTechnicalInterview(dto);
             technicalInterview.setStudentId(studentId.get());
+            technicalInterview.setExempt(dto.isExempt());
             double technicalInterviewAvaragePoint = (dto.getDirectionCorrect()*0.25) + (dto.getCompletionTime()*0.25)+ (dto.getLevelReached()*0.25)+(dto.getSupportTaken()*0.25);
             technicalInterview.setTechnicalInterviewAveragePoint(technicalInterviewAvaragePoint);
             save(technicalInterview);
@@ -52,6 +53,7 @@ public TechnicalInterviewService(ITechnicalInterviewRepository technicalIntervie
             if(technicalInterviewRepository.findAllByStudentId(studentId).size()>0){
                 TechnicalInterview technicalInterview = technicalInterviewRepository.findAllByStudentId(studentId).get(0);
                 responseDto = ITechnicalInterviewMapper.INSTANCE.fromTechnicalInterviewToGetTechnicalInterviewResponseDto(technicalInterview);
+                responseDto.setExempt(technicalInterview.isExempt());
             } else {
                 throw new CardServiceException(ErrorType.TECHNICAL_INTERVIEW_NOT_FOUND);
             }
@@ -75,8 +77,8 @@ public TechnicalInterviewService(ITechnicalInterviewRepository technicalIntervie
             technicalInterview.setLevelReachedComment(dto.getLevelReachedComment());
             technicalInterview.setSupportTakenChoice(dto.getSupportTakenChoice());
             technicalInterview.setComment(dto.getComment());
+            technicalInterview.setExempt(dto.isExempt());
             double technicalInterviewAvaragePoint = (dto.getDirectionCorrect()*0.25) + (dto.getCompletionTime()*0.25)+ (dto.getLevelReached()*0.25)+(dto.getSupportTaken()*0.25);
-            technicalInterview.setTechnicalInterviewAveragePoint(technicalInterviewAvaragePoint);
             technicalInterview.setTechnicalInterviewAveragePoint(technicalInterviewAvaragePoint);
             update(technicalInterview);
             return true;
