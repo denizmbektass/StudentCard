@@ -36,8 +36,8 @@ public class UpdateTechnicalInterviewRequestDto {
     private Long supportTaken;
     private String completionTimeComment;
     private String levelReachedComment;
-    @NotNull
     private Boolean supportTakenChoice;
     private String comment;
+    private boolean isExempt;
 
 }

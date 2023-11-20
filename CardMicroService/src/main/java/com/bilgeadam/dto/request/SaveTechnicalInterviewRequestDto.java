@@ -18,26 +18,21 @@ public class SaveTechnicalInterviewRequestDto {
     private String studentToken;
     @Min(0)
     @Max(100)
-    @NotNull
     private Long directionCorrect;
     @Min(0)
     @Max(100)
-    @NotNull
     private Long completionTime;
     @Min(0)
     @Max(100)
-    @NotNull
     private Long levelReached;
     @Min(0)
     @Max(100)
-    @NotNull
     private Long supportTaken;
     private String completionTimeComment;
     private String levelReachedComment;
-    @NotNull
     private Boolean supportTakenChoice;
-
     private String comment;
+    private boolean isExempt;
 
 
 

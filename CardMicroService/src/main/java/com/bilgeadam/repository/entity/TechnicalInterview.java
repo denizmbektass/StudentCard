@@ -27,6 +27,7 @@ public class TechnicalInterview extends BaseEntity {
     private String levelReachedComment;
     private Boolean supportTakenChoice;
     private Double technicalInterviewAveragePoint;
+    private boolean isExempt;
 
     @Builder.Default()
     private EStatus eStatus = EStatus.ACTIVE;

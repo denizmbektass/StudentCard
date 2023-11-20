@@ -20,5 +20,6 @@ public class CreateTechnicalInterviewRequestDto {
     private String completionTimeComment;
     private String levelReachedComment;
     private Boolean supportTakenChoice;
+    private boolean isExempt;
 
 }
