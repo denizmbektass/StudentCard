@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.bilgeadam.constants.ApiUrls.DOCUMENTSUBMIT;
+import static com.bilgeadam.constants.ApiUrls.*;
 
 @RestController
-@RequestMapping(DOCUMENTSUBMIT)
+@RequestMapping(DOCUMENT_SUBMIT)
 public class DocumentSubmitController {
     private final DocumentSubmitService documentSubmitService;
 

@@ -32,7 +32,7 @@ public class ApiUrls {
     public static final String FIND_GRADUATION_PROJECT = "/find-graduation-project";
     public static final String PROJECT_BEHAVIOR = CARD + "/project-behavior";
     public static final String FIND_PROJECT_BEHAVIOR = "/find-project-behavior";
-    public static final String DOCUMENTSUBMIT = CARD + "/document-submit";
+    public static final String DOCUMENT_SUBMIT = CARD + "/document-submit";
     public static final String ATTENDANCE = CARD + "/attendance";
     public static final String ALGORITHM = CARD + "/algorithm";
     public static final String FIND_ALGORITHM = "/find-algorithm";
