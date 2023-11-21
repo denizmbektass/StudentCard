@@ -15,7 +15,7 @@ spring:
               - GET
               - POST
               - PUT
-              - OPTIONS
+              - DELETE
       default-filters:
         - RewritePath= /(?<segment>.*) , /api/v1/$\{segment}
       routes:
