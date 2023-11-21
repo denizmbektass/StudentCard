@@ -55,7 +55,7 @@ public class WrittenExamService extends ServiceManager<WrittenExam, String> {
         if (writtenExam.isPresent()){
             return writtenExam.get();
         }else {
-            throw new CardServiceException(ErrorType.WRITTENEXAM_NOT_FOUND);
+            return null;
         }
     }
 

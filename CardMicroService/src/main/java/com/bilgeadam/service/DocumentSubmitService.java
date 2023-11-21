@@ -55,7 +55,7 @@ public DocumentSubmit getDocumentSubmitByStudentId(String studentId){
         return documentSubmit.get();
     }
     else {
-        throw new CardServiceException(ErrorType.DOCUMENTSUBMIT_NOT_FOUND);
+        return null;
     }
 }
 public MessageResponse updateDocumentSubmitScore(UpdateDocumentSubmitRequestDto dto){
