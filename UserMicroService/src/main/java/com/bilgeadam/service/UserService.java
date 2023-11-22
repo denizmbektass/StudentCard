@@ -185,7 +185,6 @@ public class UserService extends ServiceManager<User, String> {
 
     public List<GroupStudentResponseDto> getAllStudentsWithoutInternship(GroupStudentRequestDto dto){
         List<User> userList = userRepository.findUsersByGroupNameListAndInternshipStatus(dto.getGroupName(),Arrays.asList(ERole.STUDENT));
-        System.out.println(userList);
         List<GroupStudentResponseDto> groupStudentResponseDtoList = userList.stream().map(user ->
             IUserMapper.INSTANCE.toGroupStudentResponseDto(user)
         ).collect(Collectors.toList());
@@ -200,8 +199,6 @@ public class UserService extends ServiceManager<User, String> {
     }
 
     public Boolean updateUserInternShipStatusToDeleted(String userId) {
-        System.out.println(userId);
-        System.out.println("2321321321");
         User user = findById(userId).orElseThrow(()->{throw new UserServiceException(ErrorType.USER_NOT_EXIST);});
         user.setInternShipStatus(EStatus.DELETED);
         update(user);
@@ -279,7 +276,6 @@ public class UserService extends ServiceManager<User, String> {
         Optional<String> userId = jwtTokenManager.getIdFromTokenForUserId(dto.getToken());
         if (userId.isEmpty()) throw new UserServiceException(ErrorType.INVALID_TOKEN);
         Optional<User> optionalUser= userRepository.findById(userId.get());
-        System.out.println(dto.getProfilePicture());
         optionalUser.get().setProfilePicture(dto.getProfilePicture());
         update(optionalUser.get());
         return true;

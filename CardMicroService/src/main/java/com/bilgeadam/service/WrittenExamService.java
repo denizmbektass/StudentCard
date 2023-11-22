@@ -67,7 +67,6 @@ public class WrittenExamService extends ServiceManager<WrittenExam, String> {
         Optional<WrittenExam> writtenExam = writtenExamRepository.findByStudentId(studentId.get());
         if (writtenExam.isEmpty())
             throw new CardServiceException(ErrorType.WRITTENEXAM_NOT_FOUND);
-        System.out.println("exam id:"+writtenExam.get().getWrittenExamId());
         WrittenExam updatedWrittenExam = writtenExam.get();
         updatedWrittenExam.setCorrectAnswers(dto.getCorrectAnswers());
         updatedWrittenExam.setScore(calculateWrittenExamScore(dto.getCorrectAnswers()));

@@ -30,7 +30,6 @@ public class ProjectTypeService extends ServiceManager<ProjectType, String> {
         if (optionalProjectType.isPresent()){
             throw new CardServiceException(ErrorType.PROJECT_TYPE_DUBLICATE);
         }
-        System.out.println(optionalProjectType);
         return save(IProjectTypeMapper.INSTANCE.toProjectType(dto));
     }
 
@@ -43,9 +42,7 @@ public class ProjectTypeService extends ServiceManager<ProjectType, String> {
             throw new CardServiceException(ErrorType.PROJECT_TYPE_STATUS);
         }
         optionalProjectType.get().setStatus(EStatus.DELETED);
-        System.out.println(optionalProjectType);
         update(optionalProjectType.get());
-        System.out.println(optionalProjectType);
         return true;
     }
 
