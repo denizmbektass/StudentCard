@@ -103,8 +103,6 @@ public class SecretKeyService extends ServiceManager<SecretKey,String> {
             throw new AuthServiceException(ErrorType.SECRET_KEY_NOT_FOUND);
         });
         String totpCode = CodeGenerator.getTOTPCode(secretKey.getSecretKey());
-        System.out.println(totpCode);
-        System.out.println(dto.getUserKey());
         if(totpCode.equals(dto.getUserKey())) {
             Auth auth = authService.findById(authId).orElseThrow(() -> {
                 throw new AuthServiceException(ErrorType.USER_NOT_FOUND);

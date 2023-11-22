@@ -119,7 +119,6 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
 
     public List<ShowGroupInformationListResponseDto> showGroupInformationList(){
         List<VwGroupResponseDto> vwGroupList = internshipGroupService.findAllGroupNames();
-        System.out.println(vwGroupList);
         List<ShowGroupInformationListResponseDto> dto = new ArrayList<>();
         vwGroupList.stream().forEach(group->{
             Integer groupCount = groupStudentRepository.countAllByGroupId(group.getInternShipGroupId());
@@ -131,7 +130,6 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
                         .build());
             }
         });
-        System.out.println(dto);
         return dto;
     }
 
@@ -188,24 +186,16 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
         internshipGroupService.findById(internshipGroupId).orElseThrow(()->{
             throw new CardServiceException(ErrorType.INTERNSHIP_NOT_FOUND);
         });
-        System.out.println(1);
         internshipGroupService.deleteById(internshipGroupId);
-        System.out.println(2);
-
         List<GroupAttendance> groupAttendanceList = groupAttendanceService.findByGroupId(internshipGroupId);
         groupAttendanceList.forEach(attendance -> {
             groupAttendanceService.deleteById(attendance.getGroupAttendanceId());
         });
-        System.out.println(3);
-
         List<GroupStudent> groupStudentList = groupStudentRepository.findAllByGroupId(internshipGroupId);
         groupStudentList.forEach(groupStudent -> {
             userManager.updateUserInternShipStatusToDeleted(groupStudent.getUserId());
             deleteById(groupStudent.getGroupStudentId());
         });
-        System.out.println(4);
-
-
         return true;
     }
 }

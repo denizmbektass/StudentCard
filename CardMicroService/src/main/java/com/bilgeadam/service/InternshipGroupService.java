@@ -29,12 +29,9 @@ public class InternshipGroupService extends ServiceManager<InternshipGroup,Strin
     }
 
     public Boolean saveGroup(GroupSaveRequestDto dto){
-        System.out.println(dto);
         if(!internshipGroupRepository.existsByGroupNameIgnoreCase(dto.getGroupName())){
             InternshipGroup internshipGroup = IInternshipGroupMapper.INSTANCE.fromGroupSaveRequestDtoToInternshipGroup(dto);
-            System.out.println(internshipGroup);
             save(internshipGroup);
-            System.out.println(internshipGroup);
             return true;
         }
         throw new CardServiceException(ErrorType.GROUP_ALREADY_EXIST);
@@ -87,9 +84,7 @@ public class InternshipGroupService extends ServiceManager<InternshipGroup,Strin
 
     public List<FindAllUnRegisteredGroupListResponseDto> findAllUnRegisteredGroupList(String mainGroupId) {
         List<InternshipGroup> internshipGroupList = internshipGroupRepository.findByMainGroupId(mainGroupId);
-        System.out.println(internshipGroupList);
         Set<String> groupNameSet = mainGroupManager.getSubGroupNamesByMainGroupId(mainGroupId).getBody();
-        System.out.println(groupNameSet);
         List<FindAllUnRegisteredGroupListResponseDto> dtoList = groupNameSet.stream()
                 .filter(groupName ->
                     internshipGroupList.stream()
@@ -101,7 +96,6 @@ public class InternshipGroupService extends ServiceManager<InternshipGroup,Strin
                         .mainGroupId(mainGroupId)
                         .groupName(groupName.toUpperCase())
                         .build()).collect(Collectors.toList());
-        System.out.println(dtoList);
         return dtoList;
     }
 

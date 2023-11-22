@@ -44,7 +44,6 @@ public class CardParameterService extends ServiceManager<CardParameter,String> {
     }
 
     public GetDefaultTranscriptInfoByNameResponseDto getGroupCardParameterByGroupName(GetDefaultTranscriptInfoByNameRequestDto dto) {
-        System.out.println(dto);
         Optional<CardParameter> cardParameter = cardParameterRepository.findByGroupName(dto.getGroupName());
         GetDefaultTranscriptInfoByNameResponseDto responseDto;
         if(cardParameter.isEmpty()){
