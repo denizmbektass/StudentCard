@@ -28,6 +28,8 @@ public class ContributionService extends ServiceManager<Contribution, String> {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
         if (studentId.isPresent()) {
             Contribution addContribution = IContributionMapper.INSTANCE.fromSaveContributionRequestDtoToContribution(dto);
+            addContribution.setTotalScoreContribution(calculateTotalScore(addContribution.getDocumentationForBacklogNote(),
+            addContribution.getIncorrectCodeOrDisplayMessageNote(),addContribution.getResearchNote(),addContribution.getIntraTeamTrainingNote()));
             addContribution.setStudentId(studentId.get());
             save(addContribution);
             return true;
@@ -48,6 +50,8 @@ public class ContributionService extends ServiceManager<Contribution, String> {
         contribution.setDocumentationForBacklogNote(dto.getDocumentationForBacklogNote());
         contribution.setResearchNote(dto.getResearchNote());
         contribution.setIntraTeamTrainingNote(dto.getIntraTeamTrainingNote());
+        contribution.setTotalScoreContribution(calculateTotalScore(contribution.getDocumentationForBacklogNote(),
+        contribution.getIncorrectCodeOrDisplayMessageNote(),contribution.getResearchNote(),contribution.getIntraTeamTrainingNote()));
         update(contribution);
         return true;
     }
