@@ -338,6 +338,26 @@ public class CardService extends ServiceManager<Card, String> {
         Double technicalInterviewSuccessScore = null;
         Double totalSuccessScore = 0.0;
 
+        AlgorithmResponseDto algorithm = algorithmService.getAlgorithm(token);
+        GetTechnicalInterviewResponseDto technicalInterview = technicalInterviewService.getTechnicalInterview(studentId.get());
+        if(technicalInterview.isExempt() == true && algorithm.isExempt() == true) {
+            writtenExamWeight = 0.50;
+            algorithmWeight = 0.0;
+            candidateInterviewWeight = 0.50;
+            technicalInterviewWeight = 0.0;
+        }
+        else if(technicalInterview.isExempt() == true && algorithm.isExempt() == false){
+            writtenExamWeight = 0.34;
+            algorithmWeight = 0.33;
+            candidateInterviewWeight = 0.33;
+            technicalInterviewWeight = 0.0;
+        }
+        else if(technicalInterview.isExempt() == false && algorithm.isExempt() == true) {
+            writtenExamWeight = 0.34;
+            algorithmWeight = 0.0;
+            candidateInterviewWeight = 0.33;
+            technicalInterviewWeight = 0.33;
+        }
 
         WrittenExam writtenExam = writtenExamService.getWrittenExamByStudentId(studentId.get());
         if (writtenExam != null) {
@@ -347,11 +367,10 @@ public class CardService extends ServiceManager<Card, String> {
         }
 
 
-        AlgorithmResponseDto algorithm = algorithmService.getAlgorithm(token);
         if (algorithm != null) {
             algorithmScore = algorithm.getFinalScore();
-            algorithmSuccessScore = algorithmScore * algorithmWeight;
-            totalSuccessScore += algorithmSuccessScore;
+                algorithmSuccessScore = algorithmScore * algorithmWeight;
+                totalSuccessScore += algorithmSuccessScore;
         }
 
 
@@ -369,17 +388,19 @@ public class CardService extends ServiceManager<Card, String> {
             totalSuccessScore += technicalInterviewSuccessScore;
         }
 
-        return StudentChoiceResponseDto.builder()
-                .technicalInterviewSuccessScore(technicalInterviewSuccessScore)
-                .writtenExamSuccessScore(writtenExamSuccessScore)
-                .algorithmSuccessScore(algorithmSuccessScore)
-                .candidateInterviewSuccessScore(candidateInterviewSuccessScore)
-                .algorithmScore(algorithmScore)
-                .writtenExamScore(writtenExamScore)
-                .technicalInterviewScore(technicalInterviewScore)
-                .candidateInterviewScore(candidateInterviewScore)
-                .totalSuccessScore(totalSuccessScore)
-                .build();
+            return StudentChoiceResponseDto.builder()
+                    .technicalInterviewSuccessScore(technicalInterviewSuccessScore)
+                    .writtenExamSuccessScore(writtenExamSuccessScore)
+                    .algorithmSuccessScore(algorithmSuccessScore)
+                    .candidateInterviewSuccessScore(candidateInterviewSuccessScore)
+                    .algorithmScore(algorithmScore)
+                    .writtenExamScore(writtenExamScore)
+                    .technicalInterviewScore(technicalInterviewScore)
+                    .candidateInterviewScore(candidateInterviewScore)
+                    .totalSuccessScore(totalSuccessScore)
+                    .isExemptFromAlgorithm(algorithm.isExempt())
+                    .isExemptFromTechnicalInterview(technicalInterview.isExempt())
+                    .build();
     }
 
     public EmploymentScoreDetailsDto getEmploymentDetails(String token) {
