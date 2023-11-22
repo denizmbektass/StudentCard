@@ -26,78 +26,58 @@ public class ContributionService extends ServiceManager<Contribution, String> {
     }
     public boolean saveContribution(SaveContributionRequestDto dto) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
-        Contribution addContribution = IContributionMapper.INSTANCE.fromSaveContributionRequestDtoToContribution(dto);
-
         if (studentId.isPresent()) {
+            Contribution addContribution = IContributionMapper.INSTANCE.fromSaveContributionRequestDtoToContribution(dto);
             addContribution.setStudentId(studentId.get());
             save(addContribution);
             return true;
         }
-        else {
-            throw new CardServiceException(ErrorType.INVALID_TOKEN);
-        }
+        else {throw new CardServiceException(ErrorType.INVALID_TOKEN);}
     }
     public boolean updateContribution(UpdateContributionRequestDto dto) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
-        if (studentId.isPresent()) {
-            Contribution contribution = contributionRepository.findByStudentId(studentId.get());
-            contribution.setIncorrectCodeOrDisplayMessageNote(dto.getIncorrectCodeOrDisplayMessageNote());
-            contribution.setDocumentationForBacklogNote(dto.getDocumentationForBacklogNote());
-            contribution.setResearchNote(dto.getResearchNote());
-            contribution.setIntraTeamTrainingNote(dto.getIntraTeamTrainingNote());
-            update(contribution);
-            return true;
-        }
-        else {
+        if (studentId.isEmpty()) {
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
         }
+        Optional<Contribution> cont = contributionRepository.findByStudentId(studentId.get());
+        if (cont.isEmpty()){
+           throw new CardServiceException(ErrorType.CONTRIBUTION_NOT_FOUND);
+        }
+        Contribution contribution=cont.get();
+        contribution.setIncorrectCodeOrDisplayMessageNote(dto.getIncorrectCodeOrDisplayMessageNote());
+        contribution.setDocumentationForBacklogNote(dto.getDocumentationForBacklogNote());
+        contribution.setResearchNote(dto.getResearchNote());
+        contribution.setIntraTeamTrainingNote(dto.getIntraTeamTrainingNote());
+        update(contribution);
+        return true;
     }
     public GetContributionResponseDto getContribution(String studentId) {
-        GetContributionResponseDto giveContributionResponseDto;
-        if (studentId != null) {
-            if (contributionRepository.findByStudentId(studentId) != null) {
-                Contribution contribution = contributionRepository.findByStudentId(studentId);
-                giveContributionResponseDto = IContributionMapper.INSTANCE.fromContributionToGetContributionResponseDto(contribution);
-            }
-            else {
-                throw new CardServiceException(ErrorType.CONTRIBUTION_NOT_FOUND);
-            }
+        Optional<Contribution> cont=contributionRepository.findByStudentId(studentId);
+        if (cont.isEmpty()) {
+           return null;
         }
-        else {
-            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        else {GetContributionResponseDto dto=IContributionMapper.INSTANCE.fromContributionToGetContributionResponseDto(cont.get());
+            return dto;
         }
-        return giveContributionResponseDto;
     }
     public Double calculateAndGetTotalScoreContribution(String studentId) {
-        if (studentId == null || studentId.isEmpty()) {
-            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        if (studentId.isEmpty()) {
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);}
+        Optional<Contribution> cont=contributionRepository.findByStudentId(studentId);
+        if (cont.isEmpty()) {
+            return null; }
+        if (cont.get().getDocumentationForBacklogNote()==0){
+            return cont.get().getDocumentationForBacklogNote();
         }
-        double totalScoreContribution = 0;
-        if (contributionRepository.findByStudentId(studentId) != null) {
-            Contribution contribution = contributionRepository.findByStudentId(studentId);
-            boolean isDocumentationForBacklogNote0 = (contribution.getDocumentationForBacklogNote() == 0);
-            if (contribution != null) {
-                if (isDocumentationForBacklogNote0) {
-                    totalScoreContribution = 0;
-                }
-                else {
-                    totalScoreContribution = (contribution.getIncorrectCodeOrDisplayMessageNote() * 0.05)
-                                                + (contribution.getDocumentationForBacklogNote())
-                                                + (contribution.getResearchNote() * 0.05)
-                                                + (contribution.getIntraTeamTrainingNote() * 0.05);
-
-                    if (totalScoreContribution > 100) {
-                        totalScoreContribution = 100;
-                    }
-                }
-            }
-            else {
-                return null;
-            }
-        }
-        else {
-            return null;
-        }
-        return totalScoreContribution;
+        Contribution contribution=cont.get();
+       double totalScore=calculateTotalScore(contribution.getDocumentationForBacklogNote(),contribution.getDocumentationForBacklogNote()
+        ,contribution.getResearchNote(),contribution.getIntraTeamTrainingNote());
+        return totalScore;
+    }
+    public Double calculateTotalScore(double backLogNote,double dpMessageNote, double researchNote, double teamTrainingNote){
+        double percentage=0.05;
+        double totalScore =(backLogNote)+(dpMessageNote*percentage)+(researchNote*percentage)+(teamTrainingNote*percentage);
+        if(totalScore>100){ totalScore=100; }
+        return  totalScore;
     }
 }
