@@ -18,9 +18,9 @@ public class Contribution extends BaseEntity {
     private String contributionId;
 
     private String studentId;
-    private double incorrectCodeOrDisplayMessageNote;
-    private double documentationForBacklogNote;
-    private double researchNote;
-    private double intraTeamTrainingNote;
-    private double totalScoreContribution;
+    private Double incorrectCodeOrDisplayMessageNote;
+    private Double documentationForBacklogNote;
+    private Double researchNote;
+    private Double intraTeamTrainingNote;
+    private Double totalScoreContribution;
 }
