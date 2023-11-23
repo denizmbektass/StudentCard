@@ -74,14 +74,23 @@ public class ContributionService extends ServiceManager<Contribution, String> {
             return cont.get().getDocumentationForBacklogNote();
         }
         Contribution contribution=cont.get();
-       double totalScore=calculateTotalScore(contribution.getDocumentationForBacklogNote(),contribution.getDocumentationForBacklogNote()
+       Double totalScore=calculateTotalScore(contribution.getDocumentationForBacklogNote(),contribution.getDocumentationForBacklogNote()
         ,contribution.getResearchNote(),contribution.getIntraTeamTrainingNote());
         return totalScore;
     }
-    public Double calculateTotalScore(double backLogNote,double dpMessageNote, double researchNote, double teamTrainingNote){
-        double percentage=0.05;
-        double totalScore =(backLogNote)+(dpMessageNote*percentage)+(researchNote*percentage)+(teamTrainingNote*percentage);
-        if(totalScore>100){ totalScore=100; }
+    public Double calculateTotalScore(Double backLogNote,Double dpMessageNote, Double researchNote, Double teamTrainingNote){
+        Double percentage=0.05;
+        if(dpMessageNote ==null){
+            dpMessageNote=0.0;
+        }
+        if(researchNote ==null){
+            researchNote=0.0;
+        }
+        if(teamTrainingNote ==null){
+            teamTrainingNote=0.0;
+        }
+        Double totalScore =(backLogNote)+(dpMessageNote*percentage)+(researchNote*percentage)+(teamTrainingNote*percentage);
+        if(totalScore>100){ totalScore=100.0; }
         return  totalScore;
     }
 }

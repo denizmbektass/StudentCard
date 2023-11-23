@@ -20,21 +20,18 @@ public class SaveContributionRequestDto {
 
     @Min(0)
     @Max(100)
-    @NotNull
-    private double incorrectCodeOrDisplayMessageNote;
+    private Double incorrectCodeOrDisplayMessageNote;
 
     @Min(0)
     @Max(100)
     @NotNull
-    private double documentationForBacklogNote;
+    private Double documentationForBacklogNote;
 
     @Min(0)
     @Max(100)
-    @NotNull
-    private double researchNote;
+    private Double researchNote;
 
     @Min(0)
     @Max(100)
-    @NotNull
-    private double intraTeamTrainingNote;
+    private Double intraTeamTrainingNote;
 }

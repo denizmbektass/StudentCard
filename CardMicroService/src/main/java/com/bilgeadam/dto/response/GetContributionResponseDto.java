@@ -14,8 +14,10 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Builder
 public class GetContributionResponseDto {
-    private double incorrectCodeOrDisplayMessageNote;
-    private double documentationForBacklogNote;
-    private double researchNote;
-    private double intraTeamTrainingNote;
+
+    private Double incorrectCodeOrDisplayMessageNote;
+    private Double documentationForBacklogNote;
+    private Double researchNote;
+    private Double intraTeamTrainingNote;
+    private Double totalScoreContribution;
 }
