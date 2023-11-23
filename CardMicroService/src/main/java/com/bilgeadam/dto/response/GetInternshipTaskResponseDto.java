@@ -15,12 +15,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetInternshipTaskResponseDto {
-    @Min(0)
-    @Max(100)
-    @NotNull
     private short backlogCompletionTime;
-    @Min(0)
-    @Max(100)
-    @NotNull
     private short completedBacklog;
 }

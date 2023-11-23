@@ -14,24 +14,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Builder
 public class GetContributionResponseDto {
-
-    @Min(0)
-    @Max(100)
-    @NotNull
     private double incorrectCodeOrDisplayMessageNote;
-
-    @Min(0)
-    @Max(100)
-    @NotNull
     private double documentationForBacklogNote;
-
-    @Min(0)
-    @Max(100)
-    @NotNull
     private double researchNote;
-
-    @Min(0)
-    @Max(100)
-    @NotNull
     private double intraTeamTrainingNote;
 }

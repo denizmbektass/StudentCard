@@ -14,32 +14,11 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Builder
 public class GetCareerEducationResponseDto {
-    @Min(0)
-    @Max(100)
-    @NotNull
     private short centralHrContinuityPoint;
-    @Min(0)
-    @Max(100)
-    @NotNull
     private short centralHrActivityPoint;
-    @Min(0)
-    @Max(100)
-    @NotNull
     private short boostContinuityPoint;
-    @Min(0)
-    @Max(100)
-    @NotNull
     private short boostActivityPoint;
-    @Min(0)
-    @Max(100)
-    @NotNull
     private short resumeDeliveryPoint;
-    @Min(0)
-    @Max(100)
-    @NotNull
     private short resumeConveniencePoint;
-    @Min(0)
-    @Max(100)
-    @NotNull
     private short resumeUpToDatePoint;
 }
