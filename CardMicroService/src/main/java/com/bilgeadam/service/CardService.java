@@ -162,7 +162,7 @@ public class CardService extends ServiceManager<Card, String> {
         double absenceWeight = 0.1;
         double projectWeight = 0.15;
         double trainerAssessmentWeight = 0.25;
-        double graduationProjectWeight = 0.25;
+        double graduationProjectWeight = 0.20;
         Double avgAssignmentScore = null;
         Double avgExamScore = null;
         Double avgTrainerAssessmentScore = null;
