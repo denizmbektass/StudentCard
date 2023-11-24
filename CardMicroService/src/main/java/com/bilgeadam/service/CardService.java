@@ -322,12 +322,10 @@ public class CardService extends ServiceManager<Card, String> {
         if (studentId.isEmpty())
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
 
-        double writtenExamWeight = 0.25;
-        double algorithmWeight = 0.25;
-        double candidateInterviewWeight = 0.25;
-        double technicalInterviewWeight = 0.25;
-
-
+        Double writtenExamWeight = 0.25;
+        Double algorithmWeight= 0.25;
+        Double candidateInterviewWeight= 0.25;
+        Double technicalInterviewWeight= 0.25;
         Double writtenExamScore = null;
         Double algorithmScore = null;
         Double candidateInterviewScore = null;
@@ -337,28 +335,44 @@ public class CardService extends ServiceManager<Card, String> {
         Double candidateInterviewSuccessScore = null;
         Double technicalInterviewSuccessScore = null;
         Double totalSuccessScore = 0.0;
+        Double totalWeight=1.0;
+        int count = 0;
+        Boolean isExemptFromAlgorithm = false;
+        Boolean isExemptFromTechnicalInterview = false;
+
 
         AlgorithmResponseDto algorithm = algorithmService.getAlgorithm(token);
         GetTechnicalInterviewResponseDto technicalInterview = technicalInterviewService.getTechnicalInterview(studentId.get());
-        if(technicalInterview.isExempt() == true && algorithm.isExempt() == true) {
-            writtenExamWeight = 0.50;
-            algorithmWeight = 0.0;
-            candidateInterviewWeight = 0.50;
-            technicalInterviewWeight = 0.0;
-        }
-        else if(technicalInterview.isExempt() == true && algorithm.isExempt() == false){
-            writtenExamWeight = 0.34;
-            algorithmWeight = 0.33;
-            candidateInterviewWeight = 0.33;
-            technicalInterviewWeight = 0.0;
-        }
-        else if(technicalInterview.isExempt() == false && algorithm.isExempt() == true) {
-            writtenExamWeight = 0.34;
-            algorithmWeight = 0.0;
-            candidateInterviewWeight = 0.33;
-            technicalInterviewWeight = 0.33;
-        }
 
+        if(technicalInterview != null ){
+            if(technicalInterview.isExempt() == true ) {
+                technicalInterviewWeight = 0.0;
+                 writtenExamWeight = totalWeight/3;
+                 algorithmWeight= totalWeight/3;
+                 candidateInterviewWeight= totalWeight/3;
+                 count++;
+                 isExemptFromTechnicalInterview =true;
+            }
+        }
+        if(algorithm != null){
+            if(algorithm.isExempt() == true && count == 1) {
+                algorithmWeight =0.0;
+                writtenExamWeight= totalWeight/2;
+                candidateInterviewWeight= totalWeight/2;
+                isExemptFromAlgorithm=true;
+            }else if(algorithm.isExempt() == false && count == 1){
+                writtenExamWeight = totalWeight/3;
+                algorithmWeight= totalWeight/3;
+                candidateInterviewWeight= totalWeight/3;
+            }
+            else if (algorithm.isExempt() == true && count ==0){
+                algorithmWeight = 0.0;
+                writtenExamWeight = totalWeight/3;
+                technicalInterviewWeight= totalWeight/3;
+                candidateInterviewWeight= totalWeight/3;
+                isExemptFromAlgorithm=true;
+            }
+        }
         WrittenExam writtenExam = writtenExamService.getWrittenExamByStudentId(studentId.get());
         if (writtenExam != null) {
             writtenExamScore = writtenExam.getScore();
@@ -387,7 +401,6 @@ public class CardService extends ServiceManager<Card, String> {
             technicalInterviewSuccessScore = technicalInterviewScore * technicalInterviewWeight;
             totalSuccessScore += technicalInterviewSuccessScore;
         }
-
             return StudentChoiceResponseDto.builder()
                     .technicalInterviewSuccessScore(technicalInterviewSuccessScore)
                     .writtenExamSuccessScore(writtenExamSuccessScore)
@@ -398,10 +411,11 @@ public class CardService extends ServiceManager<Card, String> {
                     .technicalInterviewScore(technicalInterviewScore)
                     .candidateInterviewScore(candidateInterviewScore)
                     .totalSuccessScore(totalSuccessScore)
-                    .isExemptFromAlgorithm(algorithm.isExempt())
-                    .isExemptFromTechnicalInterview(technicalInterview.isExempt())
+                    .isExemptFromAlgorithm(isExemptFromAlgorithm)
+                    .isExemptFromTechnicalInterview(isExemptFromTechnicalInterview)
                     .build();
     }
+
 
     public EmploymentScoreDetailsDto getEmploymentDetails(String token) {
         Double careerEducationSuccessScore = null;

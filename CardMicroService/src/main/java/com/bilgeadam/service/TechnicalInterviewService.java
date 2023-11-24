@@ -55,7 +55,7 @@ public TechnicalInterviewService(ITechnicalInterviewRepository technicalIntervie
                 responseDto = ITechnicalInterviewMapper.INSTANCE.fromTechnicalInterviewToGetTechnicalInterviewResponseDto(technicalInterview);
                 responseDto.setExempt(technicalInterview.isExempt());
             } else {
-                throw new CardServiceException(ErrorType.TECHNICAL_INTERVIEW_NOT_FOUND);
+                return null;
             }
         } else {
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
