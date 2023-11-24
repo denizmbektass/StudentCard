@@ -18,6 +18,6 @@ public class StudentChoiceResponseDto {
     Double algorithmScore;
     Double technicalInterviewScore;
     Double totalSuccessScore;
-    boolean isExemptFromAlgorithm;
-    boolean isExemptFromTechnicalInterview;
+    Boolean isExemptFromAlgorithm;
+    Boolean isExemptFromTechnicalInterview;
 }
