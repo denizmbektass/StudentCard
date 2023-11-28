@@ -21,7 +21,6 @@ public enum ErrorType {
     INTERNAL_ERROR(5100,"Beklenmeyen bir hata oluştu.",HttpStatus.INTERNAL_SERVER_ERROR),
     BAD_REQUEST(4100,"Parametre hatası.",HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND (4200,"Kullanıcı bulunamadı.", HttpStatus.BAD_REQUEST),
-    SECRET_KEY_NOT_FOUND(4007,"Secret Key bulunamadı.", HttpStatus.BAD_REQUEST),
     CODE_NO_VALID(4008, "Girilen kod geçerli değil.", HttpStatus.BAD_REQUEST)
 
 ;
