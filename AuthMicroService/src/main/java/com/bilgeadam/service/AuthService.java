@@ -59,18 +59,14 @@ public class AuthService extends ServiceManager<Auth, String> {
         }
         if (authOptional.get().getStatus().equals(EStatus.DELETED))
             throw new AuthServiceException(ErrorType.USER_DELETED);
-        /*
+
         List<ERole> role = authOptional.get().getRole();
         List<String> roles = role.stream().map(x -> x.name()).toList();
-        Optional<String> token = jwtTokenManager.createToken(authOptional.get().getAuthId(), roles, authOptional.get().getStatus(), authOptional.get().getEmail(),authOptional.get().getUserId());
-        */
         String authStatus = authOptional.get().getStatus().toString();
-        String token = jwtTokenManager.createTokenForQr(authOptional.get().getAuthId()).orElseThrow(()->{
-            throw new AuthServiceException(ErrorType.TOKEN_NOT_CREATED);
-        });
-        if (token.isEmpty())
-            throw new AuthServiceException(ErrorType.TOKEN_NOT_CREATED);
-        return LoginResponseDto.builder().token(token).message("Login Successfully").status(authStatus).build();
+        Optional<String> token = jwtTokenManager.createToken(authOptional.get().getAuthId(), roles, authOptional.get().getStatus(),
+                authOptional.get().getEmail(), authOptional.get().getUserId()
+                        .describeConstable().orElseThrow(() -> new AuthServiceException(ErrorType.TOKEN_NOT_CREATED)));
+        return LoginResponseDto.builder().token(token.get()).message("Login Successfully").role(roles).status(authStatus).build();
     }
 
     public MessageResponseDto register(RegisterRequestDto dto) {
