@@ -81,5 +81,9 @@ public class ApiUrls {
     public static final String UPDATE_INTERNSHIP = "/update-internship";
     public static final String GET_INTERNSHIP = "/get-internship";
     public static final String GET_INTERNSHIP_SUCCESS_POINT = "/get-internship-success-point";
+    public static final String MAIN_WEIGHTS = CARD + "/main-weights";
+    public static final String SAVE_MAIN_WEIGHTS = "/save-main-weights";
+    public static final String UPDATE_MAIN_WEIGHTS = "/update-main-weights";
+    public static final String GET_ALL_MAIN_WEIGHTS = "/get-all-main-weights";
 
 }
