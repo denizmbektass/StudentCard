@@ -1,0 +1,50 @@
+package com.bilgeadam.service;
+
+import com.bilgeadam.dto.request.CreateMainWeightsRequestDto;
+import com.bilgeadam.dto.request.UpdateMainWeightsRequestDto;
+import com.bilgeadam.mapper.IMainWeightsMapper;
+import com.bilgeadam.repository.IMainWeightsRepository;
+import com.bilgeadam.repository.entity.MainWeights;
+import com.bilgeadam.utility.ServiceManager;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Service;
+
+@Service
+public class MainWeightsService extends ServiceManager<MainWeights, String> {
+    private final IMainWeightsRepository mainWeightsRepository;
+    private final IMainWeightsMapper mainWeightsMapper;
+
+    public MainWeightsService(MongoRepository<MainWeights, String> repository, IMainWeightsRepository mainWeightsRepository, IMainWeightsMapper mainWeightsMapper) {
+        super(repository);
+        this.mainWeightsRepository = mainWeightsRepository;
+        this.mainWeightsMapper = mainWeightsMapper;
+    }
+
+    public MainWeights getWeightsByGroupName(String groupName) {
+        MainWeights mainWeights = mainWeightsRepository.findByGroupName(groupName);
+        return mainWeights != null ? mainWeights : new MainWeights();
+    }
+
+    public boolean saveWeights(CreateMainWeightsRequestDto mainWeightsRequestDto) {
+        if (mainWeightsRequestDto == null) {
+            throw new RuntimeException("Hata");
+        }
+        MainWeights mainWeights = mainWeightsRepository.findByGroupName(mainWeightsRequestDto.getGroupName());
+        if (mainWeights == null) {
+            save(mainWeightsMapper.toMainWeights(mainWeightsRequestDto));
+            return true;
+        }
+        return false;
+    }
+    public boolean updateWeights(UpdateMainWeightsRequestDto mainWeightsRequestDto) {
+        if (mainWeightsRequestDto == null) {
+            throw new RuntimeException("Hata");
+        }
+        MainWeights mainWeights = mainWeightsRepository.findByGroupName(mainWeightsRequestDto.getGroupName());
+        if (mainWeights != null) {
+            update(mainWeightsMapper.toMainWeights(mainWeightsRequestDto));
+            return true;
+        }
+        return false;
+    }
+}
