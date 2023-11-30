@@ -1,6 +1,7 @@
 package com.bilgeadam.mapper;
 
 import com.bilgeadam.dto.request.RegisterRequestDto;
+import com.bilgeadam.dto.request.SendStudentsRequestDto;
 import com.bilgeadam.dto.request.UserRequestDto;
 import com.bilgeadam.dto.response.*;
 import com.bilgeadam.repository.entity.User;
@@ -25,4 +26,5 @@ public interface IUserMapper {
     List<FindByGroupNameResponseDto> toFindByGroupNameListResponseDto(final List<User> user);
     User toUserFromRegisterRequestDto(final RegisterRequestDto dto);
     GetNameAndSurnameByIdResponseDto toGetNameAndSurnameByIdResponseDtoFromUser(final User user);
+    User studentToUser(final SendStudentsRequestDto dto);
 }

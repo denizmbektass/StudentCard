@@ -2,6 +2,8 @@ package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.*;
+import com.bilgeadam.exceptions.ErrorType;
+import com.bilgeadam.exceptions.UserServiceException;
 import com.bilgeadam.repository.entity.User;
 import com.bilgeadam.repository.enums.ERole;
 import com.bilgeadam.service.UserService;
@@ -245,6 +247,27 @@ public class UserController {
     @CrossOrigin("*")
     public ResponseEntity<String> getUserProfileImage(@PathVariable String token){
         return ResponseEntity.ok(userService.getProfileImage(token));
+    }
+
+    @Operation(summary = "Öğrencileri fakedatadan çekme işlemi",
+            description = "Belirtilen DTO içindeki bilgilere göre rastgele öğrenciler oluşturur.")
+    @PostMapping("/send-student-and-save")
+    @CrossOrigin("*")
+    public ResponseEntity<Boolean> sendStudentAndSave(@RequestBody List<SendStudentsRequestDto> studentDtos){
+        return ResponseEntity.ok(userService.sendStudentAndSave(studentDtos));
+    }
+
+    @Operation(summary = "Base kısmında öğrenci verileri çekme işlemi",
+            description = "Base kısmındaki öğrenci verilerini çekip mongoya kayıt yapar.")
+    @GetMapping("/get-all-base-students")
+    @CrossOrigin("*")
+    public ResponseEntity<String> getAllBaseStudents() {
+        try {
+            userService.getAllBaseStudents();
+            return ResponseEntity.ok("Öğrenci verileri eklendi");
+        } catch (Exception e) {
+            throw new UserServiceException(ErrorType.INTERNAL_ERROR);
+        }
     }
 
 }
