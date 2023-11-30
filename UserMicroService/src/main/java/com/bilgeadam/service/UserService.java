@@ -6,6 +6,7 @@ import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.UserServiceException;
 import com.bilgeadam.converter.UserConverter;
 import com.bilgeadam.manager.IAuthManager;
+import com.bilgeadam.manager.IBaseManager;
 import com.bilgeadam.mapper.IUserMapper;
 import com.bilgeadam.repository.IUserRepository;
 import com.bilgeadam.repository.enums.ERole;
@@ -27,6 +28,7 @@ public class UserService extends ServiceManager<User, String> {
     private final IAuthManager authManager;
     private final MainGroupService mainGroupService;
     private final GroupService groupService;
+    private final IBaseManager baseManager;
 
 
     public UserService(IUserRepository userRepository,
@@ -34,7 +36,7 @@ public class UserService extends ServiceManager<User, String> {
                        JwtTokenManager jwtTokenManager,
                        MainGroupService mainGroupService,
                        GroupService groupService,
-                       IAuthManager authManager) {
+                       IAuthManager authManager, IBaseManager baseManager) {
         super(userRepository);
         this.userRepository = userRepository;
         this.userConverter = userConverter;
@@ -42,6 +44,7 @@ public class UserService extends ServiceManager<User, String> {
         this.authManager = authManager;
         this.mainGroupService = mainGroupService;
         this.groupService = groupService;
+        this.baseManager = baseManager;
     }
 
     public Boolean updateUser(UserUpdateRequestDto dto) {
@@ -291,5 +294,30 @@ public class UserService extends ServiceManager<User, String> {
     }
 
 
+    public Boolean sendStudentAndSave(List<SendStudentsRequestDto> studentDtos) {
+        if (studentDtos.isEmpty()){
+            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        }
+        for (SendStudentsRequestDto studentDto : studentDtos) {
+            groupService.addSubGroupToGroup(studentDto.getGroupNameList());
+            User user = IUserMapper.INSTANCE.studentToUser(studentDto);
+            user.setRoleList(List.of(ERole.STUDENT));
+            userRepository.save(user);
+        }
+        return true;
+    }
 
+    public Boolean getAllBaseStudents() {
+        List<SendStudentsRequestDto> studentDtos = baseManager.findAllBaseStudents().getBody();
+        if (studentDtos.isEmpty()){
+            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        }
+        for (SendStudentsRequestDto studentDto : studentDtos) {
+            groupService.addSubGroupToGroup(studentDto.getGroupNameList());
+            User user = IUserMapper.INSTANCE.studentToUser(studentDto);
+            user.setRoleList(List.of(ERole.STUDENT));
+            userRepository.save(user);
+        }
+        return true;
+    }
 }
