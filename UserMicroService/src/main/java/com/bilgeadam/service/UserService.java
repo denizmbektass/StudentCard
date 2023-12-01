@@ -293,20 +293,6 @@ public class UserService extends ServiceManager<User, String> {
         return response;
     }
 
-
-    public Boolean sendStudentAndSave(List<SendStudentsRequestDto> studentDtos) {
-        if (studentDtos.isEmpty()){
-            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
-        }
-        for (SendStudentsRequestDto studentDto : studentDtos) {
-            groupService.addSubGroupToGroup(studentDto.getGroupNameList());
-            User user = IUserMapper.INSTANCE.studentToUser(studentDto);
-            user.setRoleList(List.of(ERole.STUDENT));
-            userRepository.save(user);
-        }
-        return true;
-    }
-
     public Boolean getAllBaseStudents() {
         List<SendStudentsRequestDto> studentDtos = baseManager.findAllBaseStudents().getBody();
         if (studentDtos.isEmpty()){
