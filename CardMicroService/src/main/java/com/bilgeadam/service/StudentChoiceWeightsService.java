@@ -30,6 +30,10 @@ public class StudentChoiceWeightsService extends ServiceManager<StudentChoiceWei
         if (choiceWeightsRequestDto == null) {
             throw new RuntimeException("Hata");
         }
+        double totalWeight = choiceWeightsRequestDto.getAlgorithmWeight() + choiceWeightsRequestDto.getCandidateInterviewWeight() + choiceWeightsRequestDto.getTechnicalInterviewWeight() + choiceWeightsRequestDto.getWrittenExamWeight();
+        if (totalWeight > 100) {
+            throw new RuntimeException("Hata");
+        }
         StudentChoiceWeights studentChoiceWeights = studentChoiceWeightsRepository.findByGroupName(choiceWeightsRequestDto.getGroupName());
         if (studentChoiceWeights == null) {
             save(studentChoiceWeightsMapper.toSaveStudentChoiceWeights(choiceWeightsRequestDto));
@@ -40,6 +44,10 @@ public class StudentChoiceWeightsService extends ServiceManager<StudentChoiceWei
 
     public boolean updateWeights(UpdateStudentChoiceWeightsRequestDto choiceWeightsRequestDto) {
         if (choiceWeightsRequestDto == null) {
+            throw new RuntimeException("Hata");
+        }
+        double totalWeight = choiceWeightsRequestDto.getAlgorithmWeight() + choiceWeightsRequestDto.getCandidateInterviewWeight() + choiceWeightsRequestDto.getTechnicalInterviewWeight() + choiceWeightsRequestDto.getWrittenExamWeight();
+        if (totalWeight > 100) {
             throw new RuntimeException("Hata");
         }
         StudentChoiceWeights studentChoiceWeights = studentChoiceWeightsRepository.findByGroupName(choiceWeightsRequestDto.getGroupName());

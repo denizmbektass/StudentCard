@@ -29,15 +29,28 @@ public class MainWeightsService extends ServiceManager<MainWeights, String> {
         if (mainWeightsRequestDto == null) {
             throw new RuntimeException("Hata");
         }
+        double totalWeight = mainWeightsRequestDto.getEducationWeight() + mainWeightsRequestDto.getEmploymentWeight() + mainWeightsRequestDto.getInternshipSuccessWeight()
+                + mainWeightsRequestDto.getStudentChoiceWeight();
+        if (totalWeight > 100) {
+            throw new RuntimeException("Hata");
+        }
+
         MainWeights mainWeights = mainWeightsRepository.findByGroupName(mainWeightsRequestDto.getGroupName());
+
         if (mainWeights == null) {
             save(mainWeightsMapper.toSaveMainWeights(mainWeightsRequestDto));
             return true;
         }
         return false;
     }
+
     public boolean updateWeights(UpdateMainWeightsRequestDto mainWeightsRequestDto) {
         if (mainWeightsRequestDto == null) {
+            throw new RuntimeException("Hata");
+        }
+        double totalWeight = mainWeightsRequestDto.getEducationWeight() + mainWeightsRequestDto.getEmploymentWeight() + mainWeightsRequestDto.getInternshipSuccessWeight()
+                + mainWeightsRequestDto.getStudentChoiceWeight();
+        if (totalWeight > 100) {
             throw new RuntimeException("Hata");
         }
         MainWeights mainWeights = mainWeightsRepository.findByGroupName(mainWeightsRequestDto.getGroupName());
