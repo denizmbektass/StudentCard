@@ -249,14 +249,6 @@ public class UserController {
         return ResponseEntity.ok(userService.getProfileImage(token));
     }
 
-    @Operation(summary = "Öğrencileri fakedatadan çekme işlemi",
-            description = "Belirtilen DTO içindeki bilgilere göre rastgele öğrenciler oluşturur.")
-    @PostMapping("/send-student-and-save")
-    @CrossOrigin("*")
-    public ResponseEntity<Boolean> sendStudentAndSave(@RequestBody List<SendStudentsRequestDto> studentDtos){
-        return ResponseEntity.ok(userService.sendStudentAndSave(studentDtos));
-    }
-
     @Operation(summary = "Base kısmında öğrenci verileri çekme işlemi",
             description = "Base kısmındaki öğrenci verilerini çekip mongoya kayıt yapar.")
     @GetMapping("/get-all-base-students")
