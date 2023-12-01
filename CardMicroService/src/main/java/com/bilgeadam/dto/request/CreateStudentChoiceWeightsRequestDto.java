@@ -13,25 +13,23 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateMainWeightsRequestDto {
-    @NotNull
-    public String mainWeightsId;
+public class CreateStudentChoiceWeightsRequestDto {
     @NotNull
     private String groupName;
     @Min(0)
     @Max(100)
     @NotNull
-    private Double studentChoiceWeight;
+    private Double writtenExamWeight;
     @Min(0)
     @Max(100)
     @NotNull
-    private Double educationWeight;
+    private Double candidateInterviewWeight;
     @Min(0)
     @Max(100)
     @NotNull
-    private Double internshipSuccessWeight;
+    private Double algorithmWeight;
     @Min(0)
     @Max(100)
     @NotNull
-    private Double employmentWeight;
+    private Double technicalInterviewWeight;
 }

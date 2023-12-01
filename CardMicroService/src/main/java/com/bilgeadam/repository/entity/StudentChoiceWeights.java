@@ -12,12 +12,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document
-public class MainWeights extends BaseEntity {
+public class StudentChoiceWeights extends BaseEntity {
     @Id
-    public String mainWeightsId;
+    public String studentChoiceWeightsId;
     public String groupName;
-    public Double studentChoiceWeight = 0.0;
-    public Double educationWeight = 0.0;
-    public Double internshipSuccessWeight = 0.0;
-    public Double employmentWeight = 0.0;
+    public Double writtenExamWeight = 0.0;
+    public Double candidateInterviewWeight = 0.0;
+    public Double algorithmWeight = 0.0;
+    public Double technicalInterviewWeight = 0.0;
 }

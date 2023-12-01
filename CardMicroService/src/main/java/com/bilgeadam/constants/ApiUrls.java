@@ -85,5 +85,8 @@ public class ApiUrls {
     public static final String SAVE_MAIN_WEIGHTS = "/save-main-weights";
     public static final String UPDATE_MAIN_WEIGHTS = "/update-main-weights";
     public static final String GET_ALL_MAIN_WEIGHTS = "/get-all-main-weights";
-
+    public static final String STUDENT_CHOICE_WEIGHTS = CARD + "/student-choice-weights";
+    public static final String SAVE_STUDENT_CHOICE_WEIGHTS = "/save-student-choice-weights";
+    public static final String UPDATE_STUDENT_CHOICE_WEIGHTS = "/update-student-choice-weights";
+    public static final String GET_ALL_STUDENT_CHOICE_WEIGHTS = "/get-all-student-choice-weights";
 }

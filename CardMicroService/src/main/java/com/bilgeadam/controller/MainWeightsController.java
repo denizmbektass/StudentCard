@@ -1,6 +1,7 @@
 package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.CreateMainWeightsRequestDto;
+import com.bilgeadam.dto.request.UpdateMainWeightsRequestDto;
 import com.bilgeadam.repository.entity.MainWeights;
 import com.bilgeadam.service.MainWeightsService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,8 +38,8 @@ public class MainWeightsController {
             description = "Grup adı kullanılarak o gruba ait ağırlıkl bilgilerini günceller.")
     @CrossOrigin("*")
     @PutMapping(UPDATE_MAIN_WEIGHTS)
-    public boolean updateWeightsByGroupName(@RequestBody CreateMainWeightsRequestDto mainWeightsRequestDto) {
-        return mainWeightsService.saveWeights(mainWeightsRequestDto);
+    public boolean updateWeightsByGroupName(@RequestBody UpdateMainWeightsRequestDto mainWeightsRequestDto) {
+        return mainWeightsService.updateWeights(mainWeightsRequestDto);
     }
 
     @Operation(summary = "Bütün Grupların ağırlığını getirme işlemi",

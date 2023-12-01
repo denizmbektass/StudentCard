@@ -31,7 +31,7 @@ public class MainWeightsService extends ServiceManager<MainWeights, String> {
         }
         MainWeights mainWeights = mainWeightsRepository.findByGroupName(mainWeightsRequestDto.getGroupName());
         if (mainWeights == null) {
-            save(mainWeightsMapper.toMainWeights(mainWeightsRequestDto));
+            save(mainWeightsMapper.toSaveMainWeights(mainWeightsRequestDto));
             return true;
         }
         return false;
@@ -42,7 +42,7 @@ public class MainWeightsService extends ServiceManager<MainWeights, String> {
         }
         MainWeights mainWeights = mainWeightsRepository.findByGroupName(mainWeightsRequestDto.getGroupName());
         if (mainWeights != null) {
-            update(mainWeightsMapper.toMainWeights(mainWeightsRequestDto));
+            update(mainWeightsMapper.toUpdateMainWeights(mainWeightsRequestDto));
             return true;
         }
         return false;

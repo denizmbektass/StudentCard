@@ -11,6 +11,6 @@ import org.mapstruct.factory.Mappers;
 public interface IMainWeightsMapper {
     IMainWeightsMapper INSTANCE = Mappers.getMapper(IMainWeightsMapper.class);
 
-    MainWeights toMainWeights(final CreateMainWeightsRequestDto mainWeightsRequestDto);
-    MainWeights toMainWeights(final UpdateMainWeightsRequestDto mainWeightsRequestDto);
+    MainWeights toSaveMainWeights(final CreateMainWeightsRequestDto mainWeightsRequestDto);
+    MainWeights toUpdateMainWeights(final UpdateMainWeightsRequestDto mainWeightsRequestDto);
 }
