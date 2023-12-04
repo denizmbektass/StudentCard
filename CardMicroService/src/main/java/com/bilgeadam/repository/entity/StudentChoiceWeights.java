@@ -16,8 +16,8 @@ public class StudentChoiceWeights extends BaseEntity {
     @Id
     public String studentChoiceWeightsId;
     public String groupName;
-    public Double writtenExamWeight = 0.0;
-    public Double candidateInterviewWeight = 0.0;
-    public Double algorithmWeight = 0.0;
-    public Double technicalInterviewWeight = 0.0;
+    public Double writtenExamWeight = 25.0;
+    public Double candidateInterviewWeight = 25.0;
+    public Double algorithmWeight = 25.0;
+    public Double technicalInterviewWeight = 25.0;
 }
