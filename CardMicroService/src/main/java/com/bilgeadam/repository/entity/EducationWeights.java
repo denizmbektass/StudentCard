@@ -16,10 +16,10 @@ public class EducationWeights extends BaseEntity{
     @Id
     public String educationWeightsId;
     public String groupName;
-    public Double examWeight = 0.0;
-    public Double projectBehaviorWeight = 0.0;
-    public Double assessmentWeight = 0.0;
-    public Double assignmentWeight = 0.0;
-    public Double obligationWeight = 0.0;
-    public Double graduationProjectWeight = 0.0;
+    public Double examWeight = 15.0;
+    public Double projectBehaviorWeight = 10.0;
+    public Double assessmentWeight = 15.0;
+    public Double assignmentWeight = 15.0;
+    public Double obligationWeight = 25.0;
+    public Double graduationProjectWeight = 20.0;
 }
