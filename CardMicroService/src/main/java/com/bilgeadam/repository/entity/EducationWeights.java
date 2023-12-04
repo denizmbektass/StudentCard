@@ -7,17 +7,19 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@SuperBuilder
 @Data
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Document
-public class StudentChoiceWeights extends BaseEntity {
+public class EducationWeights extends BaseEntity{
     @Id
-    public String studentChoiceWeightsId;
+    public String educationWeightsId;
     public String groupName;
-    public Double writtenExamWeight = 25.0;
-    public Double candidateInterviewWeight = 25.0;
-    public Double algorithmWeight = 25.0;
-    public Double technicalInterviewWeight = 25.0;
+    public Double examWeight = 15.0;
+    public Double projectBehaviorWeight = 10.0;
+    public Double assessmentWeight = 15.0;
+    public Double assignmentWeight = 15.0;
+    public Double obligationWeight = 25.0;
+    public Double graduationProjectWeight = 20.0;
 }
