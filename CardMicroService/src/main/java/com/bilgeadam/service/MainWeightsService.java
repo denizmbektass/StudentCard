@@ -2,6 +2,8 @@ package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.CreateMainWeightsRequestDto;
 import com.bilgeadam.dto.request.UpdateMainWeightsRequestDto;
+import com.bilgeadam.exceptions.ErrorType;
+import com.bilgeadam.exceptions.WeightsException;
 import com.bilgeadam.mapper.IMainWeightsMapper;
 import com.bilgeadam.repository.IMainWeightsRepository;
 import com.bilgeadam.repository.entity.MainWeights;
@@ -27,12 +29,12 @@ public class MainWeightsService extends ServiceManager<MainWeights, String> {
 
     public boolean saveWeights(CreateMainWeightsRequestDto mainWeightsRequestDto) {
         if (mainWeightsRequestDto == null) {
-            throw new RuntimeException("Hata");
+            throw new WeightsException(ErrorType.TOTAL_WEIGHTS_FORMAT);
         }
         double totalWeight = mainWeightsRequestDto.getEducationWeight() + mainWeightsRequestDto.getEmploymentWeight() + mainWeightsRequestDto.getInternshipSuccessWeight()
                 + mainWeightsRequestDto.getStudentChoiceWeight();
-        if (totalWeight > 100) {
-            throw new RuntimeException("Hata");
+        if (totalWeight != 100) {
+            throw new WeightsException(ErrorType.TOTAL_WEIGHTS_VALIDATE);
         }
 
         MainWeights mainWeights = mainWeightsRepository.findByGroupName(mainWeightsRequestDto.getGroupName());
@@ -46,12 +48,12 @@ public class MainWeightsService extends ServiceManager<MainWeights, String> {
 
     public boolean updateWeights(UpdateMainWeightsRequestDto mainWeightsRequestDto) {
         if (mainWeightsRequestDto == null) {
-            throw new RuntimeException("Hata");
+            throw new WeightsException(ErrorType.TOTAL_WEIGHTS_FORMAT);
         }
         double totalWeight = mainWeightsRequestDto.getEducationWeight() + mainWeightsRequestDto.getEmploymentWeight() + mainWeightsRequestDto.getInternshipSuccessWeight()
                 + mainWeightsRequestDto.getStudentChoiceWeight();
-        if (totalWeight > 100) {
-            throw new RuntimeException("Hata");
+        if (totalWeight != 100) {
+            throw new WeightsException(ErrorType.TOTAL_WEIGHTS_VALIDATE);
         }
         MainWeights mainWeights = mainWeightsRepository.findByGroupName(mainWeightsRequestDto.getGroupName());
         if (mainWeights != null) {

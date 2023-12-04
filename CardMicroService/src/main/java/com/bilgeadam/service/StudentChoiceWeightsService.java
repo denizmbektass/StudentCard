@@ -2,6 +2,8 @@ package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.CreateStudentChoiceWeightsRequestDto;
 import com.bilgeadam.dto.request.UpdateStudentChoiceWeightsRequestDto;
+import com.bilgeadam.exceptions.ErrorType;
+import com.bilgeadam.exceptions.WeightsException;
 import com.bilgeadam.mapper.IStudentChoiceWeightsMapper;
 import com.bilgeadam.repository.IStudentChoiceWeightsRepository;
 import com.bilgeadam.repository.entity.StudentChoiceWeights;
@@ -28,11 +30,11 @@ public class StudentChoiceWeightsService extends ServiceManager<StudentChoiceWei
 
     public boolean saveWeights(CreateStudentChoiceWeightsRequestDto choiceWeightsRequestDto) {
         if (choiceWeightsRequestDto == null) {
-            throw new RuntimeException("Hata");
+            throw new WeightsException(ErrorType.TOTAL_WEIGHTS_FORMAT);
         }
         double totalWeight = choiceWeightsRequestDto.getAlgorithmWeight() + choiceWeightsRequestDto.getCandidateInterviewWeight() + choiceWeightsRequestDto.getTechnicalInterviewWeight() + choiceWeightsRequestDto.getWrittenExamWeight();
-        if (totalWeight > 100) {
-            throw new RuntimeException("Hata");
+        if (totalWeight != 100) {
+            throw new WeightsException(ErrorType.TOTAL_WEIGHTS_VALIDATE);
         }
         StudentChoiceWeights studentChoiceWeights = studentChoiceWeightsRepository.findByGroupName(choiceWeightsRequestDto.getGroupName());
         if (studentChoiceWeights == null) {
@@ -44,11 +46,11 @@ public class StudentChoiceWeightsService extends ServiceManager<StudentChoiceWei
 
     public boolean updateWeights(UpdateStudentChoiceWeightsRequestDto choiceWeightsRequestDto) {
         if (choiceWeightsRequestDto == null) {
-            throw new RuntimeException("Hata");
+            throw new WeightsException(ErrorType.TOTAL_WEIGHTS_FORMAT);
         }
         double totalWeight = choiceWeightsRequestDto.getAlgorithmWeight() + choiceWeightsRequestDto.getCandidateInterviewWeight() + choiceWeightsRequestDto.getTechnicalInterviewWeight() + choiceWeightsRequestDto.getWrittenExamWeight();
-        if (totalWeight > 100) {
-            throw new RuntimeException("Hata");
+        if (totalWeight != 100) {
+            throw new WeightsException(ErrorType.TOTAL_WEIGHTS_VALIDATE);
         }
         StudentChoiceWeights studentChoiceWeights = studentChoiceWeightsRepository.findByGroupName(choiceWeightsRequestDto.getGroupName());
         if (studentChoiceWeights != null) {
