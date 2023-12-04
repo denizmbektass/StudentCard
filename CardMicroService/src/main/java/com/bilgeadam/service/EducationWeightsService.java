@@ -56,7 +56,7 @@ public class EducationWeightsService extends ServiceManager<EducationWeights, St
 
         EducationWeights educationWeights = educationWeightsRepository.findByGroupName(educationWeightsRequestDto.getGroupName());
 
-        if (educationWeights == null) {
+        if (educationWeights != null) {
             update(educationWeightsMapper.toUpdateEducationWeights(educationWeightsRequestDto));
             return true;
         }

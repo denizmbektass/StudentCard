@@ -91,6 +91,10 @@ public class ApiUrls {
     public static final String GET_ALL_STUDENT_CHOICE_WEIGHTS = "/get-all-student-choice-weights";
     public static final String EDUCATION_WEIGHTS = CARD + "/education-weights";
     public static final String SAVE_EDUCATION_WEIGHTS = "/save-education-weights";
-    public static final String UPDATE_EDUCATION_WEIGHTS = "/update-seducation-weights";
-    public static final String GET_ALL_EDUCATION_WEIGHTS = "/get-all-seducation-weights";
+    public static final String UPDATE_EDUCATION_WEIGHTS = "/update-education-weights";
+    public static final String GET_ALL_EDUCATION_WEIGHTS = "/get-all-education-weights";
+    public static final String INTERNSHIP_SUCCESS_SCORE_WEIGHTS = CARD + "/internship-success-score-weights";
+    public static final String SAVE_INTERNSHIP_SUCCESS_SCORE_WEIGHTS = "/save-internship-success-score-weights";
+    public static final String UPDATE_INTERNSHIP_SUCCESS_SCORE_WEIGHTS = "/update-internship-success-score-weights";
+    public static final String GET_ALL_INTERNSHIP_SUCCESS_SCORE_WEIGHTS = "/get-all-internship-success-score-weights";
 }
