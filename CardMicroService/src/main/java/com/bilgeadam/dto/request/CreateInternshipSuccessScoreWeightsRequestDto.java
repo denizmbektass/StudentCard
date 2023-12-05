@@ -19,17 +19,25 @@ public class CreateInternshipSuccessScoreWeightsRequestDto {
     @Min(0)
     @Max(100)
     @NotNull
-    public Double writtenExamWeight;
+    public Double tasksExamWeight;
     @Min(0)
     @Max(100)
     @NotNull
-    public Double algorithmWeight;
+    public Double teamworkWeight;
     @Min(0)
     @Max(100)
     @NotNull
-    public Double candidateInterviewWeight;
+    public Double personalMotivationWeight;
     @Min(0)
     @Max(100)
     @NotNull
-    public Double technicalInterviewWeight;
+    public Double contributionWeight;
+    @Min(0)
+    @Max(100)
+    @NotNull
+    public Double attendanceWeight;
+    @Min(0)
+    @Max(100)
+    @NotNull
+    public Double teamLeaderWeight;
 }
