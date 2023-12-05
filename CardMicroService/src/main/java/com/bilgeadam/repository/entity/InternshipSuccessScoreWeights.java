@@ -16,8 +16,10 @@ public class InternshipSuccessScoreWeights extends BaseEntity {
     @Id
     public String internshipSuccessScoreWeightsId;
     public String groupName;
-    public Double writtenExamWeight = 25.0;
-    public Double algorithmWeight = 25.0;
-    public Double candidateInterviewWeight = 25.0;
-    public Double technicalInterviewWeight = 25.0;
+    public Double tasksExamWeight = 20.0;
+    public Double teamworkWeight = 20.0;
+    public Double personalMotivationWeight = 15.0;
+    public Double contributionWeight = 10.0;
+    public Double attendanceWeight = 10.0;
+    public Double teamLeaderWeight = 25.0;
 }

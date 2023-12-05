@@ -31,7 +31,7 @@ public class InternshipSuccessScoreWeightsService extends ServiceManager<Interns
         if (createInternshipSuccessScoreWeightsRequestDto == null) {
             throw new WeightsException(ErrorType.TOTAL_WEIGHTS_FORMAT);
         }
-        double totalWeight = createInternshipSuccessScoreWeightsRequestDto.getAlgorithmWeight() + createInternshipSuccessScoreWeightsRequestDto.getTechnicalInterviewWeight() + createInternshipSuccessScoreWeightsRequestDto.getCandidateInterviewWeight() + createInternshipSuccessScoreWeightsRequestDto.getWrittenExamWeight();
+        double totalWeight = createInternshipSuccessScoreWeightsRequestDto.getAttendanceWeight() + createInternshipSuccessScoreWeightsRequestDto.getTeamworkWeight() + createInternshipSuccessScoreWeightsRequestDto.getContributionWeight() + createInternshipSuccessScoreWeightsRequestDto.getTeamLeaderWeight() + createInternshipSuccessScoreWeightsRequestDto.getTeamLeaderWeight() + createInternshipSuccessScoreWeightsRequestDto.getPersonalMotivationWeight();
         if (totalWeight != 100) {
             throw new WeightsException(ErrorType.TOTAL_WEIGHTS_VALIDATE);
         }
@@ -48,7 +48,7 @@ public class InternshipSuccessScoreWeightsService extends ServiceManager<Interns
         if (updateInternshipSuccsessScoreWeightsRequestDto == null) {
             throw new WeightsException(ErrorType.TOTAL_WEIGHTS_FORMAT);
         }
-        double totalWeight = updateInternshipSuccsessScoreWeightsRequestDto.getAlgorithmWeight() + updateInternshipSuccsessScoreWeightsRequestDto.getTechnicalInterviewWeight() + updateInternshipSuccsessScoreWeightsRequestDto.getCandidateInterviewWeight() + updateInternshipSuccsessScoreWeightsRequestDto.getWrittenExamWeight();
+        double totalWeight = updateInternshipSuccsessScoreWeightsRequestDto.getAttendanceWeight() + updateInternshipSuccsessScoreWeightsRequestDto.getTeamworkWeight() + updateInternshipSuccsessScoreWeightsRequestDto.getContributionWeight() + updateInternshipSuccsessScoreWeightsRequestDto.getTeamLeaderWeight() + updateInternshipSuccsessScoreWeightsRequestDto.getTeamLeaderWeight() + updateInternshipSuccsessScoreWeightsRequestDto.getPersonalMotivationWeight();
         if (totalWeight != 100) {
             throw new WeightsException(ErrorType.TOTAL_WEIGHTS_VALIDATE);
         }

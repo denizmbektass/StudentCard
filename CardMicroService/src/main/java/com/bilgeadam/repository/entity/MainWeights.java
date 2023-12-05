@@ -16,8 +16,8 @@ public class MainWeights extends BaseEntity {
     @Id
     public String mainWeightsId;
     public String groupName;
-    public Double studentChoiceWeight = 0.0;
-    public Double educationWeight = 0.0;
-    public Double internshipSuccessWeight = 0.0;
-    public Double employmentWeight = 0.0;
+    public Double studentChoiceWeight = 20.0;
+    public Double educationWeight = 50.0;
+    public Double internshipSuccessWeight = 15.0;
+    public Double employmentWeight = 15.0;
 }
