@@ -2,6 +2,8 @@ package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.AddAbsenceRequestDto;
 import com.bilgeadam.dto.response.ShowUserAbsenceInformationResponseDto;
+import com.bilgeadam.exceptions.CardServiceException;
+import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.service.AbsenceService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +36,18 @@ public class AbsenceController {
         return ResponseEntity.ok(absenceService.showUserAbsenceInformation(token));
     }
 
-
+    @Operation(summary = "BaseApi tarafından yoklama verilerinin çekilmesi işlemi",
+            description = "BaseApi tarafından fake yoklama bilgisi verilerini çekip veritabanına kaydeder.")
+    @GetMapping("/get-all-base-absences")
+    @CrossOrigin("*")
+    public ResponseEntity<String> getAllBaseAbsences(){
+        try {
+            absenceService.getAllBaseAbsences();
+            return ResponseEntity.ok("Yoklama bilgileri veritabanına eklendi.");
+        } catch (Exception e){
+            throw new CardServiceException(ErrorType.INTERNAL_ERROR);
+        }
+    }
 
 
 
