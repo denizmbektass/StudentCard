@@ -97,4 +97,8 @@ public class ApiUrls {
     public static final String SAVE_INTERNSHIP_SUCCESS_SCORE_WEIGHTS = "/save-internship-success-score-weights";
     public static final String UPDATE_INTERNSHIP_SUCCESS_SCORE_WEIGHTS = "/update-internship-success-score-weights";
     public static final String GET_ALL_INTERNSHIP_SUCCESS_SCORE_WEIGHTS = "/get-all-internship-success-score-weights";
+    public static final String EMPLOYMENT_WEIGHTS = CARD + "/employment-weights";
+    public static final String SAVE_EMPLOYMENT_WEIGHTS = "/save-employment-weights";
+    public static final String UPDATE_EMPLOYMENT_WEIGHTS = "/update-employment-weights";
+    public static final String GET_ALL_EMPLOYMENT_WEIGHTS = "/get-all-employment-weights";
 }
