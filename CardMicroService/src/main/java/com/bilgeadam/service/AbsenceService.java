@@ -1,10 +1,11 @@
 package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.AddAbsenceRequestDto;
+import com.bilgeadam.dto.request.SendAbsenceRequestDto;
 import com.bilgeadam.dto.response.ShowUserAbsenceInformationResponseDto;
-import com.bilgeadam.exceptions.AbsenceException;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
+import com.bilgeadam.manager.IBaseManager;
 import com.bilgeadam.mapper.IAbsenceMapper;
 import com.bilgeadam.repository.IAbsenceRepository;
 import com.bilgeadam.repository.entity.Absence;
@@ -17,12 +18,14 @@ import java.util.List;
 public class AbsenceService extends ServiceManager<Absence,String> {
     private final IAbsenceRepository absenceRepository;
     private final JwtTokenManager jwtTokenManager;
+    private final IBaseManager baseManager;
 
     public AbsenceService(IAbsenceRepository absenceRepository,
-                          JwtTokenManager jwtTokenManager) {
+                          JwtTokenManager jwtTokenManager, IBaseManager baseManager) {
         super(absenceRepository);
         this.absenceRepository = absenceRepository;
         this.jwtTokenManager = jwtTokenManager;
+        this.baseManager = baseManager;
     }
 
     public Boolean save(AddAbsenceRequestDto dto){
@@ -61,6 +64,18 @@ public class AbsenceService extends ServiceManager<Absence,String> {
                 .group1AbsenceNumber(sumOfAbsenceHoursGroup1)
                 .group2AbsenceNumber(sumOfAbsenceHoursGroup2)
                 .build();
+    }
+
+    public Boolean getAllBaseAbsences(){
+        List<SendAbsenceRequestDto> absenceRequestDtos = baseManager.findAllAbsences().getBody();
+        if (absenceRequestDtos.isEmpty()){
+            throw new CardServiceException(ErrorType.ABSENCE_NOT_FOUND);
+        }
+        for (SendAbsenceRequestDto dto : absenceRequestDtos){
+            Absence absence = IAbsenceMapper.INSTANCE.fromDtoToAbsence(dto);
+            absenceRepository.save(absence);
+        }
+        return true;
     }
 
 }

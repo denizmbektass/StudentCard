@@ -1,6 +1,7 @@
 package com.bilgeadam.mapper;
 
 import com.bilgeadam.dto.request.AddAbsenceRequestDto;
+import com.bilgeadam.dto.request.SendAbsenceRequestDto;
 import com.bilgeadam.repository.entity.Absence;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.Mapper;
@@ -12,4 +13,6 @@ public interface IAbsenceMapper {
     IAbsenceMapper INSTANCE = Mappers.getMapper(IAbsenceMapper.class);
 
     Absence fromAddAbsenceRequestDtoToAbsence(final AddAbsenceRequestDto dto);
+
+    Absence fromDtoToAbsence(final SendAbsenceRequestDto dto);
 }
