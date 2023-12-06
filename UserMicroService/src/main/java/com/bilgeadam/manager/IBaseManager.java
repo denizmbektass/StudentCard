@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
-@FeignClient(url = "http://localhost:8081/student",name = "user-base")
+@FeignClient(url = "${base-api.url}/student",name = "user-base")
 public interface IBaseManager {
     @GetMapping("/find-all-base-students")
     ResponseEntity<List<SendStudentsRequestDto>> findAllBaseStudents();
