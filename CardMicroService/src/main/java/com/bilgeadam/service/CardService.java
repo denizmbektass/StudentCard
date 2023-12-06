@@ -44,11 +44,16 @@ public class CardService extends ServiceManager<Card, String> {
     private final InternshipTasksService internshipTasksService;
     private final PersonalMotivationService personalMotivationService;
 
+    private final EducationWeightsService educationWeightsService;
+    private final StudentChoiceWeightsService studentChoiceWeightsService;
+    private final InternshipSuccessScoreWeightsService internshipSuccessScoreWeightsService;
+    private final EmploymentWeightsService employmentWeightsService;
+
     public CardService(ICardRepository iCardRepository, JwtTokenManager jwtTokenManager,
                        CardParameterService cardParameterService, AssignmentService assignmentService,
                        ExamService examService, InternshipSuccessRateService intershipService,
                        InterviewService interviewService, AbsenceService absenceService, ProjectService projectService,
-                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, TechnicalInterviewService technicalInterviewService, TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService, ProjectBehaviorService projectBehaviorService, EmploymentInterviewService employmentInterviewService, CareerEducationService careerEducationService, ApplicationProcessService applicationProcessService, DocumentSubmitService documentSubmitService, TeamLeadAssessmentService teamLeadAssessmentService, TeamworkService teamworkService, AttendanceService attendanceService, ContributionService contributionService, InternshipTasksService internshipTasksService, PersonalMotivationService personalMotivationService) {
+                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, TechnicalInterviewService technicalInterviewService, TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService, ProjectBehaviorService projectBehaviorService, EmploymentInterviewService employmentInterviewService, CareerEducationService careerEducationService, ApplicationProcessService applicationProcessService, DocumentSubmitService documentSubmitService, TeamLeadAssessmentService teamLeadAssessmentService, TeamworkService teamworkService, AttendanceService attendanceService, ContributionService contributionService, InternshipTasksService internshipTasksService, PersonalMotivationService personalMotivationService, EducationWeightsService educationWeightsService, StudentChoiceWeightsService studentChoiceWeightsService, InternshipSuccessScoreWeightsService internshipSuccessScoreWeightsService, EmploymentWeightsService employmentWeightsService) {
         super(iCardRepository);
         this.iCardRepository = iCardRepository;
         this.jwtTokenManager = jwtTokenManager;
@@ -77,6 +82,10 @@ public class CardService extends ServiceManager<Card, String> {
         this.contributionService = contributionService;
         this.internshipTasksService = internshipTasksService;
         this.personalMotivationService = personalMotivationService;
+        this.educationWeightsService = educationWeightsService;
+        this.studentChoiceWeightsService = studentChoiceWeightsService;
+        this.internshipSuccessScoreWeightsService = internshipSuccessScoreWeightsService;
+        this.employmentWeightsService = employmentWeightsService;
     }
 
     public CardResponseDto getCardByStudent(String token) {
@@ -155,14 +164,19 @@ public class CardService extends ServiceManager<Card, String> {
         List<Long> examScoreList;
         List<Double> trainerAssessmentScoreList;
         List<Long> projectScoreList;
-
         // İleride ağırlık oranları değiştiği zaman burayı değiştir!!!
-        double examWeight = 0.15;
-        double assignmentWeight = 0.15;
-        double absenceWeight = 0.1;
-        double projectWeight = 0.15;
-        double trainerAssessmentWeight = 0.25;
-        double graduationProjectWeight = 0.20;
+
+        List<String> groupName = jwtTokenManager.getGroupNameFromToken(token);
+        if (groupName.isEmpty()) {
+            throw new RuntimeException("Hata");
+        }
+        EducationWeights educationWeights = educationWeightsService.getEducationWeightsByGroupName(groupName.get(0));
+        double examWeight = educationWeights.getExamWeight() / 100;
+        double assignmentWeight = educationWeights.getAssignmentWeight() / 100;
+        double absenceWeight = educationWeights.getObligationWeight() / 100;
+        double projectWeight = educationWeights.getProjectBehaviorWeight() / 100;
+        double trainerAssessmentWeight = educationWeights.getAssessmentWeight() / 100;
+        double graduationProjectWeight = educationWeights.getGraduationProjectWeight() / 100;
         Double avgAssignmentScore = null;
         Double avgExamScore = null;
         Double avgTrainerAssessmentScore = null;
@@ -321,11 +335,15 @@ public class CardService extends ServiceManager<Card, String> {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
         if (studentId.isEmpty())
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
-
-        Double writtenExamWeight = 0.25;
-        Double algorithmWeight= 0.25;
-        Double candidateInterviewWeight= 0.25;
-        Double technicalInterviewWeight= 0.25;
+        List<String> groupName = jwtTokenManager.getGroupNameFromToken(token);
+        if (groupName.isEmpty()) {
+            throw new RuntimeException("Hata");
+        }
+        StudentChoiceWeights studentChoiceWeights = studentChoiceWeightsService.getWeightsByGroupName(groupName.get(0));
+        Double writtenExamWeight = studentChoiceWeights.getWrittenExamWeight() / 100;
+        Double algorithmWeight = studentChoiceWeights.getAlgorithmWeight() / 100;
+        Double candidateInterviewWeight = studentChoiceWeights.getCandidateInterviewWeight() / 100;
+        Double technicalInterviewWeight = studentChoiceWeights.getTechnicalInterviewWeight() / 100;
         Double writtenExamScore = null;
         Double algorithmScore = null;
         Double candidateInterviewScore = null;
@@ -335,7 +353,7 @@ public class CardService extends ServiceManager<Card, String> {
         Double candidateInterviewSuccessScore = null;
         Double technicalInterviewSuccessScore = null;
         Double totalSuccessScore = 0.0;
-        Double totalWeight=1.0;
+        Double totalWeight = 1.0;
         int count = 0;
         Boolean isExemptFromAlgorithm = false;
         Boolean isExemptFromTechnicalInterview = false;
@@ -344,33 +362,32 @@ public class CardService extends ServiceManager<Card, String> {
         AlgorithmResponseDto algorithm = algorithmService.getAlgorithm(token);
         GetTechnicalInterviewResponseDto technicalInterview = technicalInterviewService.getTechnicalInterview(studentId.get());
 
-        if(technicalInterview != null ){
-            if(technicalInterview.isExempt() == true ) {
+        if (technicalInterview != null) {
+            if (technicalInterview.isExempt() == true) {
                 technicalInterviewWeight = 0.0;
-                 writtenExamWeight = totalWeight/3;
-                 algorithmWeight= totalWeight/3;
-                 candidateInterviewWeight= totalWeight/3;
-                 count++;
-                 isExemptFromTechnicalInterview =true;
+                writtenExamWeight = totalWeight / 3;
+                algorithmWeight = totalWeight / 3;
+                candidateInterviewWeight = totalWeight / 3;
+                count++;
+                isExemptFromTechnicalInterview = true;
             }
         }
-        if(algorithm != null){
-            if(algorithm.isExempt() == true && count == 1) {
-                algorithmWeight =0.0;
-                writtenExamWeight= totalWeight/2;
-                candidateInterviewWeight= totalWeight/2;
-                isExemptFromAlgorithm=true;
-            }else if(algorithm.isExempt() == false && count == 1){
-                writtenExamWeight = totalWeight/3;
-                algorithmWeight= totalWeight/3;
-                candidateInterviewWeight= totalWeight/3;
-            }
-            else if (algorithm.isExempt() == true && count ==0){
+        if (algorithm != null) {
+            if (algorithm.isExempt() == true && count == 1) {
                 algorithmWeight = 0.0;
-                writtenExamWeight = totalWeight/3;
-                technicalInterviewWeight= totalWeight/3;
-                candidateInterviewWeight= totalWeight/3;
-                isExemptFromAlgorithm=true;
+                writtenExamWeight = totalWeight / 2;
+                candidateInterviewWeight = totalWeight / 2;
+                isExemptFromAlgorithm = true;
+            } else if (algorithm.isExempt() == false && count == 1) {
+                writtenExamWeight = totalWeight / 3;
+                algorithmWeight = totalWeight / 3;
+                candidateInterviewWeight = totalWeight / 3;
+            } else if (algorithm.isExempt() == true && count == 0) {
+                algorithmWeight = 0.0;
+                writtenExamWeight = totalWeight / 3;
+                technicalInterviewWeight = totalWeight / 3;
+                candidateInterviewWeight = totalWeight / 3;
+                isExemptFromAlgorithm = true;
             }
         }
         WrittenExam writtenExam = writtenExamService.getWrittenExamByStudentId(studentId.get());
@@ -383,8 +400,8 @@ public class CardService extends ServiceManager<Card, String> {
 
         if (algorithm != null) {
             algorithmScore = algorithm.getFinalScore();
-                algorithmSuccessScore = algorithmScore * algorithmWeight;
-                totalSuccessScore += algorithmSuccessScore;
+            algorithmSuccessScore = algorithmScore * algorithmWeight;
+            totalSuccessScore += algorithmSuccessScore;
         }
 
 
@@ -401,23 +418,28 @@ public class CardService extends ServiceManager<Card, String> {
             technicalInterviewSuccessScore = technicalInterviewScore * technicalInterviewWeight;
             totalSuccessScore += technicalInterviewSuccessScore;
         }
-            return StudentChoiceResponseDto.builder()
-                    .technicalInterviewSuccessScore(technicalInterviewSuccessScore)
-                    .writtenExamSuccessScore(writtenExamSuccessScore)
-                    .algorithmSuccessScore(algorithmSuccessScore)
-                    .candidateInterviewSuccessScore(candidateInterviewSuccessScore)
-                    .algorithmScore(algorithmScore)
-                    .writtenExamScore(writtenExamScore)
-                    .technicalInterviewScore(technicalInterviewScore)
-                    .candidateInterviewScore(candidateInterviewScore)
-                    .totalSuccessScore(totalSuccessScore)
-                    .isExemptFromAlgorithm(isExemptFromAlgorithm)
-                    .isExemptFromTechnicalInterview(isExemptFromTechnicalInterview)
-                    .build();
+        return StudentChoiceResponseDto.builder()
+                .technicalInterviewSuccessScore(technicalInterviewSuccessScore)
+                .writtenExamSuccessScore(writtenExamSuccessScore)
+                .algorithmSuccessScore(algorithmSuccessScore)
+                .candidateInterviewSuccessScore(candidateInterviewSuccessScore)
+                .algorithmScore(algorithmScore)
+                .writtenExamScore(writtenExamScore)
+                .technicalInterviewScore(technicalInterviewScore)
+                .candidateInterviewScore(candidateInterviewScore)
+                .totalSuccessScore(totalSuccessScore)
+                .isExemptFromAlgorithm(isExemptFromAlgorithm)
+                .isExemptFromTechnicalInterview(isExemptFromTechnicalInterview)
+                .build();
     }
 
 
     public EmploymentScoreDetailsDto getEmploymentDetails(String token) {
+        List<String> groupName = jwtTokenManager.getGroupNameFromToken(token);
+        if (groupName.isEmpty()) {
+            throw new RuntimeException("Hata");
+        }
+        EmploymentWeights employmentWeights = employmentWeightsService.getWeightsByGroupName(groupName.get(0));
         Double careerEducationSuccessScore = null;
         Double documentSumbitSuccessScore = null;
         Double applicationProcessSuccessScore = null;
@@ -429,7 +451,7 @@ public class CardService extends ServiceManager<Card, String> {
         }
 
         // Kariyer Eğitimi
-        careerEducationSuccessScore = getCareerEducationSuccessScore(studentId.get());
+        careerEducationSuccessScore = getCareerEducationSuccessScore(studentId.get(), employmentWeights);
         if (careerEducationSuccessScore != null) {
             totalSuccessScore += careerEducationSuccessScore;
         }
@@ -441,7 +463,7 @@ public class CardService extends ServiceManager<Card, String> {
         }
 
         // Başvuru Süreci
-        applicationProcessSuccessScore = getApplicationProcessSuccessScore(studentId.get());
+        applicationProcessSuccessScore = getApplicationProcessSuccessScore(studentId.get(), token);
         if (applicationProcessSuccessScore != null) {
             totalSuccessScore += applicationProcessSuccessScore;
         }
@@ -470,19 +492,19 @@ public class CardService extends ServiceManager<Card, String> {
         }
     }
 
-    public Double getCareerEducationSuccessScore(String studentId) {
+    public Double getCareerEducationSuccessScore(String studentId, EmploymentWeights employmentWeights) {
         Double careerEducation = careerEducationService.getCareerEducationAveragePoint(studentId);
         if (careerEducation == null) {
             return null;
         } else {
-            Double careerEducationWeight = 0.35;
+            Double careerEducationWeight = employmentWeights.getCareerEducationWeight() / 100;
             Double careerEducationSuccessScore = careerEducation * careerEducationWeight;
             return careerEducationSuccessScore;
         }
     }
 
-    public Double getApplicationProcessSuccessScore(String studentId) {
-        Double applicationProcess = applicationProcessService.calculateApplicationProcessRate(studentId);
+    public Double getApplicationProcessSuccessScore(String studentId, String token) {
+        Double applicationProcess = applicationProcessService.calculateApplicationProcessRate(studentId, token);
         if (applicationProcess == null) {
             return null;
         } else {
@@ -499,19 +521,24 @@ public class CardService extends ServiceManager<Card, String> {
         }
     }
 
-    public InternshipSuccessResponseDto getInternshipSuccess(String token){
-        Double teamLeadAssessmentSuccessScore = null;
-        Double teamWorkSuccessScore = null;
-        Double contributionSuccessScore = null;
-        Double attendanceSuccessScore = null;
-        Double personalMotivationSuccessScore = null ;
-        Double tasksSuccessScore = null ;
+    public InternshipSuccessResponseDto getInternshipSuccess(String token) {
+        List<String> groupName = jwtTokenManager.getGroupNameFromToken(token);
+        if (groupName.isEmpty()) {
+            throw new RuntimeException("Hata");
+        }
+        InternshipSuccessScoreWeights internshipSuccessScoreWeights = internshipSuccessScoreWeightsService.getWeightsByGroupName(groupName.get(0));
+        Double teamLeadAssessmentSuccessScore = internshipSuccessScoreWeights.getTeamLeaderWeight() / 100;
+        Double teamWorkSuccessScore = internshipSuccessScoreWeights.getTeamLeaderWeight() / 100;
+        Double contributionSuccessScore = internshipSuccessScoreWeights.getContributionWeight() / 100;
+        Double attendanceSuccessScore = internshipSuccessScoreWeights.getAttendanceWeight() / 100;
+        Double personalMotivationSuccessScore = internshipSuccessScoreWeights.getPersonalMotivationWeight() / 100;
+        Double tasksSuccessScore = internshipSuccessScoreWeights.getTasksWeight() / 100;
         Double teamLeadAssessmentScore = null;
         Double teamWorkScore = null;
         Double contributionScore = null;
         Double attendanceScore = null;
-        Double personalMotivationScore = null ;
-        Double tasksScore = null ;
+        Double personalMotivationScore = null;
+        Double tasksScore = null;
         Double totalSuccessScore = 0.0;
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
         if (studentId.isEmpty()) {
@@ -519,7 +546,7 @@ public class CardService extends ServiceManager<Card, String> {
         }
         //Takım Lideri Görüşü
         GetTeamLeadAssessmentDetailsResponseDto getTeamLeadAssessmentDetailsResponseDto = teamLeadAssessmentService.getTeamLeadsAssessmentDetails(studentId.get());
-        if(getTeamLeadAssessmentDetailsResponseDto != null) {
+        if (getTeamLeadAssessmentDetailsResponseDto != null) {
             teamLeadAssessmentSuccessScore = getTeamLeadAssessmentDetailsResponseDto.getSuccessScore();
             teamLeadAssessmentScore = getTeamLeadAssessmentDetailsResponseDto.getScore();
             totalSuccessScore += teamLeadAssessmentSuccessScore;
@@ -542,22 +569,22 @@ public class CardService extends ServiceManager<Card, String> {
 
         //Katki
         contributionScore = contributionService.calculateAndGetTotalScoreContribution(studentId.get());
-        if(contributionScore != null){
+        if (contributionScore != null) {
             contributionSuccessScore = contributionScore * 0.1;
             totalSuccessScore += contributionSuccessScore;
         }
 
         //Gorevler
         tasksScore = internshipTasksService.getInternShipTaskSuccessPoint(studentId.get());
-        if(tasksScore != null){
-            tasksSuccessScore = tasksScore * 0.20 ;
+        if (tasksScore != null) {
+            tasksSuccessScore = tasksScore * 0.20;
             totalSuccessScore += tasksSuccessScore;
         }
 
         //Kisisel Motivasyonn
         personalMotivationScore = getPersonalMotivation(token);
-        if(personalMotivationScore != null){
-            personalMotivationSuccessScore = personalMotivationScore * 0.15 ;
+        if (personalMotivationScore != null) {
+            personalMotivationSuccessScore = personalMotivationScore * 0.15;
             totalSuccessScore += personalMotivationSuccessScore;
         }
 
@@ -580,9 +607,9 @@ public class CardService extends ServiceManager<Card, String> {
 
     private Double getPersonalMotivation(String token) {
         GetPersonalMotivationResponseDto motivationResponseDto = personalMotivationService.findPersonalMotivation(token);
-        if(motivationResponseDto == null){
+        if (motivationResponseDto == null) {
             return null;
-        }else{
+        } else {
             return motivationResponseDto.getAverage();
         }
 
@@ -590,10 +617,9 @@ public class CardService extends ServiceManager<Card, String> {
 
     private Double getAttendanceScore(String token) {
         GetAttendanceResponseDto getAttendanceResponseDto = attendanceService.getAttendanceInfo(token);
-        if (getAttendanceResponseDto == null){
+        if (getAttendanceResponseDto == null) {
             return null;
-        }
-        else{
+        } else {
             return getAttendanceResponseDto.getAttendanceAverage();
         }
     }
