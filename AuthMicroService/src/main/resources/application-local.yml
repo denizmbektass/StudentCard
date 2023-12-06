@@ -1,0 +1,22 @@
+server:
+  port: 4040
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: root
+  data:
+    mongodb:
+      host: localhost
+      port: 27020
+      username: studentcarduser
+      password: root
+      database: studentcard
+
+rabbitmq:
+  queueActivationLink: activation-link-mail-queue
+  activationLinkBindingKey: activation-link-binding-key
+  registerStudentAndTrainerBindingKey: register-student-and-trainer-binding-key
+  registerStudentAndTrainerQueue: register-student-and-trainer-queue
+  authDirectExchange: auth-direct-exchange

@@ -1,0 +1,19 @@
+server:
+  port: 4043
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: root
+  #  zipkin:
+  #    enabled: true
+  #    base-url: http://localhost:9411
+  #    service:
+  #      name: mail-service
+
+
+rabbitmq:
+  queueActivationLink: activation-link-mail-queue
+  activationLinkBindingKey: activation-link-binding-key
+  registerStudentAndTrainerQueue: register-student-and-trainer-queue
