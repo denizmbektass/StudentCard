@@ -8,10 +8,12 @@ import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.mapper.IApplicationProcessMapper;
 import com.bilgeadam.repository.IApplicationProcessRepository;
 import com.bilgeadam.repository.entity.ApplicationProcess;
+import com.bilgeadam.repository.entity.EmploymentWeights;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,12 +21,14 @@ public class ApplicationProcessService extends ServiceManager<ApplicationProcess
     private final IApplicationProcessRepository applicationProcessRepository;
     private final JwtTokenManager jwtTokenManager;
     private final IApplicationProcessMapper applicationProcessMapper;
+    private final EmploymentWeightsService employmentWeightsService;
 
-    public ApplicationProcessService(IApplicationProcessRepository applicationProcessRepository, JwtTokenManager jwtTokenManager, IApplicationProcessMapper applicationProcessMapper) {
+    public ApplicationProcessService(IApplicationProcessRepository applicationProcessRepository, JwtTokenManager jwtTokenManager, IApplicationProcessMapper applicationProcessMapper, EmploymentWeightsService employmentWeightsService) {
         super(applicationProcessRepository);
         this.applicationProcessRepository = applicationProcessRepository;
         this.jwtTokenManager = jwtTokenManager;
         this.applicationProcessMapper = applicationProcessMapper;
+        this.employmentWeightsService = employmentWeightsService;
     }
 
     public Boolean save(CreateApplicationProcessRequestDto dto) {
@@ -54,10 +58,11 @@ public class ApplicationProcessService extends ServiceManager<ApplicationProcess
         ApplicationProcess applicationProcess = applicationProcessMapper.fromCreateApplicationProcessRequestDtoToApplicationProcess(dto);
         applicationProcess.setStudentId(studentId.get());
         save(applicationProcess);
-        calculateApplicationProcessRate(applicationProcess.getStudentId());
+        calculateApplicationProcessRate(applicationProcess.getStudentId(), dto.getStudentToken());
         return true;
     }
-    public GetApplicationProcessResponseDto findApplicationProcessById(String studentId){
+
+    public GetApplicationProcessResponseDto findApplicationProcessById(String studentId) {
         Optional<ApplicationProcess> optionalApplicationProcess = applicationProcessRepository.findOptionalByStudentId(studentId);
         if (optionalApplicationProcess.isPresent()) {
             GetApplicationProcessResponseDto applicationProcessResponseDto = applicationProcessMapper.fromApplicationProcessToGetApplicationProcessResponseDto(optionalApplicationProcess.get());
@@ -66,6 +71,7 @@ public class ApplicationProcessService extends ServiceManager<ApplicationProcess
             throw new ApplicationProcessException(ErrorType.APPLICATION_PROCESS_NOT_FOUND);
         }
     }
+
     public Boolean update(UpdateApplicationProcessRequestDto dto) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getStudentToken());
         if (studentId.isEmpty()) {
@@ -89,7 +95,7 @@ public class ApplicationProcessService extends ServiceManager<ApplicationProcess
         Optional<ApplicationProcess> optionalApplicationProcess = applicationProcessRepository.findOptionalByStudentId(studentId.get());
         if (optionalApplicationProcess.isPresent()) {
             update(applicationProcessMapper.fromUpdateApplicationProcessRequestDtoToApplicationProcess(dto, optionalApplicationProcess.get()));
-            calculateApplicationProcessRate(optionalApplicationProcess.get().getStudentId());
+            calculateApplicationProcessRate(optionalApplicationProcess.get().getStudentId(), dto.getStudentToken());
             return true;
         }
         throw new ApplicationProcessException(ErrorType.APPLICATION_PROCESS_NOT_FOUND);
@@ -105,11 +111,16 @@ public class ApplicationProcessService extends ServiceManager<ApplicationProcess
         }
     }
 
-    public Double calculateApplicationProcessRate(String studentId) {
-        double weight = 0.05;
+    public Double calculateApplicationProcessRate(String studentId, String token) {
+        List<String> groupName = jwtTokenManager.getGroupNameFromToken(token);
+        if (groupName.isEmpty()) {
+            throw new RuntimeException("Hata");
+        }
+        EmploymentWeights employmentWeights = employmentWeightsService.getWeightsByGroupName(groupName.get(0));
+        double weight = employmentWeights.getApplicationProcessWeight() / 100;
         Optional<ApplicationProcess> optionalApplicationProcess = applicationProcessRepository.findOptionalByStudentId(studentId);
         if (optionalApplicationProcess.isPresent()) {
-            double score = (optionalApplicationProcess.get().getJobApplicationScore() + optionalApplicationProcess.get().getInformationSharingScore() + optionalApplicationProcess.get().getReferralParticipationScore() + optionalApplicationProcess.get().getCompanyFitScore() + optionalApplicationProcess.get().getCareerTeamAssessment()) * weight;
+            double score = ((optionalApplicationProcess.get().getJobApplicationScore() + optionalApplicationProcess.get().getInformationSharingScore() + optionalApplicationProcess.get().getReferralParticipationScore() + optionalApplicationProcess.get().getCompanyFitScore() + optionalApplicationProcess.get().getCareerTeamAssessment()) / 5) * weight;
             optionalApplicationProcess.get().setTotalScore(score);
             save(optionalApplicationProcess.get());
             return score;

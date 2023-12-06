@@ -23,12 +23,14 @@ public class ApplicationProcessController {
     public ResponseEntity<Boolean> save(@RequestBody CreateApplicationProcessRequestDto dto) {
         return ResponseEntity.ok(applicationProcessService.save(dto));
     }
+
     @Operation(summary = "Başvuru süreci bulma işlemi", description = "Mevcut başvuru sürecinı bulma işlemi.")
-    @GetMapping(FIND_BY_ID+ "/{studentId}")
+    @GetMapping(FIND_BY_ID + "/{studentId}")
     @CrossOrigin("*")
-    public ResponseEntity<GetApplicationProcessResponseDto> findApplicationProcessById(@PathVariable String studentId){
+    public ResponseEntity<GetApplicationProcessResponseDto> findApplicationProcessById(@PathVariable String studentId) {
         return ResponseEntity.ok(applicationProcessService.findApplicationProcessById(studentId));
     }
+
     @Operation(summary = "Başvuru süreci güncelleme işlemi", description = "Dto'dan alınan yeni verilerle, eski verilerin güncellenmesi işlemi yapılır.")
     @PutMapping(UPDATE)
     @CrossOrigin("*")
@@ -47,7 +49,7 @@ public class ApplicationProcessController {
             description = "studentId ile tüm degerlere erişilir ve toplam skor bulunur. ")
     @GetMapping(APPLICATION_PROCESS_TOTAL_SCORE + "/{studentId}")
     @CrossOrigin("*")
-    public ResponseEntity<Double> calculateApplicationProcessRate(@PathVariable String studentId) {
-        return ResponseEntity.ok(applicationProcessService.calculateApplicationProcessRate(studentId));
+    public ResponseEntity<Double> calculateApplicationProcessRate(@PathVariable String studentId,@RequestParam String token) {
+        return ResponseEntity.ok(applicationProcessService.calculateApplicationProcessRate(studentId, token));
     }
 }
