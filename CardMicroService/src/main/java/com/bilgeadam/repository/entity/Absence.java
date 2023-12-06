@@ -15,12 +15,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Absence extends BaseEntity {
     @Id
-    private String absenceId;
-    private byte hourOfAbsence;
-    private String userId;
-    private String group;
-    private String groupName;
-    private Long absenceDate;
-    private short totalCourseHours;
-    int hourOfAbsenceLimit;
+    String absenceId;
+    String userId;
+    String group;
+    String groupName;
+    int absenceDateTheo;
+    int hourOfAbsenceTheo;
+    int totalCourseHoursTheo;
+    int hourOfAbsenceLimitTheo;
+    int absenceDatePrac;
+    int hourOfAbsencePrac;
+    int totalCourseHoursPrac;
+    int hourOfAbsenceLimitPrac;
 }
