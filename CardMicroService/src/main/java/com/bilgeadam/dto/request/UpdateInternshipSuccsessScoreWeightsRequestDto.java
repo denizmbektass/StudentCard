@@ -21,7 +21,7 @@ public class UpdateInternshipSuccsessScoreWeightsRequestDto {
     @Min(0)
     @Max(100)
     @NotNull
-    public Double tasksExamWeight;
+    public Double tasksWeight;
     @Min(0)
     @Max(100)
     @NotNull
