@@ -33,7 +33,7 @@ public class AbsenceService extends ServiceManager<Absence,String> {
         return true;
     }
 
-    public ShowUserAbsenceInformationResponseDto showUserAbsenceInformation(String token){
+    /*public ShowUserAbsenceInformationResponseDto showUserAbsenceInformation(String token){
         String userId = jwtTokenManager.getIdFromToken(token).orElseThrow(()->{
             throw new CardServiceException(ErrorType.USER_NOT_EXIST);
         });
@@ -64,6 +64,44 @@ public class AbsenceService extends ServiceManager<Absence,String> {
                 .group1AbsenceNumber(sumOfAbsenceHoursGroup1)
                 .group2AbsenceNumber(sumOfAbsenceHoursGroup2)
                 .build();
+    }*/
+
+    public ShowUserAbsenceInformationResponseDto showUserAbsenceInformation(String token){
+        String userId = jwtTokenManager.getIdFromToken(token).orElseThrow(()->{
+            throw new CardServiceException(ErrorType.USER_NOT_EXIST);
+        });
+        List<Absence> absenceList = absenceRepository.findByUserId(userId);
+        if(absenceList.isEmpty())
+            return null;
+
+        int sumOfAbsenceHoursTheo = 0;
+        int sumOfTotalCourseHoursTheo = 0;
+        int sumOfAbsenceHoursPrac = 0;
+        int sumOfTotalCourseHoursPrac = 0;
+
+        for(Absence absence : absenceList){
+            sumOfAbsenceHoursTheo += absence.getHourOfAbsenceTheo();
+            sumOfTotalCourseHoursTheo += absence.getTotalCourseHoursTheo();
+
+            sumOfAbsenceHoursPrac += absence.getHourOfAbsencePrac();
+            sumOfTotalCourseHoursPrac += absence.getTotalCourseHoursPrac();
+        }
+
+        double absenceSuccessTheo = calculateAbsenceSuccess(sumOfAbsenceHoursTheo, sumOfTotalCourseHoursTheo);
+        double absenceSuccessPrac = calculateAbsenceSuccess(sumOfAbsenceHoursPrac, sumOfTotalCourseHoursPrac);
+
+        String groupName = absenceList.get(0).getGroupName();
+        return ShowUserAbsenceInformationResponseDto.builder()
+                .group1Percentage(absenceSuccessTheo) // Teorik dersler
+                .group2Percentage(absenceSuccessPrac) // Pratik dersler
+                .groupName(groupName)
+                .group1AbsenceNumber(sumOfAbsenceHoursTheo) // Teorik dersler
+                .group2AbsenceNumber(sumOfAbsenceHoursPrac) // Pratik dersler
+                .build();
+    }
+
+    private double calculateAbsenceSuccess(int sumOfAbsenceHours, int sumOfTotalCourseHours){
+        return 100 * ((double) (sumOfTotalCourseHours - sumOfAbsenceHours) / sumOfTotalCourseHours);
     }
 
     public Boolean getAllBaseAbsences(){

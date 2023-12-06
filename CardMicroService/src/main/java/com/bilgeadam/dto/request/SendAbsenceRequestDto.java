@@ -10,12 +10,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class SendAbsenceRequestDto {
-    private String absenceId;
-    private int hourOfAbsence;
-    private String userId;
-    private String group;
-    private String groupName;
-    private int absenceDate;
-    private int totalCourseHours;
-    int hourOfAbsenceLimit;
+    String absenceId;
+    String userId;
+    String group;
+    String groupName;
+    int absenceDateTheo;
+    int hourOfAbsenceTheo;
+    int totalCourseHoursTheo;
+    int hourOfAbsenceLimitTheo;
+    int absenceDatePrac;
+    int hourOfAbsencePrac;
+    int totalCourseHoursPrac;
+    int hourOfAbsenceLimitPrac;
 }
