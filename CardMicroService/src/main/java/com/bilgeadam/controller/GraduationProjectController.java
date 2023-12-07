@@ -9,6 +9,7 @@ import com.bilgeadam.service.GraduationProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import static com.bilgeadam.constants.ApiUrls.*;
@@ -23,6 +24,7 @@ public class GraduationProjectController {
             description = "Belirtilen DTO kullanılarak Bitirme projesi oluşturur.")
     @CrossOrigin("*")
     @PostMapping(CREATE)
+    @PreAuthorize("hasAnyAuthority('master_trainer:write','assistant_trainer:write')")
     public ResponseEntity<MessageResponse> createGraduationProject(@RequestBody @Valid CreateGraduationProjectRequestDto dto){
         return  ResponseEntity.ok(graduationProjectService.createGradutainProject(dto));
     }
@@ -30,6 +32,7 @@ public class GraduationProjectController {
             description = "Belirtilen token kullanılarak Bitirme projesini getirir.")
     @GetMapping(FIND_GRADUATION_PROJECT+"/{token}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<GetGraduationProjectResponseDto> findGraduationProject(@PathVariable String token){
         return  ResponseEntity.ok(graduationProjectService.findGraduationProject(token));
     }
@@ -38,6 +41,7 @@ public class GraduationProjectController {
             description = "Belirtilen token kullanılarak Bitirme projesini günceller.")
     @PutMapping(UPDATE)
     @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('master_trainer:write','assistant_trainer:write')")
     public ResponseEntity<MessageResponse> updateProject(@RequestBody @Valid UpdateGraduationProjectRequestDto dto){
         return  ResponseEntity.ok(graduationProjectService.updateProject(dto));
     }
@@ -45,6 +49,7 @@ public class GraduationProjectController {
             description = "Belirtilen token kullanılarak Bitirme projesini silinir.")
     @DeleteMapping (DELETE+"/{token}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('master_trainer:write','assistant_trainer:write')")
     public ResponseEntity<MessageResponse> deleteProject(@PathVariable String token){
         return  ResponseEntity.ok(graduationProjectService.deleteProject(token));
     }

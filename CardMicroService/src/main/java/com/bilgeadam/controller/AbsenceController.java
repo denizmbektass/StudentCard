@@ -18,11 +18,11 @@ import static com.bilgeadam.constants.ApiUrls.*;
 @RequestMapping(ABSENCE)
 public class AbsenceController {
     private final AbsenceService absenceService;
-    //@PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Kayıt işlemi",
             description = "Belirtilen DTO ile bir kaydı kaydetmek için kullanılır.")
     @CrossOrigin("*")
     @PostMapping(SAVE)
+    @PreAuthorize("hasAnyAuthority('master_trainer:write','assistant_trainer:write')")
     public ResponseEntity<Boolean> save(@RequestBody AddAbsenceRequestDto dto){
         return ResponseEntity.ok(absenceService.save(dto));
     }
@@ -32,6 +32,7 @@ public class AbsenceController {
             description = "Belirtilen token kullanılarak kullanıcının izin bilgilerini görüntüler.")
     @CrossOrigin("*")
     @GetMapping("/show-user-absence-information/{token}")
+    @PreAuthorize("hasAnyAuthority('read')")
     public ResponseEntity<ShowUserAbsenceInformationResponseDto> showUserAbsenceInformation(@PathVariable String token){
         return ResponseEntity.ok(absenceService.showUserAbsenceInformation(token));
     }
@@ -40,6 +41,7 @@ public class AbsenceController {
             description = "BaseApi tarafından fake yoklama bilgisi verilerini çekip veritabanına kaydeder.")
     @GetMapping("/get-all-base-absences")
     @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('read')")
     public ResponseEntity<String> getAllBaseAbsences(){
         try {
             absenceService.getAllBaseAbsences();

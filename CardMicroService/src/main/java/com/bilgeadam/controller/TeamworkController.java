@@ -7,6 +7,7 @@ import com.bilgeadam.service.TeamworkService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,6 +26,7 @@ public class TeamworkController {
                     "sayısını döner (0 ya da 1)")
     @GetMapping(GET_TEAMWORK_COUNT + "/{studentId}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<Integer> getTeamworkCount(@PathVariable @NotEmpty String studentId) {
         return ResponseEntity.ok(teamworkService.getTeamworkCount(studentId));
     }
@@ -33,6 +35,7 @@ public class TeamworkController {
             "sayfasında yapılan ekip çalışması kaydetme işlemidir.")
     @PostMapping(SAVE_TEAMWORK)
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('workshop_team:write')")
     public ResponseEntity<Boolean> saveTeamwork(@Valid @RequestBody SaveTeamworkRequestDto dto) {
         return ResponseEntity.ok(teamworkService.saveTeamwork(dto));
     }
@@ -41,6 +44,7 @@ public class TeamworkController {
             "Ekip Çalışması sayfasında öğrencinin daha önce girilmiş ekip çalışması varsa üstüne kaydeder")
     @PutMapping(UPDATE_TEAMWORK)
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('workshop_team:write')")
     public ResponseEntity<Boolean> updateTeamwork(@Valid @RequestBody UpdateTeamworkRequestDto dto) {
         return ResponseEntity.ok(teamworkService.updateTeamwork(dto));
     }
@@ -49,6 +53,7 @@ public class TeamworkController {
             "Ekip Çalışması başlığında öğrencinin önceden kaydedilmiş ekip çalışması puan değerleri varsa getirir")
     @GetMapping(GET_TEAMWORK + "/{studentId}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<GetTeamworkResponseDto> getTeamwork(@PathVariable @NotEmpty String studentId) {
         return ResponseEntity.ok(teamworkService.getTeamwork(studentId));
     }
@@ -57,6 +62,7 @@ public class TeamworkController {
             "Ekip Çalışması sayfasında öğrencinin ekip çalışması başarı puan bilgisini döner")
     @GetMapping(GET_TEAMWORK_SUCCESS_POINT + "/{studentId}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<Double> getTeamworkSuccessPoint(@PathVariable @NotEmpty String studentId) {
         return ResponseEntity.ok(teamworkService.getTeamworkSuccessPoint(studentId));
     }

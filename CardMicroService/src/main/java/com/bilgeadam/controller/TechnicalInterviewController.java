@@ -8,6 +8,7 @@ import com.bilgeadam.service.TechnicalInterviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,6 +27,7 @@ public class TechnicalInterviewController {
                     "HTTP POST isteği ile gönderilir. Başarılı olursa true, aksi takdirde hata döner.")
     @PostMapping(SAVE)
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('workshop_team:write')")
     public ResponseEntity<Boolean> saveTechnicalInterview(@RequestBody @Valid SaveTechnicalInterviewRequestDto dto) {
         return ResponseEntity.ok(technicalInterviewService.saveTechnicalInterview(dto));
     }
@@ -35,6 +37,7 @@ public class TechnicalInterviewController {
                     " URL'de yer alan 'studentId' parametresi ile belirtilir.")
     @GetMapping(GET_TECHNICAL_INTERVIEW + "/{studentId}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<GetTechnicalInterviewResponseDto> getTechnicalInterview(@PathVariable String studentId) {
         return ResponseEntity.ok(technicalInterviewService.getTechnicalInterview(studentId));
     }
@@ -44,6 +47,7 @@ public class TechnicalInterviewController {
                     "HTTP PUT isteği ile gönderilir. Başarılı olursa true, aksi takdirde hata döner.")
     @PutMapping(UPDATE)
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('workshop_team:write')")
     public ResponseEntity<Boolean> updateTechnicalInterview(@RequestBody @Valid UpdateTechnicalInterviewRequestDto dto) {
         return ResponseEntity.ok(technicalInterviewService.updateTechnicalInterview(dto));
     }
@@ -53,6 +57,7 @@ public class TechnicalInterviewController {
                     "Öğrencinin kimliği, URL'de yer alan 'studentId' parametresi ile belirtilir.")
     @GetMapping(GET_TECHNICAL_INTERVIEW_NUMBER + "/{studentId}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<Integer> getTechnicalInterviewNumber(@PathVariable String studentId) {
         return ResponseEntity.ok(technicalInterviewService.getTechnicalInterviewNumber(studentId));
     }
@@ -62,6 +67,7 @@ public class TechnicalInterviewController {
                     " Öğrencinin kimliği, URL'de yer alan 'studentId' parametresi ile belirtilir.")
     @GetMapping(GET_TECHNICAL_INTERVIEW_AVERAGE_POINT + "/{studentId}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<Double> getTechnicalInterviewAveragePoint(@PathVariable String studentId) {
         return ResponseEntity.ok(technicalInterviewService.getTechnicalInterviewAveragePoint(studentId));
     }
@@ -70,6 +76,7 @@ public class TechnicalInterviewController {
             description = "Öğrencinin teknik mülakat verilerini silmek için kullanılır. İlgili teknik mülakat ID'si, " +
                     "HTTP DELETE isteği ile gönderilir. Başarılı olursa true, aksi takdirde hata döner.")
     @DeleteMapping(DELETE)
+    @PreAuthorize("hasAuthority('workshop_team:write')")
     public ResponseEntity<Boolean> deleteTechnicalInterview(@PathVariable String technicalInterviewId) {
         boolean result = technicalInterviewService.deleteTechnicalInterview(technicalInterviewId);
         return ResponseEntity.ok(result);
@@ -79,6 +86,7 @@ public class TechnicalInterviewController {
             description = "Öğrencinin teknik mülakat verilerini oluşturmak için kullanılır. İlgili verileri içeren CreateTechnicalInterviewRequestDto nesnesi, " +
                     "HTTP POST isteği ile gönderilir. Başarılı olursa true, aksi takdirde hata döner.")
     @PostMapping(CREATE)
+    @PreAuthorize("hasAuthority('workshop_team:write')")
     public ResponseEntity<Boolean> createTechnicalInterview(@RequestBody CreateTechnicalInterviewRequestDto dto) {
         boolean result = technicalInterviewService.createTechnicalInterview(dto);
         return ResponseEntity.ok(result);

@@ -9,6 +9,7 @@ import com.bilgeadam.service.InternshipTasksService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -27,6 +28,7 @@ public class InternshipTasksController {
             "sayfasında yapılan görevler kaydetme işlemidir.")
     @PostMapping(SAVE_INTERNSHIP_TASK)
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('workshop_team:write')")
     public ResponseEntity<Boolean> saveTeamwork(@Valid @RequestBody SaveInternshipTaskRequestDto dto) {
         System.out.println(dto);
         return ResponseEntity.ok(internshipTasksService.saveInternshipTask(dto));
@@ -37,6 +39,7 @@ public class InternshipTasksController {
                     "sayısını döner (0 ya da 1)")
     @GetMapping(GET_INTERNSHIP_TASK_COUNT + "/{studentId}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<Integer> getInternshipTaskCount(@PathVariable @NotEmpty String studentId) {
         return ResponseEntity.ok(internshipTasksService.getInternshipTaskCount(studentId));
     }
@@ -45,6 +48,7 @@ public class InternshipTasksController {
             "Ekip Çalışması sayfasında öğrencinin daha önce girilmiş ekip çalışması varsa üstüne kaydeder")
     @PutMapping(UPDATE_INTERNSHIP)
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('workshop_team:write')")
     public ResponseEntity<Boolean> updateInternShipTask(@Valid @RequestBody SaveInternshipTaskRequestDto dto) {
         return ResponseEntity.ok(internshipTasksService.updateInternshipTask(dto));
     }
@@ -53,6 +57,7 @@ public class InternshipTasksController {
             "Görevler başlığında öğrencinin önceden kaydedilmiş ekip çalışması puan değerleri varsa getirir")
     @GetMapping(GET_INTERNSHIP + "/{studentId}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<GetInternshipTaskResponseDto> getInternShipTask(@PathVariable @NotEmpty String studentId) {
         return ResponseEntity.ok(internshipTasksService.getInternshipTask(studentId));
     }
@@ -61,6 +66,7 @@ public class InternshipTasksController {
             "Görevler sayfasında öğrencinin ekip çalışması başarı puan bilgisini döner")
     @GetMapping(GET_INTERNSHIP_SUCCESS_POINT + "/{studentId}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<Double> getInternShipTaskSuccessPoint(@PathVariable @NotEmpty String studentId) {
         return ResponseEntity.ok(internshipTasksService.getInternShipTaskSuccessPoint(studentId));
     }

@@ -8,6 +8,7 @@ import com.bilgeadam.service.PersonalMotivationService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,6 +27,7 @@ public class PersonalMotivationController {
             description = "Belirtilen öğrenci kimliği kullanılarak sınavlar için ortalama hesaplar.")
     @PostMapping(CREATE)
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('internship_team:write')")
     public ResponseEntity<MessageResponse> createPersonalMotivation(@RequestBody @Valid CreatePersonalMotivationRequestDto dto){
         return ResponseEntity.ok(personalMotivationService.createPersonalMotivation(dto));
     }
@@ -34,6 +36,7 @@ public class PersonalMotivationController {
             description = "Belirtilen öğrenci kimliği kullanılarak sınavlar için ortalama hesaplar.")
     @PutMapping(UPDATE)
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('internship_team:write')")
     public ResponseEntity<MessageResponse> updatePersonalMotivation(@RequestBody @Valid UpdatePersonalMotivationRequestDto dto){
         return  ResponseEntity.ok(personalMotivationService.updatePersonalMotivation(dto));
     }
@@ -41,6 +44,7 @@ public class PersonalMotivationController {
             description = "Belirtilen davranış puanlama kimliği kullanılarak bir davranış puanlarını siler.")
     @DeleteMapping(DELETE+"/{token}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('internship_team:write')")
     public ResponseEntity<Boolean> deletePersonalMotivation(@PathVariable String token){
         return ResponseEntity.ok(personalMotivationService.deletePersonalMotivation(token));
     }
@@ -49,6 +53,7 @@ public class PersonalMotivationController {
             description = "Belirtilen token kullanılarak proje davranış puanlarını getirir.")
     @GetMapping(FIND_PERSONAL_MOTIVATION+"/{token}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<GetPersonalMotivationResponseDto> findPersonalMotivation(@PathVariable String token){
         return  ResponseEntity.ok(personalMotivationService.findPersonalMotivation(token));
     }
