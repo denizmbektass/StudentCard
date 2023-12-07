@@ -21,49 +21,37 @@ services:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: root
 
-  # Microservice 1
+  # ApiGatewayService
   microservice1:
-    image: your-spring-boot-image
-    container_name: microservice1
+    image: gateway
+    container_name: gateway
     ports:
-      - "8081:8081"
-    environment:
-      SPRING_DATA_MONGODB_URI: mongodb://root:example@mongo:27017/microservice1db
+      - "80:80"
 
-  # Microservice 2
+  # AuthMicroService
   microservice2:
-    image: your-spring-boot-image
-    container_name: microservice2
+    image: auth
+    container_name: auth
     ports:
-      - "8082:8082"
-    environment:
-      SPRING_DATA_MONGODB_URI: mongodb://root:example@mongo:27017/microservice2db
+      - "4040:4040"
 
-  # Microservice 3
+  # UserMicroService
   microservice3:
-    image: your-spring-boot-image
-    container_name: microservice3
+    image: user
+    container_name: user
     ports:
-      - "8083:8083"
-    environment:
-      SPRING_DATA_MONGODB_URI: mongodb://root:example@mongo:27017/microservice3db
+      - "4041:4041"
 
-  # Microservice 4
+  # CardMicroService
   microservice4:
-    image: your-spring-boot-image
-    container_name: microservice4
+    image: card
+    container_name: card
     ports:
-      - "8084:8084"
-    environment:
-      SPRING_DATA_MONGODB_URI: mongodb://root:example@mongo:27017/microservice4db
+      - "4042:4042"
 
-  # Microservice 5
+  # MailService
   microservice5:
-    image: your-spring-boot-image
-    container_name: microservice5
+    image: mail
+    container_name: mail
     ports:
-      - "8085:8085"
-    environment:
-      SPRING_DATA_MONGODB_URI: mongodb://root:example@mongo:27017/microservice5db
-
-
+      - "4043:4043"
