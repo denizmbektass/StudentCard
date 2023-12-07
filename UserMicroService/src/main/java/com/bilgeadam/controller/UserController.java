@@ -5,7 +5,6 @@ import com.bilgeadam.dto.response.*;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.UserServiceException;
 import com.bilgeadam.repository.entity.User;
-import com.bilgeadam.repository.enums.ERole;
 import com.bilgeadam.service.UserService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;

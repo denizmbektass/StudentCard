@@ -9,6 +9,7 @@ import com.bilgeadam.service.TrainerAssessmentCoefficientsService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,6 +27,7 @@ public class TrainerAssessmentCoefficientsController {
             description = "Belirtilen DTO kullanılarak Eğitmen görüş oluşturur.")
     @CrossOrigin("*")
     @PostMapping(CREATE)
+    @PreAuthorize("hasAnyAuthority('master_trainer:write','assistant_trainer:write')")
     public ResponseEntity<MessageResponse> createTrainerAssessmentCoefficients(@RequestBody @Valid SaveTrainerAssessmentRequestDto dto){
         return  ResponseEntity.ok(trainerAssessmentCoefficientsService.createTrainerAssessmentCoefficients(dto));
     }
@@ -33,6 +35,7 @@ public class TrainerAssessmentCoefficientsController {
             description = "Belirtilen eğitmen değerlendirme puan katsayılarının güncelleme isteği DTO'su kullanılarak bir eğitmen değerlendirmesini kaydeder.")
     @PutMapping (UPDATE)
     @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('master_trainer:write','assistant_trainer:write')")
     public ResponseEntity<TrainerAssessmentCoefficients> updateTrainerAssessmentCoefficients(@RequestBody @Valid UpdateTrainerAssessmentCoefficientsRequestDto dto){
         return ResponseEntity.ok(trainerAssessmentCoefficientsService.updateTrainerAssessmentCoefficients(dto));
     }
@@ -41,6 +44,7 @@ public class TrainerAssessmentCoefficientsController {
             description = "Belirtilen eğitmen değerlendirme puan katsayılarının güncelleme isteği DTO'su kullanılarak bir eğitmen değerlendirme katsayısını siler.")
     @DeleteMapping(DELETE+"/{token}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('master_trainer:write','assistant_trainer:write')")
     public ResponseEntity<MessageResponse> deleteTrainerAssessmentCoefficients(@PathVariable String token){
         return ResponseEntity.ok(trainerAssessmentCoefficientsService.deleteTrainerAssessmentCoefficients(token));
     }
@@ -49,6 +53,7 @@ public class TrainerAssessmentCoefficientsController {
             description = "Belirtilen token kullanılarak Eğitmen görüşünü getirir.")
     @GetMapping(FIND_ALL+"/{token}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<GetTrainerAssessmentCoefficientsResponseDto> findTrainerAssessmentCoefficients(@PathVariable String token){
         return  ResponseEntity.ok(trainerAssessmentCoefficientsService.getTrainerAssessmentCoefficientsResponseDto(token));
     }

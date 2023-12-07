@@ -8,6 +8,7 @@ import com.bilgeadam.service.ProjectBehaviorService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,6 +25,7 @@ public class ProjectBehaviorController {
             description = "Belirtilen öğrenci kimliği kullanılarak sınavlar için ortalama hesaplar.")
     @PostMapping(CREATE)
     @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('master_trainer:write','assistant_trainer:write')")
     public ResponseEntity<CreateProjectBehaviorScoreResponseDto> createProjectBehaviorScore(@RequestBody @Valid CreatProjectBehaviorScoreRequestDto dto){
         return ResponseEntity.ok(projectBehaviorService.createProjectBehaviorScore(dto));
     }
@@ -32,6 +34,7 @@ public class ProjectBehaviorController {
             description = "Belirtilen öğrenci kimliği kullanılarak sınavlar için ortalama hesaplar.")
     @PutMapping(UPDATE)
     @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('master_trainer:write','assistant_trainer:write')")
     public ResponseEntity<MessageResponse> updateProjectBehavior(@RequestBody @Valid UpdateProjectBehaviorRequestDto dto){
         return  ResponseEntity.ok(projectBehaviorService.updateProjectBehavior(dto));
     }
@@ -39,6 +42,7 @@ public class ProjectBehaviorController {
             description = "Belirtilen davranış puanlama kimliği kullanılarak bir davranış puanlarını siler.")
     @DeleteMapping(DELETE+"/{token}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('master_trainer:write','assistant_trainer:write')")
     public ResponseEntity<Boolean> deleteProjectBehavior(@PathVariable String token){
         return ResponseEntity.ok(projectBehaviorService.deleteProjectBehavior(token));
     }
@@ -47,6 +51,7 @@ public class ProjectBehaviorController {
             description = "Belirtilen token kullanılarak proje davranış puanlarını getirir.")
     @GetMapping(FIND_PROJECT_BEHAVIOR+"/{token}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<GetProjectBehaviorResponseDto> findProjectBehavior(@PathVariable String token){
         return  ResponseEntity.ok(projectBehaviorService.findProjectBehavior(token));
     }

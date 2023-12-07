@@ -1,7 +1,6 @@
 package com.bilgeadam.dto.response;
 
 import com.bilgeadam.repository.enums.ERole;
-import com.bilgeadam.repository.enums.EStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

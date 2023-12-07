@@ -8,6 +8,7 @@ import com.bilgeadam.service.EmploymentInterviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,6 +26,7 @@ public class EmploymentInterviewController {
             description = "Belirtilen DTO kullanılarak bir Mülakat olusturur.")
     @PostMapping(CREATE)
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('employment_team:write')")
     public ResponseEntity<MessageResponse> createEmploymentInterview(@RequestBody @Valid CreateEmploymentInterviewRequestDto dto){
         return ResponseEntity.ok(employmentInterviewService.createEmploymentInterview(dto));
     }
@@ -32,6 +34,7 @@ public class EmploymentInterviewController {
             description = "Belirtilen DTO kullanılarak  Mülakat güncellenir.")
     @PutMapping(UPDATE)
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('employment_team:write')")
     public ResponseEntity<MessageResponse> updateEmploymentInterview(@RequestBody @Valid UpdateEmploymentInterviewRequestDto dto){
         return  ResponseEntity.ok(employmentInterviewService.updateEmploymentInterview(dto));
     }
@@ -39,6 +42,7 @@ public class EmploymentInterviewController {
             description = "Belirtilen token kullanılarak  var olan mülakat silinir.")
     @DeleteMapping(DELETE+"/{token}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('employment_team:write')")
     public ResponseEntity<MessageResponse> deleteEmploymentInterview(@PathVariable String token){
         return ResponseEntity.ok(employmentInterviewService.deleteEmploymentInterview(token));
     }
@@ -46,6 +50,7 @@ public class EmploymentInterviewController {
             description = "Belirtilen token kullanılarak  var olan mülakatlari getirir.")
     @GetMapping(GET_EMPLOYMENT_INTERVIEW+"/{token}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<GetEmploymentInterviewResponseDto> getEmploymentInterview(@PathVariable String token){
         return ResponseEntity.ok(employmentInterviewService.getEmploymentInterview(token));
     }

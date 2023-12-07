@@ -2,7 +2,6 @@ package com.bilgeadam.repository;
 
 import com.bilgeadam.repository.entity.User;
 import com.bilgeadam.repository.enums.ERole;
-import com.bilgeadam.repository.enums.EStatus;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
