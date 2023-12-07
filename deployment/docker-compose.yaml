@@ -3,7 +3,7 @@ services:
   # MongoDB service
   mongo:
     image: mongo
-    container_name: mongodb
+    container_name: sc-mongodb
     ports:
       - "27020:27017"
     environment:
@@ -12,8 +12,8 @@ services:
 
   # RabbitMQ service
   rabbitmq:
-    image: "rabbitmq:3-management"
-    container_name: rabbitmq
+    image: "rabbitmq"
+    container_name: sc-rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"

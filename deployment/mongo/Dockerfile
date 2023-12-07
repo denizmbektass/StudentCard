@@ -1,8 +1,5 @@
 FROM mongo:latest
 
-# ENV MONGO_INITDB_ROOT_USERNAME=studentcarduser
-# ENV MONGO_INITDB_ROOT_PASSWORD=root
-
 EXPOSE 27020
 
 CMD ["mongod"]
