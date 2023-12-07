@@ -14,4 +14,4 @@ spring:
       password: root
       database: studentcard
 base-api:
-  url: http://localhost:8081
+  url: http://localhost:80
