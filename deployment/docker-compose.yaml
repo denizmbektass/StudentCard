@@ -2,7 +2,7 @@ version: '3'
 services:
   # MongoDB service
   mongo:
-    image: mongo
+    image: mongo:latest
     container_name: sc-mongodb
     ports:
       - "27020:27017"
@@ -12,7 +12,7 @@ services:
 
   # RabbitMQ service
   rabbitmq:
-    image: "rabbitmq"
+    image: rabbitmq:latest
     container_name: sc-rabbitmq
     ports:
       - "5672:5672"
