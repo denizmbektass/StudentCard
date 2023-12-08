@@ -2,7 +2,7 @@ server:
   port: 4040
 spring:
   rabbitmq:
-    host: localhost
+    host: rabbitmq
     port: 5672
     username: user
     password: root
@@ -13,7 +13,7 @@ spring:
   #      name: auth-service
   data:
     mongodb:
-      host: localhost
+      host: mongo
       port: 27020
       username: studentcarduser
       password: root

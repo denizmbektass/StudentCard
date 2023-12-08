@@ -3,7 +3,7 @@ server:
 spring:
   data:
     mongodb:
-      host: localhost
+      host: mongo
       port: 27020
       username: studentcarduser
       password: root
