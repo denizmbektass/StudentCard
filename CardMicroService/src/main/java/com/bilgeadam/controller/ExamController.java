@@ -10,6 +10,7 @@ import com.bilgeadam.service.ExamService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
@@ -28,6 +29,7 @@ public class ExamController {
     //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @CrossOrigin("*")
     @PostMapping(CREATE)
+    @PreAuthorize("hasAnyAuthority('master_trainer:write','assistant_trainer:write')")
     public ResponseEntity<MessageResponse> createExam(@RequestBody @Valid CreateExamRequestDto dto){
         return  ResponseEntity.ok(examService.createExam(dto));
     }
@@ -37,6 +39,7 @@ public class ExamController {
             description = "Belirtilen token kullanılarak tüm sınavları alır.")
     @GetMapping(FIND_ALL+"/{token}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<List<ExamResponseDto>> findAllExams(@PathVariable String token){
         return  ResponseEntity.ok(examService.findAllExams(token));
     }
@@ -47,6 +50,7 @@ public class ExamController {
     //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @PutMapping(UPDATE)
     @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('master_trainer:write','assistant_trainer:write')")
     public ResponseEntity<MessageResponse> updateExam(@RequestBody UpdateExamRequestDto dto){
         return  ResponseEntity.ok(examService.updateExam(dto));
     }
@@ -57,6 +61,7 @@ public class ExamController {
     //@PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANT_TRAINER','MASTER_TRAINER')")
     @DeleteMapping(DELETE+"/{examId}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('master_trainer:write','assistant_trainer:write')")
     public ResponseEntity<MessageResponse> deleteExam(@PathVariable String examId){
         examService.deleteExam(examId);
         return ResponseEntity.ok(new MessageResponse("Sınav başarıyla silindi.."));
@@ -67,6 +72,7 @@ public class ExamController {
             description = "Belirtilen token kullanılarak tüm sınav başlıklarını alır.")
     @GetMapping(FIND_ALL+"/title/{token}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<Set<String>> getAllTitles(@PathVariable String token){
 
         return ResponseEntity.ok(examService.getAllTitles(token));
@@ -76,6 +82,7 @@ public class ExamController {
             description = "Belirtilen öğrenci kimliği kullanılarak sınavlar için ortalama hesaplar.")
     @GetMapping(AVERAGE)
     @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('read')")
     public ResponseEntity<AverageExamResponseDto> getAverageExam(@PathVariable String studentId){
         return ResponseEntity.ok(examService.averageExam(studentId));
     }

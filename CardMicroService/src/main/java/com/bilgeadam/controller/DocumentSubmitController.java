@@ -7,6 +7,7 @@ import com.bilgeadam.repository.entity.DocumentSubmit;
 import com.bilgeadam.service.DocumentSubmitService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,6 +27,7 @@ public class DocumentSubmitController {
             "oranlar ve kaydeder")
     @PostMapping("save-document-submit")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('employment_team:write')")
     public ResponseEntity<DocumentSubmit> saveDocumentSubmit(@RequestBody @Valid SaveDocumentSubmitRequestDto dto) {
         return ResponseEntity.ok(documentSubmitService.saveDocumentSubmit(dto));
     }
@@ -34,6 +36,7 @@ public class DocumentSubmitController {
             "üzerinden görüntüleme isteğine cevap verir")
     @GetMapping("get-document-submit/{studentId}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<DocumentSubmit> getDocumentSubmitByStudentId(@PathVariable String studentId) {
         return ResponseEntity.ok(documentSubmitService.getDocumentSubmitByStudentId(studentId));
     }
@@ -42,6 +45,7 @@ public class DocumentSubmitController {
             "evrak teslim puanına göre hesaplar")
     @GetMapping("calculate-document-submit/{documentSubmitScore}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<Double> calculateDocumentSubmitAverageScore(@PathVariable int documentSubmitScore, String token) {
         return ResponseEntity.ok(documentSubmitService.calculateDocumentSubmitAverageScore(documentSubmitScore, token));
     }
@@ -50,6 +54,7 @@ public class DocumentSubmitController {
             "göre günceller")
     @PutMapping("update-document-submit")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('employment_team:write')")
     public ResponseEntity<MessageResponse> updateDocumentSubmitScore(@RequestBody UpdateDocumentSubmitRequestDto dto) {
         return ResponseEntity.ok(documentSubmitService.updateDocumentSubmitScore(dto));
     }

@@ -7,6 +7,7 @@ import com.bilgeadam.service.CareerEducationService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,6 +26,7 @@ public class CareerEducationController {
             "sayısını döner (0 ya da 1)")
     @GetMapping(GET_CAREER_EDUCATION_COUNT + "/{studentId}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<Integer> getCareerEducationCount(@PathVariable @NotEmpty String studentId) {
         return ResponseEntity.ok(careerEducationService.getCareerEducationCount(studentId));
     }
@@ -33,6 +35,7 @@ public class CareerEducationController {
             "sayfasında yapılan kariyer eğitimi kaydetme işlemidir.")
     @PostMapping(SAVE_CAREER_EDUCATION)
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('employment_team:write')")
     public ResponseEntity<Boolean> saveCareerEducation(@Valid @RequestBody SaveCareerEducationRequestDto dto) {
         return ResponseEntity.ok(careerEducationService.saveCareerEducation(dto));
     }
@@ -41,6 +44,7 @@ public class CareerEducationController {
             "Kariyer Eğitimi sayfasında öğrencinin daha önce girilmiş kariyer eğitimi varsa üstüne kaydeder")
     @PutMapping(UPDATE_CAREER_EDUCATION)
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('employment_team:write')")
     public ResponseEntity<Boolean> updateCareerEducation(@Valid @RequestBody UpdateCareerEducationRequestDto dto) {
         return ResponseEntity.ok(careerEducationService.updateCareerEducation(dto));
     }
@@ -49,6 +53,7 @@ public class CareerEducationController {
             "Kariyer Eğitimi başlığında öğrencinin önceden kaydedilmiş kariyer eğitimi puan değerleri varsa getirir")
     @GetMapping(GET_CAREER_EDUCATION + "/{studentId}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<GetCareerEducationResponseDto> getCareerEducation(@PathVariable @NotEmpty String studentId) {
         return ResponseEntity.ok(careerEducationService.getCareerEducation(studentId));
     }
@@ -57,6 +62,7 @@ public class CareerEducationController {
             "Kariyer Eğitimi sayfasında öğrencinin ortalama kariyer eğitimi puan bilgisini döner")
     @GetMapping(GET_CAREER_EDUCATION_AVERAGE_POINT + "/{studentId}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<Double> getCareerEducationAveragePoint(@PathVariable @NotEmpty String studentId) {
         return ResponseEntity.ok(careerEducationService.getCareerEducationAveragePoint(studentId));
     }

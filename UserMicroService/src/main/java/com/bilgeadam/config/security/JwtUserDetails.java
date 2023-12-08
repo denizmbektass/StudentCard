@@ -1,7 +1,5 @@
 package com.bilgeadam.config.security;
 
-import com.bilgeadam.repository.entity.User;
-import com.bilgeadam.repository.enums.ERole;
 import com.bilgeadam.service.UserService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

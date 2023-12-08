@@ -30,6 +30,7 @@ public class AssignmentController {
             description = "Belirtilen DTO kullanılarak bir ödev oluşturur.")
     @PostMapping(CREATE)
     @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('master_trainer:write','assistant_trainer:write')")
     public ResponseEntity<MessageResponse> createAssignment(@RequestBody @Valid AssignmentRequestDto dto){
         assignmentService.createAssignment(dto);
         return ResponseEntity.ok(new MessageResponse("Ödev başarıyla kaydedildi.."));
@@ -39,6 +40,7 @@ public class AssignmentController {
             description = "Belirtilen token kullanılarak tüm ödevleri listeler.")
     @GetMapping(FIND_ALL+"/{token}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('read')")
     public ResponseEntity<List<AssignmentResponseDto>> findAllAssignments(@PathVariable String token){
         return ResponseEntity.ok( assignmentService.findAllAssignments(token));
     }
@@ -49,6 +51,7 @@ public class AssignmentController {
             description = "Belirtilen DTO kullanılarak bir ödevi günceller.")
     @PutMapping(UPDATE)
     @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('master_trainer:write','assistant_trainer:write')")
     public ResponseEntity<MessageResponse> updateAssignment(@RequestBody UpdateAssignmentRequestDto dto){
         assignmentService.updateAssignment(dto);
         return ResponseEntity.ok(new MessageResponse("Ödev başarıyla güncellendi.."));
@@ -60,6 +63,7 @@ public class AssignmentController {
             description = "Belirtilen DTO kullanılarak bir ödevi siler.")
     @DeleteMapping(DELETE+"/{assignmentId}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('master_trainer:write','assistant_trainer:write')")
     public ResponseEntity<MessageResponse> deleteAssignment(@PathVariable String assignmentId){
         assignmentService.deleteAssignment(assignmentId);
         return ResponseEntity.ok(new MessageResponse("Ödev başarıyla silindi.."));
@@ -70,6 +74,7 @@ public class AssignmentController {
             description = "Belirtilen token kullanılarak tüm ödev başlıklarını alır.")
     @GetMapping(FIND_ALL+"/title/{token}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('read')")
     public ResponseEntity<Set<String>> getAllTitles(@PathVariable String token){
         return ResponseEntity.ok(assignmentService.getAllTitles(token));
     }
@@ -77,6 +82,7 @@ public class AssignmentController {
             description = "studentId ile tüm notlara erişilir ve ortalaması alınır. ")
     @GetMapping(ASSIGNMENT_AVERAGE + "/{studentId}")
     @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('read')")
     public ResponseEntity<Double> getAssignmentAverage(@PathVariable String studentId){
         return ResponseEntity.ok(assignmentService.getAssignmentAverage(studentId));
     }

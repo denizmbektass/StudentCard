@@ -8,6 +8,7 @@ import com.bilgeadam.service.WrittenExamService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,6 +25,7 @@ public class WrittenExamController {
             description = "Verilen doğru cevap sayısını kullanarak yazılı sınav puanını hesaplar.")
     @GetMapping(WRITTEN_EXAM_SCORE)
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<Double> calculateWrittenExamScore(@PathVariable int correctAnswers){
         return ResponseEntity.ok(writtenExamService.calculateWrittenExamScore(correctAnswers));
     }
@@ -32,6 +34,7 @@ public class WrittenExamController {
             description = "Yazılı sınav puanını kaydeder.")
     @PostMapping(SAVE_WRITTEN_EXAM)
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('workshop_team:write')")
     public ResponseEntity<WrittenExam> saveWrittenExam(@RequestBody @Valid SaveWrittenExamRequestDto dto){
         return ResponseEntity.ok(writtenExamService.saveWrittenExam(dto));
     }
@@ -40,6 +43,7 @@ public class WrittenExamController {
             description = "Yazılı sınav puanını studentId üzerinden çekip görüntüler.")
     @GetMapping(GET_WRITTEN_EXAM)
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<WrittenExam> getWrittenExamByStudentId(@PathVariable String studentId){
         return ResponseEntity.ok(writtenExamService.getWrittenExamByStudentId(studentId));
     }
@@ -48,6 +52,7 @@ public class WrittenExamController {
             description = "Belirtilen Dto ile yazılı sınavı günceller.")
     @PutMapping(UPDATE)
     @CrossOrigin("*")
+    @PreAuthorize("hasAuthority('workshop_team:write')")
     public ResponseEntity<MessageResponse> updateWrittenExam(@RequestBody UpdateWrittenExamRequestDto dto){
         return ResponseEntity.ok(writtenExamService.updateWrittenExam(dto));
     }
