@@ -4,7 +4,7 @@ spring:
   data:
     mongodb:
       host: localhost
-      port: 27020
+      port: 27017
       username: studentcarduser
       password: root
       database: studentcard
