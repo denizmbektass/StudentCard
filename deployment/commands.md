@@ -1,5 +1,5 @@
 - `docker build -t sc-mongodb ./mongo`
-- `docker build -t sc-rabbitmq ./rabbitmq`
+- `docker run -d --network scn --name rabbitmq -p 5672:5672 -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=root rabbitmq:latest`
 
 - `docker build -t auth ../AuthMicroService`
 - `docker build -t gateway ../ApiGatewayService`

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 
-@FeignClient(url = "http://localhost:4041/api/v1/user",name = "card-user")
+@FeignClient(url = "${user-service.url}",name = "card-user")
 public interface IUserManager {
 
     @GetMapping("get-name-and-surname-with-id/{userId}")

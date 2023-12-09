@@ -15,3 +15,5 @@ spring:
       database: studentcard
 base-api:
   url: http://localhost:80
+user-service:
+  url: http://user:4041/api/v1/user
