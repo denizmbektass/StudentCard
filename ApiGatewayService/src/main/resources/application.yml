@@ -1,5 +1,9 @@
 server:
-  port: 80
+  port: 443
+  ssl:
+    key-store: ${KEYSTORE_JKS_PATH}
+    key-store-password: ${KEYSTORE_PASSWORD}
+    key-store-type: PKCS12
 spring:
   main:
     web-application-type: reactive
