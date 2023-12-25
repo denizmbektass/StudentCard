@@ -1,0 +1,32 @@
+server:
+  port: 4040
+spring:
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: user
+    password: root
+  #  zipkin:
+  #    enabled: true
+  #    base-url: http://localhost:9411
+  #    service:
+  #      name: auth-service
+  data:
+    mongodb:
+      host: mongo
+      port: 27017
+      username: studentcarduser
+      password: root
+      database: studentcard
+
+#  security:
+#    user:
+#      name: kullanici
+#      password: 12345
+
+rabbitmq:
+  queueActivationLink: activation-link-mail-queue
+  activationLinkBindingKey: activation-link-binding-key
+  registerStudentAndTrainerBindingKey: register-student-and-trainer-binding-key
+  registerStudentAndTrainerQueue: register-student-and-trainer-queue
+  authDirectExchange: auth-direct-exchange

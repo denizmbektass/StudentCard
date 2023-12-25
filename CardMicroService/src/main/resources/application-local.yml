@@ -6,19 +6,14 @@ spring:
       port: 5672
       username: user
       password: root
-  #  zipkin:
-  #    enabled: true
-  #    base-url: http://localhost:9411
-  #    service:
-  #      name: card-service
   data:
     mongodb:
       host: localhost
-      port: 27020
+      port: 27017
       username: studentcarduser
       password: root
       database: studentcard
-#  security:
-#    user:
-#      name: kullanici
-#      password: 12345
+base-api:
+  url: http://localhost:8081
+user-service:
+  url: http://localhost:4041/api/v1/user

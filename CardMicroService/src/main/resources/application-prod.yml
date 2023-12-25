@@ -1,0 +1,19 @@
+server:
+  port: 4042
+spring:
+  rabbitmq:
+      host: rabbitmq
+      port: 5672
+      username: user
+      password: root
+  data:
+    mongodb:
+      host: mongo
+      port: 27017
+      username: studentcarduser
+      password: root
+      database: studentcard
+base-api:
+  url: http://localhost:80
+user-service:
+  url: http://user:4041/api/v1/user

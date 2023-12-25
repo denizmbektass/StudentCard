@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
-@FeignClient(url = "http://localhost:8081/absence",name = "absence-base")
+@FeignClient(url = "${base-api.url}/absence",name = "absence-base")
 public interface IBaseManager {
 
     @GetMapping("/find-all-base-absences")

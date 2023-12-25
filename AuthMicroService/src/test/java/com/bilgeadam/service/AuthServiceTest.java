@@ -1,6 +1,5 @@
 package com.bilgeadam.service;
 
-import com.bilgeadam.converter.AuthConverter;
 import com.bilgeadam.repository.IAuthRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,8 +14,5 @@ class AuthServiceTest {
 
     @Mock
     private IAuthRepository authRepository;
-
-    @Mock
-    private AuthConverter authConverter;
 
 }
