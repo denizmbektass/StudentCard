@@ -18,7 +18,7 @@ public class ScheduleService {
   private final TaskScheduler taskScheduler;
   private ScheduledFuture<?> scheduledTask;
 
-  private String cronExpression = "0 55 10 * * *";
+  private String cronExpression = "0 0 7 * * *";
 
 
   public ScheduleService(IScheduleManager scheduleManager, IUserManager userManager, TaskScheduler taskScheduler) {
