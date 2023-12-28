@@ -38,4 +38,7 @@ public interface IUserManager {
 
     @GetMapping("get-group-name-for-student/{userId}")
     ResponseEntity<List<String>> findGroupNameForStudent(@PathVariable String userId);
+
+    @GetMapping("/get-all-base-students")
+    ResponseEntity<String> getAllBaseStudents();
 }
