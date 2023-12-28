@@ -25,6 +25,7 @@ public class ApiUrls {
     public static final String TRAINER_ASSESSMENT_COEFFICIENTS = EDUCATION + "/trainer-assessment-coefficients";
     public static final String ASSIGNMENT = EDUCATION + "/assignment";
     public static final String ABSENCE = EDUCATION + "/absence";
+    public static final String SCHEDULE = EDUCATION + "/schedule";
     public static final String GRADUATION_PROJECT = EDUCATION+ "/graduation-project";
 
     //Staj Basari
