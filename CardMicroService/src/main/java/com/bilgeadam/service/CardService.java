@@ -5,12 +5,20 @@ import com.bilgeadam.dto.request.TranscriptInfo;
 import com.bilgeadam.dto.response.*;
 import com.bilgeadam.exceptions.*;
 import com.bilgeadam.manager.IUserManager;
+import com.bilgeadam.rabbitmq.model.GetUserModel;
+import com.bilgeadam.rabbitmq.producer.GetUserProducer;
 import com.bilgeadam.repository.ICardRepository;
 import com.bilgeadam.repository.entity.*;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,11 +57,13 @@ public class CardService extends ServiceManager<Card, String> {
     private final InternshipSuccessScoreWeightsService internshipSuccessScoreWeightsService;
     private final EmploymentWeightsService employmentWeightsService;
 
+    private final GetUserProducer getUserProducer;
+
     public CardService(ICardRepository iCardRepository, JwtTokenManager jwtTokenManager,
                        CardParameterService cardParameterService, AssignmentService assignmentService,
                        ExamService examService, InternshipSuccessRateService intershipService,
                        InterviewService interviewService, AbsenceService absenceService, ProjectService projectService,
-                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, TechnicalInterviewService technicalInterviewService, TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService, ProjectBehaviorService projectBehaviorService, EmploymentInterviewService employmentInterviewService, CareerEducationService careerEducationService, ApplicationProcessService applicationProcessService, DocumentSubmitService documentSubmitService, TeamLeadAssessmentService teamLeadAssessmentService, TeamworkService teamworkService, AttendanceService attendanceService, ContributionService contributionService, InternshipTasksService internshipTasksService, PersonalMotivationService personalMotivationService, EducationWeightsService educationWeightsService, StudentChoiceWeightsService studentChoiceWeightsService, InternshipSuccessScoreWeightsService internshipSuccessScoreWeightsService, EmploymentWeightsService employmentWeightsService) {
+                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, TechnicalInterviewService technicalInterviewService, TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService, ProjectBehaviorService projectBehaviorService, EmploymentInterviewService employmentInterviewService, CareerEducationService careerEducationService, ApplicationProcessService applicationProcessService, DocumentSubmitService documentSubmitService, TeamLeadAssessmentService teamLeadAssessmentService, TeamworkService teamworkService, AttendanceService attendanceService, ContributionService contributionService, InternshipTasksService internshipTasksService, PersonalMotivationService personalMotivationService, EducationWeightsService educationWeightsService, StudentChoiceWeightsService studentChoiceWeightsService, InternshipSuccessScoreWeightsService internshipSuccessScoreWeightsService, EmploymentWeightsService employmentWeightsService, GetUserProducer getUserProducer) {
         super(iCardRepository);
         this.iCardRepository = iCardRepository;
         this.jwtTokenManager = jwtTokenManager;
@@ -86,6 +96,7 @@ public class CardService extends ServiceManager<Card, String> {
         this.studentChoiceWeightsService = studentChoiceWeightsService;
         this.internshipSuccessScoreWeightsService = internshipSuccessScoreWeightsService;
         this.employmentWeightsService = employmentWeightsService;
+        this.getUserProducer = getUserProducer;
     }
 
     public CardResponseDto getCardByStudent(String token) {
@@ -271,6 +282,8 @@ public class CardService extends ServiceManager<Card, String> {
                     .orElse(0.0);
         }
     }
+
+
 
     // Eğitmen Görüşü Ortalama
     public Double getTrainerAssesmentAverage(String token) {
@@ -625,4 +638,57 @@ public class CardService extends ServiceManager<Card, String> {
     }
 
 
+    public void getCreatePdf(HttpServletResponse response, String token) throws IOException, JRException {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
+        if (studentId.isEmpty())
+            throw new CardServiceException(ErrorType.INVALID_TOKEN);
+        GetUserModel getUserModel = GetUserModel.builder().token(token).build();
+        UserProfileResponseDto userProfileResponseDto = (UserProfileResponseDto) getUserProducer.GetUser(getUserModel);
+
+        StudentChoiceResponseDto studentChoice = getStudentChoiceDetails(token);//Öğrenci seçme
+        EducationScoreDetailsDto educationDetails = getEducationDetails(token);//Eğitim
+        InternshipSuccessResponseDto internshipSuccess = getInternshipSuccess(token);//Staj
+        EmploymentScoreDetailsDto employmentScoreDetails = getEmploymentDetails(token);//İstihdam
+
+
+        List<TranskriptResponseDto> transkriprPdfList = new ArrayList<>();
+        transkriprPdfList.add(TranskriptResponseDto.builder()
+                        .name_surname(userProfileResponseDto.getName()+ " " + userProfileResponseDto.getSurname())
+                        .writtenExamScore(studentChoice.getWrittenExamScore())
+                        .candidateInterviewScore(studentChoice.getCandidateInterviewScore())
+                        .algorithmScore(studentChoice.getAlgorithmScore())
+                        .technicalInterviewScore(studentChoice.getTechnicalInterviewScore())
+                        .studentChoiceTotalSuccessScore(studentChoice.getTotalSuccessScore())
+                        .assignmentSuccessScore(educationDetails.getAssignmentSuccessScore())
+                        .examSuccessScore(educationDetails.getExamSuccessScore())
+                        .trainerAssessmentSuccessScore(educationDetails.getTrainerAssessmentSuccessScore())
+                        .projectSuccessScore(educationDetails.getProjectSuccessScore())
+                        .absencePerformSuccessScore(educationDetails.getAbsencePerformSuccessScore())
+                        .graduationProjectSuccessScore(educationDetails.getGraduationProjectSuccessScore())
+                        .educationDetailsTotalSuccessScore(educationDetails.getTotalSuccessScore())
+                        .teamLeadAssessmentSuccessScore(internshipSuccess.getTeamLeadAssessmentSuccessScore())
+                        .teamWorkSuccessScore(internshipSuccess.getTeamWorkSuccessScore())
+                        .contributionSuccessScore(internshipSuccess.getContributionSuccessScore())
+                        .attendanceSuccessScore(internshipSuccess.getAttendanceSuccessScore())
+                        .personalMotivationSuccessScore(internshipSuccess.getPersonalMotivationSuccessScore())
+                        .tasksSuccessScore(internshipSuccess.getTasksSuccessScore())
+                        .internshipSuccessTotalSuccessScore(internshipSuccess.getTotalSuccessScore())
+                        .careerEducationSuccessScore(employmentScoreDetails.getCareerEducationSuccessScore())
+                        .documentSumbitSuccessScore(employmentScoreDetails.getDocumentSumbitSuccessScore())
+                        .applicationProcessSuccessScore(employmentScoreDetails.getApplicationProcessSuccessScore())
+                        .employmentInterviewSuccessScore(employmentScoreDetails.getEmploymentInterviewSuccessScore())
+                        .employmentScoreDetailsTotalSuccessScore(employmentScoreDetails.getTotalSuccessScore())
+                .build());
+
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(transkriprPdfList);
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("transkriptDataSet",dataSource);
+
+        File file = ResourceUtils.getFile("classpath:transkriptPdf.jrxml");
+
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+        JasperExportManager.exportReportToPdfStream(print,response.getOutputStream());
+    }
 }

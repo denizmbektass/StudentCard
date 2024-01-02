@@ -5,9 +5,15 @@ import com.bilgeadam.dto.response.*;
 import com.bilgeadam.service.CardService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 import static com.bilgeadam.constants.ApiUrls.*;
@@ -72,4 +78,17 @@ public class CardController {
         return ResponseEntity.ok(cardService.getInternshipSuccess(token));
     }
 
+    @Operation(summary = "Transkript bilgilerini pdf'e ekleme işlemi",
+            description = "Belirtilen token kullanılarak Transkript  için bilgileri bilgilerini alma ve pdf oluşturma işlemi.")
+    @GetMapping("/get-create-pdf/{token}")
+    @CrossOrigin("*")
+    public void createPdf(HttpServletResponse response, @RequestParam String token) throws JRException, IOException {
+        response.setContentType("application/pdf");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDateTime = dateFormat.format(new Date());
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=pdf_" + currentDateTime + "pdf";
+        response.setHeader(headerKey,headerValue);
+        cardService.getCreatePdf(response, token);
+    }
 }

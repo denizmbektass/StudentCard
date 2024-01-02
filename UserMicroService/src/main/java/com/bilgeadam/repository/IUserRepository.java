@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -15,4 +16,6 @@ public interface IUserRepository extends MongoRepository<User,String> {
 
     @Query("{'groupNameList': { $regex: ?0, $options: 'i' }, 'internShipStatus': { $ne: 'ACTIVE' }, 'roleList': { $in: ?1 } }")
     List<User> findUsersByGroupNameListAndInternshipStatus(String groupNameList, List<ERole> eRole);
+
+    Optional<User> findByUserId(String userId);
 }

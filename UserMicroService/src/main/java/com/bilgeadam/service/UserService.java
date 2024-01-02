@@ -306,4 +306,14 @@ public class UserService extends ServiceManager<User, String> {
         }
         return true;
     }
+
+    public Optional<User> findByWithStudentId(String token){
+        Optional<String> userId = jwtTokenManager.getIdFromToken(token);
+        if (userId.isEmpty())
+            throw new UserServiceException(ErrorType.INVALID_TOKEN);
+        Optional<User> user = userRepository.findByUserId(userId.get());
+        if (user.isEmpty())
+            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        return user;
+    }
 }
