@@ -11,6 +11,8 @@ public enum EPermission {
     ASSISTANT_TRAINER_WRITE("assistant_trainer:write"),
     STUDENT_READ("student:read"),
     STUDENT_WRITE("student:write"),
+    CANDIDATE_READ("candidate:read"),
+    CANDIDATE_WRITE("candidate:write"),
     MASTER_TRAINER_READ("read"),
     MASTER_TRAINER_WRITE("master_trainer:write"),
     WORKSHOP_TEAM_READ("read"),
