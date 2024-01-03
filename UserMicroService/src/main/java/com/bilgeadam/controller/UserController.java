@@ -53,7 +53,7 @@ public class UserController {
     @Operation(summary = "Kullanıcı kaydetme işlemi",
             description = "Belirtilen kullanıcı bilgilerini kaydeder.")
     //@PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping(SAVE)
+    @PostMapping(SAVE)
     public  ResponseEntity<UserResponseDto> save(@RequestBody UserRequestDto dto){
         return ResponseEntity.ok(userService.save(dto));
     }

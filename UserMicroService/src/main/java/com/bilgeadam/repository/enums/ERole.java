@@ -20,6 +20,8 @@ public enum ERole {
                     ASSISTANT_TRAINER_WRITE,
                     STUDENT_READ,
                     STUDENT_WRITE,
+                    CANDIDATE_READ,
+                    CANDIDATE_WRITE,
                     MASTER_TRAINER_READ,
                     MASTER_TRAINER_WRITE,
                     WORKSHOP_TEAM_READ,
@@ -38,6 +40,11 @@ public enum ERole {
             Set.of(
                     STUDENT_READ,
                     STUDENT_WRITE
+            )
+    ), CANDIDATE(
+            Set.of(
+                    CANDIDATE_READ,
+                    CANDIDATE_WRITE
             )
     ),MASTER_TRAINER(
             Set.of(
