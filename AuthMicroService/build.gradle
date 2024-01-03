@@ -3,6 +3,9 @@ buildscript{
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${versions.springBoot}")
     }
 }
+bootRun {
+    systemProperties = System.properties as Map<String, ?>
+}
 dependencies {
     implementation libs.springCloudOpenFeign
    implementation libs.springBootDataMongo
