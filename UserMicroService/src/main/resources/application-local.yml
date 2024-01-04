@@ -1,6 +1,11 @@
 server:
   port: 4041
 spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: root
   data:
     mongodb:
       host: localhost
@@ -10,3 +15,6 @@ spring:
       database: studentcard
 base-api:
   url: http://localhost:8081
+
+rabbitmq:
+  getUserQueue: user-queue
