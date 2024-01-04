@@ -17,4 +17,8 @@ dependencies {
     implementation libs.totp
     implementation libs.commonscodec
     implementation libs.zxing
+    implementation libs.javaReporting
+    implementation libs.librepdf
+
+
 }

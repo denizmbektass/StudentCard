@@ -13,5 +13,6 @@ dependencies {
     implementation libs.springBootDataMongo
     implementation libs.springBootStarterSecurity
    implementation libs.jwt
+    implementation libs.springBootAmqp
 //    implementation libs.springBootAmqp
 }
