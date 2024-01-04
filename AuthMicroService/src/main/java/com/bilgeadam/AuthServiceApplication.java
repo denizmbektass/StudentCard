@@ -22,26 +22,4 @@ public class AuthServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(AuthServiceApplication.class);
     }
-
-    @Bean
-    public ApplicationRunner runner(IAuthRepository authRepository){
-        return args -> {
-            if(authRepository.findByEmail("scadmin@bilgeadam.com").isEmpty()){
-                String id = UUID.randomUUID().toString();
-                Auth a = Auth
-                        .builder()
-                        .name("Admin")
-                        .surname("Admin")
-                        .authId(id)
-                        .userId(id)
-                        .role(List.of(ERole.ADMIN))
-                        .status(EStatus.ACTIVE)
-                        .email("scadmin@bilgeadam.com")
-                        .password("1234")
-                        .build();
-
-                authRepository.save(a);
-            }
-        };
-    }
 }
