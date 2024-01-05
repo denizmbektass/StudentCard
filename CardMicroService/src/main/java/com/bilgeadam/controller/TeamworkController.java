@@ -35,7 +35,7 @@ public class TeamworkController {
             "sayfasında yapılan ekip çalışması kaydetme işlemidir.")
     @PostMapping(SAVE_TEAMWORK)
     @CrossOrigin("*")
-    @PreAuthorize("hasAuthority('workshop_team:write')")
+    @PreAuthorize("hasAuthority('internship_team:write')")
     public ResponseEntity<Boolean> saveTeamwork(@Valid @RequestBody SaveTeamworkRequestDto dto) {
         return ResponseEntity.ok(teamworkService.saveTeamwork(dto));
     }
@@ -44,7 +44,7 @@ public class TeamworkController {
             "Ekip Çalışması sayfasında öğrencinin daha önce girilmiş ekip çalışması varsa üstüne kaydeder")
     @PutMapping(UPDATE_TEAMWORK)
     @CrossOrigin("*")
-    @PreAuthorize("hasAuthority('workshop_team:write')")
+    @PreAuthorize("hasAuthority('internship_team:write')")
     public ResponseEntity<Boolean> updateTeamwork(@Valid @RequestBody UpdateTeamworkRequestDto dto) {
         return ResponseEntity.ok(teamworkService.updateTeamwork(dto));
     }
