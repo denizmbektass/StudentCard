@@ -28,7 +28,7 @@ public class InternshipTasksController {
             "sayfasında yapılan görevler kaydetme işlemidir.")
     @PostMapping(SAVE_INTERNSHIP_TASK)
     @CrossOrigin("*")
-    @PreAuthorize("hasAuthority('workshop_team:write')")
+    @PreAuthorize("hasAuthority('internship_team:write')")
     public ResponseEntity<Boolean> saveTeamwork(@Valid @RequestBody SaveInternshipTaskRequestDto dto) {
         System.out.println(dto);
         return ResponseEntity.ok(internshipTasksService.saveInternshipTask(dto));
@@ -48,7 +48,7 @@ public class InternshipTasksController {
             "Ekip Çalışması sayfasında öğrencinin daha önce girilmiş ekip çalışması varsa üstüne kaydeder")
     @PutMapping(UPDATE_INTERNSHIP)
     @CrossOrigin("*")
-    @PreAuthorize("hasAuthority('workshop_team:write')")
+    @PreAuthorize("hasAuthority('internship_team:write')")
     public ResponseEntity<Boolean> updateInternShipTask(@Valid @RequestBody SaveInternshipTaskRequestDto dto) {
         return ResponseEntity.ok(internshipTasksService.updateInternshipTask(dto));
     }
