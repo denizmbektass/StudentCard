@@ -163,7 +163,7 @@ public class CardService extends ServiceManager<Card, String> {
         List<InternshipResponseDto> internshipResponseDtos = intershipService.findAllInternshipWithUser(token);
         List<InterviewForTranscriptResponseDto> interviewForTranscriptResponseDto = interviewService.findAllInterviewsDtos(token);
         ShowUserAbsenceInformationResponseDto absenceDto = absenceService.showUserAbsenceInformation(token);
-        Double absencePerform = (absenceDto.getGroup1Percentage() + absenceDto.getGroup2Percentage()) / 2;
+        Double absencePerform = absenceDto != null ? (absenceDto.getGroup1Percentage() + absenceDto.getGroup2Percentage()) / 2 : 0;
         List<StudentProjectListResponseDto> project = projectService.showStudentProjectList(token);
         StudentChoiceResponseDto studentChoiceResponseDto = getStudentChoiceDetails(token);
         TranscriptResponseDto transcriptResponseDto = TranscriptResponseDto.builder().absence(absencePerform).assignment(assignmentResponseDtos).studentChoice(studentChoiceResponseDto).exam(examResponseDtos).intership(internshipResponseDtos).interview(interviewForTranscriptResponseDto).project(project).trainerAssessment(trainerAssessmentForTranscriptResponseDto).build();
@@ -688,7 +688,7 @@ public class CardService extends ServiceManager<Card, String> {
         File file = ResourceUtils.getFile("classpath:transkriptPdf.jrxml");
 
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
-        JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+        JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
         JasperExportManager.exportReportToPdfStream(print,response.getOutputStream());
     }
 }
