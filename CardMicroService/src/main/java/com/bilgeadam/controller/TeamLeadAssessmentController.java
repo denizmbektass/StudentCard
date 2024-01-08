@@ -24,7 +24,7 @@ public class TeamLeadAssessmentController {
             "sayfasında yapılan takım lideri görüşü kaydetme işlemidir.")
     @PostMapping(SAVE_TEAM_LEAD_ASSESSMENT)
     @CrossOrigin("*")
-    @PreAuthorize("hasAuthority('workshop_team:write')")
+    @PreAuthorize("hasAuthority('internship_team:write')")
     public ResponseEntity<Boolean> saveTeamLeadAssessment(@Valid @RequestBody CreateTeamLeadAssesmentRequestDto dto) {
         return ResponseEntity.ok(teamLeadAssessmentService.saveTrainerAssessment(dto));
     }
@@ -33,7 +33,7 @@ public class TeamLeadAssessmentController {
             "Takım lideri görüşü sayfasında öğrencinin daha önce girilmiş Takım lideri görüşü varsa üstüne kaydeder")
     @PutMapping(UPDATE_TEAM_LEAD_ASSESSMENT)
     @CrossOrigin("*")
-    @PreAuthorize("hasAuthority('workshop_team:write')")
+    @PreAuthorize("hasAuthority('internship_team:write')")
     public ResponseEntity<Boolean> updateTeamLeadAssessment(@Valid @RequestBody UpdateTeamLeadAssessmentRequestDto dto) {
         return ResponseEntity.ok(teamLeadAssessmentService.updateTrainerAssessment(dto));
     }
