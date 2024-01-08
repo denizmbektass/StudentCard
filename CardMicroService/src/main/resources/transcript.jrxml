@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="transcript" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="54536fb2-3556-495e-941c-7243a8e7e7c3">
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="name_surname" class="java.lang.String"/>
+	<field name="product_information" class="java.lang.String"/>
+	<field name="writtenExamScore" class="java.lang.Double"/>
+	<field name="candidateInterviewScore" class="java.lang.Double"/>
+	<field name="algorithmScore" class="java.lang.Double"/>
+	<field name="technicalInterviewScore" class="java.lang.Double"/>
+	<field name="studentChoiceTotalSuccessScore" class="java.lang.Double"/>
+	<field name="assignmentSuccessScore" class="java.lang.Double"/>
+	<field name="examSuccessScore" class="java.lang.Double"/>
+	<field name="trainerAssessmentSuccessScore" class="java.lang.Double"/>
+	<field name="projectSuccessScore" class="java.lang.Double"/>
+	<field name="absencePerformSuccessScore" class="java.lang.Double"/>
+	<field name="graduationProjectSuccessScore" class="java.lang.Double"/>
+	<field name="educationDetailsTotalSuccessScore" class="java.lang.Double"/>
+	<field name="teamLeadAssessmentSuccessScore" class="java.lang.Double"/>
+	<field name="teamWorkSuccessScore" class="java.lang.Double"/>
+	<field name="contributionSuccessScore" class="java.lang.Double"/>
+	<field name="attendanceSuccessScore" class="java.lang.Double"/>
+	<field name="personalMotivationSuccessScore" class="java.lang.Double"/>
+	<field name="tasksSuccessScore" class="java.lang.Double"/>
+	<field name="internshipSuccessTotalSuccessScore" class="java.lang.Double"/>
+	<field name="careerEducationSuccessScore" class="java.lang.Double"/>
+	<field name="documentSumbitSuccessScore" class="java.lang.Double"/>
+	<field name="applicationProcessSuccessScore" class="java.lang.Double"/>
+	<field name="employmentInterviewSuccessScore" class="java.lang.Double"/>
+	<field name="employmentScoreDetailsTotalSuccessScore" class="java.lang.Double"/>
+	<title>
+		<band height="842">
+			<image>
+				<reportElement x="0" y="0" width="595" height="842" uuid="1678941e-ca15-4a9b-af0e-05214899923b"/>
+				<imageExpression><![CDATA["C:\\Users\\muham\\JaspersoftWorkspace\\StudentCardTranscript\\background.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="430" y="130" width="100" height="30" uuid="c7d5c8a6-f7fb-4f96-9c40-b62c23fa4a1b"/>
+				<textFieldExpression><![CDATA[$F{name_surname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="150" width="100" height="30" uuid="f7986664-c4f4-484d-8f44-ec689ecf4df0"/>
+				<textFieldExpression><![CDATA[$F{product_information}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="190" width="100" height="30" uuid="582ced01-b16c-4503-a80a-eb1336197ad3"/>
+				<textFieldExpression><![CDATA[$F{studentChoiceTotalSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="210" width="100" height="30" uuid="d82b5a6c-b0a6-4e78-b5ab-46122f125177"/>
+				<textFieldExpression><![CDATA[$F{writtenExamScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="240" width="100" height="30" uuid="692f55ec-a3b1-448a-ac93-77e1843b535c"/>
+				<textFieldExpression><![CDATA[$F{algorithmScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="240" width="100" height="30" uuid="38761301-46ad-4674-ad95-d812c9fd6eeb"/>
+				<textFieldExpression><![CDATA[$F{candidateInterviewScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="280" width="100" height="30" uuid="5c292090-eea3-44fb-804d-d8ae4a06ed1e"/>
+				<textFieldExpression><![CDATA[$F{technicalInterviewScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="310" width="100" height="30" uuid="a2997c34-cf7f-4c1b-bf7a-9bd8941f7b86"/>
+				<textFieldExpression><![CDATA[$F{educationDetailsTotalSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="330" width="100" height="30" uuid="8df10839-1c2c-4926-8474-6ef1f172ad90"/>
+				<textFieldExpression><![CDATA[$F{examSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="340" width="100" height="30" uuid="96a9a0ec-b459-4e40-bd5b-9fead3eb8b12"/>
+				<textFieldExpression><![CDATA[$F{projectSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="360" width="100" height="30" uuid="39591666-7e38-4038-951a-f1e0209b61df"/>
+				<textFieldExpression><![CDATA[$F{trainerAssessmentSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="380" width="100" height="30" uuid="7c190440-7d10-4ea1-acbb-b04632f91916"/>
+				<textFieldExpression><![CDATA[$F{assignmentSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="570" width="100" height="30" uuid="3d477755-7f93-4212-a618-40d6b8a3034b"/>
+				<textFieldExpression><![CDATA[$F{attendanceSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="430" width="100" height="30" uuid="b26f2c8f-5970-4c37-b68f-c9b7e7eb3b45"/>
+				<textFieldExpression><![CDATA[$F{graduationProjectSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="460" width="100" height="30" uuid="0d8c0969-838b-4769-9821-75d9593ea73a"/>
+				<textFieldExpression><![CDATA[$F{internshipSuccessTotalSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="480" width="100" height="30" uuid="f91d0b97-b3f5-4c9c-9267-2dbcd86dd148"/>
+				<textFieldExpression><![CDATA[$F{tasksSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="500" width="100" height="30" uuid="6743bde3-9964-415e-a2b6-8200882d4273"/>
+				<textFieldExpression><![CDATA[$F{teamWorkSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="530" width="100" height="30" uuid="f78e1b7d-dd5d-4f8f-a369-6ddd9a9392a2"/>
+				<textFieldExpression><![CDATA[$F{personalMotivationSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="550" width="100" height="30" uuid="13b9d251-35a1-4ba6-bb43-f31b5892bd31"/>
+				<textFieldExpression><![CDATA[$F{contributionSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="400" width="100" height="30" uuid="cce5a42e-5dbb-4114-bc2a-aa55891f59ae"/>
+				<textFieldExpression><![CDATA[$F{absencePerformSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="620" width="100" height="30" uuid="b03f31c7-f0e5-433a-b137-4649957bdd40"/>
+				<textFieldExpression><![CDATA[$F{employmentScoreDetailsTotalSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="640" width="100" height="30" uuid="eeceafea-d0fa-4674-85b4-7b4969ff1b0e"/>
+				<textFieldExpression><![CDATA[$F{documentSumbitSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="660" width="100" height="30" uuid="ced1e541-7550-415c-84d0-0c742fb08888"/>
+				<textFieldExpression><![CDATA[$F{careerEducationSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="680" width="100" height="30" uuid="1c3a6c99-27c1-474f-b17b-94d989b836af"/>
+				<textFieldExpression><![CDATA[$F{employmentInterviewSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="590" width="100" height="30" uuid="c1c518b2-bb09-4dfb-b671-7a6fbf01a964"/>
+				<textFieldExpression><![CDATA[$F{teamLeadAssessmentSuccessScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="710" width="100" height="30" uuid="f8f07070-d655-45b0-aeb4-a14d6d5b6770"/>
+				<textFieldExpression><![CDATA[$F{applicationProcessSuccessScore}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+</jasperReport>

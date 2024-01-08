@@ -13,6 +13,12 @@ import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
+import net.sf.jasperreports.export.SimplePdfReportConfiguration;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
@@ -163,7 +169,7 @@ public class CardService extends ServiceManager<Card, String> {
         List<InternshipResponseDto> internshipResponseDtos = intershipService.findAllInternshipWithUser(token);
         List<InterviewForTranscriptResponseDto> interviewForTranscriptResponseDto = interviewService.findAllInterviewsDtos(token);
         ShowUserAbsenceInformationResponseDto absenceDto = absenceService.showUserAbsenceInformation(token);
-        Double absencePerform = (absenceDto.getGroup1Percentage() + absenceDto.getGroup2Percentage()) / 2;
+        Double absencePerform = absenceDto != null ? (absenceDto.getGroup1Percentage() + absenceDto.getGroup2Percentage()) / 2 : 0;
         List<StudentProjectListResponseDto> project = projectService.showStudentProjectList(token);
         StudentChoiceResponseDto studentChoiceResponseDto = getStudentChoiceDetails(token);
         TranscriptResponseDto transcriptResponseDto = TranscriptResponseDto.builder().absence(absencePerform).assignment(assignmentResponseDtos).studentChoice(studentChoiceResponseDto).exam(examResponseDtos).intership(internshipResponseDtos).interview(interviewForTranscriptResponseDto).project(project).trainerAssessment(trainerAssessmentForTranscriptResponseDto).build();
@@ -654,6 +660,7 @@ public class CardService extends ServiceManager<Card, String> {
         List<TranskriptResponseDto> transkriprPdfList = new ArrayList<>();
         transkriprPdfList.add(TranskriptResponseDto.builder()
                         .name_surname(userProfileResponseDto.getName()+ " " + userProfileResponseDto.getSurname())
+                        .product_information("test")
                         .writtenExamScore(studentChoice.getWrittenExamScore())
                         .candidateInterviewScore(studentChoice.getCandidateInterviewScore())
                         .algorithmScore(studentChoice.getAlgorithmScore())
@@ -682,13 +689,33 @@ public class CardService extends ServiceManager<Card, String> {
 
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(transkriprPdfList);
 
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("transkriptDataSet",dataSource);
+//        File file = ResourceUtils.getFile("classpath:transkriptPdf.jrxml");
+        File file = ResourceUtils.getFile("classpath:transcript.jasper");
 
-        File file = ResourceUtils.getFile("classpath:transkriptPdf.jrxml");
+        JasperReport jasperReport = (JasperReport) JRLoader.loadObjectFromFile(file.getAbsolutePath());
+        JasperPrint print = JasperFillManager.fillReport(jasperReport, null, dataSource);
+//        JasperExportManager.exportReportToPdfStream(print,response.getOutputStream());
 
-        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
-        JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
-        JasperExportManager.exportReportToPdfStream(print,response.getOutputStream());
+        JRPdfExporter exporter = getJrPdfExporter(response, print);
+        exporter.exportReport();
+    }
+
+    private static JRPdfExporter getJrPdfExporter(HttpServletResponse response, JasperPrint print) throws IOException {
+        JRPdfExporter exporter = new JRPdfExporter();
+        exporter.setExporterInput(new SimpleExporterInput(print));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
+        SimplePdfReportConfiguration reportConfig
+                = new SimplePdfReportConfiguration();
+        reportConfig.setSizePageToContent(true);
+        reportConfig.setForceLineBreakPolicy(false);
+
+        SimplePdfExporterConfiguration exportConfig
+                = new SimplePdfExporterConfiguration();
+        exportConfig.setMetadataAuthor("bilgeadam");
+        exportConfig.setAllowedPermissionsHint("PRINTING");
+
+        exporter.setConfiguration(reportConfig);
+        exporter.setConfiguration(exportConfig);
+        return exporter;
     }
 }

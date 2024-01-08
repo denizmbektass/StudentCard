@@ -82,7 +82,7 @@ public class CardController {
             description = "Belirtilen token kullanılarak Transkript  için bilgileri bilgilerini alma ve pdf oluşturma işlemi.")
     @GetMapping("/get-create-pdf/{token}")
     @CrossOrigin("*")
-    public void createPdf(HttpServletResponse response, @RequestParam String token) throws JRException, IOException {
+    public void createPdf(HttpServletResponse response, @PathVariable("token") String token) throws JRException, IOException {
         response.setContentType("application/pdf");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateTime = dateFormat.format(new Date());
