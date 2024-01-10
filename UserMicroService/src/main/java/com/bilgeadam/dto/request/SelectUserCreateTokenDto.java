@@ -15,6 +15,6 @@ import java.util.List;
 public class SelectUserCreateTokenDto {
 
     private String studentId;
-    private List<String> role;
+    private List<String> roleList;
     private EStatus status;
 }
