@@ -27,4 +27,6 @@ public class SendStudentsRequestDto {
     private EStatus status;
     private EStatus internShipStatus;
     private List<String> groupNameList;
+    private LocalDate saleDate;
+    private Long updateDate;
 }
