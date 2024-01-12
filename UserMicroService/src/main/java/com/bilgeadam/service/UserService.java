@@ -14,8 +14,15 @@ import com.bilgeadam.repository.enums.EStatus;
 import com.bilgeadam.repository.entity.User;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.sql.Date;
 import java.util.stream.Collectors;
@@ -340,4 +347,118 @@ public class UserService extends ServiceManager<User, String> {
 	  throw new UserServiceException(ErrorType.USER_NOT_EXIST);
 	return user;
   }
+
+	public byte[] readExcel(MultipartFile file) throws IOException {
+		List<User> candidates = new ArrayList<>();
+		List<User> incorrectRecords = new ArrayList<>();
+		try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
+			Sheet sheet = workbook.getSheetAt(0);
+			Iterator<Row> iterator = sheet.iterator();
+
+			while (iterator.hasNext()) {
+				Row currentRow = iterator.next();
+
+				if (currentRow.getRowNum() == 0) {
+					continue;
+				}
+				Iterator<Cell> cellIterator = currentRow.iterator();
+				User candidate = new User();
+				boolean isEmptyRow = true;
+
+				while (cellIterator.hasNext()) {
+					Cell currentCell = cellIterator.next();
+					int columnIndex = currentCell.getColumnIndex();
+
+					switch (columnIndex) {
+						case 0:
+							candidate.setName(currentCell.getStringCellValue());
+							break;
+						case 1:
+							candidate.setSurname(currentCell.getStringCellValue());
+							break;
+						case 2:
+							candidate.setEmail(currentCell.getStringCellValue());
+							break;
+						case 3:
+							double phoneNumber = currentCell.getNumericCellValue();
+							candidate.setPhoneNumber(Integer.toString((int) phoneNumber));
+							break;
+						case 4:
+							candidate.setBirthPlace(currentCell.getStringCellValue());
+							break;
+						case 5:
+							LocalDateTime localDateTime = currentCell.getLocalDateTimeCellValue();
+							LocalDate birthDate = (localDateTime != null) ? localDateTime.toLocalDate() : null;
+							candidate.setBirthDate(birthDate);
+							break;
+
+						case 6:
+							candidate.setAddress(currentCell.getStringCellValue());
+							break;
+						case 7:
+							candidate.setSchool(currentCell.getStringCellValue());
+							break;
+						case 8:
+							candidate.setDepartment(currentCell.getStringCellValue());
+							break;
+						default:
+
+					}
+					if (currentCell.getCellType() != CellType.BLANK) {
+						isEmptyRow = false;
+					}
+				}
+				if (!isEmptyRow) {
+
+					if((candidate.getName()!=null&&candidate.getName()!="") && (candidate.getSurname()!=null && candidate.getSurname()!="") &&
+							(candidate.getEmail()!=null &&candidate.getEmail()!="") && (candidate.getPhoneNumber() != null&&candidate.getPhoneNumber() != "")){
+						candidates.add(candidate);
+					}else {
+						incorrectRecords.add(candidate);
+					}
+				}
+			}
+			saveAll(candidates);
+		}
+		if (incorrectRecords.isEmpty()){
+			return null;
+		}else{
+
+			return writeExcel(incorrectRecords);
+		}
+
+	}
+	public byte[] writeExcel(List<User> users) throws IOException {
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("Users");
+
+		Row headerRow = sheet.createRow(0);
+		String[] columns = {"İsim", "Soyisim", "Email", "Telefon", "Doğum Yeri", "Doğum Tarihi", "Adres", "Okul", "Bölüm"};
+
+		for (int i = 0; i < columns.length; i++) {
+			Cell cell = headerRow.createCell(i);
+			cell.setCellValue(columns[i]);
+		}
+
+		int rowNum = 1;
+		for (User user : users) {
+			Row row = sheet.createRow(rowNum++);
+
+			row.createCell(0).setCellValue(user.getName());
+			row.createCell(1).setCellValue(user.getSurname());
+			row.createCell(2).setCellValue(user.getEmail());
+			row.createCell(3).setCellValue(user.getPhoneNumber());
+			row.createCell(4).setCellValue(user.getBirthPlace());
+			row.createCell(5).setCellValue(user.getBirthDate());
+			row.createCell(6).setCellValue(user.getAddress());
+			row.createCell(7).setCellValue(user.getSchool());
+			row.createCell(8).setCellValue(user.getDepartment());
+		}
+
+		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+			workbook.write(outputStream);
+			return outputStream.toByteArray();
+
+		}
+	}
 }
