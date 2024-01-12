@@ -18,4 +18,6 @@ public interface IUserRepository extends MongoRepository<User,String> {
     List<User> findUsersByGroupNameListAndInternshipStatus(String groupNameList, List<ERole> eRole);
 
     Optional<User> findByUserId(String userId);
+
+  Optional<User> findByEmail(String email);
 }
