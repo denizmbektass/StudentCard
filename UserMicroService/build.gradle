@@ -12,7 +12,8 @@ dependencies {
     implementation libs.springCloudOpenFeign
     implementation libs.springBootDataMongo
     implementation libs.springBootStarterSecurity
-   implementation libs.jwt
+    implementation libs.jwt
     implementation libs.springBootAmqp
-//    implementation libs.springBootAmqp
+    implementation libs.apachePoiCommon
+    implementation libs.apachePoiOOXML
 }

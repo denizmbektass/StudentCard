@@ -9,11 +9,22 @@ import com.bilgeadam.service.UserService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import static com.bilgeadam.constants.ApiUrls.*;
@@ -238,4 +249,40 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Aday Eklemek için  excel şablonu indirme işlemi",
+            description = "Aday Eklemek için gerekli şablon buradan indirilir.")
+    @GetMapping("/download-excel")
+    public ResponseEntity<InputStreamResource> downloadExcel() throws IOException {
+        String fileName = "aday-ekleme.xlsx";
+        Resource resource = new ClassPathResource(fileName);
+        if (!resource.exists()) {
+            throw new RuntimeException("Dosya bulunamadı!");
+        }
+        InputStreamResource inputStreamResource = new InputStreamResource(resource.getInputStream());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=aday-ekleme.xlsx");
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(inputStreamResource);
+    }
+    @Operation(summary = "Excel ile toplu aday ekleme işlemi ",
+            description = "Adayları Eklemek için excel buradan yüklenir.")
+    @PostMapping("/upload-excel")
+    public ResponseEntity<InputStreamResource> uploadExcel(@RequestParam("file") MultipartFile file) throws IOException {
+        byte[] workbookBytes = userService.readExcel(file);
+
+        if(workbookBytes!=null){
+            try (ByteArrayInputStream inputStream = new ByteArrayInputStream(workbookBytes)) {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+                headers.setContentDispositionFormData("attachment", "kaydedilemeyen-adaylar.xlsx");
+
+                return new ResponseEntity<>(new InputStreamResource(inputStream), headers, HttpStatus.OK);
+            }
+        }else{
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        }
+
+    }
 }
