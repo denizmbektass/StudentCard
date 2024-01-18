@@ -36,4 +36,5 @@ public class TranskriptResponseDto {
   Double applicationProcessSuccessScore;
   Double employmentInterviewSuccessScore;
   Double employmentScoreDetailsTotalSuccessScore;
+  Double generalBoostAchievementPoints;
 }

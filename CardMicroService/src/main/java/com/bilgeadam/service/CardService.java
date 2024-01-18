@@ -656,6 +656,8 @@ public class CardService extends ServiceManager<Card, String> {
         InternshipSuccessResponseDto internshipSuccess = getInternshipSuccess(token);//Staj
         EmploymentScoreDetailsDto employmentScoreDetails = getEmploymentDetails(token);//İstihdam
 
+        Double getGeneralBoostAchievementPoints = studentChoice.getTotalSuccessScore()/4 + educationDetails.getTotalSuccessScore()/4
+                + internshipSuccess.getTotalSuccessScore()/4 + employmentScoreDetails.getTotalSuccessScore()/4;
 
         List<TranskriptResponseDto> transkriprPdfList = new ArrayList<>();
         transkriprPdfList.add(TranskriptResponseDto.builder()
@@ -685,16 +687,17 @@ public class CardService extends ServiceManager<Card, String> {
                         .applicationProcessSuccessScore(employmentScoreDetails.getApplicationProcessSuccessScore())
                         .employmentInterviewSuccessScore(employmentScoreDetails.getEmploymentInterviewSuccessScore())
                         .employmentScoreDetailsTotalSuccessScore(employmentScoreDetails.getTotalSuccessScore())
+                        .generalBoostAchievementPoints(getGeneralBoostAchievementPoints)
                 .build());
 
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(transkriprPdfList);
 
-//        File file = ResourceUtils.getFile("classpath:transkriptPdf.jrxml");
-        File file = ResourceUtils.getFile("classpath:transcript.jasper");
+        File file = ResourceUtils.getFile("classpath:transkriptPdf.jrxml");
+        //File file = ResourceUtils.getFile("classpath:transcript.jasper");
 
         JasperReport jasperReport = (JasperReport) JRLoader.loadObjectFromFile(file.getAbsolutePath());
         JasperPrint print = JasperFillManager.fillReport(jasperReport, null, dataSource);
-//        JasperExportManager.exportReportToPdfStream(print,response.getOutputStream());
+        //JasperExportManager.exportReportToPdfStream(print,response.getOutputStream());
 
         JRPdfExporter exporter = getJrPdfExporter(response, print);
         exporter.exportReport();
