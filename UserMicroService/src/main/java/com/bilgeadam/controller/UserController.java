@@ -253,14 +253,14 @@ public class UserController {
             description = "Aday Eklemek için gerekli şablon buradan indirilir.")
     @GetMapping("/download-excel")
     public ResponseEntity<InputStreamResource> downloadExcel() throws IOException {
-        String fileName = "aday-ekleme.xlsx";
+        String fileName = "aday-ekleme-sablonu.xlsx";
         Resource resource = new ClassPathResource(fileName);
         if (!resource.exists()) {
             throw new RuntimeException("Dosya bulunamadı!");
         }
         InputStreamResource inputStreamResource = new InputStreamResource(resource.getInputStream());
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=aday-ekleme.xlsx");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=aday-ekleme-sablonu.xlsx");
         return ResponseEntity.ok()
                 .headers(headers)
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
