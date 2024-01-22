@@ -16,7 +16,7 @@
         <field name="examSuccessScore" class="java.lang.Double"/>
         <field name="projectSuccessScore" class="java.lang.Double"/>
         <field name="trainerAssessmentSuccessScore" class="java.lang.Double"/>
-        <field name="assignmentSuccess Score" class="java.lang.Double"/>
+        <field name="assignmentSuccessScore" class="java.lang.Double"/>
         <field name="absencePerformSuccessScore" class="java.lang.Double"/>
         <field name="graduationProjectSuccessScore" class="java.lang.Double"/>
         <field name="educationDetailsTotalSuccessScore" class="java.lang.Double"/>
@@ -31,8 +31,7 @@
         <field name="careerEducationSuccessScore" class="java.lang.Double"/>
         <field name="employmentInterviewSuccessScore" class="java.lang.Double"/>
         <field name="applicationProcessSuccessScore" class="java.lang.Double"/>
-        <field name="employmentScoreDetailsTotalSucces" class="java.lang.Double"/>
-        <field name="generalBoostAchievementPoints" class="java.lang.Double"/>
+        <field name="employmentScoreDetailsTotalSuccessScore" class="java.lang.Double"/>
     </subDataset>
     <parameter name="transkriptDataSet" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
     <queryString>
@@ -43,16 +42,13 @@
     </background>
     <title>
         <band height="52" splitType="Stretch">
-            <image>
-                <reportElement x="0" y="-20" width="80" height="70" uuid="d7896cd7-aa87-4055-a7d2-7fe434a62ae6"/>
-                <imageExpression><![CDATA["t2.png"]]></imageExpression>
-            </image>
             <staticText>
-                <reportElement x="79" y="10" width="495" height="39" forecolor="#3C3C3D" uuid="81251dbe-d6de-4631-a0f3-e47b03137d42"/>
-                <textElement>
-                    <font fontName="Dialog" size="24"/>
+                <reportElement x="-20" y="-20" width="595" height="70" forecolor="#3366FF" backcolor="#3366FF" uuid="e2d1da3a-627f-45b9-911b-a4084c85c01b"/>
+                <textElement textAlignment="Center">
+                    <font fontName="Candara" size="54"/>
+                    <paragraph lineSpacing="Double"/>
                 </textElement>
-                <text><![CDATA[Bilge Adam Akademi                     Transkript]]></text>
+                <text><![CDATA[Bilge Adam]]></text>
             </staticText>
         </band>
     </title>
@@ -79,7 +75,7 @@
         </band>
     </columnHeader>
     <detail>
-        <band height="690" splitType="Stretch">
+        <band height="640" splitType="Stretch">
             <staticText>
                 <reportElement x="10" y="30" width="100" height="30" uuid="12bf2ff3-d47d-4192-befd-9d8b60983687">
                     <property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -353,12 +349,12 @@
                 </reportElement>
             </line>
             <componentElement>
-                <reportElement x="290" y="-56" width="285" height="745" uuid="073450c2-0dee-429c-b7b7-f753bbd25070"/>
+                <reportElement x="290" y="-56" width="285" height="695" uuid="073450c2-0dee-429c-b7b7-f753bbd25070"/>
                 <jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
                     <datasetRun subDataset="transkriptDataSet" uuid="7d36c06d-06db-4730-ba2f-67dc3f777311">
                         <dataSourceExpression><![CDATA[$P{transkriptDataSet}]]></dataSourceExpression>
                     </datasetRun>
-                    <jr:listContents height="745" width="285">
+                    <jr:listContents height="695" width="285">
                         <textField>
                             <reportElement x="0" y="0" width="185" height="30" uuid="66ccb27f-fa67-42db-b893-cdf691764239">
                                 <property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -367,7 +363,7 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{name_surname}]]></textFieldExpression>
+                            <textFieldExpression><![CDATA[$F{name_surname} != null ? String.format("%.2f", $F{writtenExamScore}) : ""]]></textFieldExpression>
                             <patternExpression><![CDATA[$F{name_surname}]]></patternExpression>
                         </textField>
                         <textField>
@@ -378,7 +374,7 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{product_information}]]></textFieldExpression>
+                            <textFieldExpression><![CDATA[$F{product_information} != null ? String.format("%.2f", $F{writtenExamScore}) : ""]]></textFieldExpression>
                         </textField>
                         <textField>
                             <reportElement x="20" y="85" width="165" height="30" uuid="c0cd7c24-b7ec-4c8b-a74d-bb470f76c186">
@@ -389,8 +385,7 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{writtenExamScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{writtenExamScore} != null ? String.format("%.2f", $F{writtenExamScore}) : "" != null ? String.format("%.2f", $F{writtenExamScore}) : ""]]></textFieldExpression>
                         </textField>
                         <textField>
                             <reportElement x="20" y="270" width="220" height="30" uuid="4359d8fd-cd70-44a0-8e07-442907d82009">
@@ -401,8 +396,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{trainerAssessmentSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{trainerAssessmentSuccessScore} != null ? String.format("%.2f", $F{trainerAssessmentSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="375" width="229" height="30" uuid="b2aecf7c-ac40-4bdb-91a2-115a8e0000bf">
@@ -413,8 +408,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{internshipSuccessTotalSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{internshipSuccessTotalSuccessScore} != null ? String.format("%.2f", $F{internshipSuccessTotalSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="345" width="220" height="30" uuid="f054d3f0-8186-47cf-90a8-0bdf34d2a287">
@@ -425,8 +420,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{graduationProjectSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{graduationProjectSuccessScore} != null ? String.format("%.2f", $F{graduationProjectSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="220" width="165" height="30" uuid="fe2ea0ef-d97f-4542-ae3c-d36110d4e398">
@@ -437,8 +432,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{examSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{examSuccessScore} != null ? String.format("%.2f", $F{examSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="530" width="229" height="30" uuid="8e732e22-8236-4b47-9568-bb11591990a2">
@@ -449,8 +444,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{teamLeadAssessmentSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{teamLeadAssessmentSuccessScore} != null ? String.format("%.2f", $F{teamLeadAssessmentSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="190" width="229" height="30" uuid="8d9c2cd8-d1aa-44d6-88d7-9f15f19288b5">
@@ -461,8 +456,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{educationDetailsTotalSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{educationDetailsTotalSuccessScore} != null ? String.format("%.2f", $F{educationDetailsTotalSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="480" width="221" height="30" uuid="15f04746-33a4-40dd-b573-bca29f09ffa2">
@@ -473,8 +468,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{contributionSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{contributionSuccessScore} != null ? String.format("%.2f", $F{contributionSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="295" width="165" height="30" uuid="5e788e0f-ecd7-4c5e-ad68-d22aeb464dae">
@@ -485,8 +480,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{assignmentSuccess Score}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{assignmentSuccessScore} != null ? String.format("%.2f", $F{assignmentSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="160" width="165" height="30" uuid="6f334c8d-d7e2-4b5e-b2cb-58c36ba7193e">
@@ -497,8 +492,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{technicalInterviewScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{technicalInterviewScore} != null ? String.format("%.2f", $F{technicalInterviewScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="455" width="220" height="30" uuid="1a19a888-14e2-46bb-a1ce-381bd12b20ee">
@@ -509,8 +504,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{personalMotivationSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{personalMotivationSuccessScore} != null ? String.format("%.2f", $F{personalMotivationSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="430" width="165" height="30" uuid="e3678ffe-c1c0-41cf-ad03-ba656b887bf8">
@@ -521,8 +516,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{teamWorkSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{teamWorkSuccessScore} != null ? String.format("%.2f", $F{teamWorkSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="505" width="165" height="30" uuid="12239468-a705-416e-8cff-fc14ed308721">
@@ -533,8 +528,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{attendanceSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{attendanceSuccessScore} != null ? String.format("%.2f", $F{attendanceSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="405" width="165" height="30" uuid="020af171-7682-44c6-a18e-ca5e0663bae6">
@@ -545,8 +540,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{tasksSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{tasksSuccessScore} != null ? String.format("%.2f", $F{tasksSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="110" width="165" height="30" uuid="64912e53-79a6-4bc3-8d8b-62520d4393a5">
@@ -557,8 +552,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{algorithmScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{algorithmScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{algorithmScore} != null ? String.format("%.2f", $F{algorithmScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="135" width="165" height="30" uuid="36f09648-5754-4dd2-944a-16d53ede76c1">
@@ -569,8 +564,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{candidateInterviewScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{candidateInterviewScore} != null ? String.format("%.2f", $F{candidateInterviewScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="55" width="229" height="30" uuid="5c0318af-0b32-49e8-a48c-42d62a804ad4">
@@ -581,8 +576,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{studentChoiceTotalSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{studentChoiceTotalSuccessScore} != null ? String.format("%.2f", $F{studentChoiceTotalSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="245" width="165" height="30" uuid="6bfc5c96-360a-42ce-a943-49544c3b799c">
@@ -593,8 +588,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{projectSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{projectSuccessScore} != null ? String.format("%.2f", $F{projectSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="320" width="210" height="30" uuid="b354fe70-a7d0-49bd-a7ae-2569d63ce9c2">
@@ -605,8 +600,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{absencePerformSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{absencePerformSuccessScore} != null ? String.format("%.2f", $F{absencePerformSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="560" width="240" height="30" uuid="44edb3cc-9398-4c38-b31b-68b567f270e0">
@@ -617,8 +612,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{employmentScoreDetailsTotalSucces}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{employmentScoreDetailsTotalSuccessScore} != null ? String.format("%.2f", $F{employmentScoreDetailsTotalSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="585" width="229" height="30" uuid="df52dda7-62c5-4f7f-b0bd-eb4cd4808ea1">
@@ -629,8 +624,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{documentSumbitSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{documentSumbitSuccessScore} != null ? String.format("%.2f", $F{documentSumbitSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="610" width="229" height="30" uuid="0bafeb93-de4b-4f8f-b964-0f7482efcc36">
@@ -641,8 +636,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{careerEducationSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{careerEducationSuccessScore} != null ? String.format("%.2f", $F{careerEducationSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="635" width="229" height="30" uuid="1bc14681-4344-4619-bf2a-4f455288e45a">
@@ -653,8 +648,8 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{employmentInterviewSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{writtenExamScore}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{employmentInterviewSuccessScore} != null ? String.format("%.2f", $F{employmentInterviewSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                         <textField>
                             <reportElement x="20" y="660" width="229" height="30" uuid="a1960eb9-966d-428c-ac6f-a187ffc4e3fd">
@@ -665,22 +660,18 @@
                             <textElement>
                                 <font fontName="Calibri" size="14"/>
                             </textElement>
-                            <textFieldExpression><![CDATA[$F{applicationProcessSuccessScore}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{applicationProcessSuccessScore}]]></patternExpression>
-                        </textField>
-                        <textField>
-                            <reportElement x="16" y="710" width="229" height="30" uuid="d534eb68-0d60-46df-80a6-3b656baf8c13"/>
-                            <textElement>
-                                <font fontName="Calibri" size="14"/>
-                            </textElement>
-                            <textFieldExpression><![CDATA[$F{generalBoostAchievementPoints}]]></textFieldExpression>
-                            <patternExpression><![CDATA[$F{generalBoostAchievementPoints}]]></patternExpression>
+                            <textFieldExpression><![CDATA[$F{applicationProcessSuccessScore} != null ? String.format("%.2f", $F{applicationProcessSuccessScore}) : ""]]></textFieldExpression>
+
                         </textField>
                     </jr:listContents>
                 </jr:list>
             </componentElement>
+        </band>
+    </detail>
+    <columnFooter>
+        <band height="56" splitType="Stretch">
             <staticText>
-                <reportElement x="10" y="653" width="170" height="30" uuid="cda51936-dc41-47d0-930d-8286d0250be4">
+                <reportElement x="10" y="15" width="180" height="30" uuid="3e958813-0684-4744-b681-8aff037dd16b">
                     <property name="com.jaspersoft.studio.unit.x" value="px"/>
                     <property name="com.jaspersoft.studio.unit.y" value="px"/>
                 </reportElement>
@@ -688,16 +679,8 @@
                     <font fontName="Calibri" size="16" isBold="true"/>
                     <paragraph lineSpacing="Single"/>
                 </textElement>
-                <text><![CDATA[Genel Boost Başarı Puanı]]></text>
+                <text><![CDATA[Genel Boosts Başarı Puanı]]></text>
             </staticText>
-            <line>
-                <reportElement x="10" y="640" width="500" height="1" uuid="82a10dac-21e2-461a-baad-c8bc50b82f95">
-                    <property name="com.jaspersoft.studio.unit.x" value="px"/>
-                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
-                    <property name="com.jaspersoft.studio.unit.y" value="px"/>
-                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
-                </reportElement>
-            </line>
         </band>
-    </detail>
+    </columnFooter>
 </jasperReport>
