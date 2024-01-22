@@ -645,6 +645,7 @@ public class CardService extends ServiceManager<Card, String> {
 
 
     public void getCreatePdf(HttpServletResponse response, String token) throws IOException, JRException {
+        System.out.println("pdf oluşturuluyor");
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
         if (studentId.isEmpty())
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
@@ -656,51 +657,46 @@ public class CardService extends ServiceManager<Card, String> {
         InternshipSuccessResponseDto internshipSuccess = getInternshipSuccess(token);//Staj
         EmploymentScoreDetailsDto employmentScoreDetails = getEmploymentDetails(token);//İstihdam
 
-        Double getGeneralBoostAchievementPoints = studentChoice.getTotalSuccessScore()/4 + educationDetails.getTotalSuccessScore()/4
-                + internshipSuccess.getTotalSuccessScore()/4 + employmentScoreDetails.getTotalSuccessScore()/4;
 
         List<TranskriptResponseDto> transkriprPdfList = new ArrayList<>();
         transkriprPdfList.add(TranskriptResponseDto.builder()
-                        .name_surname(userProfileResponseDto.getName()+ " " + userProfileResponseDto.getSurname())
-                        .product_information("test")
-                        .writtenExamScore(studentChoice.getWrittenExamScore())
-                        .candidateInterviewScore(studentChoice.getCandidateInterviewScore())
-                        .algorithmScore(studentChoice.getAlgorithmScore())
-                        .technicalInterviewScore(studentChoice.getTechnicalInterviewScore())
-                        .studentChoiceTotalSuccessScore(studentChoice.getTotalSuccessScore())
-                        .assignmentSuccessScore(educationDetails.getAssignmentSuccessScore())
-                        .examSuccessScore(educationDetails.getExamSuccessScore())
-                        .trainerAssessmentSuccessScore(educationDetails.getTrainerAssessmentSuccessScore())
-                        .projectSuccessScore(educationDetails.getProjectSuccessScore())
-                        .absencePerformSuccessScore(educationDetails.getAbsencePerformSuccessScore())
-                        .graduationProjectSuccessScore(educationDetails.getGraduationProjectSuccessScore())
-                        .educationDetailsTotalSuccessScore(educationDetails.getTotalSuccessScore())
-                        .teamLeadAssessmentSuccessScore(internshipSuccess.getTeamLeadAssessmentSuccessScore())
-                        .teamWorkSuccessScore(internshipSuccess.getTeamWorkSuccessScore())
-                        .contributionSuccessScore(internshipSuccess.getContributionSuccessScore())
-                        .attendanceSuccessScore(internshipSuccess.getAttendanceSuccessScore())
-                        .personalMotivationSuccessScore(internshipSuccess.getPersonalMotivationSuccessScore())
-                        .tasksSuccessScore(internshipSuccess.getTasksSuccessScore())
-                        .internshipSuccessTotalSuccessScore(internshipSuccess.getTotalSuccessScore())
-                        .careerEducationSuccessScore(employmentScoreDetails.getCareerEducationSuccessScore())
-                        .documentSumbitSuccessScore(employmentScoreDetails.getDocumentSumbitSuccessScore())
-                        .applicationProcessSuccessScore(employmentScoreDetails.getApplicationProcessSuccessScore())
-                        .employmentInterviewSuccessScore(employmentScoreDetails.getEmploymentInterviewSuccessScore())
-                        .employmentScoreDetailsTotalSuccessScore(employmentScoreDetails.getTotalSuccessScore())
-                        .generalBoostAchievementPoints(getGeneralBoostAchievementPoints)
-                .build());
+                                                   .name_surname(userProfileResponseDto.getName()+ " " + userProfileResponseDto.getSurname())
+                                                   .writtenExamScore(studentChoice.getWrittenExamScore())
+                                                   .candidateInterviewScore(studentChoice.getCandidateInterviewScore())
+                                                   .algorithmScore(studentChoice.getAlgorithmScore())
+                                                   .technicalInterviewScore(studentChoice.getTechnicalInterviewScore())
+                                                   .studentChoiceTotalSuccessScore(studentChoice.getTotalSuccessScore())
+                                                   .assignmentSuccessScore(educationDetails.getAssignmentSuccessScore())
+                                                   .examSuccessScore(educationDetails.getExamSuccessScore())
+                                                   .trainerAssessmentSuccessScore(educationDetails.getTrainerAssessmentSuccessScore())
+                                                   .projectSuccessScore(educationDetails.getProjectSuccessScore())
+                                                   .absencePerformSuccessScore(educationDetails.getAbsencePerformSuccessScore())
+                                                   .graduationProjectSuccessScore(educationDetails.getGraduationProjectSuccessScore())
+                                                   .educationDetailsTotalSuccessScore(educationDetails.getTotalSuccessScore())
+                                                   .teamLeadAssessmentSuccessScore(internshipSuccess.getTeamLeadAssessmentSuccessScore())
+                                                   .teamWorkSuccessScore(internshipSuccess.getTeamWorkSuccessScore())
+                                                   .contributionSuccessScore(internshipSuccess.getContributionSuccessScore())
+                                                   .attendanceSuccessScore(internshipSuccess.getAttendanceSuccessScore())
+                                                   .personalMotivationSuccessScore(internshipSuccess.getPersonalMotivationSuccessScore())
+                                                   .tasksSuccessScore(internshipSuccess.getTasksSuccessScore())
+                                                   .internshipSuccessTotalSuccessScore(internshipSuccess.getTotalSuccessScore())
+                                                   .careerEducationSuccessScore(employmentScoreDetails.getCareerEducationSuccessScore())
+                                                   .documentSumbitSuccessScore(employmentScoreDetails.getDocumentSumbitSuccessScore())
+                                                   .applicationProcessSuccessScore(employmentScoreDetails.getApplicationProcessSuccessScore())
+                                                   .employmentInterviewSuccessScore(employmentScoreDetails.getEmploymentInterviewSuccessScore())
+                                                   .employmentScoreDetailsTotalSuccessScore(employmentScoreDetails.getTotalSuccessScore())
+                                                   .build());
 
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(transkriprPdfList);
 
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("transkriptDataSet",dataSource);
+
         File file = ResourceUtils.getFile("classpath:transkriptPdf.jrxml");
-        //File file = ResourceUtils.getFile("classpath:transcript.jasper");
 
-        JasperReport jasperReport = (JasperReport) JRLoader.loadObjectFromFile(file.getAbsolutePath());
-        JasperPrint print = JasperFillManager.fillReport(jasperReport, null, dataSource);
-        //JasperExportManager.exportReportToPdfStream(print,response.getOutputStream());
-
-        JRPdfExporter exporter = getJrPdfExporter(response, print);
-        exporter.exportReport();
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+        JasperExportManager.exportReportToPdfStream(print,response.getOutputStream());
     }
 
     private static JRPdfExporter getJrPdfExporter(HttpServletResponse response, JasperPrint print) throws IOException {
