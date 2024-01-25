@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -357,7 +358,6 @@ public class UserService extends ServiceManager<User, String> {
 
 	  while (iterator.hasNext()) {
 		Row currentRow = iterator.next();
-
 		if (currentRow.getRowNum() == 0) {
 		  continue;
 		}
@@ -370,37 +370,109 @@ public class UserService extends ServiceManager<User, String> {
 		  int columnIndex = currentCell.getColumnIndex();
 
 		  switch (columnIndex) {
-			case 0:
-			  candidate.setName(currentCell.getStringCellValue());
-			  break;
-			case 1:
-			  candidate.setSurname(currentCell.getStringCellValue());
-			  break;
-			case 2:
-			  candidate.setEmail(currentCell.getStringCellValue());
-			  break;
-			case 3:
-			  double phoneNumber = currentCell.getNumericCellValue();
-			  candidate.setPhoneNumber(Integer.toString((int) phoneNumber));
-			  break;
-			case 4:
-			  candidate.setBirthPlace(currentCell.getStringCellValue());
-			  break;
-			case 5:
-			  LocalDateTime localDateTime = currentCell.getLocalDateTimeCellValue();
-			  LocalDate birthDate = (localDateTime != null) ? localDateTime.toLocalDate() : null;
-			  candidate.setBirthDate(birthDate);
-			  break;
+			  case 0:
+				  candidate.setRowNumber((long) currentCell.getNumericCellValue());
+				  break;
+			  case 1:
+				  LocalDateTime localDateTimeApplicationDate = currentCell.getLocalDateTimeCellValue();
+				  LocalDate applicationDate = (localDateTimeApplicationDate != null) ? localDateTimeApplicationDate.toLocalDate() : null;
+				  candidate.setApplicationDate(applicationDate);
+				  break;
+			  case 2:
+				  candidate.setName(currentCell.getStringCellValue());
+				  break;
+			  case 3:
+				  candidate.setChannel(currentCell.getStringCellValue());
+				  break;
+			  case 4:
+				  LocalDateTime localDateTimeBirthDate = currentCell.getLocalDateTimeCellValue();
+				  LocalDate birthDate = (localDateTimeBirthDate != null) ? localDateTimeBirthDate.toLocalDate() : null;
+				  candidate.setBirthDate(birthDate);
+				  break;
+			  case 5:
+				  candidate.setEmail(currentCell.getStringCellValue());
+				  break;
+			  case 6:
+				  candidate.setPhoneNumber(currentCell.getStringCellValue());
+				  break;
+			  case 7:
+				  candidate.setEducation(currentCell.getStringCellValue());
+				  break;
+			  case 8:
+				  candidate.setEducationStatus(currentCell.getStringCellValue());
+				  break;
+			  case 9:
+				  candidate.setClassName(currentCell.getStringCellValue());
+				  break;
+			  case 10:
+				  candidate.setSchool(currentCell.getStringCellValue());
+				  break;
+			  case 11:
+				  candidate.setDepartment(currentCell.getStringCellValue());
+				  break;
+			  case 12:
+				  candidate.setEnglishLevel(currentCell.getStringCellValue());
+				  break;
+			  case 13:
+				  candidate.setCity(currentCell.getStringCellValue());
+				  break;
+			  case 14:
+				  candidate.setDistrict(currentCell.getStringCellValue());
+				  break;
+			  case 15:
+				  candidate.setEducationBranch(currentCell.getStringCellValue());
+				  break;
+			  case 16:
+				  candidate.setRelevantBranch(currentCell.getStringCellValue());
+				  break;
+			  case 17:
+				  LocalDateTime localDateTimeWorkshopDate = currentCell.getLocalDateTimeCellValue();
+				  LocalDate workshopDate = (localDateTimeWorkshopDate != null) ? localDateTimeWorkshopDate.toLocalDate() : null;
+				  candidate.setWorkshopDate(workshopDate);
+				  break;
+			  case 18:
+				  if (currentCell.getCellType() == CellType.NUMERIC) {
+					  java.util.Date utilDateValue = currentCell.getDateCellValue();
 
-			case 6:
-			  candidate.setAddress(currentCell.getStringCellValue());
-			  break;
-			case 7:
-			  candidate.setSchool(currentCell.getStringCellValue());
-			  break;
-			case 8:
-			  candidate.setDepartment(currentCell.getStringCellValue());
-			  break;
+					  SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+					  String formattedTime = sdf.format(utilDateValue);
+					  candidate.setWorkshopTime(formattedTime);
+				  } else if (currentCell.getCellType() == CellType.STRING) {
+					  candidate.setWorkshopTime(currentCell.getStringCellValue());
+				  }
+				  break;
+			  case 19:
+				  candidate.setWorkshopPlace(currentCell.getStringCellValue());
+				  break;
+			  case 20:
+				  candidate.setParticipationStatus(currentCell.getStringCellValue());
+				  break;
+			  case 21:
+				  candidate.setExamStatus(currentCell.getStringCellValue());
+				  break;
+			  case 22:
+				  LocalDateTime localDateTimeInterviewDate = currentCell.getLocalDateTimeCellValue();
+				  LocalDate interwiewDate = (localDateTimeInterviewDate != null) ? localDateTimeInterviewDate.toLocalDate() : null;
+				  candidate.setInterviewDate(interwiewDate);
+				  break;
+			  case 23:
+				  candidate.setInterviewParticipationStatus(currentCell.getStringCellValue());
+				  break;
+			  case 24:
+				  candidate.setInterviewer(currentCell.getStringCellValue());
+				  break;
+			  case 25:
+				  candidate.setEvaluation(currentCell.getStringCellValue());
+				  break;
+			  case 26:
+				  candidate.setExamAndInterviewResult(currentCell.getStringCellValue());
+				  break;
+			  case 27:
+				  candidate.setContract(currentCell.getStringCellValue());
+				  break;
+			  case 28:
+				  candidate.setNotes(currentCell.getStringCellValue());
+				  break;
 			default:
 		  }
 		  if (currentCell.getCellType() != CellType.BLANK) {
@@ -408,9 +480,18 @@ public class UserService extends ServiceManager<User, String> {
 		  }
 		}
 		if (!isEmptyRow) {
+			candidate.setRoleList(List.of(ERole.CANDIDATE));
 
-		  if ((candidate.getName() != null && candidate.getName() != "") && (candidate.getSurname() != null && candidate.getSurname() != "") &&
-				  (candidate.getEmail() != null && candidate.getEmail() != "") && (candidate.getPhoneNumber() != null && candidate.getPhoneNumber() != "")) {
+		  if ((candidate.getName() != null && candidate.getName() != "") &&  (candidate.getEmail() != null && candidate.getEmail() != "") &&
+				  (candidate.getPhoneNumber() != null && candidate.getPhoneNumber() != "") &&  (candidate.getRowNumber() != null)
+				  &&  (candidate.getApplicationDate() != null ) &&  (candidate.getBirthDate() != null)
+				  &&  (candidate.getEducation() != null && candidate.getEducation() != "") &&  (candidate.getEducationStatus() != null && candidate.getEducationStatus() != "")
+				  &&  (candidate.getSchool() != null && candidate.getSchool() != "") &&  (candidate.getDepartment() != null && candidate.getDepartment() != "")
+				  &&  (candidate.getEnglishLevel() != null && candidate.getEnglishLevel() != "") &&  (candidate.getCity() != null && candidate.getCity() != "")
+				  &&  (candidate.getDistrict() != null && candidate.getDistrict() != "") &&  (candidate.getEducationBranch() != null && candidate.getEducationBranch() != "")
+				  &&  (candidate.getRelevantBranch() != null && candidate.getRelevantBranch() != "") &&  (candidate.getWorkshopDate() != null )
+				  &&  (candidate.getWorkshopTime() != null && candidate.getWorkshopTime() != "") &&  (candidate.getWorkshopPlace() != null && candidate.getWorkshopPlace() != "")
+				  &&  (candidate.getParticipationStatus() != null && candidate.getParticipationStatus() != "")) {
 			candidates.add(candidate);
 		  } else {
 			incorrectRecords.add(candidate);
@@ -432,7 +513,11 @@ public class UserService extends ServiceManager<User, String> {
 	Sheet sheet = workbook.createSheet("Users");
 
 	Row headerRow = sheet.createRow(0);
-	String[] columns = {"İsim","Soyisim","Email","Telefon","Doğum Yeri","Doğum Tarihi","Adres","Okul","Bölüm"};
+	String[] columns = {"S.N.","Başvuru Tarihi","İsim Soyisim","Geliş Kanalı","Doğum Tarihi","E-mail Adresi","Gsm Numarası","Öğrenim Seviyesi",
+			"Öğrenim Durumu","Sınıfı","Üniversite","Bölüm","İngilizce Bilgisi","Adres (İL)", "Adres (İLÇE)", "Eğitim Alabileceği Şube",
+	"Sizinle İlgilenmesini İstediğiniz Şube","Planlanan Workshop Tarihi","Planlanan Workshop Saati","Planlanan Workshop Yeri",
+			"Katılım Durumu","Sınav Durumu","Mülakat Tarihi","Mülakat Katılım Durumu","Mülakatı Gerçekleştiren",
+			"Değerlendirme","Mülakat / Sınav Sonucu","Sözleşme","Açıklama ve Notlar"};
 
 	for (int i = 0; i < columns.length; i++) {
 	  Cell cell = headerRow.createCell(i);
@@ -443,25 +528,37 @@ public class UserService extends ServiceManager<User, String> {
 	for (User user : users) {
 	  Row row = sheet.createRow(rowNum++);
 
-	  row.createCell(0).setCellValue(user.getName());
-	  row.createCell(1).setCellValue(user.getSurname());
-	  row.createCell(2).setCellValue(user.getEmail());
-
-	  Cell phoneCell = row.createCell(3);
-	  double phoneNumber = Double.parseDouble(user.getPhoneNumber());
-	  phoneCell.setCellValue(phoneNumber);
-
-	  CellStyle cellStyle = workbook.createCellStyle();
-	  CreationHelper createHelper = workbook.getCreationHelper();
-	  cellStyle.setDataFormat(createHelper.createDataFormat().getFormat("0"));
-	  phoneCell.setCellStyle(cellStyle);
-	  row.createCell(4).setCellValue(user.getBirthPlace());
-	  row.createCell(5).setCellValue(user.getBirthDate());
-	  row.createCell(6).setCellValue(user.getAddress());
-	  row.createCell(7).setCellValue(user.getSchool());
-	  row.createCell(8).setCellValue(user.getDepartment());
+		row.createCell(0).setCellValue(user.getRowNumber());
+		row.createCell(1).setCellValue(user.getApplicationDate().toString());
+		row.createCell(2).setCellValue(user.getName());
+		row.createCell(3).setCellValue(user.getChannel());
+		row.createCell(4).setCellValue(user.getBirthDate().toString());
+		row.createCell(5).setCellValue(user.getEmail());
+		row.createCell(6).setCellValue(user.getPhoneNumber());
+		row.createCell(7).setCellValue(user.getEducation());
+		row.createCell(8).setCellValue(user.getEducationStatus());
+		row.createCell(9).setCellValue(user.getClassName());
+		row.createCell(10).setCellValue(user.getSchool());
+		row.createCell(11).setCellValue(user.getDepartment());
+		row.createCell(12).setCellValue(user.getEnglishLevel());
+		row.createCell(13).setCellValue(user.getCity());
+		row.createCell(14).setCellValue(user.getDistrict());
+		row.createCell(15).setCellValue(user.getEducationBranch());
+		row.createCell(16).setCellValue(user.getRelevantBranch());
+		row.createCell(17).setCellValue(user.getWorkshopDate().toString());
+		row.createCell(18).setCellValue(user.getWorkshopTime().toString());
+		row.createCell(19).setCellValue(user.getWorkshopPlace());
+		row.createCell(20).setCellValue(user.getParticipationStatus());
+		row.createCell(21).setCellValue(user.getExamStatus());
+		row.createCell(22).setCellValue(user.getInterviewDate().toString());
+		row.createCell(23).setCellValue(user.getInterviewParticipationStatus());
+		row.createCell(24).setCellValue(user.getInterviewer());
+		row.createCell(25).setCellValue(user.getEvaluation());
+		row.createCell(26).setCellValue(user.getExamAndInterviewResult());
+		row.createCell(27).setCellValue(user.getContract());
+		row.createCell(28).setCellValue(user.getNotes());
 	}
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < 29; i++) {
 	  sheet.autoSizeColumn(i);
 	}
 
