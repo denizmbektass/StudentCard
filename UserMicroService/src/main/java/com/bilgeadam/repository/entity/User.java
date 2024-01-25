@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -18,8 +19,31 @@ import java.util.List;
 public class User extends BaseEntity {
     @Id
     private String userId;
+    private Long rowNumber;
     private String name;
     private String surname;
+    private String channel;
+    private LocalDate applicationDate;
+    private String education;
+    private String educationStatus;
+    private String className;
+    private String englishLevel;
+    private String city;
+    private String district;
+    private String educationBranch;
+    private String relevantBranch;
+    private LocalDate workshopDate;
+    private String workshopTime;
+    private String workshopPlace;
+    private String participationStatus;
+    private String examStatus;
+    private LocalDate interviewDate;
+    private String interviewParticipationStatus;
+    private String interviewer;
+    private String evaluation;
+    private String examAndInterviewResult;
+    private String contract;
+    private String notes;
     private String phoneNumber;
     private String address;
     private LocalDate birthDate;
