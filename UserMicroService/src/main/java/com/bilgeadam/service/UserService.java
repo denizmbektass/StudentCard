@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.sql.Date;
 import java.util.stream.Collectors;
@@ -393,7 +395,15 @@ public class UserService extends ServiceManager<User, String> {
 				  candidate.setEmail(currentCell.getStringCellValue());
 				  break;
 			  case 6:
-				  candidate.setPhoneNumber(currentCell.getStringCellValue());
+				  String phoneNumber;
+				  if (currentCell.getCellType() == CellType.STRING) {
+					  phoneNumber = currentCell.getStringCellValue();
+				  } else if (currentCell.getCellType() == CellType.NUMERIC) {
+					  phoneNumber = String.valueOf((long) currentCell.getNumericCellValue());
+				  }else {
+					  phoneNumber = "";
+				  }
+				  candidate.setPhoneNumber(phoneNumber);
 				  break;
 			  case 7:
 				  candidate.setEducation(currentCell.getStringCellValue());
@@ -508,63 +518,74 @@ public class UserService extends ServiceManager<User, String> {
 	}
   }
 
-  public byte[] writeExcel(List<User> users) throws IOException {
-	Workbook workbook = new XSSFWorkbook();
-	Sheet sheet = workbook.createSheet("Users");
+	public byte[] writeExcel(List<User> users) throws IOException {
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("Users");
 
-	Row headerRow = sheet.createRow(0);
-	String[] columns = {"S.N.","Başvuru Tarihi","İsim Soyisim","Geliş Kanalı","Doğum Tarihi","E-mail Adresi","Gsm Numarası","Öğrenim Seviyesi",
-			"Öğrenim Durumu","Sınıfı","Üniversite","Bölüm","İngilizce Bilgisi","Adres (İL)", "Adres (İLÇE)", "Eğitim Alabileceği Şube",
-	"Sizinle İlgilenmesini İstediğiniz Şube","Planlanan Workshop Tarihi","Planlanan Workshop Saati","Planlanan Workshop Yeri",
-			"Katılım Durumu","Sınav Durumu","Mülakat Tarihi","Mülakat Katılım Durumu","Mülakatı Gerçekleştiren",
-			"Değerlendirme","Mülakat / Sınav Sonucu","Sözleşme","Açıklama ve Notlar"};
+		Row headerRow = sheet.createRow(0);
+		String[] columns = {"S.N.","Başvuru Tarihi","İsim Soyisim","Geliş Kanalı","Doğum Tarihi","E-mail Adresi","Gsm Numarası","Öğrenim Seviyesi",
+				"Öğrenim Durumu","Sınıfı","Üniversite","Bölüm","İngilizce Bilgisi","Adres (İL)", "Adres (İLÇE)", "Eğitim Alabileceği Şube",
+				"Sizinle İlgilenmesini İstediğiniz Şube","Planlanan Workshop Tarihi","Planlanan Workshop Saati","Planlanan Workshop Yeri",
+				"Katılım Durumu","Sınav Durumu","Mülakat Tarihi","Mülakat Katılım Durumu","Mülakatı Gerçekleştiren",
+				"Değerlendirme","Mülakat / Sınav Sonucu","Sözleşme","Açıklama ve Notlar"};
 
-	for (int i = 0; i < columns.length; i++) {
-	  Cell cell = headerRow.createCell(i);
-	  cell.setCellValue(columns[i]);
+		for (int i = 0; i < columns.length; i++) {
+			Cell cell = headerRow.createCell(i);
+			cell.setCellValue(columns[i]);
+		}
+
+		int rowNum = 1;
+		for (User user : users) {
+			Row row = sheet.createRow(rowNum++);
+			row.createCell(0).setCellValue(user.getRowNumber());
+			writeDateCell(row.createCell(1), user.getApplicationDate(), workbook);
+			row.createCell(2).setCellValue(user.getName());
+			row.createCell(3).setCellValue(user.getChannel());
+			writeDateCell(row.createCell(4), user.getBirthDate(), workbook);
+			row.createCell(5).setCellValue(user.getEmail());
+			row.createCell(6).setCellValue(user.getPhoneNumber());
+			row.createCell(7).setCellValue(user.getEducation());
+			row.createCell(8).setCellValue(user.getEducationStatus());
+			row.createCell(9).setCellValue(user.getClassName());
+			row.createCell(10).setCellValue(user.getSchool());
+			row.createCell(11).setCellValue(user.getDepartment());
+			row.createCell(12).setCellValue(user.getEnglishLevel());
+			row.createCell(13).setCellValue(user.getCity());
+			row.createCell(14).setCellValue(user.getDistrict());
+			row.createCell(15).setCellValue(user.getEducationBranch());
+			row.createCell(16).setCellValue(user.getRelevantBranch());
+			writeDateCell(row.createCell(17), user.getWorkshopDate(), workbook);
+			row.createCell(18).setCellValue(user.getWorkshopTime().toString());
+			row.createCell(19).setCellValue(user.getWorkshopPlace());
+			row.createCell(20).setCellValue(user.getParticipationStatus());
+			row.createCell(21).setCellValue(user.getExamStatus());
+			writeDateCell(row.createCell(22), user.getInterviewDate(), workbook);
+			row.createCell(23).setCellValue(user.getInterviewParticipationStatus());
+			row.createCell(24).setCellValue(user.getInterviewer());
+			row.createCell(25).setCellValue(user.getEvaluation());
+			row.createCell(26).setCellValue(user.getExamAndInterviewResult());
+			row.createCell(27).setCellValue(user.getContract());
+			row.createCell(28).setCellValue(user.getNotes());
+		}
+
+		for (int i = 0; i < 29; i++) {
+			sheet.autoSizeColumn(i);
+		}
+
+		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+			workbook.write(outputStream);
+			return outputStream.toByteArray();
+		}
 	}
 
-	int rowNum = 1;
-	for (User user : users) {
-	  Row row = sheet.createRow(rowNum++);
-
-		row.createCell(0).setCellValue(user.getRowNumber());
-		row.createCell(1).setCellValue(user.getApplicationDate().toString());
-		row.createCell(2).setCellValue(user.getName());
-		row.createCell(3).setCellValue(user.getChannel());
-		row.createCell(4).setCellValue(user.getBirthDate().toString());
-		row.createCell(5).setCellValue(user.getEmail());
-		row.createCell(6).setCellValue(user.getPhoneNumber());
-		row.createCell(7).setCellValue(user.getEducation());
-		row.createCell(8).setCellValue(user.getEducationStatus());
-		row.createCell(9).setCellValue(user.getClassName());
-		row.createCell(10).setCellValue(user.getSchool());
-		row.createCell(11).setCellValue(user.getDepartment());
-		row.createCell(12).setCellValue(user.getEnglishLevel());
-		row.createCell(13).setCellValue(user.getCity());
-		row.createCell(14).setCellValue(user.getDistrict());
-		row.createCell(15).setCellValue(user.getEducationBranch());
-		row.createCell(16).setCellValue(user.getRelevantBranch());
-		row.createCell(17).setCellValue(user.getWorkshopDate().toString());
-		row.createCell(18).setCellValue(user.getWorkshopTime().toString());
-		row.createCell(19).setCellValue(user.getWorkshopPlace());
-		row.createCell(20).setCellValue(user.getParticipationStatus());
-		row.createCell(21).setCellValue(user.getExamStatus());
-		row.createCell(22).setCellValue(user.getInterviewDate().toString());
-		row.createCell(23).setCellValue(user.getInterviewParticipationStatus());
-		row.createCell(24).setCellValue(user.getInterviewer());
-		row.createCell(25).setCellValue(user.getEvaluation());
-		row.createCell(26).setCellValue(user.getExamAndInterviewResult());
-		row.createCell(27).setCellValue(user.getContract());
-		row.createCell(28).setCellValue(user.getNotes());
+	private void writeDateCell(Cell cell, LocalDate date, Workbook workbook) {
+		if (date != null) {
+			CellStyle dateStyle = workbook.createCellStyle();
+			dateStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat("dd.MM.yyyy"));
+			cell.setCellValue(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			cell.setCellStyle(dateStyle);
+		} else {
+			cell.setCellValue("");
+		}
 	}
-	for (int i = 0; i < 29; i++) {
-	  sheet.autoSizeColumn(i);
-	}
-
-	try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-	  workbook.write(outputStream);
-	  return outputStream.toByteArray();
-	}
-  }
 }
