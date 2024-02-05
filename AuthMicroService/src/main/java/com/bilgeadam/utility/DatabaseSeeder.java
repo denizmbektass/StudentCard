@@ -14,15 +14,16 @@ import java.util.UUID;
 
 @Configuration
 public class DatabaseSeeder {
-    @Value("${SCADMIN_PWD:1234}")
-    private String SCADMIN_PWD;
-    @Value("${EMPLOYMENT_PWD:1234}")
+
+    @Value("${passwords.admin}")
+    private String ADMIN_PWD;
+    @Value("${passwords.employment}")
     private String EMPLOYMENT_PWD;
-    @Value("${WORKSHOP_PWD:1234}")
+    @Value("${passwords.workshop}")
     private String WORKSHOP_PWD;
-    @Value("${INTERNSHIP_PWD:1234}")
+    @Value("${passwords.internship}")
     private String INTERNSHIP_PWD;
-    @Value("${EDUCATION_PWD:1234}")
+    @Value("${passwords.education}")
     private String EDUCATION_PWD;
 
     @Bean
@@ -39,7 +40,7 @@ public class DatabaseSeeder {
                         .role(List.of(ERole.ADMIN))
                         .status(EStatus.ACTIVE)
                         .email("scadmin@bilgeadam.com")
-                        .password(SCADMIN_PWD)
+                        .password(ADMIN_PWD)
                         .build();
 
                 authRepository.save(a);

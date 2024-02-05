@@ -5,7 +5,7 @@ WORKDIR /app
 COPY build/libs/AuthMicroService-v.0.1.jar /app
 
 ENV SPRING_PROFILES_ACTIVE=prod
-ENV SCADMIN_PWD=prod
+ENV ADMIN_PWD=prod
 ENV EMPLOYMENT_PWD=prod
 ENV INTERNSHIP_PWD=prod
 ENV EDUCATION_PWD=prod

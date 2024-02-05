@@ -18,7 +18,7 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document
+@Document(collection = "app_user")
 public class Auth extends BaseEntity {
     @Id
     private String authId;
