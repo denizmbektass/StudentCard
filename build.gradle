@@ -52,10 +52,3 @@ configurations{
         extendsFrom annotationProcessor
     }
 }
-
-tasks.register('runAllLocal') {
-    tasks.withType(BootRun).each { bootRunTask ->
-        bootRunTask.systemProperty 'spring.profiles.active', 'local'
-    }
-    dependsOn(':ApiGatewayService:bootRun')
-}

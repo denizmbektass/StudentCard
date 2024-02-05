@@ -9,6 +9,10 @@ services:
       dockerfile: ./Dockerfile
     image: eminarikan/gateway:${TAG_VERSION}
     container_name: gateway
+    networks:
+      - "studentcard_default"
+    ports:
+      - "443:443"
 
   # AuthMicroService
   auth:
@@ -17,6 +21,10 @@ services:
       dockerfile: ./Dockerfile
     image: eminarikan/auth:${TAG_VERSION}
     container_name: auth
+    networks:
+      - "studentcard_default"
+    ports:
+      - "4040:4040"
 
   # UserMicroService
   user:
@@ -25,6 +33,10 @@ services:
       dockerfile: ./Dockerfile
     image: eminarikan/user:${TAG_VERSION}
     container_name: user
+    networks:
+      - "studentcard_default"
+    ports:
+      - "4041:4041"
 
   # CardMicroService
   card:
@@ -33,6 +45,10 @@ services:
       dockerfile: ./Dockerfile
     image: eminarikan/card:${TAG_VERSION}
     container_name: card
+    networks:
+      - "studentcard_default"
+    ports:
+      - "4042:4042"
 
   # MailService
   mail:
@@ -41,3 +57,11 @@ services:
       dockerfile: ./Dockerfile
     image: eminarikan/mail:${TAG_VERSION}
     container_name: mail
+    networks:
+      - "studentcard_default"
+    ports:
+      - "4043:4043"
+
+networks:
+  studentcard_default:
+    external: true
