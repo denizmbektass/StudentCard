@@ -4,7 +4,9 @@ WORKDIR /app
 
 COPY build/libs/ApiGatewayService-v.0.1.jar /app
 
-EXPOSE 80:80
+ENV SPRING_PROFILES_ACTIVE=prod
+
+EXPOSE 443:443
 
 CMD ["java", "-jar", "ApiGatewayService-v.0.1.jar"]
 
