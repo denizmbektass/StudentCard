@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+
+  # ApiGatewayService
+  gateway:
+    build:
+      context: ./ApiGatewayService
+      dockerfile: ./Dockerfile
+    image: eminarikan/gateway:${TAG_VERSION}
+    container_name: gateway
+    networks:
+      - "studentcard_default"
+    ports:
+      - "443:443"
+
+  # AuthMicroService
+  auth:
+    build:
+      context: ./AuthMicroService
+      dockerfile: ./Dockerfile
+    image: eminarikan/auth:${TAG_VERSION}
+    container_name: auth
+    networks:
+      - "studentcard_default"
+    ports:
+      - "4040:4040"
+
+  # UserMicroService
+  user:
+    build:
+      context: ./UserMicroService
+      dockerfile: ./Dockerfile
+    image: eminarikan/user:${TAG_VERSION}
+    container_name: user
+    networks:
+      - "studentcard_default"
+    ports:
+      - "4041:4041"
+
+  # CardMicroService
+  card:
+    build:
+      context: ./CardMicroService
+      dockerfile: ./Dockerfile
+    image: eminarikan/card:${TAG_VERSION}
+    container_name: card
+    networks:
+      - "studentcard_default"
+    ports:
+      - "4042:4042"
+
+  # MailService
+  mail:
+    build:
+      context: ./MailService
+      dockerfile: ./Dockerfile
+    image: eminarikan/mail:${TAG_VERSION}
+    container_name: mail
+    networks:
+      - "studentcard_default"
+    ports:
+      - "4043:4043"
+
+networks:
+  studentcard_default:
+    external: true

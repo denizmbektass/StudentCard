@@ -30,3 +30,10 @@ rabbitmq:
   registerStudentAndTrainerBindingKey: register-student-and-trainer-binding-key
   registerStudentAndTrainerQueue: register-student-and-trainer-queue
   authDirectExchange: auth-direct-exchange
+
+passwords:
+  admin: ${ADMIN_PWD:1243}
+  workshop: ${WORKSHOP_PWD:1243}
+  education: ${EDUCATION_PWD:1243}
+  internship: ${INTERNSHIP_PWD:1243}
+  employment: ${EMPLOYMENT_PWD:1243}

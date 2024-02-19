@@ -14,8 +14,17 @@ import java.util.UUID;
 
 @Configuration
 public class DatabaseSeeder {
-    @Value("${SCADMIN_PWD:1234}")
-    private String scadmin_pwd;
+
+    @Value("${passwords.admin}")
+    private String ADMIN_PWD;
+    @Value("${passwords.employment}")
+    private String EMPLOYMENT_PWD;
+    @Value("${passwords.workshop}")
+    private String WORKSHOP_PWD;
+    @Value("${passwords.internship}")
+    private String INTERNSHIP_PWD;
+    @Value("${passwords.education}")
+    private String EDUCATION_PWD;
 
     @Bean
     public ApplicationRunner runner(IAuthRepository authRepository){
@@ -31,7 +40,7 @@ public class DatabaseSeeder {
                         .role(List.of(ERole.ADMIN))
                         .status(EStatus.ACTIVE)
                         .email("scadmin@bilgeadam.com")
-                        .password(scadmin_pwd)
+                        .password(ADMIN_PWD)
                         .build();
 
                 authRepository.save(a);
@@ -47,7 +56,7 @@ public class DatabaseSeeder {
                         .role(List.of(ERole.EMPLOYMENT_TEAM))
                         .status(EStatus.ACTIVE)
                         .email("serli.cakir@bilgeadam.com")
-                        .password(scadmin_pwd)
+                        .password(EMPLOYMENT_PWD)
                         .build();
 
                 authRepository.save(a);
@@ -63,7 +72,7 @@ public class DatabaseSeeder {
                         .role(List.of(ERole.MASTER_TRAINER))
                         .status(EStatus.ACTIVE)
                         .email("busra.armagan@bilgeadam.com")
-                        .password(scadmin_pwd)
+                        .password(EDUCATION_PWD)
                         .build();
 
                 authRepository.save(a);
@@ -79,7 +88,7 @@ public class DatabaseSeeder {
                         .role(List.of(ERole.INTERNSHIP_TEAM))
                         .status(EStatus.ACTIVE)
                         .email("volkan.kavlan@bilgeadam.com")
-                        .password(scadmin_pwd)
+                        .password(INTERNSHIP_PWD)
                         .build();
 
                 authRepository.save(a);
@@ -95,7 +104,7 @@ public class DatabaseSeeder {
                         .role(List.of(ERole.WORKSHOP_TEAM))
                         .status(EStatus.ACTIVE)
                         .email("ezgi.cinar@bilgeadam.com")
-                        .password(scadmin_pwd)
+                        .password(WORKSHOP_PWD)
                         .build();
 
                 authRepository.save(a);
