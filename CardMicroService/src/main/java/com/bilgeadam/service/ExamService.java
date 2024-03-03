@@ -7,14 +7,12 @@ import com.bilgeadam.dto.response.AverageExamResponseDto;
 import com.bilgeadam.dto.response.ExamResponseDto;
 import com.bilgeadam.dto.response.MessageResponse;
 
-import com.bilgeadam.exceptions.AssignmentException;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.ExamException;
 import com.bilgeadam.mapper.IExamMapper;
 import com.bilgeadam.repository.IExamRepository;
 
-import com.bilgeadam.repository.entity.Assignment;
 import com.bilgeadam.repository.entity.Exam;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;

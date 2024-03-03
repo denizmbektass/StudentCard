@@ -24,6 +24,7 @@ public class ApiUrls {
     public static final String PROJECT_BEHAVIOR = EDUCATION + "/project-behavior";
     public static final String TRAINER_ASSESSMENT_COEFFICIENTS = EDUCATION + "/trainer-assessment-coefficients";
     public static final String ASSIGNMENT = EDUCATION + "/assignment";
+    public static final String ORALEXAM = EDUCATION + "/oral-exam";
     public static final String ABSENCE = EDUCATION + "/absence";
     public static final String SCHEDULE = EDUCATION + "/schedule";
     public static final String GRADUATION_PROJECT = EDUCATION+ "/graduation-project";
@@ -54,6 +55,7 @@ public class ApiUrls {
     public static final String CARDPARAMETER = CARD + "/card-parameter";
     public static final String AVERAGE = "/average-exam/{studentId}";
     public static final String ASSIGNMENT_AVERAGE = "/get-assignment-average";
+    public static final String ORAL_EXAM_AVERAGE = "/get-oral-exam-average";
     public static final String FIND_GRADUATION_PROJECT = "/find-graduation-project";
     public static final String FIND_PROJECT_BEHAVIOR = "/find-project-behavior";
     public static final String FIND_ALGORITHM = "/find-algorithm";

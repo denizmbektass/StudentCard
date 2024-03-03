@@ -1,6 +1,5 @@
 package com.bilgeadam.repository;
 
-import com.bilgeadam.repository.entity.Assignment;
 import com.bilgeadam.repository.entity.Exam;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
