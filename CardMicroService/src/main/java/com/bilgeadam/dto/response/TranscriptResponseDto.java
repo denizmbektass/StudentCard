@@ -17,6 +17,7 @@ public class TranscriptResponseDto {
     List<TrainerAssessmentForTranscriptResponseDto> trainerAssessment;
     List<AssignmentResponseDto> assignment;
     List<ExamResponseDto> exam;
+    List<OralExamResponseDto> oralExam;
     List<InternshipResponseDto> intership;
     List<InterviewForTranscriptResponseDto> interview;
     Double absence;
