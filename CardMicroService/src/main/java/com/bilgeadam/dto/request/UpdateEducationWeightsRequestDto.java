@@ -37,6 +37,10 @@ public class UpdateEducationWeightsRequestDto {
     @Min(0)
     @Max(100)
     @NotNull
+    public Double oralExamWeight;
+    @Min(0)
+    @Max(100)
+    @NotNull
     public Double obligationWeight;
     @Min(0)
     @Max(100)

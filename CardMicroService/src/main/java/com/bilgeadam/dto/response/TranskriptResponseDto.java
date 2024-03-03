@@ -18,6 +18,7 @@ public class TranskriptResponseDto {
   Double technicalInterviewScore;
   Double studentChoiceTotalSuccessScore;
   Double assignmentSuccessScore;
+  Double oralExamSuccessScore;
   Double examSuccessScore;
   Double trainerAssessmentSuccessScore;
   Double projectSuccessScore;

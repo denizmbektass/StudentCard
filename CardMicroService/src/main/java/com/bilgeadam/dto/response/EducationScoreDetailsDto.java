@@ -11,12 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EducationScoreDetailsDto {
     Double averageAssignmentScore;
+    Double averageOralExamScore;
     Double averageExamScore;
     Double averageTrainerAssessmentScore;
     Double averageProjectScore;
     Double averageAbsencePerformScore;
     Double averageGraduationProjectScore;
     Double assignmentSuccessScore;
+    Double oralExamSuccessScore;
     Double examSuccessScore;
     Double trainerAssessmentSuccessScore;
     Double projectSuccessScore;

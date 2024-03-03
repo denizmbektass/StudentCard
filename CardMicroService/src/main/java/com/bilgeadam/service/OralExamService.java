@@ -1,17 +1,12 @@
 package com.bilgeadam.service;
 
-import com.bilgeadam.dto.request.AssignmentRequestDto;
 import com.bilgeadam.dto.request.OralExamRequestDto;
-import com.bilgeadam.dto.request.UpdateAssignmentRequestDto;
 import com.bilgeadam.dto.request.UpdateOralExamRequestDto;
-import com.bilgeadam.dto.response.AssignmentResponseDto;
 import com.bilgeadam.dto.response.OralExamResponseDto;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
-import com.bilgeadam.mapper.IAssignmentMapper;
 import com.bilgeadam.mapper.IOralExamMapper;
 import com.bilgeadam.repository.IOralExamRepository;
-import com.bilgeadam.repository.entity.Assignment;
 import com.bilgeadam.repository.entity.OralExam;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;

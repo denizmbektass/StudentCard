@@ -52,6 +52,7 @@ public class CardParameterService extends ServiceManager<CardParameter,String> {
             });
             Map<String,Integer> parameters = new HashMap<>();
             parameters.put("Assignment",transkriptDefault.getHomeworkPercentage());
+            parameters.put("OralExam",transkriptDefault.getOralExamPercentage());
             parameters.put("Exam",transkriptDefault.getExamPercentage());
             parameters.put("Internship",transkriptDefault.getInternshipSuccessRatePercentage());
             parameters.put("Interview",transkriptDefault.getInterviewPercentage());

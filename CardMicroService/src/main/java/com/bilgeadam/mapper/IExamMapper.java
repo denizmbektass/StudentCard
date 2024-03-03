@@ -1,9 +1,7 @@
 package com.bilgeadam.mapper;
 
-import com.bilgeadam.dto.request.AssignmentRequestDto;
 import com.bilgeadam.dto.request.CreateExamRequestDto;
 import com.bilgeadam.dto.response.ExamResponseDto;
-import com.bilgeadam.repository.entity.Assignment;
 import com.bilgeadam.repository.entity.Exam;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
