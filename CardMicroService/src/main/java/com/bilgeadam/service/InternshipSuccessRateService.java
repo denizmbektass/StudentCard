@@ -3,7 +3,6 @@ package com.bilgeadam.service;
 import com.bilgeadam.dto.request.InternshipSuccessRateRequestDto;
 import com.bilgeadam.dto.request.UpdateInternshipRequestDto;
 import com.bilgeadam.dto.response.InternshipResponseDto;
-import com.bilgeadam.exceptions.AssignmentException;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.mapper.IInternshipSuccessRateMapper;

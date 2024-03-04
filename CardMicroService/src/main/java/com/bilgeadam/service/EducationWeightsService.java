@@ -31,7 +31,7 @@ public class EducationWeightsService extends ServiceManager<EducationWeights, St
         if (educationWeightsRequestDto == null) {
             throw new WeightsException(ErrorType.TOTAL_WEIGHTS_FORMAT);
         }
-        double totalWeight = educationWeightsRequestDto.getAssessmentWeight() + educationWeightsRequestDto.getAssignmentWeight() + educationWeightsRequestDto.getExamWeight() + educationWeightsRequestDto.getObligationWeight() + educationWeightsRequestDto.getProjectBehaviorWeight() + educationWeightsRequestDto.getGraduationProjectWeight();
+        double totalWeight = educationWeightsRequestDto.getAssessmentWeight() + educationWeightsRequestDto.getAssignmentWeight() + educationWeightsRequestDto.getOralExamWeight() + educationWeightsRequestDto.getExamWeight() + educationWeightsRequestDto.getObligationWeight() + educationWeightsRequestDto.getProjectBehaviorWeight() + educationWeightsRequestDto.getGraduationProjectWeight();
         if (totalWeight != 100) {
             throw new WeightsException(ErrorType.TOTAL_WEIGHTS_VALIDATE);
         }
@@ -49,7 +49,7 @@ public class EducationWeightsService extends ServiceManager<EducationWeights, St
         if (educationWeightsRequestDto == null) {
             throw new WeightsException(ErrorType.TOTAL_WEIGHTS_FORMAT);
         }
-        double totalWeight = educationWeightsRequestDto.getAssessmentWeight() + educationWeightsRequestDto.getAssignmentWeight() + educationWeightsRequestDto.getExamWeight() + educationWeightsRequestDto.getObligationWeight() + educationWeightsRequestDto.getProjectBehaviorWeight() + educationWeightsRequestDto.getGraduationProjectWeight();
+        double totalWeight = educationWeightsRequestDto.getAssessmentWeight() + educationWeightsRequestDto.getAssignmentWeight() + educationWeightsRequestDto.getOralExamWeight() + educationWeightsRequestDto.getExamWeight() + educationWeightsRequestDto.getObligationWeight() + educationWeightsRequestDto.getProjectBehaviorWeight() + educationWeightsRequestDto.getGraduationProjectWeight();
         if (totalWeight != 100) {
             throw new WeightsException(ErrorType.TOTAL_WEIGHTS_VALIDATE);
         }

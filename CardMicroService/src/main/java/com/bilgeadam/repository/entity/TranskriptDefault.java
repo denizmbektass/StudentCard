@@ -18,6 +18,7 @@ private String transkriptDefaultId;
 private String mainGroupName;
 private int interviewPercentage;
 private int examPercentage;
+private int oralExamPercentage;
 private int projectPercentage;
 private int instructorPercentageOfOpinion;
 private int homeworkPercentage;
