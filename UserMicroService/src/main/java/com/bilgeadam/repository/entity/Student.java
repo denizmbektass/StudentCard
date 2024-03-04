@@ -8,7 +8,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -16,9 +15,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document
-public class User extends BaseEntity {
+public class Student extends BaseEntity {
+
     @Id
-    private String userId;
+    private String studentId;
     private Long rowNumber;
     private String name;
     private String surname;
@@ -58,4 +58,5 @@ public class User extends BaseEntity {
     private String profilePicture;
     private Double egitimSaati;
     private EStatus internShipStatus = EStatus.PASSIVE;
+
 }

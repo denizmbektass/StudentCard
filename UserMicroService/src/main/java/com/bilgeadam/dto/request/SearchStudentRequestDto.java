@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchUserRequestDto {
-    private  String name;
-    private  String surname;
-    private  String email;
-    private  String phoneNumber;
+public class SearchStudentRequestDto {
+
+    private String name;
+    private String surname;
+    private String email;
+    private String phoneNumber;
+
 }

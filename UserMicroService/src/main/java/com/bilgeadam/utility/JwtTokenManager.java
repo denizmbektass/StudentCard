@@ -6,8 +6,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import com.bilgeadam.dto.response.GetIdRoleStatusEmailFromTokenResponseDto;
-import com.bilgeadam.exceptions.ErrorType;
 
+import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.exceptions.UserServiceException;
 import com.bilgeadam.repository.enums.EStatus;
 import org.springframework.stereotype.Component;
@@ -81,13 +81,13 @@ public class JwtTokenManager {
 //            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
 //            DecodedJWT decodedJWT = verifier.verify(token);
 //            if (decodedJWT == null) {
-//                throw new UserServiceException(ErrorType.INVALID_TOKEN);
+//                throw new StudentServiceException(ErrorType.INVALID_TOKEN);
 //            }
 //            List<String> role = decodedJWT.getClaim("role").asList(String.class);
 //            return role;
 //        } catch (Exception e) {
 //            System.out.println(e.getMessage());
-//            throw new UserServiceException(ErrorType.INVALID_TOKEN);
+//            throw new StudentServiceException(ErrorType.INVALID_TOKEN);
 //
 //        }
 //    }
@@ -97,13 +97,13 @@ public class JwtTokenManager {
 //            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
 //            DecodedJWT decodedJWT = verifier.verify(token);
 //            if (decodedJWT == null) {
-//                throw new UserServiceException(ErrorType.INVALID_TOKEN);
+//                throw new StudentServiceException(ErrorType.INVALID_TOKEN);
 //            }
 //            EStatus status = decodedJWT.getClaim("status").as(EStatus.class);   //DANIŞ
 //            return status;
 //        } catch (Exception e) {
 //            System.out.println(e.getMessage());
-//            throw new UserServiceException(ErrorType.INVALID_TOKEN);
+//            throw new StudentServiceException(ErrorType.INVALID_TOKEN);
 //
 //        }
 //    }
@@ -133,7 +133,7 @@ public class JwtTokenManager {
     }
 
 
-    public Optional<String> getIdFromTokenForUserId(String token){
+    public Optional<String> getIdFromTokenForStudentId(String token){
         try{
             Algorithm algorithm = Algorithm.HMAC512(secretKey);
             JWTVerifier verifier = JWT.require(algorithm)
@@ -141,7 +141,7 @@ public class JwtTokenManager {
             DecodedJWT decodedJWT = verifier.verify(token);
             if(decodedJWT == null)
                 return Optional.empty();
-            String id = decodedJWT.getClaim("userId").asString();
+            String id = decodedJWT.getClaim("studentId").asString();
             return Optional.of(id);
         }catch (Exception exception){
             return Optional.empty();

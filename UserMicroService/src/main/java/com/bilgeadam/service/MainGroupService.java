@@ -13,37 +13,35 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class MainGroupService extends ServiceManager<MainGroup,String> {
+public class MainGroupService extends ServiceManager<MainGroup, String> {
+
     private final IMainGroupRepository mainGroupRepository;
 
-    public MainGroupService(IMainGroupRepository mainGroupRepository){
+    public MainGroupService(IMainGroupRepository mainGroupRepository) {
         super(mainGroupRepository);
         this.mainGroupRepository = mainGroupRepository;
     }
 
-    public Boolean saveGroup(String mainGroupName){
+    public Boolean saveGroup(String mainGroupName) {
         save(MainGroup.builder().mainGroupName(mainGroupName).build());
         return true;
     }
 
 
-    public Optional<MainGroup> findByGroupName(String groupName){
+    public Optional<MainGroup> findByGroupName(String groupName) {
         return mainGroupRepository.findByMainGroupName(groupName);
     }
 
-    public List<VwGroupName> getAllGroupNames(){
+    public List<VwGroupName> getAllGroupNames() {
         return mainGroupRepository.findAllGroupNamesAsString();
     }
 
-    public Set<String> getSubGroupNamesByMainGroupId(String mainGroupId){
-        MainGroup mainGroup = findById(mainGroupId).orElseThrow(()->{
+    public Set<String> getSubGroupNamesByMainGroupId(String mainGroupId) {
+        MainGroup mainGroup = findById(mainGroupId).orElseThrow(() -> {
             throw new UserServiceException(ErrorType.GROUP_NOT_FOUND);
         });
         return mainGroup.getGroupNameList();
     }
-
-
-
 
 
 }

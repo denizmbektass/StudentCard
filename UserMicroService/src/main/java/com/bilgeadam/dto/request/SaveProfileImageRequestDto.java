@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class SaveProfileImageRequestDto {
+
     private String token;
     private String profilePicture;
+
 }

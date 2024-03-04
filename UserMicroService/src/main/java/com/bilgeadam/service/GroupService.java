@@ -12,30 +12,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class GroupService extends ServiceManager<Group,String> {
+public class GroupService extends ServiceManager<Group, String> {
+
     private final IGroupRepository groupRepository;
     private final MainGroupService mainGroupService;
 
     public GroupService(IGroupRepository groupRepository,
-                        MainGroupService mainGroupService){
+                        MainGroupService mainGroupService) {
         super(groupRepository);
         this.groupRepository = groupRepository;
         this.mainGroupService = mainGroupService;
     }
 
 
-
-    public void addSubGroupToGroup(List<String> subGroupNameList){
+    public void addSubGroupToGroup(List<String> subGroupNameList) {
         List<MainGroup> groupList = mainGroupService.findAll();
-        List<String> groupNames = groupList.stream().map(x->
-            x.getMainGroupName()
+        List<String> groupNames = groupList.stream().map(x ->
+                x.getMainGroupName()
         ).collect(Collectors.toList());
-        subGroupNameList.stream().forEach(subGroupName->{
-            if(!groupRepository.existsByGroupName(subGroupName)){
-                groupNames.forEach(x->{
-                    if(subGroupName.toUpperCase().contains(x.toUpperCase())){
+        subGroupNameList.stream().forEach(subGroupName -> {
+            if (!groupRepository.existsByGroupName(subGroupName)) {
+                groupNames.forEach(x -> {
+                    if (subGroupName.toUpperCase().contains(x.toUpperCase())) {
                         System.out.println(mainGroupService.findByGroupName(x));
-                        MainGroup group = mainGroupService.findByGroupName(x).orElseThrow(()->{
+                        MainGroup group = mainGroupService.findByGroupName(x).orElseThrow(() -> {
                             throw new UserServiceException(ErrorType.GROUP_NOT_FOUND);
                         });
                         group.getGroupNameList().add(subGroupName);
@@ -48,9 +48,6 @@ public class GroupService extends ServiceManager<Group,String> {
             }
         });
     }
-
-
-
 
 
 }

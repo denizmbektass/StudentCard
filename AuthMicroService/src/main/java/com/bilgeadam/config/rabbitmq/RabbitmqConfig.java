@@ -15,15 +15,17 @@ public class RabbitmqConfig {
     private String resetPasswordQueue = "reset-password-queue";
 
     @Bean
-    DirectExchange authDirectExchange(){
+    DirectExchange authDirectExchange() {
         return new DirectExchange(authDirectExchange);
     }
+
     @Bean
-    Queue resetPasswordQueue(){
+    Queue resetPasswordQueue() {
         return new Queue(resetPasswordQueue);
     }
+
     @Bean
-    public Binding resetPasswordBindingKey(final Queue resetPasswordQueue, final DirectExchange authDirectExchange){
+    public Binding resetPasswordBindingKey(final Queue resetPasswordQueue, final DirectExchange authDirectExchange) {
         return BindingBuilder.bind(resetPasswordQueue).to(authDirectExchange).with(resetPasswordBindingKey);
     }
 
@@ -36,8 +38,9 @@ public class RabbitmqConfig {
     Queue activationLinkQueue() {
         return new Queue(activationLinkQueue);
     }
+
     @Bean
-    public Binding activationLinkBindingKey(final Queue activationLinkQueue, final DirectExchange authDirectExchange){
+    public Binding activationLinkBindingKey(final Queue activationLinkQueue, final DirectExchange authDirectExchange) {
         return BindingBuilder.bind(activationLinkQueue).to(authDirectExchange).with(activationLinkBindingKey);
     }
 
@@ -47,10 +50,12 @@ public class RabbitmqConfig {
     private String registerStudentAndTrainerQueue;
 
     @Bean
-    Queue registerStudentAndTrainerQueue(){return  new Queue(registerStudentAndTrainerQueue);}
+    Queue registerStudentAndTrainerQueue() {
+        return new Queue(registerStudentAndTrainerQueue);
+    }
 
     @Bean
-    public Binding registerStudentAndTrainerBindingKey(final Queue registerStudentAndTrainerQueue, final DirectExchange authDirectExchange){
+    public Binding registerStudentAndTrainerBindingKey(final Queue registerStudentAndTrainerQueue, final DirectExchange authDirectExchange) {
         return BindingBuilder.bind(registerStudentAndTrainerQueue).to(authDirectExchange).with(registerStudentAndTrainerBindingKey);
     }
 

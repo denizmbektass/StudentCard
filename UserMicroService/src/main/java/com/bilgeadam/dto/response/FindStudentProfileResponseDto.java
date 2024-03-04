@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class FindStudentProfileResponseDto {
+
     private String name;
     private String surname;
     private String phoneNumber;
@@ -24,6 +25,5 @@ public class FindStudentProfileResponseDto {
     private String email;
     private String address;
     private String profilePicture;
-
 
 }

@@ -12,5 +12,7 @@ import java.io.Serializable;
 @Data
 @Builder
 public class GetUserModel implements Serializable {
+
     private String token;
+
 }

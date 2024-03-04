@@ -1,6 +1,6 @@
 package com.bilgeadam.config.security;
 
-import com.bilgeadam.service.UserService;
+import com.bilgeadam.service.StudentService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,10 +13,10 @@ import java.util.List;
 
 @Service
 public class JwtUserDetails implements UserDetailsService {
-    private final UserService userService;
+    private final StudentService studentService;
 
-    public JwtUserDetails(UserService userService) {
-        this.userService = userService;
+    public JwtUserDetails(StudentService studentService) {
+        this.studentService = studentService;
     }
 
     @Override

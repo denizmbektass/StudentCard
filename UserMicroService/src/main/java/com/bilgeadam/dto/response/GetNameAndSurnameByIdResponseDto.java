@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class GetNameAndSurnameByIdResponseDto {
+
     private String userId;
     private String name;
     private String surname;
+
 }

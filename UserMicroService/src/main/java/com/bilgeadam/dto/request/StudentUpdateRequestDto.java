@@ -13,8 +13,9 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserUpdateRequestDto {
-    private String id;
+public class StudentUpdateRequestDto {
+
+    private String studentId;
     @NotBlank(message = "Name can not blank")
     private String name;
     @NotBlank(message = "Surname can not blank")
@@ -34,4 +35,5 @@ public class UserUpdateRequestDto {
     private String school;
     @NotBlank(message = "Department can not be blank")
     private String department;
+
 }
