@@ -2,7 +2,7 @@ package com.bilgeadam.config.security;
 
 import com.bilgeadam.dto.response.GetIdRoleStatusEmailFromTokenResponseDto;
 import com.bilgeadam.exceptions.ErrorType;
-import com.bilgeadam.exceptions.UserServiceException;
+import com.bilgeadam.exceptions.StudentServiceException;
 import com.bilgeadam.repository.enums.EStatus;
 import com.bilgeadam.utility.JwtTokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +36,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             List<String> userRole = dto.getRole();
             Optional<EStatus> status = Optional.of(dto.getStatus());
             if (!status.isPresent())
-                throw new UserServiceException(ErrorType.INVALID_TOKEN);
+                throw new StudentServiceException(ErrorType.INVALID_TOKEN);
             else if (!status.get().toString().equals("ACTIVE"))
-                throw new UserServiceException(ErrorType.STATUS_NOT_ACTIVE);
+                throw new StudentServiceException(ErrorType.STATUS_NOT_ACTIVE);
             else if (!userRole.isEmpty()) {
                 UserDetails userDetails = jwtUserDetails.loadUserByEmail(userRole,email.get());
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             } else {
-                throw new UserServiceException(ErrorType.INVALID_TOKEN);
+                throw new StudentServiceException(ErrorType.INVALID_TOKEN);
             }
         }
         filterChain.doFilter(request,response);

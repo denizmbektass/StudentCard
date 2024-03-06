@@ -12,6 +12,8 @@ import java.io.Serializable;
 @Data
 @Builder
 public class UserProfileResponseDto implements Serializable {
+
     private String name;
     private String surname;
+
 }

@@ -24,7 +24,6 @@ import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +37,7 @@ public class AuthService extends ServiceManager<Auth, String> {
     private final ActivationLinkProducer activationLinkProducer;
     private final RegisterStudentAndTrainerProducer registerStudentAndTrainerProducer;
 
-    public AuthService(ResetPasswordProducer resetPasswordProducer, IAuthRepository iAuthRepository, JwtTokenManager jwtTokenManager, IUserManager userManager, IAuthMapper iAuthMapper, ActivationLinkProducer activationLinkProducer,RegisterStudentAndTrainerProducer registerStudentAndTrainerProducer) {
+    public AuthService(ResetPasswordProducer resetPasswordProducer, IAuthRepository iAuthRepository, JwtTokenManager jwtTokenManager, IUserManager userManager, IAuthMapper iAuthMapper, ActivationLinkProducer activationLinkProducer, RegisterStudentAndTrainerProducer registerStudentAndTrainerProducer) {
         super(iAuthRepository);
         this.resetPasswordProducer = resetPasswordProducer;
         this.iAuthRepository = iAuthRepository;

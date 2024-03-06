@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface IMainGroupRepository extends MongoRepository<MainGroup,String> {
 
     Optional<MainGroup> findByMainGroupName(String partialGroupName);
+
     @Query("select new com.bilgeadam.repository.view.VwGroupName(g.mainGroupId,g.mainGroupName) from MainGroup g")
     List<VwGroupName> findAllGroupNamesAsString();
+
 }

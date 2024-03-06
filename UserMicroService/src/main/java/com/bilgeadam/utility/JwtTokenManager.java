@@ -8,7 +8,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.bilgeadam.dto.response.GetIdRoleStatusEmailFromTokenResponseDto;
 
 import com.bilgeadam.exceptions.ErrorType;
-import com.bilgeadam.exceptions.UserServiceException;
+import com.bilgeadam.exceptions.StudentServiceException;
 import com.bilgeadam.repository.enums.EStatus;
 import org.springframework.stereotype.Component;
 
@@ -113,7 +113,7 @@ public class JwtTokenManager {
             JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
             DecodedJWT decodedJWT = verifier.verify(token);
             if (decodedJWT == null) {
-                throw new UserServiceException(ErrorType.INVALID_TOKEN);
+                throw new StudentServiceException(ErrorType.INVALID_TOKEN);
             }
             EStatus status = decodedJWT.getClaim("status").as(EStatus.class);
             List<String> role = decodedJWT.getClaim("role").asList(String.class);
@@ -128,7 +128,7 @@ public class JwtTokenManager {
             return getIdRoleStatusEmailFromTokenResponseDto;
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            throw new UserServiceException(ErrorType.INVALID_TOKEN);
+            throw new StudentServiceException(ErrorType.INVALID_TOKEN);
         }
     }
 

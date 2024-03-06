@@ -13,9 +13,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SendStudentsRequestDto {
+public class BaseApiStudentRequestDto {
 
-    private String userId;
+    private String studentId;
     private String name;
     private String surname;
     private String email;

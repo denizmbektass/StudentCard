@@ -12,6 +12,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TranscriptInfo {
+
     private String profilePicture;
     private String masterTrainer;
     private String assistantTrainer;

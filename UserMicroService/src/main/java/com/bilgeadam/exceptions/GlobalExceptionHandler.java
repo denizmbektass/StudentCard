@@ -18,20 +18,22 @@ import java.util.List;
 //@ControllerAdvice
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(RuntimeException.class)
     @ResponseBody
-    public ResponseEntity<String> handleRuntimeException(RuntimeException ex){
-        return ResponseEntity.ok("Beklenmeyen bir hata olustu: "+ex.getMessage());
+    public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
+        return ResponseEntity.ok("Beklenmeyen bir hata olustu: " + ex.getMessage());
     }
-    @ExceptionHandler(UserServiceException.class)
-    public ResponseEntity<ErrorMessage> handleManagerException(UserServiceException ex){
-        ErrorType errorType=ex.getErrorType();
-        HttpStatus httpStatus=errorType.httpStatus;
-        return new ResponseEntity<>(createError(errorType,ex),httpStatus);
+
+    @ExceptionHandler(StudentServiceException.class)
+    public ResponseEntity<ErrorMessage> handleManagerException(StudentServiceException ex) {
+        ErrorType errorType = ex.getErrorType();
+        HttpStatus httpStatus = errorType.httpStatus;
+        return new ResponseEntity<>(createError(errorType, ex), httpStatus);
     }
 
     private ErrorMessage createError(ErrorType errorType, Exception ex) {
-        System.out.println("Hata olustu: "+ex.getMessage());
+        System.out.println("Hata olustu: " + ex.getMessage());
         return ErrorMessage.builder()
                 .code(errorType.getCode())
                 .message(errorType.getMessage())
@@ -39,18 +41,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-
-    public final ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception){
-        ErrorType errorType=ErrorType.BAD_REQUEST;
-        List<String> fields=new ArrayList<>();
-        exception.getBindingResult().getFieldErrors().forEach(e->fields.add(e.getField()+": "+e.getDefaultMessage()));
-        ErrorMessage errorMessage=createError(errorType,exception);
+    public final ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+        ErrorType errorType = ErrorType.BAD_REQUEST;
+        List<String> fields = new ArrayList<>();
+        exception.getBindingResult().getFieldErrors().forEach(e -> fields.add(e.getField() + ": " + e.getDefaultMessage()));
+        ErrorMessage errorMessage = createError(errorType, exception);
         errorMessage.setFields(fields);
-        return new ResponseEntity<>(errorMessage,errorType.getHttpStatus());
+        return new ResponseEntity<>(errorMessage, errorType.getHttpStatus());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-
     public final ResponseEntity<ErrorMessage> handleMessageNotReadableException(
             HttpMessageNotReadableException exception) {
         ErrorType errorType = ErrorType.BAD_REQUEST;
@@ -58,7 +58,6 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidFormatException.class)
-
     public final ResponseEntity<ErrorMessage> handleInvalidFormatException(
             InvalidFormatException exception) {
         ErrorType errorType = ErrorType.BAD_REQUEST;
@@ -67,7 +66,6 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-
     public final ResponseEntity<ErrorMessage> handleMethodArgumentMisMatchException(
             MethodArgumentTypeMismatchException exception) {
 
@@ -76,22 +74,21 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MissingPathVariableException.class)
-
     public final ResponseEntity<ErrorMessage> handleMethodArgumentMisMatchException(
             MissingPathVariableException exception) {
 
         ErrorType errorType = ErrorType.BAD_REQUEST;
         return new ResponseEntity<>(createError(errorType, exception), errorType.getHttpStatus());
     }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
 
-    public final ResponseEntity<ErrorMessage> handlePsqlException(DataIntegrityViolationException exception){
-        ErrorType errorType=ErrorType.EMAIL_DUPLICATE;
-        return new ResponseEntity<>(createError(errorType,exception),errorType.getHttpStatus());
+    public final ResponseEntity<ErrorMessage> handlePsqlException(DataIntegrityViolationException exception) {
+        ErrorType errorType = ErrorType.EMAIL_DUPLICATE;
+        return new ResponseEntity<>(createError(errorType, exception), errorType.getHttpStatus());
     }
 
     @ExceptionHandler(Exception.class)
-
     public final ResponseEntity<ErrorMessage> handleAllExceptions(Exception exception) {
         ErrorType errorType = ErrorType.INTERNAL_ERROR;
         List<String> fields = new ArrayList<>();

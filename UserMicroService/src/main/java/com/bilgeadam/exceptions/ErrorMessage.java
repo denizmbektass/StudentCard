@@ -15,9 +15,14 @@ import java.util.List;
 @Builder
 @Component
 public class ErrorMessage {
+
     int code;
+
     String message;
+
     List<String> fields;
+
     @Builder.Default
-    private LocalDateTime date=LocalDateTime.now();
+    private LocalDateTime date = LocalDateTime.now();
+
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 @Getter
 public enum ErrorType {
+
     TOKEN_NOT_CREATED(3001,"Token oluşturulamadı.",HttpStatus.BAD_REQUEST),
     EMAIL_DUPLICATE(4001,"E-posta zaten kullanımda.",HttpStatus.BAD_REQUEST),
     EMAIL_NOT_FOUND(4002,"E-posta bulunamadı. Lütfen tekrar deneyiniz.",HttpStatus.BAD_REQUEST),
@@ -18,7 +19,7 @@ public enum ErrorType {
     INVALID_TOKEN(5001,"Token hatası.",HttpStatus.BAD_REQUEST),
     INTERNAL_ERROR(5100,"Bilinmeyen bir hata oluştu.",HttpStatus.INTERNAL_SERVER_ERROR),
     BAD_REQUEST(4100,"Parametre hatası.",HttpStatus.BAD_REQUEST),
-    USER_NOT_EXIST(500,"Kullanıcı mevcut değil.",HttpStatus.BAD_REQUEST),
+    STUDENT_NOT_EXIST(500,"Kullanıcı mevcut değil.",HttpStatus.BAD_REQUEST),
     USER_WRONG_PASSWORD(4006,"Son şifreniz yanlış.",HttpStatus.BAD_REQUEST),
     GROUP_NOT_FOUND(9011,"Grup bulunamadı.",HttpStatus.BAD_REQUEST)
 

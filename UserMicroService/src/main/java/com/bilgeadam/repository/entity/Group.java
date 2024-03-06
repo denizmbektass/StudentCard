@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @SuperBuilder
 @Document
 public class Group extends BaseEntity {
+
     @Id
     private String groupId;
     private String groupName;

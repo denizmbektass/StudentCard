@@ -3,7 +3,7 @@ package com.bilgeadam.service;
 import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.*;
 import com.bilgeadam.exceptions.ErrorType;
-import com.bilgeadam.exceptions.UserServiceException;
+import com.bilgeadam.exceptions.StudentServiceException;
 import com.bilgeadam.converter.UserConverter;
 import com.bilgeadam.manager.IAuthManager;
 import com.bilgeadam.manager.IBaseManager;
@@ -58,7 +58,7 @@ public class StudentService extends ServiceManager<Student, String> {
     public Boolean updateStudent(StudentUpdateRequestDto dto) {
         Optional<Student> student = studentRepository.findByStudentId(dto.getStudentId());
         if (student.isEmpty())
-            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+            throw new StudentServiceException(ErrorType.STUDENT_NOT_EXIST);
         //TODO mapper'a çevrilmeli
         Student toUpdate = student.get();
         toUpdate.setName(dto.getName());
@@ -74,10 +74,11 @@ public class StudentService extends ServiceManager<Student, String> {
         return true;
     }
 
+
     public Boolean doPassive(String studentId) {
         Optional<Student> student = studentRepository.findByStudentId(studentId);
         if (student.isEmpty())
-            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+            throw new StudentServiceException(ErrorType.STUDENT_NOT_EXIST);
         student.get().setStatus(EStatus.PASSIVE);
         update(student.get());
         return true;
@@ -86,13 +87,13 @@ public class StudentService extends ServiceManager<Student, String> {
     public Boolean safeDelete(String studentId) {
         Optional<Student> student = studentRepository.findByStudentId(studentId);
         if (student.isEmpty())
-            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+            throw new StudentServiceException(ErrorType.STUDENT_NOT_EXIST);
         student.get().setStatus(EStatus.DELETED);
         update(student.get());
         return true;
     }
 
-    public SaveStudentResponseDto save(SaveStudentRequestDto dto) {
+    public SaveStudentResponseDto saveStudent(SaveStudentRequestDto dto) {
         groupService.addSubGroupToGroup(dto.getGroupNameList());
         Student student = IUserMapper.INSTANCE.toStudent(dto);
         save(student);
@@ -100,43 +101,47 @@ public class StudentService extends ServiceManager<Student, String> {
     }
 
     public List<Student> searchStudent(SearchStudentRequestDto dto) {
-        return studentRepository.findByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndPhoneNumberContaining(dto.getName(),dto.getSurname(),dto.getEmail(),dto.getPhoneNumber());
+        return studentRepository.findByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndPhoneNumberContaining(dto.getName(), dto.getSurname(), dto.getEmail(), dto.getPhoneNumber());
     }
 
-    public String createToken(SelectUserCreateTokenDto dto) {
-        Optional<Student> user = findById(dto.getStudentId());
-        Optional<String> token = jwtTokenManager.createToken(dto.getStudentId(),dto.getRoleList(),dto.getStatus(),user.get().getGroupNameList(),user.get().getEmail());
-        if (token.isEmpty()) throw new UserServiceException(ErrorType.TOKEN_NOT_CREATED);
+    public String createToken(SelectStudentCreateTokenDto dto) {
+        Optional<Student> student = studentRepository.findByStudentId(dto.getStudentId());
+        if (student.isPresent() && student.get().getStatus() == EStatus.DELETED) {
+            throw new StudentServiceException(ErrorType.TOKEN_NOT_CREATED);
+        }
+        Optional<String> token = jwtTokenManager.createToken(dto.getStudentId(), dto.getRoleList(), dto.getStatus(), student.get().getGroupNameList(), student.get().getEmail());
+        if (token.isEmpty()) throw new StudentServiceException(ErrorType.TOKEN_NOT_CREATED);
         return token.get();
     }
 
-    public String getIdFromToken(String token) {
-        Optional<String> userId = jwtTokenManager.getIdFromToken(token);
-        if (userId.isEmpty()) throw new UserServiceException(ErrorType.INVALID_TOKEN);
-        return userId.get();
+    public String getStudentIdFromToken(String token) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
+        if (studentId.isEmpty()) throw new StudentServiceException(ErrorType.INVALID_TOKEN);
+        return studentId.get();
     }
+
 
     public Boolean saveStudentList(List<SaveStudentRequestDto> dtoList) {
         dtoList.stream().forEach(dto -> {
-            save(dto);
+            saveStudent(dto);
         });
         return true;
     }
 
     public FindStudentProfileResponseDto findStudentProfile(String token) {
-        String userId = jwtTokenManager.getIdFromToken(token).orElseThrow(() -> {
-            throw new UserServiceException(ErrorType.INVALID_TOKEN);
+        String studentId = jwtTokenManager.getIdFromToken(token).orElseThrow(() -> {
+            throw new StudentServiceException(ErrorType.INVALID_TOKEN);
         });
-        Student user = findById(userId).orElseThrow(() -> {
-            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        Student student = studentRepository.findByStudentId(studentId).orElseThrow(() -> {
+            throw new StudentServiceException(ErrorType.STUDENT_NOT_EXIST);
         });
-        return IUserMapper.INSTANCE.toFindStudentProfileResponseDto(user);
+        return IUserMapper.INSTANCE.toFindStudentProfileResponseDto(student);
     }
 
-    public String getNameAndSurnameWithId(String studentId) {
+    public String getNameAndSurnameWithStudentId(String studentId) {
         Optional<Student> optionalStudent = studentRepository.findByStudentId(studentId);
         if (optionalStudent.isEmpty()) {
-            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+            throw new StudentServiceException(ErrorType.STUDENT_NOT_EXIST);
         }
         return optionalStudent.get().getName() + " " + optionalStudent.get().getSurname();
     }
@@ -180,9 +185,9 @@ public class StudentService extends ServiceManager<Student, String> {
 
     public TranscriptInfo getTranscriptInfoByStudent(String token) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
-        if (studentId.isEmpty()) throw new UserServiceException(ErrorType.INVALID_TOKEN);
-        Optional<Student> optionalStudent = findById(studentId.get());
-        if (optionalStudent.isEmpty()) throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        if (studentId.isEmpty()) throw new StudentServiceException(ErrorType.INVALID_TOKEN);
+        Optional<Student> optionalStudent = studentRepository.findByStudentId(studentId.get());
+        if (optionalStudent.isEmpty()) throw new StudentServiceException(ErrorType.STUDENT_NOT_EXIST);
         Student student = optionalStudent.get();
         List<Student> students = findAll();
         String masterTrainer = students.stream()
@@ -200,7 +205,7 @@ public class StudentService extends ServiceManager<Student, String> {
     }
 
     public List<GroupStudentResponseDto> getAllStudentsWithoutInternship(GroupStudentRequestDto dto) {
-        List<Student> studentList = studentRepository.findStudentsByGroupNameListAndInternshipStatus(dto.getGroupName(),Arrays.asList(ERole.STUDENT));
+        List<Student> studentList = studentRepository.findStudentsByGroupNameListAndInternshipStatus(dto.getGroupName(), Arrays.asList(ERole.STUDENT));
         List<GroupStudentResponseDto> groupStudentResponseDtoList = studentList.stream().map(student ->
                 IUserMapper.INSTANCE.toGroupStudentResponseDto(student)
         ).collect(Collectors.toList());
@@ -208,8 +213,8 @@ public class StudentService extends ServiceManager<Student, String> {
     }
 
     public Boolean updateStudentInternShipStatus(String studentId) {
-        Student student = findByWithStudentId(studentId).orElseThrow(() -> {
-            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        Student student = studentRepository.findByStudentId(studentId).orElseThrow(() -> {
+            throw new StudentServiceException(ErrorType.STUDENT_NOT_EXIST);
         });
         student.setInternShipStatus(EStatus.ACTIVE);
         update(student);
@@ -218,7 +223,7 @@ public class StudentService extends ServiceManager<Student, String> {
 
     public Boolean updateStudentInternShipStatusToDeleted(String studentId) {
         Student student = studentRepository.findByStudentId(studentId).orElseThrow(() -> {
-            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+            throw new StudentServiceException(ErrorType.STUDENT_NOT_EXIST);
         });
         student.setInternShipStatus(EStatus.DELETED);
         update(student);
@@ -228,7 +233,7 @@ public class StudentService extends ServiceManager<Student, String> {
     //Grup isimlerini almak için
     public List<String> findGroupNameForStudent(String studentId) {
         Optional<Student> student = studentRepository.findByStudentId(studentId);
-        if (student.isEmpty()) throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        if (student.isEmpty()) throw new StudentServiceException(ErrorType.STUDENT_NOT_EXIST);
         List<String> groupNames = new ArrayList<>();
         groupNames.addAll(student.get().getGroupNameList());
         return groupNames;
@@ -247,29 +252,30 @@ public class StudentService extends ServiceManager<Student, String> {
      * @param token
      * @return
      */
-    public GetNameAndSurnameByIdResponseDto getUserNameAndSurnameFromToken(String token) {
-        Optional<String> optionalUserId = jwtTokenManager.getIdFromTokenForStudentId(token);
-        if (optionalUserId.isEmpty()) {
-            throw new UserServiceException(ErrorType.INVALID_TOKEN);
+    public GetNameAndSurnameByIdResponseDto getStudentNameAndSurnameFromToken(String token) {
+        Optional<String> optionalStudentId = jwtTokenManager.getIdFromToken(token);
+        if (optionalStudentId.isEmpty()) {
+            throw new StudentServiceException(ErrorType.INVALID_TOKEN);
         }
-        Optional<Student> user = studentRepository.findById(optionalUserId.get());
-        if (user.isEmpty()) {
-            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        Optional<Student> student = studentRepository.findByStudentId(optionalStudentId.get());
+        if (student.isEmpty()) {
+            throw new StudentServiceException(ErrorType.STUDENT_NOT_EXIST);
         }
-        return IUserMapper.INSTANCE.toGetNameAndSurnameByIdResponseDtoFromUser(user.get());
+        return IUserMapper.INSTANCE.toGetNameAndSurnameByIdResponseDtoFromUser(student.get());
     }
 
-    public Boolean changePassword(ChangePasswordRequestDto dto,String token) {
+
+    public Boolean changePassword(ChangePasswordRequestDto dto, String token) {
         Optional<String> optionalUserId = jwtTokenManager.getIdFromTokenForStudentId(token);
         if (optionalUserId.isEmpty()) {
-            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+            throw new StudentServiceException(ErrorType.STUDENT_NOT_EXIST);
         }
         GetAuthInfoForChangePassword getAuthInfoForChangePassword = authManager.getAuthInfoForChangePassword(optionalUserId.get()).getBody();
         if (!getAuthInfoForChangePassword.getPassword().equals(dto.getLastPassword())) {
-            throw new UserServiceException(ErrorType.USER_WRONG_PASSWORD);
+            throw new StudentServiceException(ErrorType.USER_WRONG_PASSWORD);
         }
         if (!dto.getNewPassword().equals(dto.getReNewPassword()))
-            throw new UserServiceException(ErrorType.PASSWORD_UNMATCH);
+            throw new StudentServiceException(ErrorType.PASSWORD_UNMATCH);
         ChangePasswordResponseDto dto1 = ChangePasswordResponseDto.builder()
                 .newPassword(dto.getNewPassword())
                 .userId(optionalUserId.get()).build();
@@ -283,56 +289,58 @@ public class StudentService extends ServiceManager<Student, String> {
      * @param token
      */
     public FindStudentProfileResponseDto getStudentProfile(String token) {
-        String studentId = jwtTokenManager.getIdFromTokenForStudentId(token).orElseThrow(
+        String studentId = jwtTokenManager.getIdFromToken(token).orElseThrow(
                 () -> {
-                    throw new UserServiceException(ErrorType.INVALID_TOKEN);
+                    throw new StudentServiceException(ErrorType.INVALID_TOKEN);
                 });
         Optional<Student> student = studentRepository.findByStudentId(studentId);
         if (student.isEmpty())
-            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+            throw new StudentServiceException(ErrorType.STUDENT_NOT_EXIST);
         return IUserMapper.INSTANCE.toFindStudentProfileResponseDto(student.get());
     }
 
+
     public Boolean saveProfileImage(SaveProfileImageRequestDto dto) {
-        Optional<String> studentId = jwtTokenManager.getIdFromTokenForStudentId(dto.getToken());
-        if (studentId.isEmpty()) throw new UserServiceException(ErrorType.INVALID_TOKEN);
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());
+        if (studentId.isEmpty()) throw new StudentServiceException(ErrorType.INVALID_TOKEN);
         Optional<Student> optionalStudent = studentRepository.findByStudentId(studentId.get());
         optionalStudent.get().setProfilePicture(dto.getProfilePicture());
         update(optionalStudent.get());
         return true;
     }
 
-    public String getProfileImage(String token) {
-        Optional<String> studentId = jwtTokenManager.getIdFromTokenForStudentId(token);
-        if (studentId.isEmpty()) throw new UserServiceException(ErrorType.INVALID_TOKEN);
+
+    public String getStudentProfileImage(String token) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
+        if (studentId.isEmpty()) throw new StudentServiceException(ErrorType.INVALID_TOKEN);
         Optional<Student> optionalStudent = studentRepository.findByStudentId(studentId.get());
-        if (optionalStudent.isEmpty()) throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+        if (optionalStudent.isEmpty()) throw new StudentServiceException(ErrorType.STUDENT_NOT_EXIST);
         String response = optionalStudent.get().getProfilePicture();
         return response;
     }
 
     public Boolean getAllBaseStudents() {
-        List<SendStudentsRequestDto> studentDtos = baseManager.findAllBaseStudents().getBody();
+        List<BaseApiStudentRequestDto> studentDtos = baseManager.findAllBaseStudents().getBody();
         if (studentDtos.isEmpty()) {
-            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+            throw new StudentServiceException(ErrorType.STUDENT_NOT_EXIST);
         }
-        for (SendStudentsRequestDto studentDto : studentDtos) {
+        for (BaseApiStudentRequestDto studentDto : studentDtos) {
             groupService.addSubGroupToGroup(studentDto.getGroupNameList());
-            Optional<Student> user = studentRepository.findByEmail(studentDto.getEmail());
-            if (user.isEmpty()) {
+            Optional<Student> student = studentRepository.findByEmail(studentDto.getEmail());
+            if (student.isEmpty()) {
                 Student newUser = IUserMapper.INSTANCE.studentToUser(studentDto);
                 newUser.setRoleList(List.of(ERole.STUDENT));
                 studentRepository.save(newUser);
             } else {
-                Student existingUser = user.get();
-                if (existingUser.getUpdateDate() < studentDto.getUpdateDate()) {
+                Student existingStudent = student.get();
+                if (existingStudent.getUpdateDate() < studentDto.getUpdateDate()) {
                     Student updatedUser = IUserMapper.INSTANCE.studentToUser(studentDto);
                     updatedUser.setRoleList(List.of(ERole.STUDENT));
                     studentRepository.save(updatedUser);
                 } else {
-                    if (existingUser.getRoleList().contains(ERole.CANDIDATE)) {
-                        existingUser.setRoleList(List.of(ERole.STUDENT));
-                        studentRepository.save(existingUser);
+                    if (existingStudent.getRoleList().contains(ERole.CANDIDATE)) {
+                        existingStudent.setRoleList(List.of(ERole.STUDENT));
+                        studentRepository.save(existingStudent);
                     }
                 }
             }
@@ -343,10 +351,10 @@ public class StudentService extends ServiceManager<Student, String> {
     public Optional<Student> findByWithStudentId(String token) {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
         if (studentId.isEmpty())
-            throw new UserServiceException(ErrorType.INVALID_TOKEN);
+            throw new StudentServiceException(ErrorType.INVALID_TOKEN);
         Optional<Student> student = studentRepository.findByStudentId(studentId.get());
         if (student.isEmpty())
-            throw new UserServiceException(ErrorType.USER_NOT_EXIST);
+            throw new StudentServiceException(ErrorType.STUDENT_NOT_EXIST);
         return student;
     }
 
@@ -399,7 +407,7 @@ public class StudentService extends ServiceManager<Student, String> {
                                 phoneNumber = currentCell.getStringCellValue();
                             } else if (currentCell.getCellType() == CellType.NUMERIC) {
                                 phoneNumber = String.valueOf((long) currentCell.getNumericCellValue());
-                            }else {
+                            } else {
                                 phoneNumber = "";
                             }
                             candidate.setPhoneNumber(phoneNumber);
@@ -491,16 +499,16 @@ public class StudentService extends ServiceManager<Student, String> {
                 if (!isEmptyRow) {
                     candidate.setRoleList(List.of(ERole.CANDIDATE));
 
-                    if ((candidate.getName() != null && candidate.getName() != "") &&  (candidate.getEmail() != null && candidate.getEmail() != "") &&
-                            (candidate.getPhoneNumber() != null && candidate.getPhoneNumber() != "") &&  (candidate.getRowNumber() != null)
-                            &&  (candidate.getApplicationDate() != null ) &&  (candidate.getBirthDate() != null)
-                            &&  (candidate.getEducation() != null && candidate.getEducation() != "") &&  (candidate.getEducationStatus() != null && candidate.getEducationStatus() != "")
-                            &&  (candidate.getSchool() != null && candidate.getSchool() != "") &&  (candidate.getDepartment() != null && candidate.getDepartment() != "")
-                            &&  (candidate.getEnglishLevel() != null && candidate.getEnglishLevel() != "") &&  (candidate.getCity() != null && candidate.getCity() != "")
-                            &&  (candidate.getDistrict() != null && candidate.getDistrict() != "") &&  (candidate.getEducationBranch() != null && candidate.getEducationBranch() != "")
-                            &&  (candidate.getRelevantBranch() != null && candidate.getRelevantBranch() != "") &&  (candidate.getWorkshopDate() != null )
-                            &&  (candidate.getWorkshopTime() != null && candidate.getWorkshopTime() != "") &&  (candidate.getWorkshopPlace() != null && candidate.getWorkshopPlace() != "")
-                            &&  (candidate.getParticipationStatus() != null && candidate.getParticipationStatus() != "")) {
+                    if ((candidate.getName() != null && candidate.getName() != "") && (candidate.getEmail() != null && candidate.getEmail() != "") &&
+                            (candidate.getPhoneNumber() != null && candidate.getPhoneNumber() != "") && (candidate.getRowNumber() != null)
+                            && (candidate.getApplicationDate() != null) && (candidate.getBirthDate() != null)
+                            && (candidate.getEducation() != null && candidate.getEducation() != "") && (candidate.getEducationStatus() != null && candidate.getEducationStatus() != "")
+                            && (candidate.getSchool() != null && candidate.getSchool() != "") && (candidate.getDepartment() != null && candidate.getDepartment() != "")
+                            && (candidate.getEnglishLevel() != null && candidate.getEnglishLevel() != "") && (candidate.getCity() != null && candidate.getCity() != "")
+                            && (candidate.getDistrict() != null && candidate.getDistrict() != "") && (candidate.getEducationBranch() != null && candidate.getEducationBranch() != "")
+                            && (candidate.getRelevantBranch() != null && candidate.getRelevantBranch() != "") && (candidate.getWorkshopDate() != null)
+                            && (candidate.getWorkshopTime() != null && candidate.getWorkshopTime() != "") && (candidate.getWorkshopPlace() != null && candidate.getWorkshopPlace() != "")
+                            && (candidate.getParticipationStatus() != null && candidate.getParticipationStatus() != "")) {
                         candidates.add(candidate);
                     } else {
                         incorrectRecords.add(candidate);
@@ -522,11 +530,11 @@ public class StudentService extends ServiceManager<Student, String> {
         Sheet sheet = workbook.createSheet("Users");
 
         Row headerRow = sheet.createRow(0);
-        String[] columns = {"S.N.","Başvuru Tarihi","İsim Soyisim","Geliş Kanalı","Doğum Tarihi","E-mail Adresi","Gsm Numarası","Öğrenim Seviyesi",
-                "Öğrenim Durumu","Sınıfı","Üniversite","Bölüm","İngilizce Bilgisi","Adres (İL)", "Adres (İLÇE)", "Eğitim Alabileceği Şube",
-                "Sizinle İlgilenmesini İstediğiniz Şube","Planlanan Workshop Tarihi","Planlanan Workshop Saati","Planlanan Workshop Yeri",
-                "Katılım Durumu","Sınav Durumu","Mülakat Tarihi","Mülakat Katılım Durumu","Mülakatı Gerçekleştiren",
-                "Değerlendirme","Mülakat / Sınav Sonucu","Sözleşme","Açıklama ve Notlar"};
+        String[] columns = {"S.N.", "Başvuru Tarihi", "İsim Soyisim", "Geliş Kanalı", "Doğum Tarihi", "E-mail Adresi", "Gsm Numarası", "Öğrenim Seviyesi",
+                "Öğrenim Durumu", "Sınıfı", "Üniversite", "Bölüm", "İngilizce Bilgisi", "Adres (İL)", "Adres (İLÇE)", "Eğitim Alabileceği Şube",
+                "Sizinle İlgilenmesini İstediğiniz Şube", "Planlanan Workshop Tarihi", "Planlanan Workshop Saati", "Planlanan Workshop Yeri",
+                "Katılım Durumu", "Sınav Durumu", "Mülakat Tarihi", "Mülakat Katılım Durumu", "Mülakatı Gerçekleştiren",
+                "Değerlendirme", "Mülakat / Sınav Sonucu", "Sözleşme", "Açıklama ve Notlar"};
 
         for (int i = 0; i < columns.length; i++) {
             Cell cell = headerRow.createCell(i);

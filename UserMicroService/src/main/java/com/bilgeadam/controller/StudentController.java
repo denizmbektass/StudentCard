@@ -3,7 +3,7 @@ package com.bilgeadam.controller;
 import com.bilgeadam.dto.request.*;
 import com.bilgeadam.dto.response.*;
 import com.bilgeadam.exceptions.ErrorType;
-import com.bilgeadam.exceptions.UserServiceException;
+import com.bilgeadam.exceptions.StudentServiceException;
 import com.bilgeadam.repository.entity.Student;
 import com.bilgeadam.service.StudentService;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -63,8 +63,8 @@ public class StudentController {
             description = "Belirtilen öğrenci bilgilerini kaydeder.")
     //@PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(SAVE)
-    public ResponseEntity<SaveStudentResponseDto> save(@RequestBody SaveStudentRequestDto dto) {
-        return ResponseEntity.ok(studentService.save(dto));
+    public ResponseEntity<SaveStudentResponseDto> saveStudent(@RequestBody SaveStudentRequestDto dto) {
+        return ResponseEntity.ok(studentService.saveStudent(dto));
     }
 
 
@@ -104,16 +104,16 @@ public class StudentController {
             description = "Belirli kullanıcı verileri kullanılarak bir token oluşturur.")
     //@PreAuthorize("hasAuthority('MANAGER')")
     @PostMapping("/search-create-token")
-    public ResponseEntity<String> createToken(@RequestBody SelectUserCreateTokenDto dto) {
+    public ResponseEntity<String> createToken(@RequestBody SelectStudentCreateTokenDto dto) {
         return ResponseEntity.ok(studentService.createToken(dto));
     }
 
-    @Operation(summary = "Token'dan kullanıcı kimliği alınması işlemi",
-            description = "Belirli bir token'dan kullanıcı kimliğini çıkarmak için kullanılır.")
+    @Operation(summary = "Token'dan öğrencinin kimliği alınması işlemi",
+            description = "Belirli bir token'dan öğrenci id'sini almak için kullanılır.")
     //@PreAuthorize("hasAuthority('MANAGER')")
-    @PostMapping("/get-id-from-token/{token}")
-    public ResponseEntity<String> getIdFromToken(@PathVariable String token) {
-        return ResponseEntity.ok(studentService.getIdFromToken(token));
+    @PostMapping("/get-student-id-from-token/{token}")
+    public ResponseEntity<String> getStudentIdFromToken(@PathVariable String token) {
+        return ResponseEntity.ok(studentService.getStudentIdFromToken(token));
     }
 
     @Operation(summary = "Öğrenci profil bilgilerini bulma işlemi",
@@ -136,8 +136,8 @@ public class StudentController {
             description = "Belirli bir öğrenci kimliği ile öğrencinin ad ve soyadını almak için kullanılır.")
     //@PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/get-name-and-surname-with-id/{studentId}")
-    public ResponseEntity<String> getNameAndSurnameWithId(@PathVariable String studentId) {
-        return ResponseEntity.ok(studentService.getNameAndSurnameWithId(studentId));
+    public ResponseEntity<String> getNameAndSurnameWithStudentId(@PathVariable String studentId) {
+        return ResponseEntity.ok(studentService.getNameAndSurnameWithStudentId(studentId));
     }
 
     @Operation(summary = "Grup adına göre öğrencileri bulma işlemi",
@@ -188,11 +188,11 @@ public class StudentController {
     }
 
 
-    @Operation(summary = "Token'dan kullanıcının ad ve soyadını getirme işlemi",
-            description = "Verilen token'dan kullanıcının ad ve soyadını getirmek için kullanılır.")
+    @Operation(summary = "Token'dan öğrencinin ad ve soyadını getirme işlemi",
+            description = "Verilen token'dan öğrencinin ad ve soyadını getirmek için kullanılır.")
     @GetMapping("/get-user-name-and-surname-from-token-for-login/{token}")
-    public ResponseEntity<GetNameAndSurnameByIdResponseDto> getUserNameAndSurnameFromToken(@PathVariable String token) {
-        return ResponseEntity.ok(studentService.getUserNameAndSurnameFromToken(token));
+    public ResponseEntity<GetNameAndSurnameByIdResponseDto> getStudentNameAndSurnameFromToken(@PathVariable String token) {
+        return ResponseEntity.ok(studentService.getStudentNameAndSurnameFromToken(token));
     }
 
     @Operation(summary = "Kullanıcının şifresini değiştirme işlemi",
@@ -231,7 +231,7 @@ public class StudentController {
             description = "Belirtilen token ile ilişkili öğrencinin profil fotoğrafını getirir.")
     @GetMapping("/get-student-profile-image/{token}")
     public ResponseEntity<String> getStudentProfileImage(@PathVariable String token) {
-        return ResponseEntity.ok(studentService.getProfileImage(token));
+        return ResponseEntity.ok(studentService.getStudentProfileImage(token));
     }
 
     @Operation(summary = "Base kısmında öğrenci verileri çekme işlemi",
@@ -242,7 +242,7 @@ public class StudentController {
             studentService.getAllBaseStudents();
             return ResponseEntity.ok("Öğrenci verileri eklendi");
         } catch (Exception e) {
-            throw new UserServiceException(ErrorType.INTERNAL_ERROR);
+            throw new StudentServiceException(ErrorType.INTERNAL_ERROR);
         }
     }
 

@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SelectUserCreateTokenDto {
+public class SelectStudentCreateTokenDto {
 
     private String studentId;
     private List<String> roleList;

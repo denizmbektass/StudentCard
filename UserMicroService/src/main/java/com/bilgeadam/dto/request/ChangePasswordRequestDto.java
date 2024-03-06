@@ -15,8 +15,10 @@ public class ChangePasswordRequestDto {
 
     @NotBlank(message = "please enter your last password")
     String lastPassword;
+
     @NotBlank(message = "enter your new password")
     String newPassword;
+
     @NotBlank(message = "enter your new password")
     String reNewPassword;
 

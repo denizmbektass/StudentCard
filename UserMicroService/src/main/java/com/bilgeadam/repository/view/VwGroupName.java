@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class VwGroupName {
+
     private String mainGroupId;
     private String mainGroupName;
+
 }
