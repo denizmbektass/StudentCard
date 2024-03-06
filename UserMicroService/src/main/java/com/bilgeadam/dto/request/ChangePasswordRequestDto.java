@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @Builder
 public class ChangePasswordRequestDto {
+
     @NotBlank(message = "please enter your last password")
     String lastPassword;
     @NotBlank(message = "enter your new password")

@@ -12,9 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentsMailReminderDto {
+
     private String studentId;
     private List<String> groupName;
     private Double egitimSaati;
     private String name;
     private String surname;
+
 }

@@ -23,4 +23,5 @@ public class Contribution extends BaseEntity {
     private Double researchNote;
     private Double intraTeamTrainingNote;
     private Double totalScoreContribution;
+
 }

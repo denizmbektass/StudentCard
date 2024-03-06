@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(url = "http://localhost:4040/api/v1/auth",name = "user-auth")
+@FeignClient(url = "http://localhost:4040/api/v1/auth", name = "user-auth")
 public interface IAuthManager {
 
     @GetMapping("get-auth-info-for-user-change-password/{userId}")
@@ -18,4 +18,6 @@ public interface IAuthManager {
 
     @PostMapping("change-password-from-user")
     ResponseEntity<Boolean> changePasswordFromUser(@RequestBody ChangePasswordResponseDto dto);
+
+
 }

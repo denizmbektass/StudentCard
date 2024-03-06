@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ChangePasswordResponseDto {
-String userId;
-String newPassword;
+
+    String userId;
+    String newPassword;
+
 }

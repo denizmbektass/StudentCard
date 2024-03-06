@@ -1,8 +1,8 @@
 package com.bilgeadam.config.security;
 
 import com.bilgeadam.dto.response.GetIdRoleStatusEmailFromTokenResponseDto;
-import com.bilgeadam.exceptions.UserServiceException;
 import com.bilgeadam.exceptions.ErrorType;
+import com.bilgeadam.exceptions.UserServiceException;
 import com.bilgeadam.repository.enums.EStatus;
 import com.bilgeadam.utility.JwtTokenManager;
 import org.springframework.beans.factory.annotation.Autowired;

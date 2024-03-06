@@ -22,12 +22,13 @@ import static com.bilgeadam.constants.ApiUrls.*;
 @RequiredArgsConstructor
 public class AlgorithmController {
     private final AlgorithmService algorithmService;
+
     @Operation(summary = "Algoritma oluşturma işlemi",
             description = "Belirtilen DTO kullanılarak bir algoritma sonucu oluşturur.")
     @CrossOrigin("*")
     @PostMapping(CREATE)
     @PreAuthorize("hasAuthority('workshop_team:write')")
-    public ResponseEntity<MessageResponse> createAlgorithmScore(@RequestBody @Valid CreateAlgorithmRequestDto dto){
+    public ResponseEntity<MessageResponse> createAlgorithmScore(@RequestBody @Valid CreateAlgorithmRequestDto dto) {
         algorithmService.createAlgorithmScore(dto);
         return ResponseEntity.ok(new MessageResponse("Algoritma sonucu başarıyla kaydedildi.."));
     }
@@ -37,29 +38,29 @@ public class AlgorithmController {
     @PutMapping(UPDATE)
     @CrossOrigin("*")
     @PreAuthorize("hasAuthority('workshop_team:write')")
-    public ResponseEntity<MessageResponse> updateAlgoritmScore(@RequestBody UpdateAlgorithmRequestDto dto){
+    public ResponseEntity<MessageResponse> updateAlgoritmScore(@RequestBody UpdateAlgorithmRequestDto dto) {
         algorithmService.updateAlgorithmScore(dto);
         return ResponseEntity.ok(new MessageResponse("Algoritma başarıyla güncellendi.."));
     }
 
     @Operation(summary = "Algoritma silme işlemi",
             description = "Belirtilen DTO kullanılarak bir algoritmayı siler.")
-    @DeleteMapping(DELETE+"/{algorithmId}")
+    @DeleteMapping(DELETE + "/{algorithmId}")
     @CrossOrigin("*")
     @PreAuthorize("hasAuthority('workshop_team:write')")
-    public ResponseEntity<MessageResponse> deleteAlgorithm(@PathVariable String algorithmId){
+    public ResponseEntity<MessageResponse> deleteAlgorithm(@PathVariable String algorithmId) {
         algorithmService.deleteAlgorithm(algorithmId);
         return ResponseEntity.ok(new MessageResponse("Algoritma başarıyla silindi.."));
     }
+
     @Operation(summary = "Öğrencinin Algoritmasını bulma",
             description = "Belirtilen token kullanılarak Bitirme projesini getirir.")
-    @GetMapping(FIND_ALGORITHM+"/{token}")
+    @GetMapping(FIND_ALGORITHM + "/{token}")
     @CrossOrigin("*")
     @PreAuthorize("hasAuthority('read')")
-    public ResponseEntity<AlgorithmResponseDto> findAlgorithm(@PathVariable String token){
-        return  ResponseEntity.ok(algorithmService.getAlgorithm(token));
+    public ResponseEntity<AlgorithmResponseDto> findAlgorithm(@PathVariable String token) {
+        return ResponseEntity.ok(algorithmService.getAlgorithm(token));
     }
-
 
 
 }

@@ -15,4 +15,5 @@ public class MastersMailReminderDto {
 
     private List<String> groupName;
     private String email;
+
 }

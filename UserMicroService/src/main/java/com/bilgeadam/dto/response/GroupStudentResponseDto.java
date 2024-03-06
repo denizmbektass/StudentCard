@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class GroupStudentResponseDto {
-    private String userId;
+
+    private String studentId;
     private String name;
     private String surname;
+
 }

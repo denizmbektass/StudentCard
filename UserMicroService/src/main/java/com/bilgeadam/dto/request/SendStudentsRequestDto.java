@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SendStudentsRequestDto {
+
     private String userId;
     private String name;
     private String surname;
@@ -29,4 +30,5 @@ public class SendStudentsRequestDto {
     private List<String> groupNameList;
     private LocalDate saleDate;
     private Long updateDate;
+
 }

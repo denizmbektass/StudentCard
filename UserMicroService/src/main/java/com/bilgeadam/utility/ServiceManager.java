@@ -54,7 +54,9 @@ public class ServiceManager <T extends BaseEntity,ID> implements IService<T,ID> 
 
     @Override
     public Optional<T> findById(ID id) {
-        return repository.findById(id);
+        return Optional.empty();
     }
+
+
 
 }

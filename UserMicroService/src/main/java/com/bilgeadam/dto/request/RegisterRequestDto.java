@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequestDto {
+
     @Email(message = "Please enter a valid e-mail address")
     private String email;
     @NotBlank(message = "Please enter your name")
@@ -27,6 +28,5 @@ public class RegisterRequestDto {
     private String surname;
     @Builder.Default
     private List<String> role = new ArrayList<>();
-
 
 }

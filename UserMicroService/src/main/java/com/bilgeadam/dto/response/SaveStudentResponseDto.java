@@ -8,12 +8,14 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponseDto {
-    private String userId;
+public class SaveStudentResponseDto {
+
+    private String studentId;
     private String name;
     private String surname;
     private Long identityNumber;
@@ -26,4 +28,5 @@ public class UserResponseDto {
     private String email;
     private List<String> groupNameList;
     private List<ERole> roleList;
+
 }

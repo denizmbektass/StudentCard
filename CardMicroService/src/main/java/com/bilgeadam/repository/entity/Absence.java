@@ -27,4 +27,5 @@ public class Absence extends BaseEntity {
     int hourOfAbsencePrac;
     int totalCourseHoursPrac;
     int hourOfAbsenceLimitPrac;
+
 }

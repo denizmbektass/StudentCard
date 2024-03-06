@@ -14,9 +14,9 @@ ext {
             commonscodec  : "1.10",
             zxing         : "3.4.1",
             euraka        : "4.0.3",
-            reporting     :"6.21.0",
-            pdf           :"1.3.34",
-            apachePoi        :"4.1.2",
+            reporting     : "6.21.0",
+            pdf           : "1.3.34",
+            apachePoi     : "4.1.2",
     ]
 
     libs = [
@@ -55,20 +55,20 @@ ext {
             junitJupiterApi                 : "org.junit.jupiter:junit-jupiter-api:$versions.junit",
             junitJupiterEngine              : "org.junit.jupiter:junit-jupiter-engine:$versions.junit",
 
-            springNetflixEurekaClient       :"org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:$versions.euraka",
-            springNetflixEurekaServer       :"org.springframework.cloud:spring-cloud-starter-netflix-eureka-server:$versions.euraka",
+            springNetflixEurekaClient       : "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:$versions.euraka",
+            springNetflixEurekaServer       : "org.springframework.cloud:spring-cloud-starter-netflix-eureka-server:$versions.euraka",
 
             //Totp The Time-based One-Time Password algorithm
-            totp                           : "de.taimos:totp:$versions.totp",
+            totp                            : "de.taimos:totp:$versions.totp",
             //Codec for converting inputs to hex and base32.
-            commonscodec                   : "commons-codec:commons-codec:$versions.commonscodec",
+            commonscodec                    : "commons-codec:commons-codec:$versions.commonscodec",
             //zxing for qr generating
-            zxing                          : "com.google.zxing:javase:$versions.zxing",
+            zxing                           : "com.google.zxing:javase:$versions.zxing",
 
-            javaReporting                  : "net.sf.jasperreports:jasperreports:$versions.reporting",
-            librepdf                       : "com.github.librepdf:openpdf:$versions.pdf",
+            javaReporting                   : "net.sf.jasperreports:jasperreports:$versions.reporting",
+            librepdf                        : "com.github.librepdf:openpdf:$versions.pdf",
 
-            apachePoiCommon                :"org.apache.poi:poi:$versions.apachePoi",
-            apachePoiOOXML                :"org.apache.poi:poi-ooxml:$versions.apachePoi",
+            apachePoiCommon                 : "org.apache.poi:poi:$versions.apachePoi",
+            apachePoiOOXML                  : "org.apache.poi:poi-ooxml:$versions.apachePoi",
     ]
 }

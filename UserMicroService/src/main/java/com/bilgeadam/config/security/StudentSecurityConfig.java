@@ -9,7 +9,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class UserSecurityConfig {
+public class StudentSecurityConfig {
 
     @Bean
     JwtTokenFilter getJwtTokenFilter() {

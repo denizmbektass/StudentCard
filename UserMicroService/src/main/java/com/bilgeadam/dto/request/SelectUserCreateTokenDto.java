@@ -17,4 +17,5 @@ public class SelectUserCreateTokenDto {
     private String studentId;
     private List<String> roleList;
     private EStatus status;
+
 }

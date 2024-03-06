@@ -7,14 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRequestDto {
+public class SaveStudentRequestDto {
+
     private String name;
     private String surname;
     private Long identityNumber;
@@ -50,4 +50,5 @@ public class UserRequestDto {
     private String contract;
     private String notes;
     private String channel;
+
 }
