@@ -15,9 +15,9 @@ public class JwtTokenProvider {
     private final String secretKey = "StudentCard";
     private final String audience = "audience";
 
-    public Optional<String> createTokenForActivationLink(String id){
+    public Optional<String> createTokenForActivationLink(String id) {
         String token = null;
-        Date date = new Date(System.currentTimeMillis() + (1000*60*60*24));
+        Date date = new Date(System.currentTimeMillis() + (1000 * 60 * 60 * 24));
         try {
             token = JWT.create()
                     .withAudience(audience)
@@ -27,7 +27,7 @@ public class JwtTokenProvider {
                     .withClaim("id", id)
                     .sign(Algorithm.HMAC512(secretKey));
             return Optional.of(token);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return Optional.empty();
         }

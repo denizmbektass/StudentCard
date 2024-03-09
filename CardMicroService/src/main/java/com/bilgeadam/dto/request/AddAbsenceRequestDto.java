@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AddAbsenceRequestDto {
+
     private byte hourOfAbsence;
-    private String userId;
+    private String studentId;
     private Long absenceDate;
     private String group;
     private String groupName;
+
 }

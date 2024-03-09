@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class SendAbsenceRequestDto {
     String absenceId;
-    String userId;
+    String studentId;
     String group;
     String groupName;
     int absenceDateTheo;

@@ -4,9 +4,9 @@ package com.bilgeadam.service;
 import com.bilgeadam.dto.request.TranscriptInfo;
 import com.bilgeadam.dto.response.*;
 import com.bilgeadam.exceptions.*;
-import com.bilgeadam.manager.IUserManager;
-import com.bilgeadam.rabbitmq.model.GetUserModel;
-import com.bilgeadam.rabbitmq.producer.GetUserProducer;
+import com.bilgeadam.manager.IStudentManager;
+import com.bilgeadam.rabbitmq.model.GetStudentModel;
+import com.bilgeadam.rabbitmq.producer.GetStudentProducer;
 import com.bilgeadam.repository.ICardRepository;
 import com.bilgeadam.repository.entity.*;
 import com.bilgeadam.utility.JwtTokenManager;
@@ -40,7 +40,7 @@ public class CardService extends ServiceManager<Card, String> {
     private final AbsenceService absenceService;
     private final ProjectService projectService;
     private final TrainerAssessmentService trainerAssessmentService;
-    private final IUserManager userManager;
+    private final IStudentManager studentManager;
     private final GraduationProjectService graduationProjectService;
     private final WrittenExamService writtenExamService;
     private final AlgorithmService algorithmService;
@@ -63,13 +63,13 @@ public class CardService extends ServiceManager<Card, String> {
     private final InternshipSuccessScoreWeightsService internshipSuccessScoreWeightsService;
     private final EmploymentWeightsService employmentWeightsService;
 
-    private final GetUserProducer getUserProducer;
+    private final GetStudentProducer getStudentProducer;
 
     public CardService(ICardRepository iCardRepository, JwtTokenManager jwtTokenManager,
                        CardParameterService cardParameterService, AssignmentService assignmentService,
                        OralExamService oralExamService, ExamService examService, InternshipSuccessRateService intershipService,
                        InterviewService interviewService, AbsenceService absenceService, ProjectService projectService,
-                       TrainerAssessmentService trainerAssessmentService, IUserManager userManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, TechnicalInterviewService technicalInterviewService, TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService, ProjectBehaviorService projectBehaviorService, EmploymentInterviewService employmentInterviewService, CareerEducationService careerEducationService, ApplicationProcessService applicationProcessService, DocumentSubmitService documentSubmitService, TeamLeadAssessmentService teamLeadAssessmentService, TeamworkService teamworkService, AttendanceService attendanceService, ContributionService contributionService, InternshipTasksService internshipTasksService, PersonalMotivationService personalMotivationService, EducationWeightsService educationWeightsService, StudentChoiceWeightsService studentChoiceWeightsService, InternshipSuccessScoreWeightsService internshipSuccessScoreWeightsService, EmploymentWeightsService employmentWeightsService, GetUserProducer getUserProducer) {
+                       TrainerAssessmentService trainerAssessmentService, IStudentManager studentManager, GraduationProjectService graduationProjectService, WrittenExamService writtenExamService, AlgorithmService algorithmService, TechnicalInterviewService technicalInterviewService, TrainerAssessmentCoefficientsService trainerAssessmentCoefficientsService, ProjectBehaviorService projectBehaviorService, EmploymentInterviewService employmentInterviewService, CareerEducationService careerEducationService, ApplicationProcessService applicationProcessService, DocumentSubmitService documentSubmitService, TeamLeadAssessmentService teamLeadAssessmentService, TeamworkService teamworkService, AttendanceService attendanceService, ContributionService contributionService, InternshipTasksService internshipTasksService, PersonalMotivationService personalMotivationService, EducationWeightsService educationWeightsService, StudentChoiceWeightsService studentChoiceWeightsService, InternshipSuccessScoreWeightsService internshipSuccessScoreWeightsService, EmploymentWeightsService employmentWeightsService, GetStudentProducer getStudentProducer) {
         super(iCardRepository);
         this.iCardRepository = iCardRepository;
         this.jwtTokenManager = jwtTokenManager;
@@ -82,7 +82,7 @@ public class CardService extends ServiceManager<Card, String> {
         this.absenceService = absenceService;
         this.projectService = projectService;
         this.trainerAssessmentService = trainerAssessmentService;
-        this.userManager = userManager;
+        this.studentManager = studentManager;
         this.graduationProjectService = graduationProjectService;
         this.writtenExamService = writtenExamService;
         this.algorithmService = algorithmService;
@@ -103,7 +103,7 @@ public class CardService extends ServiceManager<Card, String> {
         this.studentChoiceWeightsService = studentChoiceWeightsService;
         this.internshipSuccessScoreWeightsService = internshipSuccessScoreWeightsService;
         this.employmentWeightsService = employmentWeightsService;
-        this.getUserProducer = getUserProducer;
+        this.getStudentProducer = getStudentProducer;
     }
 
     public CardResponseDto getCardByStudent(String token) {
@@ -137,8 +137,8 @@ public class CardService extends ServiceManager<Card, String> {
                 + (internshipNote * parameters.get("Internship"))
 //                + (interviewNote * parameters.get("Interview"))
                 + (projectNote * parameters.get("Project")) + (assessmentNote * parameters.get("TrainerAssessment"))) / 100;
-        TranscriptInfo transcriptInfo = userManager.getTranscriptInfoByUser(token).getBody();
-        ShowUserAbsenceInformationResponseDto dto = absenceService.showUserAbsenceInformation(token);
+        TranscriptInfo transcriptInfo = studentManager.getTranscriptInfoByStudent(token).getBody();
+        ShowStudentAbsenceInformationResponseDto dto = absenceService.showStudentAbsenceInformation(token);
         Double absence = (dto.getGroup1Percentage() + dto.getGroup2Percentage()) / 2;
         card.setNotes(newNotes);
         card.setAbsence(absence);
@@ -155,7 +155,7 @@ public class CardService extends ServiceManager<Card, String> {
         if (studentId.isEmpty()) {
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
         }
-        List<String> groupNameForStudent = userManager.findGroupNameForStudent(studentId.get()).getBody();
+        List<String> groupNameForStudent = studentManager.findGroupNameForStudent(studentId.get()).getBody();
         CardParameter cardParameter = cardParameterService.getCardParameterByGroupName(groupNameForStudent);
         Map<String, Integer> parameters = cardParameter.getParameters();
         return parameters;
@@ -172,9 +172,9 @@ public class CardService extends ServiceManager<Card, String> {
         List<OralExamResponseDto> oralExamResponseDtos = oralExamService.findAllOralExam(token);
         List<ExamResponseDto> examResponseDtos = examService.findAllExams(token);
         List<TrainerAssessmentForTranscriptResponseDto> trainerAssessmentForTranscriptResponseDto = trainerAssessmentService.findAllTrainerAssessmentForTranscriptResponseDto(token);
-        List<InternshipResponseDto> internshipResponseDtos = intershipService.findAllInternshipWithUser(token);
+        List<InternshipResponseDto> internshipResponseDtos = intershipService.findAllInternshipWithStudent(token);
         List<InterviewForTranscriptResponseDto> interviewForTranscriptResponseDto = interviewService.findAllInterviewsDtos(token);
-        ShowUserAbsenceInformationResponseDto absenceDto = absenceService.showUserAbsenceInformation(token);
+        ShowStudentAbsenceInformationResponseDto absenceDto = absenceService.showStudentAbsenceInformation(token);
         Double absencePerform = absenceDto != null ? (absenceDto.getGroup1Percentage() + absenceDto.getGroup2Percentage()) / 2 : 0;
         List<StudentProjectListResponseDto> project = projectService.showStudentProjectList(token);
         StudentChoiceResponseDto studentChoiceResponseDto = getStudentChoiceDetails(token);
@@ -368,7 +368,7 @@ public class CardService extends ServiceManager<Card, String> {
 
     // Yoklama Ortalama
     public Double getAbsencePerformAverage(String token) {
-        ShowUserAbsenceInformationResponseDto absenceDto = absenceService.showUserAbsenceInformation(token);
+        ShowStudentAbsenceInformationResponseDto absenceDto = absenceService.showStudentAbsenceInformation(token);
         if (absenceDto != null) {
             return (absenceDto.getGroup1Percentage() + absenceDto.getGroup2Percentage()) / 2;
         }
@@ -685,8 +685,8 @@ public class CardService extends ServiceManager<Card, String> {
         Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
         if (studentId.isEmpty())
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
-        GetUserModel getUserModel = GetUserModel.builder().token(token).build();
-        UserProfileResponseDto userProfileResponseDto = (UserProfileResponseDto) getUserProducer.GetUser(getUserModel);
+        GetStudentModel getStudentModel = GetStudentModel.builder().token(token).build();
+        StudentProfileResponseDto studentProfileResponseDto = (StudentProfileResponseDto) getStudentProducer.GetStudent(getStudentModel);
 
         StudentChoiceResponseDto studentChoice = getStudentChoiceDetails(token);//Öğrenci seçme
         EducationScoreDetailsDto educationDetails = getEducationDetails(token);//Eğitim
@@ -696,7 +696,7 @@ public class CardService extends ServiceManager<Card, String> {
 
         List<TranskriptResponseDto> transkriprPdfList = new ArrayList<>();
         transkriprPdfList.add(TranskriptResponseDto.builder()
-                                                   .name_surname(userProfileResponseDto.getName()+ " " + userProfileResponseDto.getSurname())
+                                                   .name_surname(studentProfileResponseDto.getName()+ " " + studentProfileResponseDto.getSurname())
                                                    .writtenExamScore(studentChoice.getWrittenExamScore())
                                                    .candidateInterviewScore(studentChoice.getCandidateInterviewScore())
                                                    .algorithmScore(studentChoice.getAlgorithmScore())

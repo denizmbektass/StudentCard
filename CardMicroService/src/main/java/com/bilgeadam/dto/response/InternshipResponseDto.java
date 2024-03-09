@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InternshipResponseDto {
+
     private String internshipSuccessRateId;
     private Long score;
     private String comment;

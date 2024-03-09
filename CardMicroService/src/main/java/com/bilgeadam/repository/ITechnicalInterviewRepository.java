@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface ITechnicalInterviewRepository extends MongoRepository<TechnicalInterview,String> {
     List<TechnicalInterview> findAllByStudentId(String studentId);
-    Optional<TechnicalInterview> findByStudentId(String studenId);
+    Optional<TechnicalInterview> findByStudentId(String studentId);
 }

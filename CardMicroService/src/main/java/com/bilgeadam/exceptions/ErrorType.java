@@ -32,7 +32,7 @@ public enum ErrorType {
     APPLICATION_PROCESS_NOT_FOUND(6100, "Böyle bir kayıt bulanamadı.", HttpStatus.NOT_FOUND),
 
     TRAINER_ASSESSMENT_NOT_FOUND(6001,"Eğitmen değerlendirmesi bulunamadı, lütfen tekrar deneyin.",HttpStatus.BAD_REQUEST),
-    USER_NOT_EXIST(500,"Kullanıcı mevcut.",HttpStatus.BAD_REQUEST),
+    STUDENT_NOT_EXIST(500,"Öğrenci mevcut.",HttpStatus.BAD_REQUEST),
     ROLE_MISMATCH(500,"Role eşleştirilemedi.",HttpStatus.BAD_REQUEST),
     ABSENCE_NOT_FOUND(7001,"Devamsızlık bulunamadı.",HttpStatus.NOT_FOUND),
 

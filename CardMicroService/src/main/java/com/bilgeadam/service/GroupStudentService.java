@@ -10,7 +10,7 @@ import com.bilgeadam.dto.response.GroupStudentsResponseDto;
 import com.bilgeadam.dto.response.ShowGroupInformationListResponseDto;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
-import com.bilgeadam.manager.IUserManager;
+import com.bilgeadam.manager.IStudentManager;
 import com.bilgeadam.mapper.IGroupAttendanceMapper;
 import com.bilgeadam.repository.entity.InternshipGroup;
 import com.bilgeadam.repository.entity.GroupAttendance;
@@ -33,18 +33,18 @@ import java.util.stream.Collectors;
 public class GroupStudentService extends ServiceManager<GroupStudent, String> {
     private final IGroupStudentRepository groupStudentRepository;
     private final InternshipGroupService internshipGroupService;
-    private final IUserManager userManager;
+    private final IStudentManager studentManager;
     private final GroupAttendanceService groupAttendanceService;
 
 
     public GroupStudentService(IGroupStudentRepository addGroupStudentRepository,
                                InternshipGroupService internshipGroupService,
-                               IUserManager userManager,
+                               IStudentManager studentManager,
                                GroupAttendanceService groupAttendanceService) {
         super(addGroupStudentRepository);
         this.groupStudentRepository = addGroupStudentRepository;
         this.internshipGroupService = internshipGroupService;
-        this.userManager = userManager;
+        this.studentManager = studentManager;
         this.groupAttendanceService = groupAttendanceService;
     }
 
@@ -53,7 +53,7 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
         if(group.isEmpty()){
             throw new CardServiceException(ErrorType.GROUP_NOT_FOUND);
         }
-        if(!groupStudentRepository.existsByUserId(dto.getUserId()) && userManager.updateUserInternShipStatusToActive(dto.getUserId()).getBody()) {
+        if(!groupStudentRepository.existsByStudentId(dto.getStudentId()) && studentManager.updateStudentInternShipStatusToActive(dto.getStudentId()).getBody()) {
             GroupStudent groupStudent = IGroupStudentMapper.INSTANCE.fromSaveGroupStudentRequestDtoToGroupStudent(dto);
             groupStudent.setGroupId(group.get().getInternShipGroupId());
             save(groupStudent);
@@ -89,7 +89,7 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
             GroupStudent groupStudent = groupStudentRepository.findById(groupStudentId).orElseThrow(()->{
                 throw new CardServiceException(ErrorType.STUDENT_NOT_FOUND);
             });
-            userManager.updateUserInternShipStatusToDeleted(groupStudent.getUserId());
+            studentManager.updateStudentInternShipStatusToDeleted(groupStudent.getStudentId());
             List<GroupAttendance> groupAttendanceList = groupAttendanceService.findByGroupId(groupStudent.getGroupId());
             groupAttendanceList.forEach(groupAttendance -> {
                 groupAttendance.getGroupStudents().remove(groupStudent.getName() + " " + groupStudent.getSurname());
@@ -193,7 +193,7 @@ public class GroupStudentService extends ServiceManager<GroupStudent, String> {
         });
         List<GroupStudent> groupStudentList = groupStudentRepository.findAllByGroupId(internshipGroupId);
         groupStudentList.forEach(groupStudent -> {
-            userManager.updateUserInternShipStatusToDeleted(groupStudent.getUserId());
+            studentManager.updateStudentInternShipStatusToDeleted(groupStudent.getStudentId());
             deleteById(groupStudent.getGroupStudentId());
         });
         return true;

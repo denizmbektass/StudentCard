@@ -12,7 +12,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReminderMailModel implements Serializable {
+
     private String email;
     private String studentName;
     private String aralik;
+
 }

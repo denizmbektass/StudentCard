@@ -12,16 +12,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document
-public class TranskriptDefault extends BaseEntity{
-@Id
-private String transkriptDefaultId;
-private String mainGroupName;
-private int interviewPercentage;
-private int examPercentage;
-private int oralExamPercentage;
-private int projectPercentage;
-private int instructorPercentageOfOpinion;
-private int homeworkPercentage;
-private int internshipSuccessRatePercentage;
+public class TranskriptDefault extends BaseEntity {
+    @Id
+    private String transkriptDefaultId;
+    private String mainGroupName;
+    private int interviewPercentage;
+    private int examPercentage;
+    private int oralExamPercentage;
+    private int projectPercentage;
+    private int instructorPercentageOfOpinion;
+    private int homeworkPercentage;
+    private int internshipSuccessRatePercentage;
 
 }

@@ -19,15 +19,20 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequestDto {
+
     @Email(message = "Please enter a valid e-mail address")
     private String email;
+
     @NotBlank(message = "Please enter your name")
     @Length(min = 3, max = 32, message = "İsim minimum 3, maximum 32 karekter olmalıdır")
     private String name;
+
     private String userId;
+
     @NotBlank(message = "Please enter your surname")
     @Length(min = 3, max = 32, message = "Soyisim minimum 3, maximum 32 karekter olmalıdır")
     private String surname;
+
     @Builder.Default
     private List<String> role = new ArrayList<>();
 

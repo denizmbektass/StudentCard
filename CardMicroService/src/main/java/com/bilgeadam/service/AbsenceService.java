@@ -2,7 +2,7 @@ package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.AddAbsenceRequestDto;
 import com.bilgeadam.dto.request.SendAbsenceRequestDto;
-import com.bilgeadam.dto.response.ShowUserAbsenceInformationResponseDto;
+import com.bilgeadam.dto.response.ShowStudentAbsenceInformationResponseDto;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.manager.IBaseManager;
@@ -33,7 +33,7 @@ public class AbsenceService extends ServiceManager<Absence,String> {
         return true;
     }
 
-    /*public ShowUserAbsenceInformationResponseDto showUserAbsenceInformation(String token){
+    /*public ShowStudentAbsenceInformationResponseDto showUserAbsenceInformation(String token){
         String userId = jwtTokenManager.getIdFromToken(token).orElseThrow(()->{
             throw new CardServiceException(ErrorType.USER_NOT_EXIST);
         });
@@ -57,7 +57,7 @@ public class AbsenceService extends ServiceManager<Absence,String> {
         double absenceSuccessGroup2 = 100 *((double)(sumOfTotalCourseHoursGroup2 - sumOfAbsenceHoursGroup2) / sumOfTotalCourseHoursGroup2);
 
         String groupName = absenceList.get(0).getGroupName();
-        return ShowUserAbsenceInformationResponseDto.builder()
+        return ShowStudentAbsenceInformationResponseDto.builder()
                 .group1Percentage(absenceSuccessGroup1)
                 .group2Percentage(absenceSuccessGroup2)
                 .groupName(groupName)
@@ -66,11 +66,11 @@ public class AbsenceService extends ServiceManager<Absence,String> {
                 .build();
     }*/
 
-    public ShowUserAbsenceInformationResponseDto showUserAbsenceInformation(String token){
-        String userId = jwtTokenManager.getIdFromToken(token).orElseThrow(()->{
-            throw new CardServiceException(ErrorType.USER_NOT_EXIST);
+    public ShowStudentAbsenceInformationResponseDto showStudentAbsenceInformation(String token){
+        String studentId = jwtTokenManager.getIdFromToken(token).orElseThrow(()->{
+            throw new CardServiceException(ErrorType.STUDENT_NOT_EXIST);
         });
-        List<Absence> absenceList = absenceRepository.findByUserId(userId);
+        List<Absence> absenceList = absenceRepository.findByStudentId(studentId);
         if(absenceList.isEmpty())
             return null;
 
@@ -91,7 +91,7 @@ public class AbsenceService extends ServiceManager<Absence,String> {
         double absenceSuccessPrac = calculateAbsenceSuccess(sumOfAbsenceHoursPrac, sumOfTotalCourseHoursPrac);
 
         String groupName = absenceList.get(0).getGroupName();
-        return ShowUserAbsenceInformationResponseDto.builder()
+        return ShowStudentAbsenceInformationResponseDto.builder()
                 .group1Percentage(absenceSuccessTheo) // Teorik dersler
                 .group2Percentage(absenceSuccessPrac) // Pratik dersler
                 .groupName(groupName)

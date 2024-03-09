@@ -1,20 +1,16 @@
 package com.bilgeadam.service;
 
 import com.bilgeadam.dto.request.*;
-import com.bilgeadam.dto.response.*;
 import com.bilgeadam.dto.response.DeleteTrainerAssessmentResponseDto;
 import com.bilgeadam.dto.response.TrainerAssessmentForTranscriptResponseDto;
-import com.bilgeadam.dto.response.TrainerAssessmentSaveResponseDto;
-import com.bilgeadam.dto.response.UpdateTrainerAssessmentResponseDto;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
-import com.bilgeadam.manager.IUserManager;
+import com.bilgeadam.manager.IStudentManager;
 import com.bilgeadam.mapper.ITrainerAssessmentMapper;
 import com.bilgeadam.rabbitmq.model.ReminderMailModel;
 import com.bilgeadam.rabbitmq.producer.ReminderMailProducer;
 import com.bilgeadam.repository.ITrainerAssessmentRepository;
 import com.bilgeadam.repository.entity.TrainerAssessment;
-import com.bilgeadam.repository.enums.ERole;
 import com.bilgeadam.repository.enums.EStatus;
 import com.bilgeadam.utility.JwtTokenManager;
 import com.bilgeadam.utility.ServiceManager;
@@ -26,22 +22,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.bilgeadam.repository.entity.TrainerAssessmentCoefficients.*;
-
 @Service
 public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, String> {
 
     private final ITrainerAssessmentRepository iTrainerAssesmentRepository;
     private final JwtTokenManager jwtTokenManager;
     private final ReminderMailProducer reminderMailProducer;
-    private final IUserManager userManager;
+    private final IStudentManager studentManager;
 
-    public TrainerAssessmentService(ITrainerAssessmentRepository iTrainerAssessmentRepository, JwtTokenManager jwtTokenManager, ReminderMailProducer reminderMailProducer, IUserManager userManager) {
+    public TrainerAssessmentService(ITrainerAssessmentRepository iTrainerAssessmentRepository, JwtTokenManager jwtTokenManager, ReminderMailProducer reminderMailProducer, IStudentManager studentManager) {
         super(iTrainerAssessmentRepository);
         this.iTrainerAssesmentRepository = iTrainerAssessmentRepository;
         this.jwtTokenManager = jwtTokenManager;
         this.reminderMailProducer = reminderMailProducer;
-        this.userManager = userManager;
+        this.studentManager = studentManager;
     }
 
     public Integer getTrainerAssessmentNote(String studentId) {
@@ -66,9 +60,9 @@ public class TrainerAssessmentService extends ServiceManager<TrainerAssessment, 
     //cron = "0 58 23 15 * ?"
     //fixedRate = 300000
     public void sendReminderMail() {
-        List<TrainersMailReminderDto> trainers = userManager.getTrainers().getBody();
-        List<StudentsMailReminderDto> students = userManager.getStudents().getBody();
-        List<MastersMailReminderDto> masters = userManager.getMasters().getBody();
+        List<TrainersMailReminderDto> trainers = studentManager.getTrainers().getBody();
+        List<StudentsMailReminderDto> students = studentManager.getStudents().getBody();
+        List<MastersMailReminderDto> masters = studentManager.getMasters().getBody();
         for (StudentsMailReminderDto s : students) {
             Double sure = s.getEgitimSaati();
             List<TrainerAssessment> gorusListesi = iTrainerAssesmentRepository.findAllByStudentId(s.getStudentId()).stream()

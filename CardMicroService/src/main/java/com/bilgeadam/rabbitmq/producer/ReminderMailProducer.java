@@ -8,11 +8,12 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ReminderMailProducer {
+
     private final RabbitTemplate rabbitTemplate;
     private String cardDirectExchange = "card-direct-exchange";
     private String reminderMailBindingKey = "reminder-mail-binding-key";
 
-    public void sendReminderMail(ReminderMailModel model){
-        rabbitTemplate.convertAndSend(cardDirectExchange,reminderMailBindingKey,model);
+    public void sendReminderMail(ReminderMailModel model) {
+        rabbitTemplate.convertAndSend(cardDirectExchange, reminderMailBindingKey, model);
     }
 }

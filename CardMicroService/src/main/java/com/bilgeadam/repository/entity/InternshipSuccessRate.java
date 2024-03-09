@@ -13,9 +13,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @Document
 public class InternshipSuccessRate extends BaseEntity {
+
     @Id
     private String internshipSuccessRateId;
     private Long score; // Participation Rate
     private String comment;
-    private String userId;
+    private String studentId;
 }

@@ -7,7 +7,7 @@ import com.bilgeadam.dto.response.LoginResponseDto;
 import com.bilgeadam.dto.response.MessageResponseDto;
 import com.bilgeadam.exceptions.AuthServiceException;
 import com.bilgeadam.exceptions.ErrorType;
-import com.bilgeadam.manager.IUserManager;
+import com.bilgeadam.manager.IStudentManager;
 import com.bilgeadam.mapper.IAuthMapper;
 import com.bilgeadam.rabbitmq.model.ActivationLinkMailModel;
 import com.bilgeadam.rabbitmq.model.RegisterStudentAndTrainerModel;
@@ -32,17 +32,17 @@ public class AuthService extends ServiceManager<Auth, String> {
     private final ResetPasswordProducer resetPasswordProducer;
     private final IAuthRepository iAuthRepository;
     private final JwtTokenManager jwtTokenManager;
-    private final IUserManager userManager;
+    private final IStudentManager studentManager;
     private final IAuthMapper iAuthMapper;
     private final ActivationLinkProducer activationLinkProducer;
     private final RegisterStudentAndTrainerProducer registerStudentAndTrainerProducer;
 
-    public AuthService(ResetPasswordProducer resetPasswordProducer, IAuthRepository iAuthRepository, JwtTokenManager jwtTokenManager, IUserManager userManager, IAuthMapper iAuthMapper, ActivationLinkProducer activationLinkProducer, RegisterStudentAndTrainerProducer registerStudentAndTrainerProducer) {
+    public AuthService(ResetPasswordProducer resetPasswordProducer, IAuthRepository iAuthRepository, JwtTokenManager jwtTokenManager, IStudentManager studentManager, IAuthMapper iAuthMapper, ActivationLinkProducer activationLinkProducer, RegisterStudentAndTrainerProducer registerStudentAndTrainerProducer) {
         super(iAuthRepository);
         this.resetPasswordProducer = resetPasswordProducer;
         this.iAuthRepository = iAuthRepository;
         this.jwtTokenManager = jwtTokenManager;
-        this.userManager = userManager;
+        this.studentManager = studentManager;
         this.iAuthMapper = iAuthMapper;
         this.activationLinkProducer = activationLinkProducer;
         this.registerStudentAndTrainerProducer = registerStudentAndTrainerProducer;
@@ -81,7 +81,7 @@ public class AuthService extends ServiceManager<Auth, String> {
         Auth auth = IAuthMapper.INSTANCE.toAuth(dto, password);
         auth.setStatus(EStatus.INACTIVE);
         auth.setRole(List.of(ERole.ADMIN));
-        String userId = userManager.registerManagerForUser(dto).getBody();
+        String userId = studentManager.registerManagerForStudent(dto).getBody();
         auth.setUserId(userId);
         save(auth);
         resetPasswordProducer.sendNewPassword(ResetPasswordModel.builder().email(auth.getEmail()).password(auth.getPassword()).build());
@@ -131,16 +131,17 @@ public class AuthService extends ServiceManager<Auth, String> {
 
     /**
      * Bu method user service'de change password metodu için yazıldı. O User'ın bilgilerini çekmek için kullanılmaktadır.
+     *
      * @param userId
      * @return
      */
     public GetAuthInfoForChangePassword getAuthInfoForChangePassword(String userId) {
-        Optional<Auth> optionalAuth= iAuthRepository.findByUserId(userId);
+        Optional<Auth> optionalAuth = iAuthRepository.findByUserId(userId);
         if (optionalAuth.isEmpty()) throw new AuthServiceException(ErrorType.USER_NOT_FOUND);
-        return  GetAuthInfoForChangePassword.builder().password(optionalAuth.get().getPassword()).userId(userId).build();
+        return GetAuthInfoForChangePassword.builder().password(optionalAuth.get().getPassword()).userId(userId).build();
     }
 
-    public Boolean changePasswordForAuth (ChangePasswordResponseDto dto){
+    public Boolean changePasswordForAuth(ChangePasswordResponseDto dto) {
         Optional<Auth> optionalAuth = iAuthRepository.findByUserId(dto.getUserId());
         if (optionalAuth.isEmpty())
             throw new AuthServiceException(ErrorType.USER_NOT_FOUND);
@@ -148,13 +149,15 @@ public class AuthService extends ServiceManager<Auth, String> {
         update(optionalAuth.get());
         return true;
     }
-    public List<ERole> getRoleFromToken(String token){
-        Optional<String> authId= jwtTokenManager.getIdFromToken(token);
+
+    public List<ERole> getRoleFromToken(String token) {
+        Optional<String> authId = jwtTokenManager.getIdFromToken(token);
         if (authId.isEmpty()) throw new AuthServiceException(ErrorType.INVALID_TOKEN);
-        Optional<Auth> optionalAuth=iAuthRepository.findById(authId.get());
+        Optional<Auth> optionalAuth = iAuthRepository.findById(authId.get());
         if (optionalAuth.isEmpty()) throw new AuthServiceException(ErrorType.USER_NOT_FOUND);
         return optionalAuth.get().getRole();
     }
+
     public MessageResponseDto registerStudentAndTrainer(RegisterStudentAndTrainerRequestDto dto) {
         Optional<Auth> authOptional = iAuthRepository.findByEmail(dto.getEmail());
         if (authOptional.isPresent())

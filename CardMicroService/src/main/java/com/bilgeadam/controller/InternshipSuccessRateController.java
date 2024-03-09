@@ -3,12 +3,10 @@ package com.bilgeadam.controller;
 import com.bilgeadam.dto.request.InternshipSuccessRateRequestDto;
 import com.bilgeadam.dto.request.UpdateInternshipRequestDto;
 import com.bilgeadam.dto.response.InternshipResponseDto;
-import com.bilgeadam.repository.entity.InternshipSuccessRate;
 import com.bilgeadam.service.InternshipSuccessRateService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,7 +34,7 @@ public class InternshipSuccessRateController {
     @GetMapping("/find-all-internship-with-user/{token}")
     @CrossOrigin("*")
     public ResponseEntity<List<InternshipResponseDto>> findAllInternshipWithUser(@PathVariable String token) {
-        return ResponseEntity.ok(internshipSuccessRateService.findAllInternshipWithUser(token));
+        return ResponseEntity.ok(internshipSuccessRateService.findAllInternshipWithStudent(token));
     }
 
     @Operation(summary = "Seçilen stajı silme işlemi",

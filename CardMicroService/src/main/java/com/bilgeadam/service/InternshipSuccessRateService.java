@@ -29,12 +29,12 @@ public class InternshipSuccessRateService extends ServiceManager<InternshipSucce
     }
 
     public Boolean addScoreAndCommentForStudent(InternshipSuccessRateRequestDto dto) {
-        Optional<String> userId = jwtTokenManager.getIdFromToken(dto.getToken());
-        if (userId.isEmpty()) {
-            throw new CardServiceException(ErrorType.USER_NOT_FOUND);
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(dto.getToken());
+        if (studentId.isEmpty()) {
+            throw new CardServiceException(ErrorType.STUDENT_NOT_FOUND);
         }
         InternshipSuccessRate internshipSuccessRate = IInternshipSuccessRateMapper.INSTANCE.toInternshipSuccessRateDtoFromInternshipSuccessRate(dto);
-        internshipSuccessRate.setUserId(userId.get());
+        internshipSuccessRate.setStudentId(studentId.get());
         if (dto.getScore() < 0 || dto.getScore() >100 ) {
             throw new CardServiceException(ErrorType.POINT_SUCCESS_RATE);
         }
@@ -45,15 +45,15 @@ public class InternshipSuccessRateService extends ServiceManager<InternshipSucce
         return true;
     }
 
-    public List<InternshipResponseDto> findAllInternshipWithUser(String token) {
-        Optional<String> userId = jwtTokenManager.getIdFromToken(token);
-        if (userId.isEmpty())
+    public List<InternshipResponseDto> findAllInternshipWithStudent(String token) {
+        Optional<String> studentId = jwtTokenManager.getIdFromToken(token);
+        if (studentId.isEmpty())
             throw new CardServiceException(ErrorType.INVALID_TOKEN);
-        List<InternshipResponseDto> internshipSuccessRateList = internshipSuccessRateRepository.findAllByUserId(userId.get());
+        List<InternshipResponseDto> internshipSuccessRateList = internshipSuccessRateRepository.findAllByStudentId(studentId.get());
         return internshipSuccessRateList;
     }
     public Integer getInternshipNote(String studentId){
-        return (int) Math.floor(internshipSuccessRateRepository.findAllByUserId(studentId).stream()
+        return (int) Math.floor(internshipSuccessRateRepository.findAllByStudentId(studentId).stream()
                 .mapToLong(x->x.getScore()).average().orElse(0));
     }
     public Boolean deleteSelectedInternship(String internshipId) {
