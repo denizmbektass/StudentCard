@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class MailSenderService {
+
     @Autowired
     private JavaMailSender javaMailSender;
     @Autowired
@@ -29,16 +30,16 @@ public class MailSenderService {
         javaMailSender.send(preConfiguredMessage);
     }
 
-    public void sendTrainerAssessmentReminder(ReminderMailModel model){
+    public void sendTrainerAssessmentReminder(ReminderMailModel model) {
         preConfiguredMessage.setTo(model.getEmail());
         preConfiguredMessage.setSubject("Eğitmen Görüşü Hatırlatıcısı");
         preConfiguredMessage.setText(model.getStudentName() + " isimli öğrenciye " + model.getAralik() + " yapılmamıştır. Lütfen görüşünüzü yapınız.");
         javaMailSender.send(preConfiguredMessage);
     }
 
-    public void activationLink(ActivationLinkMailModel model){
+    public void activationLink(ActivationLinkMailModel model) {
         String token = jwtTokenProvider.createTokenForActivationLink(model.getAuthId()).get();
-        String linkActivateUserLink = "http://localhost:4040/api/v1/auth/activate-user/"+token;
+        String linkActivateUserLink = "http://localhost:4040/api/v1/auth/activate-user/" + token;
         preConfiguredMessage.setTo(model.getEmail());
         preConfiguredMessage.setSubject("Activation Link");
         preConfiguredMessage.setText("Dear User, \n"

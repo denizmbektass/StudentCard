@@ -20,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Document(collection = "app_user")
 public class Auth extends BaseEntity {
+
     @Id
     private String authId;
     private String userId;
@@ -34,5 +35,5 @@ public class Auth extends BaseEntity {
     private String password;
     private List<ERole> role;
     @Builder.Default
-    private EStatus status=EStatus.PASSIVE;
+    private EStatus status = EStatus.PASSIVE;
 }

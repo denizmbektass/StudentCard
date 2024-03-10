@@ -14,9 +14,9 @@ public class FallbackController {
     public ResponseEntity<String> fallbackAuthService(){
         return ResponseEntity.ok("Auth servisi şu anda hizmet verememektedir. Lütfen daha sonra tekrar deneyiniz");
     }
-    @GetMapping("/user")
-    public ResponseEntity<String> fallbackUserService(){
-        return ResponseEntity.ok("User servisi şu anda hizmet verememektedir. Lütfen daha sonra tekrar deneyiniz");
+    @GetMapping("/student")
+    public ResponseEntity<String> fallbackStudentService(){
+        return ResponseEntity.ok("Student servisi şu anda hizmet verememektedir. Lütfen daha sonra tekrar deneyiniz");
     }
     @GetMapping("/mail")
     public ResponseEntity<String> fallbackMailService(){

@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IGroupStudentRepository extends MongoRepository<GroupStudent, String> {
 
@@ -20,10 +19,7 @@ public interface IGroupStudentRepository extends MongoRepository<GroupStudent, S
 
     List<GroupStudent> findAllByGroupId(String groupId);
 
-    Boolean existsByUserId(String userId);
-
-
-
+    Boolean existsByStudentId(String studentId);
 
 
 }

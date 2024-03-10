@@ -13,10 +13,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @SuperBuilder
 @Document
 public class GroupStudent extends BaseEntity {
+
     @Id
     private String groupStudentId;
     private String groupId;
-    private String userId;
+    private String studentId;
     private String name;
     private String surname;
 }

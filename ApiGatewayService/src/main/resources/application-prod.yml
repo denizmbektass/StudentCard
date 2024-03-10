@@ -35,17 +35,17 @@ spring:
               args:
                 name: auth-service-application
                 fallbackUri: forward:/fallback/auth
-         #User service route
-        - id: user-service
-          uri: http://user:4041
+         #Student service route
+        - id: student-service
+          uri: http://student:4041
           predicates:
-            - Path=/user/**
+            - Path=/student/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
             - name: CircuitBreaker
               args:
-                name: user-service-application
-                fallbackUri: forward:/fallback/user
+                name: student-service-application
+                fallbackUri: forward:/fallback/student
         #Mail service route
         - id: mail-service
           uri: http://mail:4043

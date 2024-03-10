@@ -12,6 +12,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ActivationLinkMailModel implements Serializable {
+
     private String authId;
     private String email;
+
 }

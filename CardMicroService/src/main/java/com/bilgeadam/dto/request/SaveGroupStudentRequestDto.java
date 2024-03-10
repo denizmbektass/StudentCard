@@ -15,10 +15,13 @@ import javax.validation.constraints.NotNull;
 public class SaveGroupStudentRequestDto {
     @NotBlank(message = "Grup İsmi Eksik Girilmiştir")
     private String groupName;
+
     @NotBlank(message = "İsim Eksik Girilmiştir")
     private String name;
+
     @NotBlank(message = "Soyisim Eksik Girismiştir")
     private String surname;
+
     @NotNull(message = "Öğrenci Id'si Eksik Girilmiştir")
-    private String userId;
+    private String studentId;
 }

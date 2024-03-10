@@ -1,7 +1,7 @@
 package com.bilgeadam.controller;
 
 import com.bilgeadam.dto.request.AddAbsenceRequestDto;
-import com.bilgeadam.dto.response.ShowUserAbsenceInformationResponseDto;
+import com.bilgeadam.dto.response.ShowStudentAbsenceInformationResponseDto;
 import com.bilgeadam.exceptions.CardServiceException;
 import com.bilgeadam.exceptions.ErrorType;
 import com.bilgeadam.service.AbsenceService;
@@ -33,8 +33,8 @@ public class AbsenceController {
     @CrossOrigin("*")
     @GetMapping("/show-user-absence-information/{token}")
     @PreAuthorize("hasAnyAuthority('read')")
-    public ResponseEntity<ShowUserAbsenceInformationResponseDto> showUserAbsenceInformation(@PathVariable String token){
-        return ResponseEntity.ok(absenceService.showUserAbsenceInformation(token));
+    public ResponseEntity<ShowStudentAbsenceInformationResponseDto> showUserAbsenceInformation(@PathVariable String token){
+        return ResponseEntity.ok(absenceService.showStudentAbsenceInformation(token));
     }
 
     @Operation(summary = "BaseApi tarafından yoklama verilerinin çekilmesi işlemi",

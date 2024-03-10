@@ -13,7 +13,8 @@ public class ActivationLinkMailConsumer {
     private final MailSenderService mailSenderService;
 
     @RabbitListener(queues = ("${rabbitmq.queueActivationLink}"))
-    public void sendMailActivationLink(ActivationLinkMailModel model){
+    public void sendMailActivationLink(ActivationLinkMailModel model) {
         mailSenderService.activationLink(model);
     }
+
 }

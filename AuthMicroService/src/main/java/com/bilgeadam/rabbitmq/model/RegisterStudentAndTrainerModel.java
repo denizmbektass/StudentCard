@@ -12,6 +12,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterStudentAndTrainerModel implements Serializable {
+
     private String email;
     private String password;
+
 }

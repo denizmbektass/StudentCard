@@ -15,13 +15,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @Document
 public class Project extends BaseEntity{
+
     @Id
     private String projectId;
     private String title;
     private String projectType;
     private Long projectScore;
     private String description;
-    private String userId;
+    private String studentId;
     @Builder.Default
     private EStatus status = EStatus.ACTIVE;
 }

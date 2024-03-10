@@ -15,9 +15,9 @@ spring:
       database: studentcard
 base-api:
   url: http://localhost:8081
-user-service:
-  url: http://localhost:4041/api/v1/user
+student-service:
+  url: http://localhost:4041/api/v1/student
 
 rabbitmq:
-  getUserBindingKey: get-user-binging-key
-  getUserQueue: user-queue
+  getStudentBindingKey: get-student-binging-key
+  getStudentQueue: student-queue

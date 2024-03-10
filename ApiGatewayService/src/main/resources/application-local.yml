@@ -1,4 +1,4 @@
-server:
+cserver:
   port: 8080
 spring:
   main:
@@ -31,17 +31,17 @@ spring:
               args:
                 name: auth-service-application
                 fallbackUri: forward:/fallback/auth
-         #User service route
-        - id: user-service
+         #Student service route
+        - id: student-service
           uri: http://localhost:4041
           predicates:
-            - Path=/user/**
+            - Path=/student/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
             - name: CircuitBreaker
               args:
-                name: user-service-application
-                fallbackUri: forward:/fallback/user
+                name: student-service-application
+                fallbackUri: forward:/fallback/student
         #Mail service route
         - id: mail-service
           uri: http://localhost:4043

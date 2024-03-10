@@ -6,5 +6,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface IAbsenceRepository extends MongoRepository<Absence, String> {
-    List<Absence> findByUserId(String userId);
+    List<Absence> findByStudentId(String studentId);
 }

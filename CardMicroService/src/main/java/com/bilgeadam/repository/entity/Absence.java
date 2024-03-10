@@ -1,7 +1,6 @@
 package com.bilgeadam.repository.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -16,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Absence extends BaseEntity {
     @Id
     String absenceId;
-    String userId;
+    String studentId;
     String group;
     String groupName;
     int absenceDateTheo;

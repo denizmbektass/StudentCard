@@ -1,6 +1,6 @@
 package com.bilgeadam.service;
 
-import com.bilgeadam.manager.IUserManager;
+import com.bilgeadam.manager.IStudentManager;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import java.util.concurrent.ScheduledFuture;
 public class ScheduleService {
 
 
-  private final IUserManager userManager;
+  private final IStudentManager studentManager;
   private final TaskScheduler taskScheduler;
   private ScheduledFuture<?> scheduledTask;
   private final AbsenceService absenceService;
@@ -19,9 +19,9 @@ public class ScheduleService {
   private String cronExpression = "0 0 7 * * *";
 
 
-  public ScheduleService(IUserManager userManager,TaskScheduler taskScheduler,AbsenceService absenceService) {
+  public ScheduleService(IStudentManager studentManager, TaskScheduler taskScheduler, AbsenceService absenceService) {
 
-	this.userManager = userManager;
+	this.studentManager = studentManager;
 	this.taskScheduler = taskScheduler;
 	this.absenceService = absenceService;
 
@@ -44,11 +44,11 @@ public class ScheduleService {
 
 	scheduledTask = taskScheduler.schedule(() -> {
 	  absenceService.getAllBaseAbsences();
-	  userManager.getAllBaseStudents();
+	  studentManager.getAllBaseStudents();
 	}, newTrigger);
   }
   public void fetchData(){
 	absenceService.getAllBaseAbsences();
-	userManager.getAllBaseStudents();
+	studentManager.getAllBaseStudents();
   }
 }

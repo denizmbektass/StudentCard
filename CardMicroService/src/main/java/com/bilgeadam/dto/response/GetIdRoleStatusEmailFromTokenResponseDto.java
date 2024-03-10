@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetIdRoleStatusEmailFromTokenResponseDto {
+
     String id;
     List<String> role;
     EStatus status;

@@ -15,29 +15,33 @@ public class RabbitmqConfig {
     private String reminderMailQueue = "reminder-mail-queue";
 
     @Bean
-    DirectExchange cardDirectExchange(){
+    DirectExchange cardDirectExchange() {
         return new DirectExchange(cardDirectExchange);
     }
+
     @Bean
-    Queue reminderMailQueue(){
+    Queue reminderMailQueue() {
         return new Queue(reminderMailQueue);
     }
+
     @Bean
-    public Binding reminderMailBindingKey(final Queue reminderMailQueue, final DirectExchange cardDirectExchange){
+    public Binding reminderMailBindingKey(final Queue reminderMailQueue, final DirectExchange cardDirectExchange) {
         return BindingBuilder.bind(reminderMailQueue).to(cardDirectExchange).with(reminderMailBindingKey);
     }
 
-    //user dan bilgi çekmek için oluşturulan kuyruk
-    @Value("${rabbitmq.getUserBindingKey}")
-    private String getUserBindingKey;
-    @Value("${rabbitmq.getUserQueue}")
-    private String getUserQueue;
+    //Student tan bilgi çekmek için oluşturulan kuyruk
+    @Value("${rabbitmq.getStudentBindingKey}")
+    private String getStudentBindingKey;
+    @Value("${rabbitmq.getStudentQueue}")
+    private String getStudentQueue;
 
     @Bean
-    Queue getUserQueue(){return  new Queue(getUserQueue);}
+    Queue getStudentQueue() {
+        return new Queue(getStudentQueue);
+    }
 
     @Bean
-    public Binding getUserBindingKey(final Queue getUserQueue, final DirectExchange cardDirectExchange){
-        return BindingBuilder.bind(getUserQueue).to(cardDirectExchange).with(getUserBindingKey);
+    public Binding getStudentBindingKey(final Queue getStudentQueue, final DirectExchange cardDirectExchange) {
+        return BindingBuilder.bind(getStudentQueue).to(cardDirectExchange).with(getStudentBindingKey);
     }
 }

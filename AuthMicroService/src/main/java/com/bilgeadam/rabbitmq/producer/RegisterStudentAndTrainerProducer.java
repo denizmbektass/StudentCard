@@ -9,12 +9,15 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class RegisterStudentAndTrainerProducer {
+
     private final RabbitTemplate rabbitTemplate;
     @Value("${rabbitmq.registerStudentAndTrainerBindingKey}")
-    private String registerStudentAndTrainerBindingKey ;
+    private String registerStudentAndTrainerBindingKey;
     @Value("${rabbitmq.authDirectExchange}")
     private String authDirectExchange;
-    public void registerStudentAndTrainer(RegisterStudentAndTrainerModel model){
-        rabbitTemplate.convertAndSend(authDirectExchange,registerStudentAndTrainerBindingKey,model);
+
+    public void registerStudentAndTrainer(RegisterStudentAndTrainerModel model) {
+        rabbitTemplate.convertAndSend(authDirectExchange, registerStudentAndTrainerBindingKey, model);
     }
+
 }
