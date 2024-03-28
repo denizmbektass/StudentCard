@@ -58,7 +58,6 @@ public class AuthService extends ServiceManager<Auth, String> {
         }
         if (authOptional.get().getStatus().equals(EStatus.DELETED))
             throw new AuthServiceException(ErrorType.USER_DELETED);
-
         List<ERole> role = authOptional.get().getRole();
         List<String> roles = role.stream().map(x -> x.name()).toList();
         String authStatus = authOptional.get().getStatus().toString();
@@ -171,5 +170,18 @@ public class AuthService extends ServiceManager<Auth, String> {
                 .password(auth.getPassword())
                 .build());
         return MessageResponseDto.builder().message("Register has been completed successfully, Password needs to be updated for activating the profile!").build();
+    }
+
+    public MessageResponseDto saveStudent(SaveStudentWithRoleRequestDto dto) {
+        Optional<Auth> authOptional = iAuthRepository.findByEmail(dto.getEmail());
+        if (authOptional.isPresent()){
+            throw new AuthServiceException(ErrorType.EXIST_BY_EMAIL);
+        }
+        String password = "1234";
+        Auth auth = IAuthMapper.INSTANCE.studentToAuth(dto);
+        auth.setPassword(password);
+        auth.setUserId(dto.getStudentId());
+        save(auth);
+        return MessageResponseDto.builder().message("New student has been created succesfully.").build();
     }
 }

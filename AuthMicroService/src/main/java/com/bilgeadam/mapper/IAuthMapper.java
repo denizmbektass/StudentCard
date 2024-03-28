@@ -3,6 +3,7 @@ package com.bilgeadam.mapper;
 
 import com.bilgeadam.dto.request.RegisterRequestDto;
 import com.bilgeadam.dto.request.RegisterStudentAndTrainerRequestDto;
+import com.bilgeadam.dto.request.SaveStudentWithRoleRequestDto;
 import com.bilgeadam.repository.entity.Auth;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -15,4 +16,6 @@ public interface IAuthMapper {
 // UserResponseDto toUserResponseDto(final User user);
 Auth toAuth (final RegisterRequestDto dto,String password);
     Auth toAuth (final RegisterStudentAndTrainerRequestDto dto, String password);
+
+    Auth studentToAuth(final SaveStudentWithRoleRequestDto dto);
 }
