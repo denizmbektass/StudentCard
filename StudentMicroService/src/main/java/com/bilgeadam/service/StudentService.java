@@ -97,6 +97,14 @@ public class StudentService extends ServiceManager<Student, String> {
         groupService.addSubGroupToGroup(dto.getGroupNameList());
         Student student = IStudentMapper.INSTANCE.toStudent(dto);
         save(student);
+        authManager.saveStudent(SaveStudentWithRoleRequestDto.builder()
+                        .role(List.of(String.valueOf(ERole.STUDENT)))
+                        .email(dto.getEmail())
+                        .name(dto.getName())
+                        .surname(dto.getSurname())
+                        .studentId(student.getStudentId())
+                        .groupNameList(student.getGroupNameList())
+                .build());
         return IStudentMapper.INSTANCE.toStudentResponseDto(student);
     }
 

@@ -41,6 +41,15 @@ public class AuthController {
         return ResponseEntity.ok(authService.register(dto));
     }
 
+    @Operation(summary = "Yeni öğrenci kaydı yapma işlemi",
+            description = "Yeni öğrenci kaydı yapmak için kullanılır.")
+    @PostMapping("/save-new-student")
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    @CrossOrigin("*")
+    public ResponseEntity<MessageResponseDto>saveStudent( @RequestBody @Valid SaveStudentWithRoleRequestDto dto){
+        return ResponseEntity.ok(authService.saveStudent(dto));
+    }
+
 
     @Operation(summary = "Parolamı Unuttum işlemi",
             description = "Kullanıcının parolasını sıfırlamak için kullanılır.")
